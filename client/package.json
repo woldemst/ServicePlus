@@ -21,6 +21,7 @@
     "react-native-pagination": "^1.5.5",
     "react-native-safe-area-context": "4.6.3",
     "react-native-screens": "~3.22.0",
+    "react-native-svg": "^13.13.0",
     "react-native-tab-view": "^3.5.2"
   },
   "devDependencies": {
