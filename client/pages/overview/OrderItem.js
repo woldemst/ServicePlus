@@ -1,8 +1,8 @@
 import { View, StyleSheet, Image, Text } from "react-native";
-<script src="http://localhost:8097"></script>
 
 
-const Appointment = () => {
+
+const OrderItem = (props) => {
     return (
         <View style={styles.container}>
             <View style={styles.indicator}></View>
@@ -75,4 +75,4 @@ const styles = StyleSheet.create({
 
 
 
-export default Appointment; 
+export default OrderItem; 
