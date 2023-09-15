@@ -1,5 +1,6 @@
-
 import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native"
+
+import Appointment from "./Appointment"
 
 const Overview = () => {
     return ( 
@@ -33,7 +34,11 @@ const Overview = () => {
             <View style={styles.mainContent}> 
 
                 <View style={styles.imgContainer}>
-                    <Image style={styles.bannerImg} source={require('../../assets/banner0.png')} />
+                    {/* <Image style={styles.bannerImg} source={require('../../assets/banner0.png')} /> */}
+                </View>
+
+                <View style={styles.appointmentsContainer}>
+                    <Appointment />
 
                 </View>
 
@@ -147,6 +152,9 @@ const styles = StyleSheet.create({
         marginRight: 'auto',
         marginTop: 0,
         marginBottom: 0
+    },
+    appointmentsContainer: {
+        padding: 32
     },
     // MAIN: END !!!
 
