@@ -1,6 +1,6 @@
 import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native"
 
-import Appointment from "./Appointment"
+import AppointmentItem from "./OrderItem"
 
 const Overview = () => {
     return ( 
@@ -37,8 +37,8 @@ const Overview = () => {
                     {/* <Image style={styles.bannerImg} source={require('../../assets/banner0.png')} /> */}
                 </View>
 
-                <View style={styles.appointmentsContainer}>
-                    <Appointment />
+                <View style={styles.orderContainer}>
+                    <AppointmentItem />
 
                 </View>
 
@@ -153,7 +153,7 @@ const styles = StyleSheet.create({
         marginTop: 0,
         marginBottom: 0
     },
-    appointmentsContainer: {
+    orderContainer: {
         padding: 32
     },
     // MAIN: END !!!
