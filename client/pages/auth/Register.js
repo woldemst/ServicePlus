@@ -28,7 +28,7 @@ const Register = () => {
         <View style={styles.container}>
 
             <Text style={styles.logoText}>ServicePlus</Text>
-            <Text style={styles.title}>Registriren</Text>
+            <Text style={styles.title}>Registrieren</Text>
 
             {/* {error && <Text style={styles.error}>{error}</Text>} */}
 

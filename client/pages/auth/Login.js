@@ -1,14 +1,25 @@
 import { View, Text, TextInput, TouchableOpacity, Button ,StyleSheet} from "react-native";
 import { useState } from "react";
 import { useNavigation } from "@react-navigation/native";
+import axios from "axios";
 
 const Login = () => {
 
     const navigation = useNavigation()
 
-    const [logingMode, setLogingMode] = useState(true)
-    const handleSignIn = () =>{
-        alert('handle')
+    const [email, setEmail] = useState('')
+    const [password, setPassword] = useState('')
+
+    const handleSignIn = async() =>{
+        const apiUrl = "http://localhost:8000/api/users/login";
+
+        const response = await axios.post(apiUrl, {
+            email: email,
+            password: password
+        })
+
+        // alert(response)
+        navigation.navigate('overview', {title: 'Overview'})
     }
 
 
@@ -24,16 +35,16 @@ const Login = () => {
             <TextInput
                 style={styles.input}
                 placeholder="Email"
-                // onChangeText={(text) => setEmail(text)}
-                // value={email}
+                onChangeText={(text) => setEmail(text)}
+                value={email}
             />
 
             <TextInput
                 style={styles.input}
                 placeholder="Password"
                 secureTextEntry
-                // onChangeText={(text) => setPassword(text)}
-                // value={password}
+                onChangeText={(text) => setPassword(text)}
+                value={password}
             />
 
             <Text style={styles.notice} >Passwort vergessen?</Text>
@@ -46,7 +57,7 @@ const Login = () => {
             <View style={styles.inviteContainer}>
                 <Text style={styles.inviteText} >Haben Sie noch keinen Account? </Text>
 
-                <TouchableOpacity onPress={()=>{navigation.navigate('register', {name: 'Registration'})}}>
+                <TouchableOpacity onPress={()=>{navigation.navigate('register', {name: '​Registrierung'})}}>
                     <Text style={styles.registerBtn} >Registrieren</Text>
                 </TouchableOpacity>
             </View>
