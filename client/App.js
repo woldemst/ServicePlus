@@ -14,7 +14,7 @@ export default function App() {
 
     <NavigationContainer>
       <Stack.Navigator>
-        <Stack.Screen name='onboarding' component={OnboardingNavigator} options={{headerShown: false}}/>
+        {/* <Stack.Screen name='onboarding' component={OnboardingNavigator} options={{headerShown: false}}/> */}
         <Stack.Screen name='overview' component={Overview} options={{title: 'Overview'}}/>
         <Stack.Screen name='login' component={Login} options={{title: 'Login'}} />
         <Stack.Screen name='register' component={Register} options={{title: 'Registration'}} />
