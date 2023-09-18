@@ -8,10 +8,12 @@ const port = 8000;
 app.use(bodyParser.json())
 
 const userRoutes = require('./routes/user-routes');
+const orderRoutes = require('./routes/order-routes')
 
 
 // routes 
 app.use('/api/users', userRoutes)
+app.use('/api/orders', orderRoutes)
 
 const connectionURL = 'mongodb+srv://waldemar:1234@clusterplus.5ckgjtl.mongodb.net/ServicePlus?retryWrites=true&w=majority'
 
