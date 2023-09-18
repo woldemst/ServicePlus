@@ -3,8 +3,8 @@ import { View, StyleSheet } from "react-native"
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs'
 
 
-import Management from "./Management"
-import Appointments from "./Appointments"
+import Management from "./pages/Management"
+import Appointments from "./pages/Appointments"
 
 const Tab = createMaterialTopTabNavigator()
 

@@ -8,7 +8,7 @@ const Management = ({route}) => {
     return (
         <View style={styles.container}>
             <Text style={styles.logoText}>ServicePlus</Text>
-            <Image style={styles.image} source={require('../../assets/onboarding_1.png')} />
+            <Image style={styles.image} source={require('../../../assets/onboarding_1.png')} />
             <Text style={styles.title}>Verwaltung</Text>
             <Text style={styles.description}>Registrieren Sie Ihren Betrieb und verwalten Sie Ihre Mitarbeiter direct in der App.</Text>
 

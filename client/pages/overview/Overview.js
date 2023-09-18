@@ -1,8 +1,13 @@
 import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native"
 
-import OrderList from './components/OrderList'
+
+import OrderView from "./pages/OrderView"
+import AppointmentView from "./pages/AppointmentView"
+import { useState } from "react"
+
 
 const Overview = () => {
+    const [activeTab, setActiveTab] = useState(2)
     return (
         <View style={styles.container}>
             <View style={styles.header} >
@@ -38,25 +43,27 @@ const Overview = () => {
                     {/* <Image style={styles.bannerImg} source={require('../../assets/banner0.png')} /> */}
                 </View>
 
-                <View style={styles.orderContainer}>
-                    <OrderList />
+                <View style={styles.orderContainer}>    
+                    {activeTab == 1 && <AppointmentView />}
+                    {activeTab == 2 && <OrderView />}
+
 
                 </View>
 
-            </View>
+            </View> 
 
             <View style={styles.footer} >
                 <View style={styles.footerContent}>
 
                     <View style={styles.footerIconContainer} >
-                        <TouchableOpacity style={styles.footerButton} >
+                        <TouchableOpacity style={styles.footerButton} number='1' onPress={()=>{setActiveTab(1)}}>
                             <Image source={require('../../assets/tabler.png')} />
                             <Text style={styles.footerIconText}>Termine</Text>
                         </TouchableOpacity>
                     </View>
 
                     <View style={styles.footerIconContainer} >
-                        <TouchableOpacity style={styles.footerButton} >
+                        <TouchableOpacity style={styles.footerButton} number='2' onPress={()=>{setActiveTab(2)}}>
 
                             <Image source={require('../../assets/settings.png')} />
                             <Text style={styles.footerIconText}>Aufträge</Text>
@@ -64,7 +71,7 @@ const Overview = () => {
                     </View>
 
                     <View style={styles.footerIconContainer} >
-                        <TouchableOpacity style={styles.footerButton} >
+                        <TouchableOpacity style={styles.footerButton} number='3' onPress={()=>{setActiveTab(3)}}>
                             <Image source={require('../../assets/betrieb.png')} />
                             <Text style={styles.footerIconText}>Betrieb</Text>
                         </TouchableOpacity>
