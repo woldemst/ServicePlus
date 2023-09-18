@@ -9,7 +9,7 @@ const Appointments = ({route}) => {
 
         <View style={styles.container}>
             <Text style={styles.logoText}>ServicePlus</Text>
-            <Image style={styles.image} source={require('../../assets/onboarding_2.png')} />
+            <Image style={styles.image} source={require('../../../assets/onboarding_2.png')} />
             <Text style={styles.title}>Kundentermine</Text>
             <Text style={styles.description}>Behalten Sie Ihre Kunden, Termine und Berichte zentral und mobil im Blick.</Text>
 
