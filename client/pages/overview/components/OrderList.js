@@ -6,7 +6,6 @@ import OrderItem from './OrderItem'
 const OrderList = () => {
     const [fetchedOrders, setFetchedOrders] = useState([])
 
-
     useEffect(() => {
         const fetchOrders = async () => {
             try {
@@ -27,7 +26,7 @@ const OrderList = () => {
 
         <>
             {fetchedOrders.map(order => (
-                <OrderItem key={order.id} order={order} />
+                <OrderItem key={order._id} order={order} />
 
             ))}
 

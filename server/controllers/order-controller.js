@@ -1,7 +1,6 @@
 const Order = require("../models/Order")
 const HttpError = require("../models/http-error")
 
-
 const getAllOrders = async (req, res, next) => {
     try {
         const orders = await Order.find()
