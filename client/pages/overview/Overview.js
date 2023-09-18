@@ -1,10 +1,10 @@
 import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native"
 
-import AppointmentItem from "./OrderItem"
+import OrderList from './components/OrderList'
 
 const Overview = () => {
-    return ( 
-        <View style={styles.container}> 
+    return (
+        <View style={styles.container}>
             <View style={styles.header} >
                 <View style={styles.headerContent}>
 
@@ -20,9 +20,9 @@ const Overview = () => {
                             <Image width='24' height='24' source={require('../../assets/calendar_plus.png')} />
 
                         </TouchableOpacity>
-                        
+
                         <TouchableOpacity style={styles.headerButton} >
-                            <Image width='24' height='24'  source={require('../../assets/filter.png')} />
+                            <Image width='24' height='24' source={require('../../assets/filter.png')} />
 
                         </TouchableOpacity>
                     </View>
@@ -31,14 +31,15 @@ const Overview = () => {
 
                 </View>
             </View>
-            <View style={styles.mainContent}> 
+
+            <View style={styles.mainContent}>
 
                 <View style={styles.imgContainer}>
                     {/* <Image style={styles.bannerImg} source={require('../../assets/banner0.png')} /> */}
                 </View>
 
                 <View style={styles.orderContainer}>
-                    <AppointmentItem />
+                    <OrderList />
 
                 </View>
 
@@ -81,8 +82,8 @@ const styles = StyleSheet.create({
     container: {
         // borderColor: 'red', 
         // borderWidth: 2,
-        
-        flex: 1, 
+
+        flex: 1,
         backgroundColor: '#fff',
         position: 'relative',
 
@@ -93,18 +94,18 @@ const styles = StyleSheet.create({
     header: {
         width: '100%',
         paddingTop: 27,
-        paddingBottom: 10, 
+        paddingBottom: 10,
         paddingLeft: 32,
         paddingRight: 32,
         position: 'fixed',
         top: 0,
         borderBottomColor: '#eee',
         borderBottomWidth: 1
-        
+
     },
     headerContent: {
 
-        flexDirection:'row',
+        flexDirection: 'row',
         justifyContent: 'space-between'
     },
     textContainer: {
@@ -112,7 +113,7 @@ const styles = StyleSheet.create({
     },
     headerText: {
         fontSize: 21,
-        fontWeight:  '400'
+        fontWeight: '400'
     },
     headerIconContainer: {
         flexDirection: 'row',
@@ -146,8 +147,8 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         bottom: 0,
         left: 0,
-        top: 0, 
-        right: 0, 
+        top: 0,
+        right: 0,
         marginLeft: 'auto',
         marginRight: 'auto',
         marginTop: 0,
@@ -166,13 +167,13 @@ const styles = StyleSheet.create({
         borderTopWidth: 1,
         width: '100%',
         paddingTop: 24,
-        paddingBottom: 24, 
+        paddingBottom: 24,
         paddingLeft: 40,
         paddingRight: 40,
         // position: 'absolute',
     },
     footerContent: {
-        flexDirection:'row',
+        flexDirection: 'row',
         justifyContent: 'space-between'
 
     },
@@ -189,7 +190,7 @@ const styles = StyleSheet.create({
     },
     // FOOTER: END !!!
 
-    
+
 })
 
 export default Overview;
