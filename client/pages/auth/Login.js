@@ -1,4 +1,4 @@
-import { View, Text, TextInput, TouchableOpacity, Button ,StyleSheet} from "react-native";
+import { View, Text, TextInput, TouchableOpacity ,StyleSheet} from "react-native";
 import { useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import axios from "axios";
@@ -31,7 +31,7 @@ const Login = () => {
 
             {/* {error && <Text style={styles.error}>{error}</Text>} */}
 
-
+        
             <TextInput
                 style={styles.input}
                 placeholder="Email"
