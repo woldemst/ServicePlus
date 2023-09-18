@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-const orderShema = new mongoose.Schema({
+const orderSchema = new mongoose.Schema({
   name: { type: String },
   creator: {type: mongoose.Types.ObjectId, required: true, ref: 'User' }, // establish connecrion between two shemas
   worker: { type: String},
@@ -15,5 +15,5 @@ const orderShema = new mongoose.Schema({
 
 });
 
-module.exports = mongoose.model("Order", orderShema);
+module.exports = mongoose.model("Order", orderSchema);
 
