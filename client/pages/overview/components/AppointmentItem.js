@@ -2,32 +2,24 @@ import { View, StyleSheet, Image, Text } from "react-native";
 
 
 
-const OrderItem = (props) => {
+const AppointmentItem = (props) => {
     return (
         <View style={styles.container}>
             <View style={styles.indicator}></View>
 
             <View style={styles.mainContent}>
-                <View style={styles.nameContainer} >
-                    <Text style={styles.order}>{props.order.name}</Text>
-                    <Text style={styles.date}>{props.order._id}</Text>
-                </View>
+                {/* <Text style={styles.date}>{props.order.date}</Text> */}
+                <Text style={styles.date}>{props.appointment.startTime} - {props.appointment.finishTime}</Text>
 
+                <Text style={styles.workersName}>{props.appointment.worker}</Text>
 
-                <View style={styles.adressContainer}>
-
-                    <Text style={styles.workersName}>{props.order.address}</Text>
-
-
-                </View>
-
-                <Text style={styles.workersName}>{props.order.customer}</Text>
+                <Text style={styles.order}>{props.appointment.name}</Text>
                 
             </View>
 
-            {/* <View style={styles.iconContainer}>
+            <View style={styles.iconContainer}>
                 <Image style={styles.filePlusImg} source={require('../../../assets/file_plus.png')} />
-            </View> */}
+            </View>
         </View>
     )
 }
@@ -55,18 +47,8 @@ const styles = StyleSheet.create({
         paddingTop: 6,
         paddingBottom: 6,
         paddingLeft: 16,
-        paddingRight: 16,
         textAlign: 'left', 
-
     },
-    nameContainer: {
-        flexDirection: 'row',
-        justifyContent: 'space-between'
-
-    },  
-    adressContainer: {
-        flexDirection: 'row'
-    },  
     date: {
         fontSize: 14, 
         color: '#171717', 
@@ -78,7 +60,7 @@ const styles = StyleSheet.create({
     },
     order: {
         fontSize: 14, 
-        // marginTop: 7
+        marginTop:7
     },
     iconContainer: {
         // width: '8%',
@@ -98,4 +80,4 @@ const styles = StyleSheet.create({
 
 
 
-export default OrderItem; 
+export default AppointmentItem; 

@@ -12,44 +12,32 @@ const Overview = () => {
         <View style={styles.container}>
             <View style={styles.header} >
                 <View style={styles.headerContent}>
-
                     <View style={styles.textContainer} >
-                        <Text style={styles.headerText}>Terminübersicht</Text>
+                        {activeTab == 1 && <Text style={styles.headerText}>Terminübersicht</Text>}
+                        {activeTab == 2 && <Text style={styles.headerText}>Aufträge</Text>}
 
                     </View>
 
-
                     <View style={styles.headerIconContainer} >
                         <TouchableOpacity style={styles.headerButton} >
-
                             <Image width='24' height='24' source={require('../../assets/calendar_plus.png')} />
-
                         </TouchableOpacity>
 
                         <TouchableOpacity style={styles.headerButton} >
                             <Image width='24' height='24' source={require('../../assets/filter.png')} />
-
                         </TouchableOpacity>
                     </View>
-
-
 
                 </View>
             </View>
 
             <View style={styles.mainContent}>
-
-                <View style={styles.imgContainer}>
-                    {/* <Image style={styles.bannerImg} source={require('../../assets/banner0.png')} /> */}
-                </View>
-
                 <View style={styles.orderContainer}>    
                     {activeTab == 1 && <AppointmentView />}
                     {activeTab == 2 && <OrderView />}
 
 
                 </View>
-
             </View> 
 
             <View style={styles.footer} >
@@ -141,26 +129,7 @@ const styles = StyleSheet.create({
         flex: 1,
         position: 'relative',
     },
-    bannerImg: {
-        // bottom: '50%',
-    },
-    imgContainer: {
-        // borderColor: 'red', 
-        // borderWidth: 2,
 
-        flex: 1,
-        position: 'absolute',
-        justifyContent: 'center',
-        alignItems: 'center',
-        bottom: 0,
-        left: 0,
-        top: 0,
-        right: 0,
-        marginLeft: 'auto',
-        marginRight: 'auto',
-        marginTop: 0,
-        marginBottom: 0
-    },
     orderContainer: {
         padding: 32
     },
