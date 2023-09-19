@@ -1,14 +1,22 @@
 import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native"
 
-
 import OrderView from "./pages/OrderView"
 import AppointmentView from "./pages/AppointmentView"
 import { useState } from "react"
 
+import ModalComponent from "../../share/UIElements/Modal"
+
 
 const Overview = () => {
     const [activeTab, setActiveTab] = useState(2)
+    const [isModalVisible, setModalVisible] = useState(false);
+
+    const toggleModal = () => {
+        setModalVisible(!isModalVisible)
+      }
+
     return (
+        <>
         <View style={styles.container}>
             <View style={styles.header} >
                 <View style={styles.headerContent}>
@@ -19,9 +27,17 @@ const Overview = () => {
                     </View>
 
                     <View style={styles.headerIconContainer} >
-                        <TouchableOpacity style={styles.headerButton} >
-                            <Image width='24' height='24' source={require('../../assets/calendar_plus.png')} />
-                        </TouchableOpacity>
+                        {activeTab == 1 && (
+                            <TouchableOpacity style={styles.headerButton} >
+                                <Image width='24' height='24' source={require('../../assets/calendar_plus.png')} />
+                            </TouchableOpacity>
+                        )}
+                        {activeTab == 2 && (
+                            <TouchableOpacity style={styles.headerButton} onPress={toggleModal} >
+                                <Image width='24' height='24' source={require('../../assets/calendar_plus.png')} />
+                            </TouchableOpacity>
+                        )}
+
 
                         <TouchableOpacity style={styles.headerButton} >
                             <Image width='24' height='24' source={require('../../assets/filter.png')} />
@@ -70,6 +86,17 @@ const Overview = () => {
 
             </View>
         </View>
+
+        <ModalComponent 
+            isVisible={isModalVisible}
+            animationIn="slideInUp" // Specify the slide-up animation
+            animationOut="slideOutDown" // Specify the slide-down animation
+            onBackdropPress={toggleModal}
+            onBackButtonPress={toggleModal}
+        >
+        {/*  */}
+        </ModalComponent>
+        </>
     )
 }
 
