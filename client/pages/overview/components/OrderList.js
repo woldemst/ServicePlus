@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
+import ModalComponent from '../../../share/UIElements/Modal';
+
 
 import OrderItem from './OrderItem'
 
@@ -25,6 +27,7 @@ const OrderList = () => {
     return (
 
         <>
+
             {fetchedOrders.map(order => (
                 <OrderItem key={order._id} order={order} />
 

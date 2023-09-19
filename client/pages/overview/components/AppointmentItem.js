@@ -1,26 +1,30 @@
 import { View, StyleSheet, Image, Text } from "react-native";
-
+import ModalComponent from "../../../share/UIElements/Modal";
 
 
 const AppointmentItem = (props) => {
     return (
-        <View style={styles.container}>
-            <View style={styles.indicator}></View>
+        <>
+            <View style={styles.container}>
+                <View style={styles.indicator}></View>
 
-            <View style={styles.mainContent}>
-                {/* <Text style={styles.date}>{props.order.date}</Text> */}
-                <Text style={styles.date}>{props.appointment.startTime} - {props.appointment.finishTime}</Text>
+                <View style={styles.mainContent}>
+                    {/* <Text style={styles.date}>{props.order.date}</Text> */}
+                    <Text style={styles.date}>{props.appointment.startTime} - {props.appointment.finishTime}</Text>
 
-                <Text style={styles.workersName}>{props.appointment.worker}</Text>
+                    <Text style={styles.workersName}>{props.appointment.worker}</Text>
 
-                <Text style={styles.order}>{props.appointment.name}</Text>
-                
+                    <Text style={styles.order}>{props.appointment.name}</Text>
+                    
+                </View>
+
+                <View style={styles.iconContainer}>
+                    <Image style={styles.filePlusImg} source={require('../../../assets/file_plus.png')} />
+                </View>
             </View>
+            <ModalComponent />
 
-            <View style={styles.iconContainer}>
-                <Image style={styles.filePlusImg} source={require('../../../assets/file_plus.png')} />
-            </View>
-        </View>
+        </>
     )
 }
 
