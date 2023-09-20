@@ -1,8 +1,10 @@
 import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native"
 import { useState } from "react"
+import { useNavigation } from '@react-navigation/native'
 
 
 const Firm = () => {
+    const navigation = useNavigation()
     return (
         <>
             <View style={styles.container} >
@@ -17,7 +19,7 @@ const Firm = () => {
 
                 </View>
                 <View style={styles.listContainer} >
-                    <TouchableOpacity style={styles.listItem}>
+                    <TouchableOpacity style={styles.listItem} onPress={()=>{navigation.navigate('editProfile', {name: 'Edit Profile'})}}>
                         <Image style={styles.icon} source={require('../../../../assets/firm/profile.png')} />
                         <Text style={styles.itemText}>Unternehmensprofile bearbeiten</Text>
                     </TouchableOpacity>

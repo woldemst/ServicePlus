@@ -98,8 +98,9 @@ const styles = StyleSheet.create({
         height: 50,
         borderColor: 'gray',
         borderWidth: 1,
-        marginTop: 6,
-        marginBottom: 6,
+        // borderColor: '#e0e0e0', 
+        // marginTop: 6,
+        marginBottom: 16,
         padding: 7,
         borderRadius: 6,
         fontSize: 18,
@@ -122,7 +123,7 @@ const styles = StyleSheet.create({
     textArea: {
         width: '100%',
         height: 130, // Adjust the height as needed
-        borderColor: 'gray',
+        borderColor: '#e0e0e0', 
         borderWidth: 1,
         marginBottom: 30, 
         paddingTop: 7,
