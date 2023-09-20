@@ -1,8 +1,9 @@
 import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native"
-
-import OrderView from "./pages/OrderView"
-import AppointmentView from "./pages/AppointmentView"
 import { useState } from "react"
+
+import AppointmentView from "./pages/AppointmentView"
+import OrderView from "./pages/OrderView"
+import Firm from "./components/firm/Firm"
 
 import ModalComponent from "../../share/UIElements/Modal"
 import OrderCreate from "./components/order/form/OrderCreate"
@@ -25,6 +26,7 @@ const Overview = () => {
                     <View style={styles.textContainer} >
                         {activeTab == 1 && <Text style={styles.headerText}>Terminübersicht</Text>}
                         {activeTab == 2 && <Text style={styles.headerText}>Aufträge</Text>}
+                        {activeTab == 3 && <Text style={styles.headerText}>Betrieb</Text>}
 
                     </View>
 
@@ -41,9 +43,12 @@ const Overview = () => {
                         )}
 
 
-                        <TouchableOpacity style={styles.headerButton} >
-                            <Image width='24' height='24' source={require('../../assets/filter.png')} />
-                        </TouchableOpacity>
+                        {activeTab !== 3 && (
+                            <TouchableOpacity style={styles.headerButton} >
+                                <Image width='24' height='24' source={require('../../assets/filter.png')} />
+                            </TouchableOpacity>
+                        )}
+
                     </View>
 
                 </View>
@@ -53,8 +58,7 @@ const Overview = () => {
                 <View style={styles.orderContainer}>    
                     {activeTab == 1 && <AppointmentView />}
                     {activeTab == 2 && <OrderView />}
-
-
+                    {activeTab == 3 && <Firm />}
                 </View>
             </View> 
 
