@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, ScrollView, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import Modal from 'react-native-modal'
 
 
@@ -12,37 +12,57 @@ const ModalComponent = (props) => {
       <View style={styles.container}>
 
         <Modal
+          style={{margin: 0}}
           isVisible={props.isVisible}
-          animationIn="slideInUp" // Specify the slide-up animation
-          animationOut="slideOutDown" // Specify the slide-down animation
+          animationIn={props.animationIn} // Specify the slide-up animation
+          animationOut={props.animationOut} // Specify the slide-down animation
           onBackdropPress={props.onBackdropPress}
           onBackButtonPress={props.onBackButtonPress}
+
         >
 
-          <View style={styles.modalContainer}>
-            {props.children}
-            <Text>This is your modal content.</Text>
-            <TouchableOpacity >
-              <Text>Close Modal</Text>
-            </TouchableOpacity>
-          </View>
+            <View style={styles.modalContainer}>
+                <View style={styles.modalHeader}>{props.header}</View>
+              <ScrollView showsVerticalScrollIndicator={false}>
+                  <View style={styles.modalHeader}>{props.children}</View>
+
+                  <View style={styles.modalHeader}>{props.footer}</View>
+              </ScrollView>
+            </View>
+
         </Modal>
       </View>
     );
 }
 
+
 const styles = StyleSheet.create({
     container: {
       // flex: 1,
-      alignItems: 'center',
-      justifyContent: 'center',
-      backgroundColor: 'red'
+
+      padding: 0,
+
+    
+      // alignItems: 'center',
+
+
+      
     },
     modalContainer: {
-      backgroundColor: 'white',
-      padding: 20,
+      backgroundColor: '#fff',
+      padding: 32,
       borderRadius: 10,
+      // borderColor: 'red', 
+      // borderWidth: 2,
+      // flex: 1,
+      height: '80%',
+      width: '100%',
+      position: 'absolute',
+      bottom: 0
     },
+    modalHeader: {
+
+    }
   });
 
 export default ModalComponent

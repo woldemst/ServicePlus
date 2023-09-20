@@ -1,6 +1,5 @@
 import { View, Text} from "react-native"
-import AppointmentList from "../components/AppointmentList"
-import ModalComponent from "../../../share/UIElements/Modal"
+import AppointmentList from  '../components/appointment/AppointmentList'
 
 const AppointmentView = () => {
     return (
