@@ -1,6 +1,4 @@
 import { View, StyleSheet, Image, Text } from "react-native";
-import ModalComponent from "../../../share/UIElements/Modal";
-
 
 const AppointmentItem = (props) => {
     return (
@@ -15,15 +13,13 @@ const AppointmentItem = (props) => {
                     <Text style={styles.workersName}>{props.appointment.worker}</Text>
 
                     <Text style={styles.order}>{props.appointment.name}</Text>
-                    
+
                 </View>
 
                 <View style={styles.iconContainer}>
-                    <Image style={styles.filePlusImg} source={require('../../../assets/file_plus.png')} />
+                    <Image style={styles.filePlusImg} source={require('../../../../assets/file_plus.png')} />
                 </View>
             </View>
-            <ModalComponent />
-
         </>
     )
 }
@@ -37,34 +33,34 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         flexDirection: 'row',
         borderColor: '#757575',
-        marginBottom: 16, 
+        marginBottom: 16,
     },
     indicator: {
         width: '3%',
         backgroundColor: '#7A9B76',
-        borderTopLeftRadius: 10, 
+        borderTopLeftRadius: 10,
         borderBottomLeftRadius: 10
 
-    },  
+    },
     mainContent: {
         flex: 1,
         paddingTop: 6,
         paddingBottom: 6,
         paddingLeft: 16,
-        textAlign: 'left', 
+        textAlign: 'left',
     },
     date: {
-        fontSize: 14, 
-        color: '#171717', 
+        fontSize: 14,
+        color: '#171717',
         fontWeight: '700'
-    },  
+    },
     workersName: {
-        fontSize: 14, 
-        marginTop: 6  
+        fontSize: 14,
+        marginTop: 6
     },
     order: {
-        fontSize: 14, 
-        marginTop:7
+        fontSize: 14,
+        marginTop: 7
     },
     iconContainer: {
         // width: '8%',

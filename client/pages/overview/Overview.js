@@ -5,6 +5,8 @@ import AppointmentView from "./pages/AppointmentView"
 import { useState } from "react"
 
 import ModalComponent from "../../share/UIElements/Modal"
+import OrderCreate from "./components/order/form/OrderCreate"
+
 
 
 const Overview = () => {
@@ -93,8 +95,12 @@ const Overview = () => {
             animationOut="slideOutDown" // Specify the slide-down animation
             onBackdropPress={toggleModal}
             onBackButtonPress={toggleModal}
+            
+            header={<>
+              <Text style={styles.modalHeadline}>Auftrag hinzufügen</Text>
+            </>}
         >
-        {/*  */}
+            <OrderCreate />
         </ModalComponent>
         </>
     )
@@ -192,7 +198,11 @@ const styles = StyleSheet.create({
         fontSize: 12
     },
     // FOOTER: END !!!
-
+    modalHeadline: {
+        fontSize: 21,
+        color: '#7a9b76',
+        fontWeight: '700'
+    },
 
 })
 

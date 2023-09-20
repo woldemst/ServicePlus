@@ -1,8 +1,7 @@
 import { useEffect, useState } from 'react';
+import { View, StyleSheet, Image } from 'react-native';
 import axios from 'axios';
 
-import OrderItem from './OrderItem'
-import { View, StyleSheet, Image } from 'react-native';
 import AppointmentItem from './AppointmentItem';
 
 const AppointmentList = () => {
@@ -21,10 +20,10 @@ const AppointmentList = () => {
         fetchOrders()
     }, [])
 
-    if (fetchedAppointments.length === 0){
-        return(
+    if (fetchedAppointments.length === 0) {
+        return (
             <View style={styles.imgContainer}>
-                <Image style={styles.bannerImg} source={require('../../../assets/banner0.png')} />
+                <Image style={styles.bannerImg} source={require('../../../../assets/banner0.png')} />
             </View>
         )
     }
@@ -48,11 +47,13 @@ const styles = StyleSheet.create({
         // bottom: '50%',
     },
     imgContainer: {
-        borderColor: 'red', 
-        borderWidth: 2,
+        // borderColor: 'red',
+        // borderWidth: 2,
 
-        flex: 1,
-        position: 'absolute',
+        height: '100%',
+        width: '100%',
+        // flex: 1,
+        // position: 'absolute',
         justifyContent: 'center',
         alignItems: 'center',
         bottom: 0,
