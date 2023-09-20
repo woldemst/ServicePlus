@@ -3,12 +3,6 @@ import { View, Text, TextInput, TouchableOpacity, StyleSheet } from "react-nativ
 
 import { SelectList } from 'react-native-dropdown-select-list' 
 
-
-
-
-
-
-
 const OrderCreate = () =>{
     const [name, setName] = useState('')
     const [description, setDescription] = useState('')
