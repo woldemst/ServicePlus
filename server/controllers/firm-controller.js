@@ -44,4 +44,32 @@ const register = async (req, res, next) => {
     })
 }
 
+const updateFirm = async (req, res, next) => {
+    // destructuring assignment from body
+    const {name, owner, email, street, houseNr, zip, place, phone, website } = req.body
+
+    let firm; 
+    try {
+        firm = await Firm.findById()
+    } catch (err) {
+        
+    }
+}
+
+const getFirmProfile = async (req, res, next) => {
+    try {
+        const firm = await Firm.find()
+        res.json(firm)
+
+    } catch (err) {
+        const error = new HttpError(
+            'Fetch the firm failed, please try again later',
+            500
+        )
+        next(error)
+    }
+}
+
 exports.register = register; 
+exports.updateFirm = updateFirm;
+exports.getFirmProfile = getFirmProfile; 
