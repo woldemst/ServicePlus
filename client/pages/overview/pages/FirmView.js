@@ -1,48 +1,93 @@
 import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { useNavigation } from '@react-navigation/native'
+import axios from "axios"
 
+import ModalComponent from "../../../share/UIElements/Modal"
+import FirmProfile from "./firm/FirmProfile"
 
 const Firm = () => {
     const navigation = useNavigation()
+
+    const [fetchedFirm, setFetchedFirm] = useState([])
+    const [isModalVisible, setModalVisible] = useState(false);
+    
+    const toggleModal = () => setModalVisible(!isModalVisible)
+
+    useEffect(()=>{
+
+        const fetcheFirm = async () =>{
+            try {
+
+                const response = await axios.get("http://localhost:8000/api/firm/profile")
+                setFetchedFirm(response.data)
+            } catch (err) {
+                console.log("Error fetching firm profile", err);
+                
+            }
+        }
+        // alert(fetchedFirm)
+
+        fetcheFirm()
+    }, [])
+    
+
     return (
         <>
             <View style={styles.container} >
-                <View style={styles.firmContainer}>
+                <TouchableOpacity style={styles.firmContainer} onPress={toggleModal}>
                     <View style={styles.imageContainer} >
-                        <Image style={styles.img} source={require('../../../../assets/firmImage.jpeg')} ></Image>
+                        <Image style={styles.img} source={require('../../../assets/firmImage.jpeg')} ></Image>
                     </View>
                     <View style={styles.nameContainer} >
-                        <Text style={styles.firmName}>Name des Betriebes</Text>
-                        <Text style={styles.bossName}>Name des Geschäftsführers</Text>
+                        {fetchedFirm.map(firm => (
+                            <>
+                                <Text style={styles.firmName}>{firm.name}</Text>
+                                <Text style={styles.bossName}>{firm.owner}</Text>
+
+                            </>
+
+                        ))}
                     </View>
 
-                </View>
+                </TouchableOpacity>
                 <View style={styles.listContainer} >
                     <TouchableOpacity style={styles.listItem} onPress={()=>{navigation.navigate('editProfile', {name: 'Edit Profile'})}}>
-                        <Image style={styles.icon} source={require('../../../../assets/firm/profile.png')} />
+                        <Image style={styles.icon} source={require('../../../assets/firm/profile.png')} />
                         <Text style={styles.itemText}>Unternehmensprofile bearbeiten</Text>
                     </TouchableOpacity>
                     <TouchableOpacity style={styles.listItem}>
-                        <Image style={styles.icon} source={require('../../../../assets/firm/worker.png')} />
+                        <Image style={styles.icon} source={require('../../../assets/firm/worker.png')} />
                         <Text style={styles.itemText}>Mitarbeiter verwalten</Text>
                     </TouchableOpacity>
                     <TouchableOpacity style={styles.listItem}>
-                        <Image style={styles.icon} source={require('../../../../assets/firm/customer.png')} />
+                        <Image style={styles.icon} source={require('../../../assets/firm/customer.png')} />
                         <Text style={styles.itemText}>Kunden verwalten</Text>
                     </TouchableOpacity>
                     <TouchableOpacity style={styles.listItem}>
-                        <Image style={styles.icon} source={require('../../../../assets/firm/setting.png')} />
+                        <Image style={styles.icon} source={require('../../../assets/firm/setting.png')} />
                         <Text style={styles.itemText}>Einstellungen</Text>
                     </TouchableOpacity>
                 </View>
                 <View style={styles.logoutContainer}>
                 <TouchableOpacity style={styles.listItem}>
-                        <Image style={styles.icon} source={require('../../../../assets/firm/logout.png')} />
+                        <Image style={styles.icon} source={require('../../../assets/firm/logout.png')} />
                         <Text style={styles.itemText}>Logout</Text>
                     </TouchableOpacity>
                 </View>
             </View>
+
+            <ModalComponent 
+                isVisible={isModalVisible}
+                animationIn="slideInUp" // Specify the slide-up animation
+                animationOut="slideOutDown" // Specify the slide-down animation
+                onBackdropPress={toggleModal}
+                onBackButtonPress={toggleModal}
+                modalHeight='40%'
+                header={<Text style={styles.modalHeadline}>Betrieb</Text>}
+            >
+                <FirmProfile items={fetchedFirm} />
+            </ModalComponent>
 
         </>
     )
@@ -64,8 +109,6 @@ const styles = StyleSheet.create({
         height: 48
     },
     nameContainer: {
-        // borderWidth: 2, 
-        // borderColor: 'red',
         paddingLeft: 16, 
         paddingRight: 16,
         paddingTop: 9,
@@ -81,23 +124,11 @@ const styles = StyleSheet.create({
     },
     listContainer: {
         paddingTop: 23,
-        // flex: 1,
-        // height: '100%',
-        // borderWidth: 2, 
-        // borderColor: 'red',
     },
     listItem: {
-        // borderWidth: 2, 
-        // borderColor: 'red',
-
         alignItems: 'center',
         flexDirection: 'row',
         marginBottom: 4
-        // paddingLeft: 16, 
-        // paddingRight: 16,
-        // paddingTop: 14,
-        // paddingBottom: 14,
-        // height: 56
     },
     icon: {
         margin: 12,
@@ -112,7 +143,12 @@ const styles = StyleSheet.create({
     logoutContainer: {
         position: 'fixed',
         bottom: 0
-    }
+    },
+    modalHeadline: {
+        fontSize: 21,
+        color: '#7a9b76',
+        fontWeight: '700'
+    },
 })
 
 export default Firm; 

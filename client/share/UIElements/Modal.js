@@ -6,7 +6,7 @@ import Modal from 'react-native-modal'
 
 
 const ModalComponent = (props) => {
-
+  const modlaHeight = props.modalHeight
 
     return (
       <View style={styles.container}>
@@ -21,7 +21,7 @@ const ModalComponent = (props) => {
 
         >
 
-            <View style={styles.modalContainer}>
+            <View style={[styles.modalContainer, {height: props.modalHeight || '80%'} ]}>
                 <View style={styles.modalHeader}>{props.header}</View>
               <ScrollView showsVerticalScrollIndicator={false}>
                   <View style={styles.modalHeader}>{props.children}</View>
@@ -52,8 +52,6 @@ const styles = StyleSheet.create({
       backgroundColor: '#fff',
       padding: 32,
       borderRadius: 10,
-
-      height: '80%',
       width: '100%',
       position: 'absolute',
       bottom: 0
