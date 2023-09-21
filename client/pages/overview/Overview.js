@@ -3,7 +3,7 @@ import { useState } from "react"
 
 import AppointmentView from "./pages/AppointmentView"
 import OrderView from "./pages/OrderView"
-import Firm from "./components/firm/Firm"
+import FirmView from "./pages/FirmView"
 
 import ModalComponent from "../../share/UIElements/Modal"
 import OrderCreate from "./components/order/form/OrderCreate"
@@ -33,19 +33,19 @@ const Overview = () => {
                     <View style={styles.headerIconContainer} >
                         {activeTab == 1 && (
                             <TouchableOpacity style={styles.headerButton} >
-                                <Image width='24' height='24' source={require('../../assets/calendar_plus.png')} />
+                                <Image style={styles.headerIcon} source={require('../../assets/calendar_plus.png')} />
                             </TouchableOpacity>
                         )}
                         {activeTab == 2 && (
                             <TouchableOpacity style={styles.headerButton} onPress={toggleModal} >
-                                <Image width='24' height='24' source={require('../../assets/calendar_plus.png')} />
+                                <Image style={styles.headerIcon} source={require('../../assets/calendar_plus.png')} />
                             </TouchableOpacity>
                         )}
 
 
                         {activeTab !== 3 && (
                             <TouchableOpacity style={styles.headerButton} >
-                                <Image width='24' height='24' source={require('../../assets/filter.png')} />
+                                <Image style={styles.headerIcon} source={require('../../assets/filter.png')} />
                             </TouchableOpacity>
                         )}
 
@@ -58,7 +58,7 @@ const Overview = () => {
                 <View style={styles.orderContainer}>    
                     {activeTab == 1 && <AppointmentView />}
                     {activeTab == 2 && <OrderView />}
-                    {activeTab == 3 && <Firm />}
+                    {activeTab == 3 && <FirmView />}
                 </View>
             </View> 
 
@@ -155,6 +155,10 @@ const styles = StyleSheet.create({
     headerButton: {
         justifyContent: 'center',
         alignItems: 'center'
+    },
+    headerIcon: {
+        width: 24, 
+        height: 24
     },
     // HEADER: END !!!
 

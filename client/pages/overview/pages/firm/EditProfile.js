@@ -1,17 +1,24 @@
 import { useState } from "react";
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, ScrollView } from "react-native";
+import axios from "axios";
 
 import { SelectList } from 'react-native-dropdown-select-list' 
 
 const EditProfile = () => {
 
-    const [name, setName] = useState('')
-    const [description, setDescription] = useState('')
     const [selectedValue, setSelectedValue] = useState('');
-
-
     const [selected, setSelected] = useState("");
-    
+
+    const [firmName, setFirmName] = useState('')
+    const [ownerName, setOwnerName] = useState('')
+    const [email, setEmail] = useState('')
+    const [street, setStreet] = useState('')
+    const [houseNr, setHouseNr] = useState('')
+    const [zip, setZip] = useState('')
+    const [phone, setPhone] = useState('')
+    const [website, setWebsite] = useState('')
+
+
     const data = [
         {key:'1', value:'Herr Kunde', disabled:true},
         {key:'2', value:'Frau Kundin'},
@@ -19,21 +26,36 @@ const EditProfile = () => {
         {key:'4', value:'B', disabled:true},
         {key:'5', value:'c'},
     ]
+
+    const haldleSubmit = async () => {
+        const URL = "http://localhost:8000/api/firm/update";
+
+        const response = await axios.post(URL, {
+            firmName: firmName,
+            ownerName: ownerName, 
+            email: email,
+            street: street, 
+            houseNr: houseNr, 
+            zip: zip, 
+            phone: phone,
+            website: website
+        })
+
+        alert(response)
+    }
   
     return (
         <>
             <View style={styles.container}> 
                 <ScrollView showsVerticalScrollIndicator={false}>
 
-
-                
                 <Text style={styles.label}>Name des Betriebs*</Text>
 
                 <TextInput
                     style={[styles.input, styles.input.placeholderText]}
                     placeholder="Name des Betriebs"
-                    onChangeText={(text) => setName(text)}
-                    value={name}
+                    onChangeText={(text) => setFirmName(text)}
+                    value={firmName}
                 />
 
                 <Text style={styles.label}>Name des Inhabers*</Text>
@@ -41,8 +63,8 @@ const EditProfile = () => {
                 <TextInput
                     style={[styles.input, styles.input.placeholderText]}
                     placeholder="Name des Inhabers"
-                    onChangeText={(text) => setName(text)}
-                    value={name}
+                    onChangeText={(text) => setOwnerName(text)}
+                    value={ownerName}
                 />
 
                 <Text style={styles.label}>E-Mail*</Text>
@@ -50,48 +72,59 @@ const EditProfile = () => {
                 <TextInput
                     style={[styles.input, styles.input.placeholderText]}
                     placeholder="Email"
-                    onChangeText={(text) => setName(text)}
-                    value={name}
+                    onChangeText={(text) => setEmail(text)}
+                    value={email}
                 />
 
                 <View style={styles.streetContainer}>
-                
-                    <Text style={styles.label}>Straße*</Text>
 
-                    <TextInput
-                        style={[styles.input, styles.input.placeholderText]}
-                        placeholder="Straße"
-                        onChangeText={(text) => setName(text)}
-                        value={name}
-                    />
-                    <Text style={styles.label}>Nr.*</Text>
+                <View style={styles.streetWrapper}>
+                        <Text style={styles.label}>Straße*</Text>
 
-                    <TextInput
-                        style={[styles.input, styles.input.placeholderText]}
-                        placeholder="Nr."
-                        onChangeText={(text) => setName(text)}
-                        value={name}
-                    />
+                        <TextInput
+                            style={[styles.input, styles.input.placeholderText]}
+                            placeholder="Straße"
+                            onChangeText={(text) => setStreet(text)}
+                            value={street}
+                        />
+                    </View>
+
+                    <View style={styles.nrWrapper}>
+                        <Text style={styles.label}>Nr.*</Text>
+
+                        <TextInput
+                            style={[styles.input, styles.input.placeholderText]}
+                            placeholder="Nr."
+                            onChangeText={(text) => setHouseNr(text)}
+                            value={houseNr}
+                        />
+                    </View>
+
 
                 </View>
+
                 <View style={styles.zipContainer}>
+                    <View style={styles.zipWrapper}>
+                        <Text style={styles.label}>PLZ*</Text>
+
+                        <TextInput
+                            style={[styles.input, styles.input.placeholderText]}
+                            placeholder="PLZ"
+                            onChangeText={(text) => setZip(text)}
+                            value={zip}
+                        />
+                    </View>
                 
-                    <Text style={styles.label}>PLZ*</Text>
+                    <View style={styles.placeWrapper}>
+                        <Text style={styles.label}>Ort*</Text>
 
-                    <TextInput
-                        style={[styles.input, styles.input.placeholderText]}
-                        placeholder="PLZ"
-                        onChangeText={(text) => setName(text)}
-                        value={name}
-                    />
-                    <Text style={styles.label}>Ort*</Text>
-
-                    <TextInput
-                        style={[styles.input, styles.input.placeholderText]}
-                        placeholder="Ort"
-                        onChangeText={(text) => setName(text)}
-                        value={name}
-                    />
+                        <TextInput
+                            style={[styles.input, styles.input.placeholderText]}
+                            placeholder="Ort"
+                            onChangeText={(text) => setPlace(text)}
+                            value={place}
+                        />
+                    </View>
 
                 </View>
 
@@ -100,8 +133,8 @@ const EditProfile = () => {
                 <TextInput
                     style={[styles.input, styles.input.placeholderText]}
                     placeholder="Telefon"
-                    onChangeText={(text) => setName(text)}
-                    value={name}
+                    onChangeText={(text) => setPhone(text)}
+                    value={phone}
                 />
 
                 {/* <Text style={styles.label}>Branche*</Text>
@@ -121,8 +154,8 @@ const EditProfile = () => {
                 <TextInput
                     style={[styles.input, styles.input.placeholderText]}
                     placeholder="Webseite"
-                    onChangeText={(text) => setName(text)}
-                    value={name}
+                    onChangeText={(text) => setWebsite(text)}
+                    value={website}
                 />
 
                 <View style={styles.btnContainer}>
@@ -191,10 +224,24 @@ const styles = StyleSheet.create({
 
     },
     streetContainer: {
-
+        flexDirection: 'row',
+        justifyContent: 'space-between'
+    },
+    streetWrapper: {
+        width: '75%'
+    },
+    nrWrapper: {
+        width: '20%' 
     },
     zipContainer: {
-
+        flexDirection: 'row',
+        justifyContent: 'space-between'
+    },
+    zipWrapper: {
+        width: '35%'
+    },
+    placeWrapper: {
+        width: '60%'
     },
     label: {
         marginTop: 12,
