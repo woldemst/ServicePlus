@@ -10,11 +10,13 @@ app.use(bodyParser.json())
 const userRoutes = require('./routes/user-routes');
 const orderRoutes = require('./routes/order-routes')
 const appointmentRoutes = require('./routes/appointment-routes')
+const firmRoutes = require('./routes/firm-routes')
 
 // routes 
 app.use('/api/users', userRoutes)
 app.use('/api/orders', orderRoutes)
 app.use('/api/appointments', appointmentRoutes)
+app.use('/api/firm', firmRoutes)
 
 const connectionURL = 'mongodb+srv://waldemar:1234@clusterplus.5ckgjtl.mongodb.net/ServicePlus?retryWrites=true&w=majority'
 
