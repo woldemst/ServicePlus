@@ -104,21 +104,11 @@ const styles = StyleSheet.create({
         padding: 7,
         borderRadius: 6,
         fontSize: 18,
-        placeholderText: {
-            color: 'gray',
-            fontSize: 18, // Set the font size of the placeholder text
-          },
-
     },
     select: {
         margin: 15, 
         fontSize: 18,
         borderRadius: 6,
-        placeholderText: {
-            color: 'gray',
-            fontSize: 18, // Set the font size of the placeholder text
-          },
-
     },
     textArea: {
         width: '100%',
@@ -132,12 +122,10 @@ const styles = StyleSheet.create({
         paddingRight: 7,
         fontSize: 18,
         borderRadius: 6,
-        placeholderText: {
-            color: 'gray',
-            fontSize: 18, // Set the font size of the placeholder text
-          },
-
-
+    },
+    placeholderText: {
+        color: 'gray',
+        fontSize: 18, // Set the font size of the placeholder text
     },
     label: {
         marginTop: 12,
