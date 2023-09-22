@@ -1,8 +1,6 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 
-
-
 import OrderItem from './OrderItem'
 
 const OrderList = () => {
