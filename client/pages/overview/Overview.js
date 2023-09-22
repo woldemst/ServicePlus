@@ -10,13 +10,19 @@ import OrderCreate from "./components/order/form/OrderCreate"
 
 
 
-const Overview = () => {
+const Overview = (props) => {
     const [activeTab, setActiveTab] = useState(2)
     const [isModalVisible, setModalVisible] = useState(false);
 
     const toggleModal = () => {
         setModalVisible(!isModalVisible)
       }
+
+
+    // data from order child component
+    const onButtonPress = (e) => {
+        setModalVisible(false)
+    }
 
     return (
         <>
@@ -41,7 +47,6 @@ const Overview = () => {
                                 <Image style={styles.headerIcon} source={require('../../assets/calendar_plus.png')} />
                             </TouchableOpacity>
                         )}
-
 
                         {activeTab !== 3 && (
                             <TouchableOpacity style={styles.headerButton} >
@@ -104,7 +109,7 @@ const Overview = () => {
               <Text style={styles.modalHeadline}>Auftrag hinzufügen</Text>
             </>}
         >
-            <OrderCreate />
+            <OrderCreate toggle={toggleModal} />
         </ModalComponent>
         </>
     )

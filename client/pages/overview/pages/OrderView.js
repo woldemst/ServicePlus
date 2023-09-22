@@ -1,4 +1,4 @@
-import { View} from "react-native"
+import { View, ScrollView} from "react-native"
 import OrderList from '../components/order/OrderList'
 
 
@@ -6,8 +6,9 @@ const OrderView = () => {
     return(
 
         <View>
-
-            <OrderList />
+            <ScrollView showsVerticalScrollIndicator={false}>
+                <OrderList />
+            </ScrollView>
         </View>
 
     )
