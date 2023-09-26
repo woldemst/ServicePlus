@@ -20,14 +20,23 @@ const OrderList = () => {
     }, [])
 
 
-
-
     return (
 
         <>
-
             {fetchedOrders.map(order => (
-                <OrderItem key={order._id} order={order} />
+                <OrderItem 
+                    id={order._id}
+                    key={order._id} 
+                    name={order.name}
+                    customer={order.customer}
+                    address={order.address}
+                    creator={order.creator}
+                    worker={order.worker}
+                    date={order.date}
+                    status={order.status}
+                    contact={order.contact}
+                    description={order.description}
+                />
 
             ))}
 

@@ -5,7 +5,7 @@ const FirmProfile = (props) => {
     return (
         <>
             {props.items.map(firm => (
-                <View style={styles.profileList}>
+                <View key={firm._id} style={styles.profileList}>
                     <View style={styles.listItem}>
                         <Text style={styles.label}>Betrieb:</Text>
                         <View style={styles.wrapper}>

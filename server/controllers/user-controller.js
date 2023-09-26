@@ -7,7 +7,6 @@ const register = async (req, res, next) => {
   const { name, email, password } = req.body;
 
   // check if a user with tre same email exists using the User model
-
   let existingUser;
 
   try {
