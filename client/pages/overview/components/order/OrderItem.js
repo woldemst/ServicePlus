@@ -10,20 +10,13 @@ import { useState } from "react";
 import ModalComponent from "../../../../share/UIElements/Modal";
 import OrderInfo from "./form/OrderInfo";
 
+
 const OrderItem = (props) => {
   const [isModalVisible, setModalVisible] = useState(false);
   
-
   const toggleModal = () => {
     setModalVisible(!isModalVisible);
   };
-
-
-
-  const orderId = props.order._id
-
-    // console.log(fetchedOrderItem)
-
 
   return (
     <>
@@ -32,15 +25,15 @@ const OrderItem = (props) => {
 
         <View style={styles.mainContent}>
           <View style={styles.nameContainer}>
-            <Text style={styles.order}>{props.order.name}</Text>
-            <Text style={styles.date}>{props.order._id}</Text>
+            <Text style={styles.order}>{props.name}</Text>
+            <Text style={styles.date}>{props._id}</Text>
           </View>
 
           <View style={styles.adressContainer}>
-            <Text style={styles.workersName}>{props.order.address}</Text>
+            <Text style={styles.workersName}>{props.address}</Text>
           </View>
 
-          <Text style={styles.workersName}>{props.order.customer}</Text>
+          <Text style={styles.workersName}>{props.customer}</Text>
         </View>
 
         {/* <View style={styles.iconContainer}>
@@ -54,10 +47,23 @@ const OrderItem = (props) => {
         animationOut="slideOutDown" // Specify the slide-down animation
         onBackdropPress={toggleModal}
         onBackButtonPress={toggleModal}
-        modalHeight="30%"
-        header={<Text style={styles.modalHeadline}>Auftrag hinzufügen</Text>}
+        header={<Text style={styles.modalHeadline}>Auftrag</Text>}
+        modalHeight="50%" 
       >
-        <OrderInfo id={orderId} toggle={toggleModal} />
+        <OrderInfo 
+          id={props.id} 
+          toggle={toggleModal} 
+          name={props.name}
+          customer={props.customer}
+          address={props.address}
+          owner={props.owner}
+          creator={props.creator}
+          worker={props.worker}
+          date={props.date}
+          status={props.status}
+          contact={props.contact}
+          description={props.description}
+        />
       </ModalComponent>
     </>
   );
@@ -72,6 +78,11 @@ const styles = StyleSheet.create({
     borderColor: "#757575",
     marginBottom: 16,
   },
+  modalHeadline: {
+    fontSize: 21,
+    color: '#7a9b76',
+    fontWeight: '700'
+    },
   indicator: {
     width: "3%",
     backgroundColor: "#7A9B76",

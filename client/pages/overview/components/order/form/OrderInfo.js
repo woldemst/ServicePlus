@@ -5,62 +5,45 @@ import {
   TouchableOpacity,
   StyleSheet,
 } from "react-native";
-import { useState } from "react";
 
 const OrderInfo = (props) => {
-  const [fetchedOrderItem, setFetchedOrderItem] = useState([]);
-
-  const orderId = props.orderId
-  const fetchOrderItemById = async () => {
-    try {
-      const response = await axios.get(
-        `http://localhost:8000/api/orders/${orderId}`
-      );
-      setFetchedOrderItem(response.data);
-      console.log(fetchOrderItemById);
-    } catch (err) {
-      console.log("Error fetching order", err);
-    }
-  };
-
   return (
     <>
-      {fetchedOrderItem.map((order) => (
-        <View key={order._id} style={styles.profileList}>
-          <View style={styles.listItem}>
-            <Text style={styles.label}>Datum:</Text>
-            <View style={styles.wrapper}>
-              <Text style={styles.infoText}>{order.name}</Text>
+        <View style={styles.profileList}>
+            <View style={styles.listItem}>
+                <Text style={styles.label}>Datum:</Text>
+                <View style={styles.wrapper}>
+                    <Text style={styles.infoText}>{props.name}</Text>
+                </View>
             </View>
-          </View>
-
-          <View style={styles.listItem}>
-            <Text style={styles.label}>Auftrag:</Text>
-            <View style={styles.wrapper}>
-              <Text style={styles.infoText}>{order.owner}</Text>
+    
+            <View style={styles.listItem}>
+                <Text style={styles.label}>Auftrag:</Text>
+                <View style={styles.wrapper}>
+                    <Text style={styles.infoText}>{props.id}</Text>
+                </View>
             </View>
-          </View>
-
-          <View style={styles.listItem}>
-            <Text style={styles.label}>Mitarbeiter:</Text>
-            <View style={styles.wrapper}>
-              <Text style={styles.infoText}>{order.email}</Text>
+    
+            <View style={styles.listItem}>
+                <Text style={styles.label}>Mitarbeiter:</Text>
+                <View style={styles.wrapper}>
+                    <Text style={styles.infoText}>{props.worker}</Text>
+                </View>
             </View>
-          </View>
-
-          <View style={styles.listItem}>
-            <Text style={styles.label}>Kunde:</Text>
-            <View style={styles.wrapper}>
-              <Text style={styles.infoText}>
-                {order.street}
-                {order.houseNr}
-                {order.zip}
-                {order.place}
-              </Text>
+            <View style={styles.listItem}>
+                <Text style={styles.label}>Kunde:</Text>
+                <View style={styles.wrapper}>
+                    <Text style={styles.infoText}>{props.customer}</Text>
+                </View>
             </View>
-          </View>
+    
+            <View style={styles.listItem}>
+                <Text style={styles.label}>Adresse:</Text>
+                <View style={styles.wrapper}>
+                    <Text style={styles.infoText}>{props.address}</Text>
+                </View>
+            </View>
         </View>
-      ))}
     </>
   );
 };
@@ -92,3 +75,4 @@ const styles = StyleSheet.create({
 });
 
 export default OrderInfo;
+

@@ -1,13 +1,13 @@
 import { useState } from "react";
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, ScrollView } from "react-native";
 import axios from "axios";
-
-import { SelectList } from 'react-native-dropdown-select-list' 
+import { useRoute } from "@react-navigation/native";
+// import { SelectList } from 'react-native-dropdown-select-list' 
 
 const EditProfile = () => {
-
-    const [selectedValue, setSelectedValue] = useState('');
-    const [selected, setSelected] = useState("");
+    const route = useRoute()
+    // const [selectedValue, setSelectedValue] = useState('');
+    // const [selected, setSelected] = useState("");
 
     const [firmName, setFirmName] = useState('')
     const [ownerName, setOwnerName] = useState('')
@@ -15,6 +15,7 @@ const EditProfile = () => {
     const [street, setStreet] = useState('')
     const [houseNr, setHouseNr] = useState('')
     const [zip, setZip] = useState('')
+    const [place, setPlace] = useState('')
     const [phone, setPhone] = useState('')
     const [website, setWebsite] = useState('')
 
@@ -27,21 +28,32 @@ const EditProfile = () => {
         {key:'5', value:'c'},
     ]
 
+    console.log(route.params);
+    const {firmId} = route.params;
+    console.log(firmId);
+
     const haldleSubmit = async () => {
-        const URL = "http://localhost:8000/api/firm/update";
+        const URL = `http://localhost:8000/api/firm/update/${firmId}`;
 
-        const response = await axios.post(URL, {
-            firmName: firmName,
-            ownerName: ownerName, 
-            email: email,
-            street: street, 
-            houseNr: houseNr, 
-            zip: zip, 
-            phone: phone,
-            website: website
-        })
-
-        alert(response)
+        try {            
+            const response = await axios.patch(URL, {
+                firmName: firmName,
+                ownerName: ownerName, 
+                email: email,
+                street: street, 
+                houseNr: houseNr, 
+                zip: zip, 
+                place: place,
+                phone: phone,
+                website: website
+            })
+            // Handle success (e.g., show a success message)
+            console.log("Firm updated:", response.data);
+            
+        } catch (err) {
+            // Handle errors (e.g., show an error message)
+            console.error("Error updating firm:", err);
+        }
     }
   
     return (
@@ -159,7 +171,7 @@ const EditProfile = () => {
                 />
 
                 <View style={styles.btnContainer}>
-                    <TouchableOpacity style={[styles.createBtn, styles.button]}  >
+                    <TouchableOpacity style={[styles.createBtn, styles.button]} onPress={haldleSubmit}  >
                         <Text style={styles.createBtnText}>Speichern</Text>
                     </TouchableOpacity>
                 </View>
@@ -188,21 +200,12 @@ const styles = StyleSheet.create({
         padding: 7,
         borderRadius: 6,
         fontSize: 16,
-        placeholderText: {
-            color: 'gray',
-            fontSize: 18, // Set the font size of the placeholder text
-          },
-
     },
+
     select: {
         margin: 15, 
         fontSize: 18,
         borderRadius: 6,
-        placeholderText: {
-            color: 'gray',
-            fontSize: 18, // Set the font size of the placeholder text
-          },
-
     },
     textArea: {
         width: '100%',
@@ -216,12 +219,10 @@ const styles = StyleSheet.create({
         paddingRight: 7,
         fontSize: 18,
         borderRadius: 6,
-        placeholderText: {
-            color: 'gray',
-            fontSize: 18, // Set the font size of the placeholder text
-          },
-
-
+    },
+    placeholderText: {
+        color: 'gray',
+        fontSize: 18, // Set the font size of the placeholder text
     },
     streetContainer: {
         flexDirection: 'row',

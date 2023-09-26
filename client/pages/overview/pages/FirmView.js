@@ -21,16 +21,20 @@ const Firm = () => {
 
                 const response = await axios.get("http://localhost:8000/api/firm/profile")
                 setFetchedFirm(response.data)
+                // console.log(response.data)
             } catch (err) {
                 console.log("Error fetching firm profile", err);
                 
             }
         }
-        // alert(fetchedFirm)
-
+        
         fetcheFirm()
     }, [])
+
     
+    const firmObj = fetchedFirm[0]
+    // console.log(firmProfile);
+
 
     return (
         <>
@@ -41,18 +45,22 @@ const Firm = () => {
                     </View>
                     <View style={styles.nameContainer} >
                         {fetchedFirm.map(firm => (
-                            <>
+                            <View key={firm._id}>
                                 <Text style={styles.firmName}>{firm.name}</Text>
                                 <Text style={styles.bossName}>{firm.owner}</Text>
-
-                            </>
+                            </View>
 
                         ))}
                     </View>
 
                 </TouchableOpacity>
                 <View style={styles.listContainer} >
-                    <TouchableOpacity style={styles.listItem} onPress={()=>{navigation.navigate('editProfile', {name: 'Edit Profile'})}}>
+                    <TouchableOpacity style={styles.listItem} onPress={()=>{navigation.navigate('editProfile', 
+                        {
+                            name: 'Edit Profile',
+                            firmId: firmObj._id
+                        }
+                    )}}>
                         <Image style={styles.icon} source={require('../../../assets/firm/profile.png')} />
                         <Text style={styles.itemText}>Unternehmensprofile bearbeiten</Text>
                     </TouchableOpacity>
