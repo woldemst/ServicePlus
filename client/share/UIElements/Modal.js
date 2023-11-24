@@ -22,7 +22,7 @@ const ModalComponent = (props) => {
         >
 
             <View style={[styles.modalContainer, {height: props.modalHeight || '80%'} ]}>
-                <View style={styles.modalHeader}>{props.header}</View>
+              <View style={styles.modalHeader}>{props.header}</View>
               <ScrollView showsVerticalScrollIndicator={false}>
                   <View style={styles.modalHeader}>{props.children}</View>
 
@@ -58,7 +58,7 @@ const styles = StyleSheet.create({
     },
     modalHeader: {
 
-    }
+    } 
   });
 
 export default ModalComponent

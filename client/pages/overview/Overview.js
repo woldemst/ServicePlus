@@ -16,7 +16,7 @@ const Overview = (props) => {
 
     const toggleModal = () => {
         setModalVisible(!isModalVisible)
-      }
+    }
 
 
     return (
