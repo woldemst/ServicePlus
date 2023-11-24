@@ -6,13 +6,13 @@ import {
 } from "react-native";
 import { useState } from "react";
 
-import ModalComponent from "../../../../share/UIElements/Modal";
-import OrderInfo from "./form/OrderInfo";
+import ModalComponent from "../../share/UIElements/Modal";
+import OrderInfo from "../pages/OrderInfo";
 
 
 const OrderItem = (props) => {
   const [isModalVisible, setModalVisible] = useState(false);
-  
+
   const toggleModal = () => {
     setModalVisible(!isModalVisible);
   };
@@ -47,11 +47,11 @@ const OrderItem = (props) => {
         onBackdropPress={toggleModal}
         onBackButtonPress={toggleModal}
         header={<Text style={styles.modalHeadline}>Auftrag</Text>}
-        modalHeight="50%" 
+        modalHeight="50%"
       >
-        <OrderInfo 
-          id={props.id} 
-          toggle={toggleModal} 
+        <OrderInfo
+          id={props.id}
+          toggle={toggleModal}
           name={props.name}
           customer={props.customer}
           address={props.address}
@@ -81,7 +81,7 @@ const styles = StyleSheet.create({
     fontSize: 21,
     color: '#7a9b76',
     fontWeight: '700'
-    },
+  },
   indicator: {
     width: "3%",
     backgroundColor: "#7A9B76",

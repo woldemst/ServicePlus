@@ -5,9 +5,9 @@ import { useEffect, useState } from "react"
 const CustomerDetails = props => {
     return <>
         <View>
-            <Text>Kundeninfos</Text>
+            <Text>Kunden Details</Text>
             <Text>{props.name}</Text>
-
+    
         </View>  
     </>
 }

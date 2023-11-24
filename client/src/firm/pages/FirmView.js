@@ -3,20 +3,20 @@ import { useEffect, useState } from "react"
 import { useNavigation } from '@react-navigation/native'
 import axios from "axios"
 
-import ModalComponent from "../../../share/UIElements/Modal"
-import FirmProfile from "./firm/FirmProfile"
+import ModalComponent from "../../../src/share/UIElements/Modal"
+import FirmProfile from './FirmProfile'
 
 const Firm = () => {
     const navigation = useNavigation()
 
     const [fetchedFirm, setFetchedFirm] = useState([])
     const [isModalVisible, setModalVisible] = useState(false);
-    
+
     const toggleModal = () => setModalVisible(!isModalVisible)
 
-    useEffect(()=>{
+    useEffect(() => {
 
-        const fetcheFirm = async () =>{
+        const fetcheFirm = async () => {
             try {
 
                 const response = await axios.get("http://localhost:8000/api/firm/profile")
@@ -24,14 +24,14 @@ const Firm = () => {
                 // console.log(response.data)
             } catch (err) {
                 console.log("Error fetching firm profile", err);
-                
+
             }
         }
-        
+
         fetcheFirm()
     }, [])
 
-    
+
     const firmObj = fetchedFirm[0]
 
 
@@ -55,25 +55,29 @@ const Firm = () => {
 
                 </TouchableOpacity>
                 <View style={styles.listContainer} >
-                    <TouchableOpacity style={styles.listItem} onPress={()=>{navigation.navigate('editProfile', 
-                        {
-                            name: 'Edit Profile',
-                            firmId: firmObj._id 
-                        }
-                    )}}>
+                    <TouchableOpacity style={styles.listItem} onPress={() => {
+                        navigation.navigate('editProfile',
+                            {
+                                name: 'Edit Profile',
+                                firmId: firmObj._id
+                            }
+                        )
+                    }}>
                         <Image style={styles.icon} source={require('../../../assets/firm/profile.png')} />
                         <Text style={styles.itemText}>Unternehmensprofile</Text>
                     </TouchableOpacity>
-                    
+
 
                     <TouchableOpacity style={styles.listItem}>
                         <Image style={styles.icon} source={require('../../../assets/firm/customer.png')} />
                         <Text style={styles.itemText}>Mitarbeiter verwalten</Text>
                     </TouchableOpacity>
-                    
-                    <TouchableOpacity style={styles.listItem} onPress={()=>{navigation.navigate('customerList', {
-                        name: 'Customers'
-                    })}}>
+
+                    <TouchableOpacity style={styles.listItem} onPress={() => {
+                        navigation.navigate('customerList', {
+                            name: 'Customers'
+                        })
+                    }}>
                         <Image style={styles.icon} source={require('../../../assets/firm/worker.png')} />
                         <Text style={styles.itemText}>Kunden verwalten</Text>
                     </TouchableOpacity>
@@ -84,14 +88,14 @@ const Firm = () => {
                     </TouchableOpacity>
                 </View>
                 <View style={styles.logoutContainer}>
-                <TouchableOpacity style={styles.listItem}>
+                    <TouchableOpacity style={styles.listItem}>
                         <Image style={styles.icon} source={require('../../../assets/firm/logout.png')} />
                         <Text style={styles.itemText}>Logout</Text>
                     </TouchableOpacity>
                 </View>
             </View>
 
-            <ModalComponent 
+            <ModalComponent
                 isVisible={isModalVisible}
                 animationIn="slideInUp" // Specify the slide-up animation
                 animationOut="slideOutDown" // Specify the slide-down animation
@@ -118,12 +122,12 @@ const styles = StyleSheet.create({
     imageContainer: {
         justifyContent: 'center'
     },
-    img : {
-        width: 48, 
+    img: {
+        width: 48,
         height: 48
     },
     nameContainer: {
-        paddingLeft: 16, 
+        paddingLeft: 16,
         paddingRight: 16,
         paddingTop: 9,
         paddingBottom: 9,
@@ -149,8 +153,8 @@ const styles = StyleSheet.create({
 
     },
     itemText: {
-        marginLeft: 16,   
-        marginTop: 16, 
+        marginLeft: 16,
+        marginTop: 16,
         marginBottom: 16,
         fontSize: 16
     },

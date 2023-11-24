@@ -15,6 +15,7 @@ const customerSchema = new mongoose.Schema({
   worker: { type: String, required: true },
   nextAppointment: { type: String, required: false },
   description: { type: String, required: false },
+  // orders: { type: Array, required: false },
 
   // creator: { type: mongoose.Types.ObjectId, required: true, ref: 'Customer'}, //ref: establish connection between two schemas
   

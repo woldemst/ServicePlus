@@ -1,5 +1,5 @@
 import { View, ScrollView} from "react-native"
-import OrderList from '../components/order/OrderList'
+import OrderList from '../components/OrderList'
 
 
 const OrderView = () => {

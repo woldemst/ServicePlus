@@ -17,13 +17,12 @@ const AppointmentItem = (props) => {
                 </View>
 
                 <View style={styles.iconContainer}>
-                    <Image style={styles.filePlusImg} source={require('../../../../assets/file_plus.png')} />
+                    <Image style={styles.filePlusImg} source={require('../../../assets/file_plus.png')} />
                 </View>
             </View>
         </>
     )
 }
-
 
 
 const styles = StyleSheet.create({
