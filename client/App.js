@@ -3,12 +3,17 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 
 import Overview from './pages/overview/Overview';
-import OnboardingNavigator from './pages/onboarding/OnboardingNavigator';
+// import OnboardingNavigator from './pages/onboarding/OnboardingNavigator';
 import Login from './pages/auth/Login';
 import Register from './pages/auth/Register';
 import EditProfile from './pages/overview/pages/firm/EditProfile';
-
 import OrderView from './pages/overview/pages/OrderView';
+
+import CustomerList from './pages/overview/pages/firm/customer/CustomerList';
+import CreateCustomer from './pages/overview/pages/firm/customer/page/CreateCusstomer';
+import CustomerDetails from './pages/overview/pages/firm/customer/page/CustomerDetails';
+
+
 const Stack = createNativeStackNavigator()
 
 export default function App() {
@@ -23,6 +28,10 @@ export default function App() {
         {/*  */}
         <Stack.Screen name='orderView' component={OrderView} options={{title: 'Order view'}} />
         <Stack.Screen name='editProfile' component={EditProfile} options={{title: 'Edit Profile'}} />
+        {/*  */}
+        <Stack.Screen name='customerList' component={CustomerList} options={{title: 'Customers'}} />
+        <Stack.Screen name='createCustomer' component={CreateCustomer} options={{title: 'Create Customer'}} />
+        <Stack.Screen name='customerDetails' component={CustomerDetails} options={{title: 'Details of the customer'}} />
 
       </Stack.Navigator>
     </NavigationContainer>

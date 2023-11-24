@@ -33,7 +33,7 @@ const Firm = () => {
 
     
     const firmObj = fetchedFirm[0]
-    // console.log(firmProfile);
+
 
 
     return (
@@ -58,20 +58,26 @@ const Firm = () => {
                     <TouchableOpacity style={styles.listItem} onPress={()=>{navigation.navigate('editProfile', 
                         {
                             name: 'Edit Profile',
-                            firmId: firmObj._id
+                            firmId: firmObj._id 
                         }
                     )}}>
                         <Image style={styles.icon} source={require('../../../assets/firm/profile.png')} />
-                        <Text style={styles.itemText}>Unternehmensprofile bearbeiten</Text>
+                        <Text style={styles.itemText}>Unternehmensprofile</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={styles.listItem}>
-                        <Image style={styles.icon} source={require('../../../assets/firm/worker.png')} />
-                        <Text style={styles.itemText}>Mitarbeiter verwalten</Text>
-                    </TouchableOpacity>
+                    
+
                     <TouchableOpacity style={styles.listItem}>
                         <Image style={styles.icon} source={require('../../../assets/firm/customer.png')} />
+                        <Text style={styles.itemText}>Mitarbeiter verwalten</Text>
+                    </TouchableOpacity>
+                    
+                    <TouchableOpacity style={styles.listItem} onPress={()=>{navigation.navigate('customerList', {
+                        name: 'Customers'
+                    })}}>
+                        <Image style={styles.icon} source={require('../../../assets/firm/worker.png')} />
                         <Text style={styles.itemText}>Kunden verwalten</Text>
                     </TouchableOpacity>
+
                     <TouchableOpacity style={styles.listItem}>
                         <Image style={styles.icon} source={require('../../../assets/firm/setting.png')} />
                         <Text style={styles.itemText}>Einstellungen</Text>
