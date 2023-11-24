@@ -23,7 +23,7 @@ const AppointmentList = () => {
     if (fetchedAppointments.length === 0) {
         return (
             <View style={styles.imgContainer}>
-                <Image style={styles.bannerImg} source={require('../../../../assets/banner0.png')} />
+                <Image style={styles.bannerImg} source={require('../../../assets/banner0.png')} />
             </View>
         )
     }

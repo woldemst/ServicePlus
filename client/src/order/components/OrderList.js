@@ -24,9 +24,9 @@ const OrderList = () => {
 
         <>
             {fetchedOrders.map(order => (
-                <OrderItem 
+                <OrderItem
                     id={order._id}
-                    key={order._id} 
+                    key={order._id}
                     name={order.name}
                     customer={order.customer}
                     address={order.address}

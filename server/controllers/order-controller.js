@@ -68,10 +68,10 @@ const getOrderById = async (req, res, next) => {
 
   if (!order) {
     const error = new HttpError(
-        'Could not find order for the provided id.',
-        404
-      );
-  }
+      'Could not find order for the provided id.',
+      404
+    );
+}
 
   res.json({ order: order.toObject({getters: true}) })
 };

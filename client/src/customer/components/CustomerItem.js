@@ -1,8 +1,8 @@
 import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native"
 import { useEffect, useState } from "react"
 import { useNavigation } from '@react-navigation/native'
-import ModalComponent from "../../../../../share/UIElements/Modal"
-import CustomerDetails from "./page/CustomerDetails"
+import ModalComponent from "../../../src/share/UIElements/Modal"
+import CustomerDetails from "../pages/CustomerDetails"
 
 const CustomerItem = (props) => {
     const navigation = useNavigation()
@@ -21,11 +21,11 @@ const CustomerItem = (props) => {
             >
                 <View style={styles.customerContent}>
                     <View style={styles.circleWrapper}>
-                        <Image style={styles.img} source={require('../../../../../assets/circle.png')} />
+                        <Image style={styles.img} source={require('../../../assets/circle.png')} />
                     </View>
                     <View style={styles.imageContainer} >
                         <View style={styles.imgSet}>
-                            <Image style={styles.img} source={require('../../../../../assets/customer/customer.png')} />
+                            <Image style={styles.img} source={require('../../../assets/customer/customer.png')} />
                         </View>
                     </View>
                     <View style={styles.nameContainer} >
@@ -36,7 +36,7 @@ const CustomerItem = (props) => {
                     </View>
                 </View>
                 <View style={styles.arrowWrapper}>
-                    <Image style={styles.img} source={require('../../../../../assets/right_arrow.png')} />
+                    <Image style={styles.img} source={require('../../../assets/right_arrow.png')} />
                 </View>
             </TouchableOpacity>
 

@@ -1,12 +1,12 @@
 import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native"
 import { useState } from "react"
 
-import AppointmentView from "./pages/AppointmentView"
-import OrderView from "./pages/OrderView"
-import FirmView from "./pages/FirmView"
+import AppointmentView from "../../appointment/pages/AppointmentView"
+import OrderView from "../../order/pages/OrderView"
+import FirmView from "../../firm/pages/FirmView"
 
 import ModalComponent from "../../share/UIElements/Modal"
-import OrderCreate from "./components/order/form/OrderCreate"
+import OrderCreate from "../../order/pages/OrderCreate"
 
 
 
@@ -34,18 +34,18 @@ const Overview = (props) => {
                         <View style={styles.headerIconContainer} >
                             {activeTab == 1 && (
                                 <TouchableOpacity style={styles.headerButton} >
-                                    <Image style={styles.headerIcon} source={require('../../assets/calendar_plus.png')} />
+                                    <Image style={styles.headerIcon} source={require('../../../assets/calendar_plus.png')} />
                                 </TouchableOpacity>
                             )}
                             {activeTab == 2 && (
                                 <TouchableOpacity style={styles.headerButton} onPress={toggleModal} >
-                                    <Image style={styles.headerIcon} source={require('../../assets/calendar_plus.png')} />
+                                    <Image style={styles.headerIcon} source={require('../../../assets/calendar_plus.png')} />
                                 </TouchableOpacity>
                             )}
 
                             {activeTab !== 3 && (
                                 <TouchableOpacity style={styles.headerButton} >
-                                    <Image style={styles.headerIcon} source={require('../../assets/filter.png')} />
+                                    <Image style={styles.headerIcon} source={require('../../../assets/filter.png')} />
                                 </TouchableOpacity>
                             )}
 
@@ -55,34 +55,34 @@ const Overview = (props) => {
                 </View>
 
                 <View style={styles.mainContent}>
-                    <View style={styles.orderContainer}>    
+                    <View style={styles.orderContainer}>
                         {activeTab == 1 && <AppointmentView />}
                         {activeTab == 2 && <OrderView />}
                         {activeTab == 3 && <FirmView />}
                     </View>
-                </View> 
+                </View>
 
                 <View style={styles.footer} >
                     <View style={styles.footerContent}>
 
                         <View style={styles.footerIconContainer} >
-                            <TouchableOpacity style={styles.footerButton} number='1' onPress={()=>{setActiveTab(1)}}>
-                                <Image source={require('../../assets/tabler.png')} />
+                            <TouchableOpacity style={styles.footerButton} number='1' onPress={() => { setActiveTab(1) }}>
+                                <Image source={require('../../../assets/tabler.png')} />
                                 <Text style={styles.footerIconText}>Termine</Text>
                             </TouchableOpacity>
                         </View>
 
                         <View style={styles.footerIconContainer} >
-                            <TouchableOpacity style={styles.footerButton} number='2' onPress={()=>{setActiveTab(2)}}>
+                            <TouchableOpacity style={styles.footerButton} number='2' onPress={() => { setActiveTab(2) }}>
 
-                                <Image source={require('../../assets/settings.png')} />
+                                <Image source={require('../../../assets/settings.png')} />
                                 <Text style={styles.footerIconText}>Aufträge</Text>
                             </TouchableOpacity>
                         </View>
 
                         <View style={styles.footerIconContainer} >
-                            <TouchableOpacity style={styles.footerButton} number='3' onPress={()=>{setActiveTab(3)}}>
-                                <Image source={require('../../assets/betrieb.png')} />
+                            <TouchableOpacity style={styles.footerButton} number='3' onPress={() => { setActiveTab(3) }}>
+                                <Image source={require('../../../assets/betrieb.png')} />
                                 <Text style={styles.footerIconText}>Betrieb</Text>
                             </TouchableOpacity>
                         </View>
@@ -93,13 +93,13 @@ const Overview = (props) => {
                 </View>
             </View>
 
-            <ModalComponent 
+            <ModalComponent
                 isVisible={isModalVisible}
                 animationIn="slideInUp" // Specify the slide-up animation
                 animationOut="slideOutDown" // Specify the slide-down animation
                 onBackdropPress={toggleModal}
                 onBackButtonPress={toggleModal}
-                
+
                 header={<Text style={styles.modalHeadline}>Auftrag hinzufügen</Text>}
             >
                 <OrderCreate toggle={toggleModal} />
@@ -157,7 +157,7 @@ const styles = StyleSheet.create({
         alignItems: 'center'
     },
     headerIcon: {
-        width: 24, 
+        width: 24,
         height: 24
     },
     // HEADER: END !!!

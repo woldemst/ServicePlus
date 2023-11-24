@@ -2,19 +2,20 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 
-import Overview from './pages/overview/Overview';
+import Overview from './src/overview/pages/Overview'
 // import OnboardingNavigator from './pages/onboarding/OnboardingNavigator';
-import Login from './pages/auth/Login';
-import Register from './pages/auth/Register';
-import EditProfile from './pages/overview/pages/firm/EditProfile';
-import OrderView from './pages/overview/pages/OrderView';
+import Login from './src/auth/pages/Login';
+import Register from './src/auth/pages/Register';
+import EditProfile from './src/firm/pages/EditProfile'
+import OrderView from './src/order/pages/OrderView';
 
-import CustomerList from './pages/overview/pages/firm/customer/CustomerList';
-import CreateCustomer from './pages/overview/pages/firm/customer/page/CreateCusstomer';
-import CustomerDetails from './pages/overview/pages/firm/customer/page/CustomerDetails';
+import CustomerList from './src/customer/components/CustomerList';
+import CreateCustomer from './src/customer/pages/CreateCustomer'
+import CustomerDetails from './src/customer/pages/CustomerDetails';
 
 
 const Stack = createNativeStackNavigator()
+
 
 export default function App() {
   return (

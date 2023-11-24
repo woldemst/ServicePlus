@@ -31,7 +31,7 @@ const CustomerList = () => {
 
                         <View style={styles.headerIconContainer} >
                             <TouchableOpacity style={styles.headerButton} >
-                                <Image style={styles.headerIcon} source={require('../../../../../assets/customer/user_plus.png')} />
+                                <Image style={styles.headerIcon} source={require('../../../assets/customer/user_plus.png')} />
                             </TouchableOpacity>
 
                         </View>
