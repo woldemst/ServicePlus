@@ -11,16 +11,9 @@ const OrderInfo = (props) => {
     <>
         <View style={styles.profileList}>
             <View style={styles.listItem}>
-                <Text style={styles.label}>Datum:</Text>
-                <View style={styles.wrapper}>
-                    <Text style={styles.infoText}>{props.name}</Text>
-                </View>
-            </View>
-    
-            <View style={styles.listItem}>
                 <Text style={styles.label}>Auftrag:</Text>
                 <View style={styles.wrapper}>
-                    <Text style={styles.infoText}>{props.id}</Text>
+                    <Text style={styles.infoText}>{props.name}</Text>
                 </View>
             </View>
     

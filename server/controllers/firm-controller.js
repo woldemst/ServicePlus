@@ -49,8 +49,6 @@ const updateFirm = async (req, res, next) => {
   const firmId = req.params.fid;
   const { name, owner, email, street, houseNr, zip, place, phone, website } = req.body;
 
-    console.log(req.body);
- 
 
 //   try {
 //     const updatedFirm = await Firm.findByIdAndUpdate(firmId, req.body, { new: true });
@@ -95,8 +93,8 @@ const updateFirm = async (req, res, next) => {
       return next()
   }
 
-//   res.status(200).json({firm: firm.toObject({getters: true})})
-  res.status(200).json(firm);
+  res.status(200).json({firm: firm.toObject({getters: true})})
+  // res.status(200).json(firm);
 };
 
 const getFirmProfile = async (req, res, next) => {

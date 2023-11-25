@@ -3,8 +3,6 @@ import { useEffect, useState } from "react"
 import { useNavigation } from '@react-navigation/native'
 import axios from "axios"
 
-import ModalComponent from "../../../src/share/UIElements/Modal"
-import FirmProfile from './FirmProfile'
 
 const Firm = () => {
     const navigation = useNavigation()
@@ -15,7 +13,6 @@ const Firm = () => {
     const toggleModal = () => setModalVisible(!isModalVisible)
 
     useEffect(() => {
-
         const fetcheFirm = async () => {
             try {
 
@@ -39,7 +36,15 @@ const Firm = () => {
     return (
         <>
             <View style={styles.container} >
-                <TouchableOpacity style={styles.firmContainer} onPress={toggleModal}>
+                <TouchableOpacity style={styles.firmContainer} onPress={() => {
+                        navigation.navigate('editProfile',
+                            {
+                                name: 'Edit Profile',
+                                firmId: firmObj._id,
+                                firmArr: firmObj
+                            }
+                        )
+                    }}>
                     <View style={styles.imageContainer} >
                         <Image style={styles.img} source={require('../../../assets/firmImage.jpeg')} ></Image>
                     </View>
@@ -54,20 +59,8 @@ const Firm = () => {
                     </View>
 
                 </TouchableOpacity>
+
                 <View style={styles.listContainer} >
-                    <TouchableOpacity style={styles.listItem} onPress={() => {
-                        navigation.navigate('editProfile',
-                            {
-                                name: 'Edit Profile',
-                                firmId: firmObj._id
-                            }
-                        )
-                    }}>
-                        <Image style={styles.icon} source={require('../../../assets/firm/profile.png')} />
-                        <Text style={styles.itemText}>Unternehmensprofile</Text>
-                    </TouchableOpacity>
-
-
                     <TouchableOpacity style={styles.listItem}>
                         <Image style={styles.icon} source={require('../../../assets/firm/customer.png')} />
                         <Text style={styles.itemText}>Mitarbeiter verwalten</Text>
@@ -94,18 +87,6 @@ const Firm = () => {
                     </TouchableOpacity>
                 </View>
             </View>
-
-            <ModalComponent
-                isVisible={isModalVisible}
-                animationIn="slideInUp" // Specify the slide-up animation
-                animationOut="slideOutDown" // Specify the slide-down animation
-                onBackdropPress={toggleModal}
-                onBackButtonPress={toggleModal}
-                modalHeight='40%'
-                header={<Text style={styles.modalHeadline}>Betrieb</Text>}
-            >
-                <FirmProfile items={fetchedFirm} />
-            </ModalComponent>
 
         </>
     )
