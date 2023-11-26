@@ -26,9 +26,9 @@ const FirmProfile = (props) => {
         {key:'5', value:'c'},
     ]
 
-    console.log(route.params);
+
     const {firmId} = route.params;
-    console.log(firmId);
+
 
     const haldleSubmit = async () => {
         const URL = `http://localhost:8000/api/firm/update/${firmId}`;

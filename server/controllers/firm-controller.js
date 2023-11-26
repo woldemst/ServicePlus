@@ -10,7 +10,7 @@ const register = async (req, res, next) => {
   let existingFirm;
 
   try {
-    existingFirm = await Firm.findOne({ email });
+    existingFirm = await Firm.findOne({ email }); 
   } catch (err) {
     const error = new HttpError(
       "Signing up failed, please try agail later.",
@@ -39,7 +39,7 @@ const register = async (req, res, next) => {
   }
 
   res.status(201).json({
-    firmId: createdFirm.id,
+    firmId: createdFirm.id, 
     email: createdFirm.email,
   });
 };
@@ -57,7 +57,7 @@ const updateFirm = async (req, res, next) => {
 //     const error = new HttpError(
 //         'Something went wrong, could not update profile.',
 //         500
-//     );
+//     )  ;
 //     return next(error);
 // }
 
