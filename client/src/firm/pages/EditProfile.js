@@ -2,12 +2,13 @@
     import { View, Text, TextInput, TouchableOpacity, StyleSheet, ScrollView } from "react-native";
     import axios from "axios";
     import { useRoute } from "@react-navigation/native";
-    import CustomerDetails from "../../customer/pages/CustomerDetails";
+
     // import { SelectList } from 'react-native-dropdown-select-list' 
 
 
     const EditProfile = () => {
         const {firmId, firmArr} = useRoute().params; 
+
 
         const [formData, setFormData] = useState({
             firmName: firmArr.name || '',
@@ -22,35 +23,14 @@
         });
 
         const handleChange = (fieldName, value) => {
-            setFormData({
-                 ...formData,
-                 [fieldName]: value
-            });
+            setFormData(prevState => ({
+                ...prevState, 
+                [fieldName]: value
+            }))
         };
     
 
 
-        useEffect(() => {
-            const fetchData = async () => {
-                try {
-                    setFormData({
-                        firmName: firmArr.name || '',
-                        ownerName: firmArr.owner || '',
-                        email: firmArr.email || '',
-                        street: firmArr.street || '',
-                        houseNr: firmArr.houseNr || '',
-                        zip: firmArr.zip || '',
-                        place: firmArr.place || '',
-                        phone: firmArr.phone || '',
-                        website: firmArr.website || '',
-                    });
-                } catch (error) {
-                    console.error("Error whille fetching customer data:", error);
-                }
-            };
-
-            fetchData();
-        }, [firmId]);
 
         const haldleSubmit = async () => {
             const URL = `http://localhost:8000/api/firm/update/${firmId}`;
@@ -76,21 +56,21 @@
                     <TextInput
                         style={[styles.input, styles.input.placeholderText]}
                         placeholder="Name des Betriebs"
-                        onChangeText={(text) => handleChange('fieldName', text)}
+                        onChangeText={(text) => handleChange('firmName', text)}
                         value={formData.firmName}
                     />
 
                     <TextInput
                         style={[styles.input, styles.input.placeholderText]}
                         placeholder="Name des Inhabers"
-                        onChangeText={(text) => handleChange('fieldName', text)}
+                        onChangeText={(text) => handleChange('ownerName', text)}
                         value={formData.ownerName}
                     />
 
                     <TextInput
                         style={[styles.input, styles.input.placeholderText]}
                         placeholder="Email"
-                        onChangeText={(text) => handleChange('fieldName', text)}
+                        onChangeText={(text) => handleChange('email', text)}
                         value={formData.email}
                     />
 
@@ -100,7 +80,7 @@
                             <TextInput
                                 style={[styles.input, styles.input.placeholderText]}
                                 placeholder="Straße"
-                                onChangeText={(text) => handleChange('fieldName', text)}
+                                onChangeText={(text) => handleChange('street', text)}
                                 value={formData.street}
                             />
                         </View>
@@ -109,7 +89,7 @@
                             <TextInput
                                 style={[styles.input, styles.input.placeholderText]}
                                 placeholder="Nr."
-                                onChangeText={(text) => handleChange('fieldName', text)}
+                                onChangeText={(text) => handleChange('houseNr', text)}
                                 value={formData.houseNr}
                             />
                         </View>
@@ -121,7 +101,7 @@
                             <TextInput
                                 style={[styles.input, styles.input.placeholderText]}
                                 placeholder="PLZ"
-                                onChangeText={(text) => handleChange('fieldName', text)}
+                                onChangeText={(text) => handleChange('zip', text)}
                                 value={formData.zip}
                             />
                         </View>
@@ -130,7 +110,7 @@
                             <TextInput
                                 style={[styles.input, styles.input.placeholderText]}
                                 placeholder="Ort"
-                                onChangeText={(text) => handleChange('fieldName', text)}
+                                onChangeText={(text) => handleChange('place', text)}
                                 value={formData.place}
                             />
                         </View>
@@ -140,7 +120,7 @@
                     <TextInput
                         style={[styles.input, styles.input.placeholderText]}
                         placeholder="Telefon"
-                        onChangeText={(text) => handleChange('fieldName', text)}
+                        onChangeText={(text) => handleChange('phone', text)}
                         value={formData.phone}
                     />
 
@@ -158,7 +138,7 @@
                     <TextInput
                         style={[styles.input, styles.input.placeholderText]}
                         placeholder="Webseite"
-                        onChangeText={(text) => handleChange('fieldName', text)}
+                        onChangeText={(text) => handleChange('website', text)}
                         value={formData.website}
                     />
 
