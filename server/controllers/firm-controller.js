@@ -46,55 +46,39 @@ const register = async (req, res, next) => {
 
 const updateFirm = async (req, res, next) => {
   // destructuring assignment from body
-  const firmId = req.params.fid;
+  const firmId = req.params.firmId;
   const { name, owner, email, street, houseNr, zip, place, phone, website } = req.body;
-
-
-//   try {
-//     const updatedFirm = await Firm.findByIdAndUpdate(firmId, req.body, { new: true });
-//     res.status(200).json({ firm: updatedFirm.toObject({ getters: true }) });
-// } catch (err) {
-//     const error = new HttpError(
-//         'Something went wrong, could not update profile.',
-//         500
-//     )  ;
-//     return next(error);
-// }
-
-  let firm;
-
+    
   try {
-    firm = await Firm.findById(firmId);
+    const updatedFirm = await Firm.findByIdAndUpdate(
+      firmId,
+      {
+        name,
+        owner,
+        email,
+        street,
+        houseNr,
+        zip,
+        place,
+        phone,
+        website,
+      },
+      { new: true } // To return the updated document
+    );
+
+    if (!updatedFirm) {
+      const error = new HttpError('Firm not found.', 404);
+      return next(error);
+    }
+
+    res.status(200).json({ firm: updatedFirm.toObject({ getters: true }) });
   } catch (err) {
     const error = new HttpError(
-      "Something went wrong, could not update place.",
+      'Something went wrong, could not update profile.',
       500
     );
     return next(error);
   }
-
-  firm.name = name;
-  firm.owner = owner; 
-  firm.email = email; 
-  firm.street = street; 
-  firm.houseNr = houseNr; 
-  firm.zip = zip; 
-  firm.place = place;
-  firm.phone = phone; 
-  firm.website = website; 
-
-  try {
-    await firm.save()
-  } catch (err) {
-    const error = new HttpError(
-        'Something went wrong, could not update profile.',
-        500
-      );
-      return next()
-  }
-
-  res.status(200).json({firm: firm.toObject({getters: true})})
-  // res.status(200).json(firm);
 };
 
 const getFirmProfile = async (req, res, next) => {
