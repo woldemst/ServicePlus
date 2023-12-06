@@ -1,22 +1,28 @@
 import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native"
 import { useState } from "react"
+import { useRoute } from "@react-navigation/native"
 
 import AppointmentView from "../../appointment/pages/AppointmentView"
 import OrderView from "../../order/pages/OrderView"
-import FirmView from "../../firm/pages/FirmView"
+import FirmProfile from "../../firm/pages/FirmProfile"
 
 import ModalComponent from "../../share/UIElements/Modal"
 import OrderCreate from "../../order/pages/OrderCreate"
 
 
+const Overview = () => {
 
-const Overview = (props) => {
     const [activeTab, setActiveTab] = useState(2)
     const [isModalVisible, setModalVisible] = useState(false);
+    const router = useRoute()
+    const [refresh, setRefresh] = useState(false)
 
     const toggleModal = () => {
         setModalVisible(!isModalVisible)
     }
+
+ 
+
 
 
     return (
@@ -28,7 +34,6 @@ const Overview = (props) => {
                             {activeTab == 1 && <Text style={styles.headerText}>Terminübersicht</Text>}
                             {activeTab == 2 && <Text style={styles.headerText}>Aufträge</Text>}
                             {activeTab == 3 && <Text style={styles.headerText}>Betrieb</Text>}
-
                         </View>
 
                         <View style={styles.headerIconContainer} >
@@ -58,7 +63,7 @@ const Overview = (props) => {
                     <View style={styles.orderContainer}>
                         {activeTab == 1 && <AppointmentView />}
                         {activeTab == 2 && <OrderView />}
-                        {activeTab == 3 && <FirmView />}
+                        {activeTab == 3 && <FirmProfile refresh={refresh} />}
                     </View>
                 </View>
 
@@ -88,7 +93,6 @@ const Overview = (props) => {
                         </View>
 
                     </View>
-
 
                 </View>
             </View>

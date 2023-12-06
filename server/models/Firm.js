@@ -7,9 +7,9 @@ const firmSchema = new mongoose.Schema({
   email: { type: String, required: true, unique: true },
   street: { type: String, required: true },
   houseNr: { type: String, required: true },
-  zip: { type: Number, required: true }, 
+  zip: { type: String, required: true },
   place: { type: String, required: true }, 
-  phone: { type: Number, required: true }, 
+  phone: { type: String, required: true },
   website: { type: String, required: true }, 
 });
 
