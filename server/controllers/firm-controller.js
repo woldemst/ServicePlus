@@ -3,9 +3,10 @@ const Firm = require("../models/Firm");
 const HttpError = require("../models/http-error");
 
 const register = async (req, res, next) => {
-  // destructuring assignment from body
-  const { name, owner, email, street, houseNr, zip, place, phone, website } =
-    req.body;
+  // destructuring assignment from bod
+  console.log('request body');
+  console.log(req.body);  
+  const { name, owner, email, street, houseNr, zip, place, phone, website } = req.body;
 
   let existingFirm;
 
@@ -49,34 +50,33 @@ const updateFirm = async (req, res, next) => {
   const firmId = req.params.firmId;
   const { name, owner, email, street, houseNr, zip, place, phone, website } = req.body;
     
+  console.log('Received data:', req.body); 
+
+  let updatedFirm
+
   try {
-    const updatedFirm = await Firm.findByIdAndUpdate(
-      firmId,
-      {
-        name,
-        owner,
-        email,
-        street,
-        houseNr,
-        zip,
-        place,
-        phone,
-        website,
-      },
-      { new: true } // To return the updated document
-    );
+    updatedFirm = await Firm.findById(firmId)
 
     if (!updatedFirm) {
-      const error = new HttpError('Firm not found.', 404);
+      const error = new HttpError('Could not find firm for the provided ID.', 404);
       return next(error);
     }
-
+  
+    updatedFirm.name = name,
+    updatedFirm.owner = owner,
+    updatedFirm.email = email,
+    updatedFirm.street = street,
+    updatedFirm.houseNr = houseNr,
+    updatedFirm.zip = zip,
+    updatedFirm.place = place,
+    updatedFirm.phone = phone,
+    updatedFirm.website = website,
+  
+    await updatedFirm.save();
+  
     res.status(200).json({ firm: updatedFirm.toObject({ getters: true }) });
   } catch (err) {
-    const error = new HttpError(
-      'Something went wrong, could not update profile.',
-      500
-    );
+    const error = new HttpError('Something went wrong, could not update profile.', 500);
     return next(error);
   }
 };

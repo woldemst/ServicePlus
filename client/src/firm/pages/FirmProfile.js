@@ -1,364 +1,164 @@
-import { useState } from "react";
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, ScrollView } from "react-native";
-import axios from "axios";
-import { useRoute } from "@react-navigation/native";
+import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native"
+import { useEffect, useState } from "react"
+import { useNavigation } from '@react-navigation/native'
+import { useRoute } from "@react-navigation/native"
+import axios from "axios"
+import { useDispatch, useSelector } from "react-redux"
+import { getFirmData } from "../../actions/firmActions"
 
 
-const FirmProfile = (props) => {
-    
-    const route = useRoute()
-
-    const [firmName, setFirmName] = useState('')
-    const [ownerName, setOwnerName] = useState('')
-    const [email, setEmail] = useState('')
-    const [street, setStreet] = useState('')
-    const [houseNr, setHouseNr] = useState('')
-    const [zip, setZip] = useState('')
-    const [place, setPlace] = useState('')
-    const [phone, setPhone] = useState('')
-    const [website, setWebsite] = useState('')
-
-    const data = [
-        {key:'1', value:'Herr Kunde', disabled:true},
-        {key:'2', value:'Frau Kundin'},
-        {key:'3', value:'A'},
-        {key:'4', value:'B', disabled:true},
-        {key:'5', value:'c'},
-    ]
+const FirmProfile = props => {
+    const navigation = useNavigation()
+    const dispatch = useDispatch()  
+    const router = useRoute()
+    const fetchedData = useSelector(state => state.firm)
+    const firmArr = fetchedData.firmData[0]
+    const [refresh, setRefresh] = useState(false)
+    // console.log('before getting');
+    // console.log(firmArr);
+    // console.log('props ');
+    // console.log(props);
+    const handleRefresh = () => setRefresh(prevData => !prevData);
 
 
-    const {firmId} = route.params;
+    useEffect(() => {
+        const fetcheFirm = async () => {
+            try {   
 
+                 
+                const response = await axios.get("http://localhost:8000/api/firm/profile")
+                dispatch(getFirmData(response.data));
+                // console.log('after getting');
+                // console.log(firmArr);
 
-    const haldleSubmit = async () => {
-        const URL = `http://localhost:8000/api/firm/update/${firmId}`;
-
-        try {            
-            const response = await axios.patch(URL, {
-                firmName: firmName,
-                ownerName: ownerName, 
-                email: email,
-                street: street, 
-                houseNr: houseNr, 
-                zip: zip, 
-                place: place,
-                phone: phone,
-                website: website
-            })
-            // Handle success (e.g., show a success message)
-            console.log("Firm updated:", response.data);
-            
-        } catch (err) {
-            // Handle errors (e.g., show an error message)
-            console.error("Error updating firm:", err);
+            } catch (err) {
+                console.log("Error fetching firm profile", err);
+            }
         }
-    } 
+        fetcheFirm()
+    }, [dispatch, refresh])
+
+
+
+
+   
     return (
         <>
-            {props.items.map(firm => (
-                <View key={firm._id} style={styles.profileList}>
-                    <View style={styles.listItem}>
-                        <Text style={styles.label}>Betrieb:</Text>
-                        <View style={styles.wrapper}>
-                            <Text style={styles.infoText}>{firm.name}</Text>
-                        </View>
+            <View style={styles.container} >
+                <TouchableOpacity style = {styles.firmContainer} onPress={() => {
+                        navigation.navigate('editProfile',
+                            {
+                                name: 'Edit Profile',
+                                firmArr: firmArr,
+                                firmId: firmArr._id,
+                                handleRefresh: handleRefresh
+                            }
+                        )
+                    }}>
+
+                    <View style={styles.imageContainer} >
+                        <Image style={styles.img} source={require('../../../assets/firmImage.jpeg')} ></Image>
                     </View>
 
-                    <View style={styles.listItem}>
-                        <Text style={styles.label}>Inhaber:</Text>
-                        <View style={styles.wrapper}>
-                            <Text style={styles.infoText}>{firm.owner}</Text>
-                        </View>
+                    <View style={styles.nameContainer} >
+
+                            <View>
+                                <Text style={styles.firmName}>{firmArr?.name}</Text>
+                                <Text style={styles.bossName}>{firmArr?.owner}</Text>   
+                            </View>
+
                     </View>
 
-                    <View style={styles.listItem}>
-                        <Text style={styles.label}>Email:</Text>
-                        <View style={styles.wrapper}>
-                            <Text style={styles.infoText}>{firm.email}</Text>
-                        </View>
-                    </View>
+                </TouchableOpacity>
 
-                    <View style={styles.listItem}>
-                        <Text style={styles.label}>Adresse:</Text>
-                        <View style={styles.wrapper}>
-                            <Text style={styles.infoText}>{firm.street}{firm.houseNr}{firm.zip}{firm.place}</Text>
-                        </View>
-                    </View>
+                <View style={styles.listContainer} >
+                    <TouchableOpacity style={styles.listItem}>
+                        <Image style={styles.icon} source={require('../../../assets/firm/customer.png')} />
+                        <Text style={styles.itemText}>Mitarbeiter verwalten</Text>
+                    </TouchableOpacity>
 
-                    <View style={styles.listItem}>
-                        <Text style={styles.label}>Telefon:</Text>  
-                        <View style={styles.wrapper}>
-                            <Text style={styles.infoText}>{firm.phone}</Text>
-                        </View>
-                    </View>
+                    <TouchableOpacity style={styles.listItem} onPress={() => {
+                        navigation.navigate('customerList', {
+                            name: 'Customers'
+                        })
+                    }}>
+                        <Image style={styles.icon} source={require('../../../assets/firm/worker.png')} />
+                        <Text style={styles.itemText}>Kunden verwalten</Text>
+                    </TouchableOpacity>
 
-                    <View style={styles.listItem}>
-                        <Text style={styles.label}>Webseite:</Text>
-                        <View style={styles.wrapper}>
-                            <Text style={styles.infoText}>{firm.website}</Text>
-                        </View>
-                    </View>
-
-
-
-
-                    <View style={styles.container}> 
-                <ScrollView showsVerticalScrollIndicator={false}>
-
-                <Text style={styles.label}>Name des Betriebs*</Text>
-
-                <TextInput
-                    style={[styles.input, styles.input.placeholderText]}
-                    placeholder="Name des Betriebs"
-                    onChangeText={(text) => setFirmName(text)}
-                    value={firmName}
-                />
-
-                <Text style={styles.label}>Name des Inhabers*</Text>
-
-                <TextInput
-                    style={[styles.input, styles.input.placeholderText]}
-                    placeholder="Name des Inhabers"
-                    onChangeText={(text) => setOwnerName(text)}
-                    value={ownerName}
-                />
-
-                <Text style={styles.label}>E-Mail*</Text>
-
-                <TextInput
-                    style={[styles.input, styles.input.placeholderText]}
-                    placeholder="Email"
-                    onChangeText={(text) => setEmail(text)}
-                    value={email}
-                />
-
-                <View style={styles.streetContainer}>
-
-                <View style={styles.streetWrapper}>
-                        <Text style={styles.label}>Straße*</Text>
-
-                        <TextInput
-                            style={[styles.input, styles.input.placeholderText]}
-                            placeholder="Straße"
-                            onChangeText={(text) => setStreet(text)}
-                            value={street}
-                        />
-                    </View>
-
-                    <View style={styles.nrWrapper}>
-                        <Text style={styles.label}>Nr.*</Text>
-
-                        <TextInput
-                            style={[styles.input, styles.input.placeholderText]}
-                            placeholder="Nr."
-                            onChangeText={(text) => setHouseNr(text)}
-                            value={houseNr}
-                        />
-                    </View>
-
-
-                </View>
-
-                <View style={styles.zipContainer}>
-                    <View style={styles.zipWrapper}>
-                        <Text style={styles.label}>PLZ*</Text>
-
-                        <TextInput
-                            style={[styles.input, styles.input.placeholderText]}
-                            placeholder="PLZ"
-                            onChangeText={(text) => setZip(text)}
-                            value={zip}
-                        />
-                    </View>
-                
-                    <View style={styles.placeWrapper}>
-                        <Text style={styles.label}>Ort*</Text>
-
-                        <TextInput
-                            style={[styles.input, styles.input.placeholderText]}
-                            placeholder="Ort"
-                            onChangeText={(text) => setPlace(text)}
-                            value={place}
-                        />
-                    </View>
-
-                </View>
-
-                <Text style={styles.label}>Telefon</Text>
-
-                <TextInput
-                    style={[styles.input, styles.input.placeholderText]}
-                    placeholder="Telefon"
-                    onChangeText={(text) => setPhone(text)}
-                    value={phone}
-                />
-
-                {/* <Text style={styles.label}>Branche*</Text>
-
-                <SelectList 
-                    style={[styles.select, styles.select.placeholderText]}
-                    search={false} 
-                    setSelected={(val) => setSelected(val)} 
-                    data={data} 
-                    save="value"
-                    placeholder='Offen'
-                /> */}
-
-
-                <Text style={styles.label}>Webseite</Text>
-
-                <TextInput
-                    style={[styles.input, styles.input.placeholderText]}
-                    placeholder="Webseite"
-                    onChangeText={(text) => setWebsite(text)}
-                    value={website}
-                />
-
-                <View style={styles.btnContainer}>
-                    <TouchableOpacity style={[styles.createBtn, styles.button]} onPress={haldleSubmit}  >
-                        <Text style={styles.createBtnText}>Speichern</Text>
+                    <TouchableOpacity style={styles.listItem}>
+                        <Image style={styles.icon} source={require('../../../assets/firm/setting.png')} />
+                        <Text style={styles.itemText}>Einstellungen</Text>
                     </TouchableOpacity>
                 </View>
-
-                </ScrollView>
- 
-            </View>
-
-
+                <View style={styles.logoutContainer}>
+                    <TouchableOpacity style={styles.listItem}>
+                        <Image style={styles.icon} source={require('../../../assets/firm/logout.png')} />
+                        <Text style={styles.itemText}>Logout</Text>
+                    </TouchableOpacity>
                 </View>
-            ))}
-
-
-
+            </View>
 
         </>
     )
 }
 
 const styles = StyleSheet.create({
-    profileList: {
-        marginTop: 20
-    },  
-    listItem: {
-        flexDirection: 'row',
-        justifyContent: 'space-between'
-    },
-    label: {
-        fontSize: 18,
-        fontWeight: '700',
-        lineHeight: 28,
-        width: '35%',
-
-    },
-    wrapper: {
-        justifyContent: 'flex-start',
-        width: '65%',
-        // borderColor: 'red',
-        // borderWidth: 2
-    },
-    infoText: {
-        fontSize: 18,
-        lineHeight: 28
-    },
-
-
-
     container: {
-        padding: 32,
-        backgroundColor: '#fff'
+        // borderWidth: 2, 
+        // borderColor: 'red'
     },
-    input: {
-        width: '100%',
-        height: 50,
-        borderColor: 'gray',
-        borderWidth: 1,
-        borderColor: '#e0e0e0', 
-        // marginTop: 6,
-        marginBottom: 16,
-        padding: 7,
-        borderRadius: 6,
-        fontSize: 16,
+    firmContainer: {
+        flexDirection: 'row'
     },
-
-    select: {
-        margin: 15, 
-        fontSize: 18,
-        borderRadius: 6,
+    imageContainer: {
+        justifyContent: 'center'
     },
-    textArea: {
-        width: '100%',
-        height: 130, // Adjust the height as needed
-        borderColor: '#e0e0e0', 
-        borderWidth: 1,
-        marginBottom: 30, 
-        paddingTop: 7,
-        paddingBottom: 7,
-        paddingLeft: 7, 
-        paddingRight: 7,
-        fontSize: 18,
-        borderRadius: 6,
+    img: {
+        width: 48,
+        height: 48
     },
-    placeholderText: {
-        color: 'gray',
-        fontSize: 18, // Set the font size of the placeholder text
-    },
-    streetContainer: {
-        flexDirection: 'row',
-        justifyContent: 'space-between'
-    },
-    streetWrapper: {
-        width: '75%'
-    },
-    nrWrapper: {
-        width: '20%' 
-    },
-    zipContainer: {
-        flexDirection: 'row',
-        justifyContent: 'space-between'
-    },
-    zipWrapper: {
-        width: '35%'
-    },
-    placeWrapper: {
-        width: '60%'
-    },
-    label: {
-        marginTop: 12,
-        marginBottom: 6,
-        fontSize: 18
-    },
-
-    btnContainer: {
-        flexDirection: 'row',
-        marginTop: 50
-    },
-
-    button: {
-        // height: 53,
+    nameContainer: {
         paddingLeft: 16,
         paddingRight: 16,
-        paddingTop: 14,
-        paddingBottom: 14,
-        borderRadius: 5,
-        width: '100%',
-        justifyContent: 'center',
-        flexDirection: "row",
-        justifyContent: "center", 
-        alignItems: 'center'
+        paddingTop: 9,
+        paddingBottom: 9,
     },
-
-
-
-    createBtn:{
-        backgroundColor: '#7A9B76', 
-    },
-    createBtnText:{
-        fontSize: 18,
-        color: '#fff',
+    firmName: {
+        fontSize: 16,
         fontWeight: '700'
     },
+    bossName: {
+        color: '#9e9e9e',
+        fontSize: 14
+    },
+    listContainer: {
+        paddingTop: 23,
+    },
+    listItem: {
+        alignItems: 'center',
+        flexDirection: 'row',
+        marginBottom: 4
+    },
+    icon: {
+        margin: 12,
 
+    },
+    itemText: {
+        marginLeft: 16,
+        marginTop: 16,
+        marginBottom: 16,
+        fontSize: 16
+    },
+    logoutContainer: {
+        position: 'fixed',
+        bottom: 0
+    },
+    modalHeadline: {
+        fontSize: 21,
+        color: '#7a9b76',
+        fontWeight: '700'
+    },
 })
 
-
-export default FirmProfile;
+export default FirmProfile; 
