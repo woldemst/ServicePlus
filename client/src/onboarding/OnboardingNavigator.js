@@ -21,10 +21,10 @@ const OnboardingNavigator = () =>{
                 }}
                 
                 onTabPress={({ route }) => {
-                const index = Tab.Navigator.router.getStateForRouteName(route.name).index;
-                setActiveTab(index);
+                    const index = Tab.Navigator.router.getStateForRouteName(route.name).index;
+                    setActiveTab(index);
 
-                }}
+                    }}
                 >
 
 

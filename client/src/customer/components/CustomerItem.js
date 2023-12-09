@@ -13,6 +13,7 @@ const CustomerItem = (props) => {
         setModalVisible(!isModalVisible)
     }
 
+    
     return (
         <>
             <TouchableOpacity 
@@ -54,16 +55,23 @@ const CustomerItem = (props) => {
                     id={props.id} 
                     key={props.id} 
                     name={props.name}
-                    customer={props.customer}
-                    address={props.address}
-                    owner={props.owner}
+                    email={props.email}
+                    // customer={props.customer}
+                    // address={props.address}
                     creator={props.creator}
-                    worker={props.worker}
-                    date={props.date}
-                    status={props.status}
+                    // worker={props.worker}
                     contact={props.contact}
                     description={props.description}
+                    website={props.website}
+                    phone={props.phone}
 
+                    //address 
+                    street={props.street}
+                    houseNr={props.houseNr}
+                    zip={props.zip}
+                    place={props.place}
+
+                    
                 />
     
 
@@ -158,4 +166,5 @@ const styles = StyleSheet.create({
         // borderWidth: 2
     }
 })
+
 export default CustomerItem;

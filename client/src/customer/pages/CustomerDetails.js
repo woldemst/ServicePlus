@@ -1,18 +1,42 @@
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, ScrollView } from "react-native";
 import { useEffect, useState } from "react"
+import { useDispatch, useSelector } from 'react-redux'
+import { getCustomerData } from '../../actions/customerActions'
+import axios from "axios";
 
-
+ 
 const CustomerDetails = props => {
-    const [firmName, setFirmName] = useState('')
-    const [email, setEmail] = useState('')
-    const [street, setStreet] = useState('')
-    const [houseNr, setHouseNr] = useState('')
-    const [zip, setZip] = useState('')
-    const [place, setPlace] = useState('')
-    const [phone, setPhone] = useState('')
-    const [website, setWebsite] = useState('')
+    const customerId = props.id 
+    
+    const dispatch = useDispatch()
+    const fetchedData = useSelector(state => state.customer)
+    const [formData, setFormData] = useState()
 
+    // useEffect(()=> {    
+    //     const fetchCustomer = async () => {
+    //         try {
+    //             const response = await axios.get(`http://localhost:8000/api/customers/${customerId}`)
+    //             // dispatch(getCustomerData(response.data))
+    //         } catch (err) {
+    //             console.log("Error fetching customer profile", err);
+    //         }
+    //     }
+    //     fetchCustomer()
 
+    // }, [dispatch])
+
+    // console.log(fetchedData);
+
+    const handleChange = (field, value) => {
+        setFormData(prevData => ({
+            ...prevData, 
+            [field]: value
+        }))
+    }
+
+    const handleSubmit = () => {
+        console.log('submited customer!');
+    }
 
     return <>
         <View>
@@ -22,36 +46,33 @@ const CustomerDetails = props => {
                 <TextInput
                     style={[styles.input, styles.input.placeholderText]}
                     placeholder="Name"
-                    onChangeText={(text) => setFirmName(text)}
-                    value={firmName}
+                    onChangeText={(text) => handleChange('name', text)}
+                    value={props.name}
                 />
 
                 <TextInput
                     style={[styles.input, styles.input.placeholderText]}
                     placeholder="Email"
-                    onChangeText={(text) => setEmail(text)}
-                    value={email}
+                    onChangeText={(text) => handleChange('email', text)}
+                    value={props.email}
                 />
 
                 <View style={styles.streetContainer}>
-
                     <View style={styles.streetWrapper}>
-
                         <TextInput
                             style={[styles.input, styles.input.placeholderText]}
                             placeholder="Straße"
-                            onChangeText={(text) => setStreet(text)}
-                            value={street}
+                            onChangeText={(text) => handleChange('street', text)}
+                            value={props.street}
                         />
                     </View>
 
                     <View style={styles.nrWrapper}>
-
                         <TextInput
                             style={[styles.input, styles.input.placeholderText]}
                             placeholder="Nr."
-                            onChangeText={(text) => setHouseNr(text)}
-                            value={houseNr}
+                            onChangeText={(text) => handleChange('houseNr', text)}
+                            value={props.houseNr}
                         />
                     </View>
                 </View>
@@ -61,8 +82,8 @@ const CustomerDetails = props => {
                         <TextInput
                             style={[styles.input, styles.input.placeholderText]}
                             placeholder="PLZ"
-                            onChangeText={(text) => setZip(text)}
-                            value={zip}
+                            onChangeText={(text) => handleChange('zip', text)}
+                            value={props.zip}
                         />
                     </View>
                 
@@ -70,29 +91,31 @@ const CustomerDetails = props => {
                         <TextInput
                             style={[styles.input, styles.input.placeholderText]}
                             placeholder="Ort"
-                            onChangeText={(text) => setPlace(text)}
-                            value={place}
+                            onChangeText={(text) => handleChange('place', text)}
+                            value={props.place}
                         />
                     </View>
-
                 </View>
 
                 <TextInput
                     style={[styles.input, styles.input.placeholderText]}
                     placeholder="Telefon"
-                    onChangeText={(text) => setPhone(text)}
-                    value={phone}
+                    onChangeText={(text) => handleChange('phone', text)}
+                    value={props.phone}
                 />
 
                 <TextInput
                     style={[styles.input, styles.input.placeholderText]}
                     placeholder="Webseite"
-                    onChangeText={(text) => setWebsite(text)}
-                    value={website}
+                    onChangeText={(text) => handleChange('website', text)}
+                    value={props.website}
                 />
 
                 <View style={styles.btnContainer}>
-                    <TouchableOpacity style={[styles.createBtn, styles.button]} >
+                    <TouchableOpacity 
+                        style={[styles.createBtn, styles.button]} 
+                        onPress={handleSubmit} 
+                    >
                         <Text style={styles.createBtnText}>Speichern</Text>
                     </TouchableOpacity>
                 </View>

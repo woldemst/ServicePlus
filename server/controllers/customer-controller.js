@@ -16,11 +16,11 @@ const getAllCustomers = async (req, res, next) => {
 
 const getCustomerById = async (req, res, next) => {
     const customerId = req.params.customerId;
-  
+    
     let customer;
   
     try {
-      customer = await customer.findById(customerId);
+      customer = await Customer.findById(customerId);
     } catch (err) {
       const error = new HttpError(
         "Something went wrong, could not find a customer.",
