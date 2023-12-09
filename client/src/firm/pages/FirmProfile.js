@@ -16,7 +16,7 @@ const FirmProfile = props => {
     const [refresh, setRefresh] = useState(false)
     // console.log('before getting');
     // console.log(firmArr);
-    // console.log('props ');
+    // console.log('props');
     // console.log(props);
     const handleRefresh = () => setRefresh(prevData => !prevData);
 
@@ -39,9 +39,6 @@ const FirmProfile = props => {
     }, [dispatch, refresh])
 
 
-
-
-   
     return (
         <>
             <View style={styles.container} >
@@ -61,12 +58,10 @@ const FirmProfile = props => {
                     </View>
 
                     <View style={styles.nameContainer} >
-
-                            <View>
-                                <Text style={styles.firmName}>{firmArr?.name}</Text>
-                                <Text style={styles.bossName}>{firmArr?.owner}</Text>   
-                            </View>
-
+                        <View>
+                            <Text style={styles.firmName}>{firmArr?.name}</Text>
+                            <Text style={styles.bossName}>{firmArr?.owner}</Text>   
+                        </View>
                     </View>
 
                 </TouchableOpacity>

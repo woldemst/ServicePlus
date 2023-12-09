@@ -2,6 +2,8 @@ import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native"
 import { useState } from "react"
 import { useRoute } from "@react-navigation/native"
 
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+
 import AppointmentView from "../../appointment/pages/AppointmentView"
 import OrderView from "../../order/pages/OrderView"
 import FirmProfile from "../../firm/pages/FirmProfile"
@@ -11,17 +13,16 @@ import OrderCreate from "../../order/pages/OrderCreate"
 
 
 const Overview = () => {
+    const Tab = createBottomTabNavigator()
 
     const [activeTab, setActiveTab] = useState(2)
     const [isModalVisible, setModalVisible] = useState(false);
-    const router = useRoute()
     const [refresh, setRefresh] = useState(false)
+    const router = useRoute()
 
     const toggleModal = () => {
         setModalVisible(!isModalVisible)
     }
-
- 
 
 
 
@@ -58,7 +59,6 @@ const Overview = () => {
 
                     </View>
                 </View>
-
                 <View style={styles.mainContent}>
                     <View style={styles.orderContainer}>
                         {activeTab == 1 && <AppointmentView />}
@@ -66,6 +66,37 @@ const Overview = () => {
                         {activeTab == 3 && <FirmProfile refresh={refresh} />}
                     </View>
                 </View>
+                {/* <View style={styles.mainContent}>
+                    <View style={styles.orderContainer}>
+                        <Tab.Navigator 
+                            screenOptions={{
+                                tabBarItemStyle: { display: 'none' }, // Hide tab label
+                            }}
+                            initialRouteName="Order view"
+                            onTabPress={({ route }) => {
+                                const index = Tab.Navigator.router.getStateForRouteName(route.name).index;
+                                setActiveTab(index);
+                            }}
+
+                        >
+                            <Tab.Screen 
+                                name="Appointment view" 
+                                initialParams={activeTab} 
+                                component={AppointmentView} 
+                            />
+                            <Tab.Screen 
+                                name="Order view" 
+                                initialParams={activeTab} 
+                                component={OrderView}
+                            />
+                            <Tab.Screen 
+                                name="Firm profile" 
+                                initialParams={activeTab} 
+                                component={FirmProfile} 
+                            />
+                        </Tab.Navigator>
+                    </View>
+                </View> */}
 
                 <View style={styles.footer} >
                     <View style={styles.footerContent}>
