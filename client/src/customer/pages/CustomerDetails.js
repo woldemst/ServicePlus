@@ -1,29 +1,35 @@
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, ScrollView } from "react-native";
 import { useEffect, useState } from "react"
 import { useDispatch, useSelector } from 'react-redux'
-import { getCustomerData } from '../../actions/customerActions'
+import { getCustomerData, updateCustomerData} from '../../actions/customerActions'
 import axios from "axios";
-
+import { useNavigation } from "@react-navigation/native";
  
 const CustomerDetails = props => {
     const customerId = props.id 
-    
+    const navigation = useNavigation()
     const dispatch = useDispatch()
     const fetchedData = useSelector(state => state.customer)
-    const [formData, setFormData] = useState()
+    const [formData, setFormData] = useState({})
 
-    // useEffect(()=> {    
-    //     const fetchCustomer = async () => {
-    //         try {
-    //             const response = await axios.get(`http://localhost:8000/api/customers/${customerId}`)
-    //             // dispatch(getCustomerData(response.data))
-    //         } catch (err) {
-    //             console.log("Error fetching customer profile", err);
-    //         }
-    //     }
-    //     fetchCustomer()
+    // console.log(fetchedData);
 
-    // }, [dispatch])
+    useEffect(()=> {    
+        const fetchCustomer = async () => {
+            try {
+                const response = await axios.get(`http://localhost:8000/api/customers/${customerId}`)
+
+                dispatch(getCustomerData(response.data.customer))
+                setFormData(response.data.customer)
+
+                // dispatch(updateCustomerData(response.data))
+            } catch (err) {
+                console.log("Error fetching customer profile", err);
+            }
+        }
+        fetchCustomer()
+
+    }, [dispatch])
 
     // console.log(fetchedData);
 
@@ -34,9 +40,18 @@ const CustomerDetails = props => {
         }))
     }
 
-    const handleSubmit = () => {
+    const handleSubmit = async () => {
         console.log('submited customer!');
+        try {
+            const response = await axios.patch(`http://localhost:8000/api/customers/${customerId}`)
+            dispatch(updateCustomerData(response.data))
+            navigation.goBack()
+
+        } catch (err) {
+            console.log("Error fetching customer profile", err);
+        }
     }
+    
 
     return <>
         <View>
@@ -47,14 +62,14 @@ const CustomerDetails = props => {
                     style={[styles.input, styles.input.placeholderText]}
                     placeholder="Name"
                     onChangeText={(text) => handleChange('name', text)}
-                    value={props.name}
+                    value={formData.name}
                 />
 
                 <TextInput
                     style={[styles.input, styles.input.placeholderText]}
                     placeholder="Email"
                     onChangeText={(text) => handleChange('email', text)}
-                    value={props.email}
+                    value={formData.email}
                 />
 
                 <View style={styles.streetContainer}>
@@ -63,7 +78,7 @@ const CustomerDetails = props => {
                             style={[styles.input, styles.input.placeholderText]}
                             placeholder="Straße"
                             onChangeText={(text) => handleChange('street', text)}
-                            value={props.street}
+                            value={formData.street}
                         />
                     </View>
 
@@ -72,7 +87,7 @@ const CustomerDetails = props => {
                             style={[styles.input, styles.input.placeholderText]}
                             placeholder="Nr."
                             onChangeText={(text) => handleChange('houseNr', text)}
-                            value={props.houseNr}
+                            value={formData.houseNr}
                         />
                     </View>
                 </View>
@@ -83,7 +98,7 @@ const CustomerDetails = props => {
                             style={[styles.input, styles.input.placeholderText]}
                             placeholder="PLZ"
                             onChangeText={(text) => handleChange('zip', text)}
-                            value={props.zip}
+                            value={formData.zip}
                         />
                     </View>
                 
@@ -92,7 +107,7 @@ const CustomerDetails = props => {
                             style={[styles.input, styles.input.placeholderText]}
                             placeholder="Ort"
                             onChangeText={(text) => handleChange('place', text)}
-                            value={props.place}
+                            value={formData.place}
                         />
                     </View>
                 </View>
@@ -101,14 +116,14 @@ const CustomerDetails = props => {
                     style={[styles.input, styles.input.placeholderText]}
                     placeholder="Telefon"
                     onChangeText={(text) => handleChange('phone', text)}
-                    value={props.phone}
+                    value={formData.phone}
                 />
 
                 <TextInput
                     style={[styles.input, styles.input.placeholderText]}
                     placeholder="Webseite"
                     onChangeText={(text) => handleChange('website', text)}
-                    value={props.website}
+                    value={formData.website}
                 />
 
                 <View style={styles.btnContainer}>

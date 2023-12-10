@@ -58,18 +58,18 @@ const CustomerItem = (props) => {
                     email={props.email}
                     // customer={props.customer}
                     // address={props.address}
-                    creator={props.creator}
+                    // creator={props.creator}
                     // worker={props.worker}
-                    contact={props.contact}
-                    description={props.description}
-                    website={props.website}
-                    phone={props.phone}
+                    // contact={props.contact}
+                    // description={props.description}
+                    // website={props.website}
+                    // phone={props.phone}
 
-                    //address 
-                    street={props.street}
-                    houseNr={props.houseNr}
-                    zip={props.zip}
-                    place={props.place}
+                    // address 
+                    // street={props.street}
+                    // houseNr={props.houseNr}
+                    // zip={props.zip}
+                    // place={props.place}
 
                     
                 />
