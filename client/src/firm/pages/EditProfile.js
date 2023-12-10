@@ -16,7 +16,7 @@ import { useDispatch, useSelector } from "react-redux";
 const EditProfile = (props) => {
   const navigation = useNavigation();
   const { firmId, firmArr } = useRoute().params;
-  const fetchedData = useSelector((state) => state.firm);
+  // const fetchedData = useSelector((state) => state.firm);
   
   const [firmData, setFirmData] = useState(firmArr);
   const dispatch = useDispatch();

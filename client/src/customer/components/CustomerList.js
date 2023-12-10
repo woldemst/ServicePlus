@@ -7,16 +7,17 @@
     import { getCustomerData } from "../../actions/customerActions"
 
     const CustomerList = () => {
-        const fetchedData = useSelector(state => state.customer)
+        const [fetchedData, setFetchedData] = useState([])
         const dispatch = useDispatch()
-        console.log(fetchedData);
+        // console.log(fetchedData);
 
 
         useEffect(()=> {
             const fetchCustomers = async () => {
                 try {
                     const response = await axios.get('http://localhost:8000/api/customers/all')
-                    dispatch(getCustomerData(response.data))
+                    setFetchedData(response.data)
+                    // dispatch(getCustomerData(response.data))
                 } catch (err) {
                     console.log('Error fetching customers', err);
                 }
@@ -44,22 +45,22 @@
                     </View>
 
                     <View style={styles.customerList}>
-                        {fetchedData.customerData.map(customer => (
+                        {fetchedData.map(customer => (
                             <CustomerItem 
                                 id={customer._id} 
                                 key={customer._id} 
                                 name={customer.name}
                                 customerNr={customer.customerNr}
-                                email={customer.email}
+                                // email={customer.email}
                                 // worker={customer.worker}
                                 // contact={customer.contact}
                                 organisation
-                                phone={customer.phone}
+                                // phone={customer.phone}
                                 // contact={customer.contact}
                                 // worker
                                 // nextAppointment
                                 // description={contact.description}
-                                website={customer.website}
+                                // website={customer.website}
 
                                 //address
                                 street={customer.street}
