@@ -17,7 +17,7 @@ import { useNavigation } from "@react-navigation/native";
 
 const CreateCustomer = () => {
     const [formData, setFormData] =  useState([])
-    
+
     const handleChange = (field, value) => {
     setFormData((prevData) => ({
         ...prevData,
@@ -113,6 +113,7 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: "#fff",
     padding: 30,
+
   },
   input: {
     width: "100%",
