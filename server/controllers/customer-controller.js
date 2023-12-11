@@ -101,6 +101,57 @@ const updateCustomerById = async (req, res, next) => {
   }
 }
 
+const createCustomer = async (req, res, next) => {
+   const {
+    name, 
+    email, 
+    customerNr, 
+    organisation, 
+    street, 
+    houseNr, 
+    zip, 
+    place, 
+    phone, 
+    mobilePhone, 
+    contact, 
+    worker, 
+    nextAppointment, 
+    website,  
+    description 
+  } = req.body
+
+  const createCustomer = new Customer({
+    name: name, 
+    email: email, 
+    customerNr: customerNr, 
+    organisation: organisation, 
+    street: street, 
+    houseNr: houseNr, 
+    zip: zip, 
+    place: place, 
+    phone: phone, 
+    mobilePhone: mobilePhone, 
+    contact: contact, 
+    worker: worker, 
+    nextAppointment: nextAppointment, 
+    website: website,  
+    description: description
+  })
+
+  try {
+    await createCustomer.save();
+  } catch (err) {
+    console.log(err);
+    return next(err)
+  }
+
+  res
+    .status(201)
+    // .json({name: createCustomer.name})
+    .json({ customer: createCustomer.toObject({ getters: true }) });
+}
+
 exports.getAllCustomers = getAllCustomers; 
 exports.getCustomerById = getCustomerById;
 exports.updateCustomerById = updateCustomerById;
+exports.createCustomer = createCustomer;
