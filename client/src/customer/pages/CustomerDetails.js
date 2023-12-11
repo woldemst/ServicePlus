@@ -29,7 +29,6 @@ const CustomerDetails = props => {
 
     }, [dispatch])
 
-    // console.log(fetchedData);
 
     const handleChange = (field, value) => {
         setFormData(prevData => ({
@@ -37,6 +36,7 @@ const CustomerDetails = props => {
             [field]: value
         }))
     }
+
 
     const handleSubmit = async () => {
 

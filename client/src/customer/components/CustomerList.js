@@ -5,6 +5,7 @@
     import CustomerItem from "./CustomerItem"
     import { useDispatch, useSelector } from "react-redux"
     import { getCustomerData } from "../../actions/customerActions"
+    import { useNavigation } from "@react-navigation/native"
 
     const CustomerList = () => {
         const [fetchedData, setFetchedData] = useState([])
@@ -12,14 +13,13 @@
         // console.log(fetchedData);
         const [refresh, setRefresh] = useState(false)
         const handleRefresh = () => setRefresh(prevData => !prevData);
-
+        const navigation = useNavigation()
 
         useEffect(()=> {
             const fetchCustomers = async () => {
                 try {
                     const response = await axios.get('http://localhost:8000/api/customers/all')
                     setFetchedData(response.data)
-                    // dispatch(getCustomerData(response.data))
                 } catch (err) {
                     console.log('Error fetching customers', err);
                 }
@@ -37,7 +37,13 @@
                             </View>
 
                             <View style={styles.headerIconContainer} >
-                                <TouchableOpacity style={styles.headerButton} >
+                                <TouchableOpacity style={styles.headerButton}
+                                 onPress={
+                                    navigation.navigate('createCustomer', { 
+                                        name: 'Create customer'
+                                    })
+                                } 
+                                >
                                     <Image style={styles.headerIcon} source={require('../../../assets/customer/user_plus.png')} />
                                 </TouchableOpacity>
 
