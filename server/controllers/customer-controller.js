@@ -37,7 +37,70 @@ const getCustomerById = async (req, res, next) => {
     }
   
     res.json({ customer: customer.toObject({getters: true}) })
-  };
+};
   
-  exports.getAllCustomers = getAllCustomers; 
-  exports.getCustomerById = getCustomerById;
+const updateCustomerById = async (req, res, next) => {
+  const customerId = req.params.customerId
+ 
+  const {
+    name, 
+    email, 
+    customerNr, 
+    organisation, 
+    street, 
+    houseNr, 
+    zip, 
+    place, 
+    phone, 
+    mobilePhone, 
+    contact, 
+    worker, 
+    nextAppointment, 
+    website,  
+    description 
+  } = req.body
+
+  let updatedCustomer; 
+
+  try {
+    updatedCustomer = await Customer.findById(customerId)
+    console.log(updatedCustomer);
+    if (!updatedCustomer) {
+      const error = new HttpError('Could not find customer for the provided ID.', 404);
+      return next(error);
+    }
+
+    updatedCustomer.name = name,
+    updatedCustomer.email = email,
+    updatedCustomer.customerNr = customerNr,
+    updatedCustomer.organisation = organisation,
+    updatedCustomer.nextAppointment = nextAppointment,
+    updatedCustomer.mobilePhone = mobilePhone,
+    updatedCustomer.contact = contact,
+    updatedCustomer.worker = worker,
+    updatedCustomer.description = description,
+    updatedCustomer.street = street,
+    updatedCustomer.houseNr = houseNr,
+    updatedCustomer.zip = zip,
+    updatedCustomer.place = place,
+    updatedCustomer.phone = phone,
+    updatedCustomer.website = website,
+
+    await updatedCustomer.save();
+    
+    res
+      .status(200)
+      .json({ customer: updatedCustomer.toObject({ getters: true }) });
+
+  } catch (err) {
+    const error = new HttpError(
+      "Something went wrong, could not update profile.",
+      500
+    );
+    return next(error);
+  }
+}
+
+exports.getAllCustomers = getAllCustomers; 
+exports.getCustomerById = getCustomerById;
+exports.updateCustomerById = updateCustomerById;
