@@ -12,7 +12,6 @@ const CustomerDetails = props => {
     const fetchedData = useSelector(state => state.customer)
     const [formData, setFormData] = useState({})
 
-    // console.log(fetchedData);
 
     useEffect(()=> {    
         const fetchCustomer = async () => {
@@ -21,8 +20,7 @@ const CustomerDetails = props => {
 
                 dispatch(getCustomerData(response.data.customer))
                 setFormData(response.data.customer)
-
-                // dispatch(updateCustomerData(response.data))
+                dispatch(getCustomerData(response.data.customer))
             } catch (err) {
                 console.log("Error fetching customer profile", err);
             }
@@ -41,12 +39,13 @@ const CustomerDetails = props => {
     }
 
     const handleSubmit = async () => {
-        console.log('submited customer!');
-        try {
-            const response = await axios.patch(`http://localhost:8000/api/customers/${customerId}`)
-            dispatch(updateCustomerData(response.data))
-            navigation.goBack()
 
+        try {
+            const response = await axios.patch(`http://localhost:8000/api/customers/${customerId}`, formData)
+            dispatch(updateCustomerData(response.data))
+            props.toggle()
+            props.handleRefresh();
+            window.alert('Customer updated!')
         } catch (err) {
             console.log("Error fetching customer profile", err);
         }

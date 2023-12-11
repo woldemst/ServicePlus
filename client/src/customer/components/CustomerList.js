@@ -10,6 +10,8 @@
         const [fetchedData, setFetchedData] = useState([])
         const dispatch = useDispatch()
         // console.log(fetchedData);
+        const [refresh, setRefresh] = useState(false)
+        const handleRefresh = () => setRefresh(prevData => !prevData);
 
 
         useEffect(()=> {
@@ -23,7 +25,7 @@
                 }
             }
             fetchCustomers()
-        }, [])
+        }, [refresh])
 
         return (
             <>
@@ -67,6 +69,9 @@
                                 houseNr={customer.houseNr}
                                 zip={customer.zip}
                                 place={customer.place}
+
+                                // functions
+                                handleRefresh={handleRefresh}
                             />
                         ))}
                     </View>

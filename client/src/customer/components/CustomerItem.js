@@ -51,7 +51,9 @@ const CustomerItem = (props) => {
                 header={<Text style={styles.modalHeadline}>Kundeniformtaion</Text>}
             >
                 <CustomerDetails 
+                    // functions
                     toggle={toggleModal} 
+                    handleRefresh={props.handleRefresh}
                     id={props.id} 
                     key={props.id} 
                     name={props.name}
