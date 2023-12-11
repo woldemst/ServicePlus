@@ -49,8 +49,7 @@ const updateFirm = async (req, res, next) => {
   // destructuring assignment from body
   const firmId = req.params.firmId;
   const { name, owner, email, street, houseNr, zip, place, phone, website } = req.body;
-    
-  console.log('Received data:', req.body); 
+
 
   let updatedFirm
 
