@@ -43,8 +43,7 @@ const FirmProfile = props => {
         <>
             <View style={styles.container} >
                 <TouchableOpacity style = {styles.firmContainer} onPress={() => {
-                        navigation.navigate('editProfile',
-                            {
+                        navigation.navigate('editProfile', {
                                 name: 'Edit Profile',
                                 firmArr: firmArr,
                                 firmId: firmArr._id,
