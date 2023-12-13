@@ -13,6 +13,7 @@ const orderRoutes = require('./routes/order-routes')
 const appointmentRoutes = require('./routes/appointment-routes')
 const firmRoutes = require('./routes/firm-routes')
 const customerRoutes = require('./routes/customer-routes')
+const workerRoutes = require('./routes/worker-routes')
 
 // CORS 
 app.use((req, res, next) => {
@@ -30,6 +31,7 @@ app.use('/api/orders', orderRoutes)
 app.use('/api/appointments', appointmentRoutes)
 app.use('/api/firm', firmRoutes)
 app.use('/api/customers', customerRoutes)
+app.use('/api/workers', workerRoutes)
 
 // connection string 
 const connectionURL = 'mongodb+srv://waldemar:1234@clusterplus.5ckgjtl.mongodb.net/ServicePlus?retryWrites=true&w=majority'
