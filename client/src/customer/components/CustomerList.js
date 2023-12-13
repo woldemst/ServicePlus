@@ -1,4 +1,4 @@
-    import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native"
+    import { View, Text, StyleSheet, Image, TouchableOpacity, ScrollView } from "react-native"
     import { useEffect, useState } from "react"
     // import { useNavigation } from '@react-navigation/native'
     import axios from "axios"
@@ -15,6 +15,7 @@
         const handleRefresh = () => setRefresh(prevData => !prevData);
         const navigation = useNavigation()
 
+
         useEffect(()=> {
             const fetchCustomers = async () => {
                 try {
@@ -26,65 +27,66 @@
             }
             fetchCustomers()
         }, [refresh])
+        return <>
+        <ScrollView showsVerticalScrollIndicator={false}>
+            <View style={styles.container}>
+                <View style={styles.header} >
+                    <View style={styles.headerContent}>
+                        <View style={styles.textContainer} >
+                            <Text style={styles.headerText}>Kunden</Text>
+                        </View>
 
-        return (
-            <>
-                <View style={styles.container}>
-                    <View style={styles.header} >
-                        <View style={styles.headerContent}>
-                            <View style={styles.textContainer} >
-                                <Text style={styles.headerText}>Kunden</Text>
-                            </View>
+                        <View style={styles.headerIconContainer} >
+                            <TouchableOpacity 
+                                style={styles.headerButton} 
+                                onPress={() => {
+                                    navigation.navigate('createCustomer',  { 
+                                        name: 'Create customer',
+                                        handleRefresh: handleRefresh
 
-                            <View style={styles.headerIconContainer} >
-                                <TouchableOpacity style={styles.headerButton}
-                                 onPress={
-                                    navigation.navigate('createCustomer', { 
-                                        name: 'Create customer'
                                     })
-                                } 
-                                >
-                                    <Image style={styles.headerIcon} source={require('../../../assets/customer/user_plus.png')} />
-                                </TouchableOpacity>
-
-                            </View>
+                                }} >
+                                <Image style={styles.headerIcon} source={require('../../../assets/customer/user_plus.png')} />
+                            </TouchableOpacity>
 
                         </View>
+
                     </View>
-
-                    <View style={styles.customerList}>
-                        {fetchedData.map(customer => (
-                            <CustomerItem 
-                                id={customer._id} 
-                                key={customer._id} 
-                                name={customer.name}
-                                customerNr={customer.customerNr}
-                                // email={customer.email}
-                                // worker={customer.worker}
-                                // contact={customer.contact}
-                                organisation
-                                // phone={customer.phone}
-                                // contact={customer.contact}
-                                // worker
-                                // nextAppointment
-                                // description={contact.description}
-                                // website={customer.website}
-
-                                //address
-                                street={customer.street}
-                                houseNr={customer.houseNr}
-                                zip={customer.zip}
-                                place={customer.place}
-
-                                // functions
-                                handleRefresh={handleRefresh}
-                            />
-                        ))}
-                    </View>
-
                 </View>
-            </>
-        )
+
+                <View style={styles.customerList}>
+                    {fetchedData.map(customer => (
+                        <CustomerItem 
+                            id={customer._id} 
+                            key={customer._id} 
+                            name={customer.name}
+                            customerNr={customer.customerNr}
+                            // email={customer.email}
+                            // worker={customer.worker}
+                            // contact={customer.contact}
+                            organisation
+                            // phone={customer.phone}
+                            // contact={customer.contact}
+                            // worker
+                            // nextAppointment
+                            // description={contact.description}
+                            // website={customer.website}
+
+                            //address
+                            street={customer.street}
+                            houseNr={customer.houseNr}
+                            zip={customer.zip}
+                            place={customer.place}
+
+                            // functions
+                            handleRefresh={handleRefresh}
+                        />
+                    ))}
+                </View>
+
+            </View>
+        </ScrollView>
+        </>
     }
 
 

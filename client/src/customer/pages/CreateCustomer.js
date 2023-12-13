@@ -7,7 +7,6 @@ import {
   ScrollView,
 } from "react-native";
 import { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
 import {
   getCustomerData,
   updateCustomerData,
@@ -15,8 +14,18 @@ import {
 import axios from "axios";
 import { useNavigation } from "@react-navigation/native";
 
-const CreateCustomer = () => {
-    const [formData, setFormData] =  useState([])
+const CreateCustomer = (props) => {
+  const navigation = useNavigation()
+    const [formData, setFormData] =  useState({
+        name: '',
+        email: '', 
+        street: '',
+        houseNr: '',
+        zip: '',
+        place: '',
+        phone: '',
+        website: ''
+    })
 
     const handleChange = (field, value) => {
     setFormData((prevData) => ({
@@ -25,25 +34,42 @@ const CreateCustomer = () => {
         }));
     };
 
-  const handleSubmit = () => {
-    console.log("Creted customer");
+  const handleSubmit = async () => {
+      console.log("Creted customer");
+      const URL = 'http://localhost:8000/api/customers/new'
+      try {
+        const response = await axios.post(URL, {
+          ...formData
+        })
+        console.log(response.data);
+        alert("Customer created successfully!");
+        props.route.params.handleRefresh();
+        navigation.goBack()
+
+
+    } catch (err) {
+        console.log("Error if creating customer", err);
+        
+    }
   };
 
   return (
     <>
-      <View>
         <View style={styles.container}>
           <ScrollView showsVerticalScrollIndicator={false}>
             <TextInput
               style={[styles.input, styles.input.placeholderText]}
               placeholder="Name"
               onChangeText={(text) => handleChange("name", text)}
+              value={formData.name}
             />
 
             <TextInput
               style={[styles.input, styles.input.placeholderText]}
               placeholder="Email"
               onChangeText={(text) => handleChange("email", text)}
+              value={formData.email}
+
             />
 
             <View style={styles.streetContainer}>
@@ -52,6 +78,8 @@ const CreateCustomer = () => {
                   style={[styles.input, styles.input.placeholderText]}
                   placeholder="Straße"
                   onChangeText={(text) => handleChange("street", text)}
+                value={formData.street}
+
                 />
               </View>
 
@@ -60,6 +88,8 @@ const CreateCustomer = () => {
                   style={[styles.input, styles.input.placeholderText]}
                   placeholder="Nr."
                   onChangeText={(text) => handleChange("houseNr", text)}
+              value={formData.houseNr}
+
                 />
               </View>
             </View>
@@ -70,6 +100,8 @@ const CreateCustomer = () => {
                   style={[styles.input, styles.input.placeholderText]}
                   placeholder="PLZ"
                   onChangeText={(text) => handleChange("zip", text)}
+              value={formData.zip}
+
                 />
               </View>
 
@@ -78,6 +110,8 @@ const CreateCustomer = () => {
                   style={[styles.input, styles.input.placeholderText]}
                   placeholder="Ort"
                   onChangeText={(text) => handleChange("place", text)}
+              value={formData.place}
+
                 />
               </View>
             </View>
@@ -86,12 +120,16 @@ const CreateCustomer = () => {
               style={[styles.input, styles.input.placeholderText]}
               placeholder="Telefon"
               onChangeText={(text) => handleChange("phone", text)}
+              value={formData.phone}
+
             />
 
             <TextInput
               style={[styles.input, styles.input.placeholderText]}
               placeholder="Webseite"
               onChangeText={(text) => handleChange("website", text)}
+              value={formData.website}
+
             />
 
             <View style={styles.btnContainer}>
@@ -104,7 +142,7 @@ const CreateCustomer = () => {
             </View>
           </ScrollView>
         </View>
-      </View>
+
     </>
   );
 };
@@ -113,6 +151,9 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: "#fff",
     padding: 30,
+    flex: 1,
+    // borderColor: 'red',
+    // borderWidth: 1,
 
   },
   input: {
