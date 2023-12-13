@@ -8,8 +8,7 @@ import {
 } from "react-native";
 import { useEffect, useState } from "react";
 import {
-  getCustomerData,
-  updateCustomerData,
+  getCustomerData
 } from "../../actions/customerActions";
 import axios from "axios";
 import { useNavigation } from "@react-navigation/native";
@@ -35,18 +34,15 @@ const CreateCustomer = (props) => {
     };
 
   const handleSubmit = async () => {
-      console.log("Creted customer");
-      const URL = 'http://localhost:8000/api/customers/new'
-      try {
+    try {
+        const URL = 'http://localhost:8000/api/customers/new'
         const response = await axios.post(URL, {
           ...formData
         })
-        console.log(response.data);
+        // console.log(response.data);
         alert("Customer created successfully!");
         props.route.params.handleRefresh();
         navigation.goBack()
-
-
     } catch (err) {
         console.log("Error if creating customer", err);
         
@@ -56,7 +52,7 @@ const CreateCustomer = (props) => {
   return (
     <>
         <View style={styles.container}>
-          <ScrollView showsVerticalScrollIndicator={false}>
+          <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
             <TextInput
               style={[styles.input, styles.input.placeholderText]}
               placeholder="Name"
@@ -69,7 +65,6 @@ const CreateCustomer = (props) => {
               placeholder="Email"
               onChangeText={(text) => handleChange("email", text)}
               value={formData.email}
-
             />
 
             <View style={styles.streetContainer}>
@@ -78,8 +73,7 @@ const CreateCustomer = (props) => {
                   style={[styles.input, styles.input.placeholderText]}
                   placeholder="Straße"
                   onChangeText={(text) => handleChange("street", text)}
-                value={formData.street}
-
+                  value={formData.street}
                 />
               </View>
 
@@ -88,8 +82,7 @@ const CreateCustomer = (props) => {
                   style={[styles.input, styles.input.placeholderText]}
                   placeholder="Nr."
                   onChangeText={(text) => handleChange("houseNr", text)}
-              value={formData.houseNr}
-
+                  value={formData.houseNr}
                 />
               </View>
             </View>
@@ -100,8 +93,7 @@ const CreateCustomer = (props) => {
                   style={[styles.input, styles.input.placeholderText]}
                   placeholder="PLZ"
                   onChangeText={(text) => handleChange("zip", text)}
-              value={formData.zip}
-
+                  value={formData.zip}
                 />
               </View>
 
@@ -110,8 +102,7 @@ const CreateCustomer = (props) => {
                   style={[styles.input, styles.input.placeholderText]}
                   placeholder="Ort"
                   onChangeText={(text) => handleChange("place", text)}
-              value={formData.place}
-
+                  value={formData.place}
                 />
               </View>
             </View>
@@ -121,7 +112,6 @@ const CreateCustomer = (props) => {
               placeholder="Telefon"
               onChangeText={(text) => handleChange("phone", text)}
               value={formData.phone}
-
             />
 
             <TextInput
@@ -129,7 +119,6 @@ const CreateCustomer = (props) => {
               placeholder="Webseite"
               onChangeText={(text) => handleChange("website", text)}
               value={formData.website}
-
             />
 
             <View style={styles.btnContainer}>
@@ -137,7 +126,7 @@ const CreateCustomer = (props) => {
                 style={[styles.createBtn, styles.button]}
                 onPress={handleSubmit}
               >
-                <Text style={styles.createBtnText}>Anlehen</Text>
+                <Text style={styles.createBtnText}>Anlegen</Text>
               </TouchableOpacity>
             </View>
           </ScrollView>
@@ -148,6 +137,9 @@ const CreateCustomer = (props) => {
 };
 
 const styles = StyleSheet.create({
+  scrollView: {
+    flex: 1
+  },
   container: {
     backgroundColor: "#fff",
     padding: 30,

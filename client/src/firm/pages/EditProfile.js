@@ -35,7 +35,6 @@ const EditProfile = (props) => {
       const response = await axios.patch(URL, firmData);
       dispatch(updateFirmData(response.data));
       props.route.params.handleRefresh();
-
       navigation.goBack()
       console.log("Firm updated!", response.data);
     } catch (err) {
