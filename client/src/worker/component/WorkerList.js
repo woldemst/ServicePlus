@@ -2,12 +2,11 @@ import { View, Text, StyleSheet, Image, TouchableOpacity, ScrollView } from "rea
 import { useEffect, useState } from "react"
 // import { useNavigation } from '@react-navigation/native'
 import axios from "axios"
-import CustomerItem from "./CustomerItem"
+import WorkerItem from "./WokerItem"
 import { useDispatch, useSelector } from "react-redux"
-import { getCustomerData } from "../../actions/customerActions"
 import { useNavigation } from "@react-navigation/native"
 
-const CustomerList = () => {
+const WorkerList = () => {
     const [fetchedData, setFetchedData] = useState([])
     const dispatch = useDispatch()
     // console.log(fetchedData);
@@ -17,30 +16,31 @@ const CustomerList = () => {
 
 
     useEffect(()=> {
-        const fetchCustomers = async () => {
+        const fetchWorkers = async () => {
             try {
-                const response = await axios.get('http://localhost:8000/api/customers/all')
+                const response = await axios.get('http://localhost:8000/api/workers/all')
                 setFetchedData(response.data)
             } catch (err) {
                 console.log('Error fetching customers', err);
             }
         }
-        fetchCustomers()
+        fetchWorkers()
     }, [refresh])
+
     return <>
         <View style={styles.container}>
             <ScrollView showsVerticalScrollIndicator={false}>
                 <View style={styles.header} >
                     <View style={styles.headerContent}>
                         <View style={styles.textContainer} >
-                            <Text style={styles.headerText}>Kunden</Text>
+                            <Text style={styles.headerText}>Mitarbeiter</Text>
                         </View>
 
                         <View style={styles.headerIconContainer} >
                             <TouchableOpacity 
                                 style={styles.headerButton} 
                                 onPress={() => {
-                                    navigation.navigate('createCustomer',  { 
+                                    navigation.navigate('createWorker',  { 
                                         name: 'Create customer',
                                         handleRefresh: () => handleRefresh()
 
@@ -56,7 +56,7 @@ const CustomerList = () => {
 
                 <View style={styles.customerList}>
                     {fetchedData.map(customer => (
-                        <CustomerItem 
+                        <WorkerItem 
                             id={customer._id} 
                             key={customer._id} 
                             name={customer.name}
@@ -96,7 +96,6 @@ const styles = StyleSheet.create({
 
         backgroundColor: '#fff',
         flex: 1,
-
     },
     header: {
         
@@ -206,4 +205,4 @@ const styles = StyleSheet.create({
 })
 
 
-export default CustomerList;
+export default WorkerList;
