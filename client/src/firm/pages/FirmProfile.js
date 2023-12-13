@@ -66,7 +66,14 @@ const FirmProfile = props => {
                 </TouchableOpacity>
 
                 <View style={styles.listContainer} >
-                    <TouchableOpacity style={styles.listItem}>
+                    <TouchableOpacity style={styles.listItem}
+                        onPress={()=> {
+                            navigation.navigate('workerList', {
+                                name: 'Workers'
+                            })
+                        }}
+                    >
+
                         <Image style={styles.icon} source={require('../../../assets/firm/customer.png')} />
                         <Text style={styles.itemText}>Mitarbeiter verwalten</Text>
                     </TouchableOpacity>
