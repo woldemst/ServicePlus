@@ -17,7 +17,7 @@ const CustomerItem = (props) => {
     return (
         <>
             <TouchableOpacity 
-                style={styles.customerContainer} 
+                style={styles.customerContainer}    
                 onPress={toggleModal}
             >
                 <View style={styles.customerContent}>
