@@ -34,6 +34,7 @@ const getCustomerById = async (req, res, next) => {
           'Could not find customer for the provided id.',
           404
         );
+        return next(error)
     }
   
     res.json({ customer: customer.toObject({getters: true}) })
