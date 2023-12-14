@@ -9,7 +9,7 @@ const CustomerDetails = props => {
     const customerId = props.id 
     const navigation = useNavigation()
     const dispatch = useDispatch()
-    const fetchedData = useSelector(state => state.customer)
+    // const fetchedData = useSelector(state => state.customer)
     const [formData, setFormData] = useState({})
 
 
@@ -20,7 +20,6 @@ const CustomerDetails = props => {
 
                 dispatch(getCustomerData(response.data.customer))
                 setFormData(response.data.customer)
-                dispatch(getCustomerData(response.data.customer))
             } catch (err) {
                 console.log("Error fetching customer profile", err);
             }
