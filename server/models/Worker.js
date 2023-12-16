@@ -3,8 +3,7 @@ const mongoose = require("mongoose");
 const workerSchema = new mongoose.Schema({
   name: { type: String, required: true },
   email: { type: String, required: true },
-  customerNr: { type: String, required: false },
-  organisation: { type: String, required: false },
+  workerNr: { type: String, required: false },
   street: { type: String, required: true },
   houseNr: { type: String, required: true },
   zip: { type: String, required: true },

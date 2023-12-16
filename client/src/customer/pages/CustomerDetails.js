@@ -46,7 +46,7 @@ const CustomerDetails = props => {
             props.handleRefresh();
             window.alert('Customer updated!')
         } catch (err) {
-            console.log("Error fetching customer profile", err);
+            console.log("Error fetching while updating customers' profile", err);
         }
     }
     

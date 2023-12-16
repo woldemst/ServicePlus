@@ -65,7 +65,7 @@ const updateCustomerById = async (req, res, next) => {
 
   try {
     updatedCustomer = await Customer.findById(customerId)
-    console.log(updatedCustomer);
+
     if (!updatedCustomer) {
       const error = new HttpError('Could not find customer for the provided ID.', 404);
       return next(error);
