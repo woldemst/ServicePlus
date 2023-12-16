@@ -1,15 +1,16 @@
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, ScrollView } from "react-native";
 import { useEffect, useState } from "react"
 import { useDispatch, useSelector } from 'react-redux'
-import { getWorkerData} from '../../actions/workerActions'
+import { getWorkerData, updateWorkerData } from '../../actions/workerActions'
 import axios from "axios";
 import { useNavigation } from "@react-navigation/native";
+
  
 const WorkerDetails = props => {
     const workerId = props.id 
     const navigation = useNavigation()
     const dispatch = useDispatch()
-    // const fetchedData = useSelector(state => state.worker)
+    const fetchedData = useSelector(state => state.worker)
     const [formData, setFormData] = useState({})
 
 
@@ -20,6 +21,8 @@ const WorkerDetails = props => {
                 const response = await axios.get(`http://localhost:8000/api/workers/${workerId}`)
 
                 dispatch(getWorkerData(response.data.worker))
+
+                // console.log(response.data.worker);
                 setFormData(response.data.worker)
 
 
@@ -42,13 +45,14 @@ const WorkerDetails = props => {
 
     const handleSubmit = async () => {
         try {
-            const response = await axios.patch(`http://localhost:8000/api/customers/${workerId}`, formData)
+            const response = await axios.patch(`http://localhost:8000/api/workers/${workerId}`, formData)
+            // console.log(formData);
             dispatch(updateWorkerData(response.data))
             props.toggle()
-            props.handleRefresh();
+            props.handleRefresh();  
             window.alert('Worker updated!')
         } catch (err) {
-            console.log("Error fetching customer profile", err);
+            console.log("Error while updating worker's profile", err);
         }
     }
     
