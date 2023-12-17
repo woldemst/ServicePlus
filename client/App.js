@@ -16,6 +16,7 @@ import CustomerDetails from './src/customer/pages/CustomerDetails';
 import { Provider } from 'react-redux';
 import store from './store';
 import WorkerList from './src/worker/component/WorkerList';
+import WorkerCreate from './src/worker/pages/WorkerCreate';
 
 
 const Stack = createNativeStackNavigator()
@@ -44,6 +45,7 @@ export default function App() {
 
           {/* workers  */}
           <Stack.Screen name='workerList' component={WorkerList} options={{ title: 'Workers' }} />
+          <Stack.Screen name='createWorker' component={WorkerCreate} options={{ title: 'Worker create'}} />
 
 
         </Stack.Navigator>

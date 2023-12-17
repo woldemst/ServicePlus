@@ -29,7 +29,7 @@ const getWorkerById = async (req, res, next) => {
     }
 
     if (!worker) {
-        const error = new HttpError(
+            const error = new HttpError(
             'Could not find customer for the provided id.',
             404
         );
@@ -88,6 +88,49 @@ const updateWorkerById = async (req, res, next) => {
     }
 }
 
+const createWorker = async (req, res, next) => {
+    const {
+        name, 
+        email, 
+        workerNr,
+        street, 
+        houseNr, 
+        zip, 
+        place, 
+        phone, 
+        mobilePhone, 
+        description 
+    } = req.body
+
+    const createWorker = new Worker({
+        name: name, 
+        email: email, 
+        workerNr: workerNr,
+        street: street, 
+        houseNr: houseNr, 
+        zip: zip, 
+        place: place, 
+        phone: phone, 
+        mobilePhone: mobilePhone, 
+        description: description
+    })
+    
+    try {
+        await createWorker.save()
+    } catch (err) {
+        const error = new HttpError(
+        "Something went wrong, could not update profile.",
+        500
+        );
+        return next(error);
+    }
+
+    res
+    .status(201)
+    .json({ worker: createWorker.toObject({ getters: true }) });
+}
+
 exports.getAllWorkers = getAllWorkers;
 exports.getWorkerById = getWorkerById;
 exports.updateWorkerById = updateWorkerById;
+exports.createWorker = createWorker;

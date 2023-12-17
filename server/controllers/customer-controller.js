@@ -120,6 +120,7 @@ const createCustomer = async (req, res, next) => {
     website,  
     description 
   } = req.body
+  
 
   const createCustomer = new Customer({
     name: name, 

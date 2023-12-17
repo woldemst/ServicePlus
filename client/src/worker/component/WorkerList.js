@@ -41,7 +41,7 @@ const WorkerList = () => {
                                 style={styles.headerButton} 
                                 onPress={() => {
                                     navigation.navigate('createWorker',  { 
-                                        name: 'Create customer',
+                                        name: 'Create worker',
                                         handleRefresh: () => handleRefresh()
 
                                     })
