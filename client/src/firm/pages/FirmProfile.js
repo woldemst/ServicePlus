@@ -1,13 +1,15 @@
 import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native"
-import { useEffect, useState } from "react"
+import { useEffect, useState, useContext } from "react"
 import { useNavigation } from '@react-navigation/native'
 import { useRoute } from "@react-navigation/native"
 import axios from "axios"
+
 import { useDispatch, useSelector } from "react-redux"
 import { getFirmData } from "../../actions/firmActions"
-
+import { AuthContext } from "../../context/auth-context"
 
 const FirmProfile = props => {
+    const auth = useContext(AuthContext)
     const navigation = useNavigation()
     const dispatch = useDispatch()  
     const router = useRoute()
@@ -19,6 +21,7 @@ const FirmProfile = props => {
     // console.log('props');
     // console.log(props);
     const handleRefresh = () => setRefresh(prevData => !prevData);
+
 
 
     useEffect(() => {
@@ -37,6 +40,11 @@ const FirmProfile = props => {
         }
         fetcheFirm()
     }, [dispatch, refresh])
+
+    const logout = () => {
+        auth.logout()
+        navigation.navigate('onboarding')
+    }
 
 
     return (
@@ -93,14 +101,15 @@ const FirmProfile = props => {
                     </TouchableOpacity>
                 </View>
                 <View style={styles.logoutContainer}>
-                    <TouchableOpacity style={styles.listItem}>
+                    <TouchableOpacity style={styles.listItem} onPress={logout} >
                         <Image style={styles.icon} source={require('../../../assets/firm/logout.png')} />
-                        <Text style={styles.itemText}>Logout</Text>
+                        <Text style={styles.itemText}>Logout</Text> 
                     </TouchableOpacity>
                 </View>
             </View>
 
         </>
+        
     )
 }
 

@@ -1,10 +1,12 @@
 import { View, Text, TextInput, TouchableOpacity ,StyleSheet} from "react-native";
-import { useState } from "react";
+import { useState, useContext} from "react";
 import { useNavigation } from "@react-navigation/native";
 import axios from "axios";
 
-const Login = () => {
+import { AuthContext } from "../../context/auth-context";
 
+const Login = () => {
+    const auth = useContext(AuthContext)
     const navigation = useNavigation()
 
     const [email, setEmail] = useState('')
@@ -15,10 +17,9 @@ const Login = () => {
 
         const response = await axios.post(apiUrl, {
             email: email,
-            password: password
+            password: password, 
         })
-
-        // alert(response)
+        auth.login(response.data.userId, response.data.token)
         navigation.navigate('overview', {title: 'Overview'})
     }
 
@@ -40,7 +41,7 @@ const Login = () => {
             />
 
             <TextInput
-                style={styles.input}
+                style={styles.input}    
                 placeholder="Password"
                 secureTextEntry
                 onChangeText={(text) => setPassword(text)}
