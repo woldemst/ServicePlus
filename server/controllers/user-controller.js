@@ -1,6 +1,7 @@
 const User = require("../models/User");
 const HttpError = require("../models/http-error");
 const bcrypt = require("bcryptjs");
+const jwt = require('jsonwebtoken')
 
 const register = async (req, res, next) => {
   // destructuring assignment from body
@@ -66,16 +67,14 @@ const login = async (req, res, next) => {
   }
 
   const passwortDB = identifiedUser.password;
-  console.log(passwortDB);
+
   // compare the password
   let isValidPassword; 
   try {
-    // isValidPassword = await bcrypt.compare(password, passwortDB);
+    isValidPassword = await bcrypt.compare(password, passwortDB);
     if  (password == passwortDB){
         isValidPassword = true
     }
-
-    console.log(isValidPassword);
   } catch (err) {
     const error = new HttpError(
       "Could not log you in, please check your credentials and try again.",
@@ -92,13 +91,28 @@ const login = async (req, res, next) => {
     return next(error);
   }
 
-  // const token = generateJwtToken(identifiedUser._id)
-  // res.json({token})
+  let token; 
+
+  try {
+    token = jwt.sign(
+      {userId: identifiedUser.id, email: identifiedUser.email },
+      'supersecret_dont_share',
+      {expiresIn: '1h'}
+    )
+
+  } catch (err) {
+    const error = new HttpError(
+      'Logging in failed, please try again later.',
+      500
+    );
+    return next(error);
+  }
+
 
   res.json({
     userId: identifiedUser.id,
     email: identifiedUser.email,
-    password: identifiedUser.password,
+    token: token
   });
 };
 

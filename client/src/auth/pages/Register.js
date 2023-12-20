@@ -38,7 +38,6 @@ const Register = () => {
                 value={name}
             />
         
- 
             <TextInput
                 style={styles.input}
                 placeholder="Email"
