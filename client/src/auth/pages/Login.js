@@ -8,7 +8,7 @@ import { AuthContext } from "../../context/auth-context";
 const Login = () => {
     const auth = useContext(AuthContext)
     const navigation = useNavigation()
-
+    const [isLoginMode, setIsLoginMode] = useState(true)
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
 
@@ -21,6 +21,7 @@ const Login = () => {
         })
         auth.login(response.data.userId, response.data.token)
         navigation.navigate('overview', {title: 'Overview'})
+        setIsLoginMode(prev => !prev)
     }
 
 

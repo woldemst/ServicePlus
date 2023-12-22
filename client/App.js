@@ -2,9 +2,9 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import OnboardingNavigator from './src/onboarding/OnboardingNavigator';
 import { NavigationContainer } from '@react-navigation/native';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useState, useContext} from 'react';
 import { Provider } from 'react-redux';
-
+import React from 'react';
 
 
 import CustomerList from './src/customer/components/CustomerList';
@@ -21,29 +21,29 @@ import Login from './src/auth/pages/Login';
 import store from './store';
 
 
-
 export default function App() {
   const Stack = createNativeStackNavigator() 
-
+  const auth = useContext(AuthContext)
   const [userToken, setUserToken] = useState(false)
   const [userId, setUserId] = useState(false)
 
+
   useEffect(()=>{
-    const getAllKeys = async () => {
+    const getUserData = async () => {
       try {
-        const token = await AsyncStorage.getItem('userToken')
-        if(token !== null) {
-          setUserToken(token)
+        const userData = JSON.parse(await AsyncStorage.getItem('userData'))
+        if(userData && userData.token && userData.userId) {
+          login(userData.usedId, userData.token)
         }
+
 
       } catch (err) {
         console.error('Error retrieving user token:', err);
       }
-
     }
 
-    getAllKeys()
-  })
+    getUserData()
+  }, [login])
   
 
   const login = useCallback(async (uid, token) => {
@@ -51,20 +51,16 @@ export default function App() {
       setUserToken(token)
       setUserId(uid)
 
-      await AsyncStorage.setItem('userToken', 
-        JSON.stringify({ userId: uid, token: token })
-      )
-
-      
+      await AsyncStorage.setItem('userData', JSON.stringify({ userId: uid, token: token }))
     } catch (err) {
-      console.error('Error setting user token:', err);
+      console.error('Error setting user data:', err);
       
     }
   }, [])
 
   const logout = useCallback(async() => {
     try {
-      await AsyncStorage.removeItem('userToken')
+      await AsyncStorage.removeItem('userData')
       // window.alert('Are you sure you want to logout?')
       setUserToken(null)
       setUserId(null)
@@ -75,32 +71,66 @@ export default function App() {
     }
   }, [])
 
+  let routes;
+  
+
+  if(userToken){
+    routes = (
+      <NavigationContainer>
+        <Stack.Navigator>
+          {/* when logging out */}
+          <Stack.Screen name='onboarding' component={OnboardingNavigator} options={{ headerShown: false }}/>
+
+          {/* authentification */}
+          <Stack.Screen name='login' component={Login} options={{ title: 'Login' }} />
+          <Stack.Screen name='register' component={Register} options={{ title: 'Registration' }} />
+
+          {/* main */}
+          <Stack.Screen name='overview' component={Overview} options={{ title: 'Overview' }} />
+
+          {/* orders */}
+          <Stack.Screen name='orderView' component={OrderView} options={{ title: 'Order view' }} />
+
+          <Stack.Screen name='editProfile' component={EditProfile} options={{ title: 'Edit Profile' }} />
+          {/* customers */}
+          <Stack.Screen name='customerList' component={CustomerList} options={{ title: 'Customers' }} />
+          <Stack.Screen name='createCustomer' component={CreateCustomer} options={{ title: 'Create Customer' }} />
+          <Stack.Screen name='customerDetails' component={CustomerDetails} options={{ title: 'Details of the customer' }} />
+
+          {/* workers  */}
+          <Stack.Screen name='workerList' component={WorkerList} options={{ title: 'Workers' }} />
+          <Stack.Screen name='createWorker' component={WorkerCreate} options={{ title: 'Worker create'}} />
+
+        </Stack.Navigator>
+      </NavigationContainer>
+    )
+  }else{
+    routes = (
+      <NavigationContainer>
+        <Stack.Navigator>
+          {/* main */}
+          <Stack.Screen name='onboarding' component={OnboardingNavigator} options={{ headerShown: false }}/>
+
+          {/* authentification */}
+          <Stack.Screen name='login' component={Login} options={{ title: 'Login' }} />
+          <Stack.Screen name='register' component={Register} options={{ title: 'Registration' }} />
+
+        </Stack.Navigator>
+      </NavigationContainer>
+    )
+  }
 
   return (
       <Provider store={store}>
-          <AuthContext.Provider value={{ login: login, logout: logout }}>
-            <NavigationContainer>
-              <Stack.Navigator>
-                <Stack.Screen name='onboarding' component={OnboardingNavigator} options={{ headerShown: false }}/>
-                <Stack.Screen name='overview' component={Overview} options={{ title: 'Overview' }} />
-
-                {/* authentification */}
-                <Stack.Screen name='login' component={Login} options={{ title: 'Login' }} />
-                <Stack.Screen name='register' component={Register} options={{ title: 'Registration' }} />
-                {/* orders */}
-                <Stack.Screen name='orderView' component={OrderView} options={{ title: 'Order view' }} />
-
-                <Stack.Screen name='editProfile' component={EditProfile} options={{ title: 'Edit Profile' }} />
-                {/* customers */}
-                <Stack.Screen name='customerList' component={CustomerList} options={{ title: 'Customers' }} />
-                <Stack.Screen name='createCustomer' component={CreateCustomer} options={{ title: 'Create Customer' }} />
-                <Stack.Screen name='customerDetails' component={CustomerDetails} options={{ title: 'Details of the customer' }} />
-
-                {/* workers  */}
-                <Stack.Screen name='workerList' component={WorkerList} options={{ title: 'Workers' }} />
-                <Stack.Screen name='createWorker' component={WorkerCreate} options={{ title: 'Worker create'}} />
-              </Stack.Navigator>
-            </NavigationContainer>
+          <AuthContext.Provider 
+            value={{ 
+              login: login, 
+              logout: logout, 
+              isLogedIn: !!userToken, 
+              userToken: userToken, 
+              userId: userId 
+            }}>
+            <React.Fragment>{routes}</React.Fragment>
           </AuthContext.Provider>
       </Provider>
   );
