@@ -14,8 +14,8 @@ const register = async (req, res, next) => {
     existingUser = await User.findOne({ email });
   } catch (err) {
     const error = new HttpError(
-      "Signing up failed, please try agail later.",
-      500
+      "User already exists, please log in instead.",
+      422  // Unprocessable Entity
     );
     return next(error);
   }
@@ -34,10 +34,29 @@ const register = async (req, res, next) => {
     return next(err);
   }
 
+  let token; 
+
+  try {
+    token = jwt.sign(
+      {userId: createdUser.id, email: createdUser.email },
+      'supersecret_dont_share',
+      {expiresIn: '1h'}
+    )
+
+  } catch (err) {
+    const error = new HttpError(
+      'Signing up failed, please try again later.',
+      500
+    );
+    return next(error);
+  }
+
+
   res.status(201).json({
     userId: createdUser.id,
     email: createdUser.email,
     password: password,
+    token: token
   });
 };
 
