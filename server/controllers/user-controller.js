@@ -4,45 +4,36 @@ const bcrypt = require("bcryptjs");
 const jwt = require('jsonwebtoken')
 
 const register = async (req, res, next) => {
-  // destructuring assignment from body
   const { name, email, password } = req.body;
 
-  // check if a user with tre same email exists using the User model
-  let existingUser;
-
   try {
-    existingUser = await User.findOne({ email });
-  } catch (err) {
-    const error = new HttpError(
-      "User already exists, please log in instead.",
-      422  // Unprocessable Entity
-    );
-    return next(error);
-  }
+    let existingUser = await User.findOne({ email });
 
-  // creating of new user
-  const createdUser = new User({
-    name: name,
-    email: email,
-    password: password,
-  });
+    if (existingUser) {
+      return res.status(422).json({ message: 'User exists already, please login instead.' });
+    }
 
-  try {
+    const hashedPassword = await bcrypt.hash(password, 12);
+
+    const createdUser = new User({
+      name,
+      email,
+      password: hashedPassword,
+    });
+
     await createdUser.save();
-  } catch (err) {
-    console.log(err);
-    return next(err);
-  }
 
-  let token; 
-
-  try {
-    token = jwt.sign(
-      {userId: createdUser.id, email: createdUser.email },
+    let token = jwt.sign(
+      { userId: createdUser.id, email: createdUser.email },
       'supersecret_dont_share',
-      {expiresIn: '1h'}
-    )
+      { expiresIn: '1h' }
+    );
 
+    res.status(201).json({
+      userId: createdUser.id,
+      email: createdUser.email,
+      token,
+    });
   } catch (err) {
     const error = new HttpError(
       'Signing up failed, please try again later.',
@@ -50,14 +41,6 @@ const register = async (req, res, next) => {
     );
     return next(error);
   }
-
-
-  res.status(201).json({
-    userId: createdUser.id,
-    email: createdUser.email,
-    password: password,
-    token: token
-  });
 };
 
 const login = async (req, res, next) => {

@@ -9,18 +9,36 @@ const Register = () => {
     const [name, setName] = useState('')
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
+    const [showError, setShowError] = useState(false)
 
-    
     const handleSubmit = async () => {
         const URL = "http://localhost:8000/api/users/register";
 
-        const response = await axios.post(URL, {
-            name: name,
-            email: email, 
-            password: password
-        })
+     
 
-        alert(response)
+
+
+
+        try {
+            const response = await axios.post(URL, {
+                name: name,
+                email: email, 
+                password: password
+            })
+
+            if (response.status === 201) {
+                navigation.navigate('overview');
+                alert('User created');
+            } else {
+                setShowError(true);
+                // alert('User already exists, please log in instead');
+            }
+        } catch (error) {
+            setShowError(true);
+            // alert('User already exists, please log in instead');
+            // You can log the error to see more details in the console
+            console.error(error);
+        }
     }
 
     return (
@@ -43,7 +61,9 @@ const Register = () => {
                 placeholder="Email"
                 onChangeText={(text) => setEmail(text)}
                 value={email}
+
             />
+            {showError && <Text>User already exists, please log in instead or choose another email</Text>}
 
             <TextInput
                 style={styles.input}
@@ -56,7 +76,7 @@ const Register = () => {
             <Text style={styles.notice} >Passwort vergessen?</Text>
 
             <TouchableOpacity style={styles.button} onPress={handleSubmit} >
-                <Text style={styles.buttonText}>Sign in</Text>
+                <Text style={styles.buttonText}>Sign up</Text>
             </TouchableOpacity>
 
 
@@ -64,7 +84,7 @@ const Register = () => {
 
                 <Text style={styles.inviteText} >Sie haben schon einen Account? </Text>
 
-                <TouchableOpacity onPress={()=>{navigation.navigate('login', {name: 'Login'})}}>
+                <TouchableOpacity onPress={()=>{navigation.navigate('login')}}>
                     <Text style={styles.registerBtn} >Zurück zum Login</Text>
                 </TouchableOpacity>
 
