@@ -2,39 +2,42 @@ import { View, Text, TextInput, TouchableOpacity ,StyleSheet} from "react-native
 import { useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import axios from "axios";
+import { useDispatch, useSelector } from "react-redux";
+
+import Input from "../../share/UIElements/Input";
+
 
 const Register = () => {
     const navigation = useNavigation()
+    const fetchedData = useSelector(state => state.user)
+    console.log(fetchedData);
 
     const [name, setName] = useState('')
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
-    const [showError, setShowError] = useState(false)
+    
+
+  
+
 
     const handleSubmit = async () => {
         const URL = "http://localhost:8000/api/users/register";
 
-     
-
-
-
 
         try {
             const response = await axios.post(URL, {
-                name: name,
-                email: email, 
-                password: password
+                name: fetchedData.name,
+                email: fetchedData.email, 
+                password: fetchedData.password
             })
 
             if (response.status === 201) {
                 navigation.navigate('overview');
                 alert('User created');
             } else {
-                setShowError(true);
                 // alert('User already exists, please log in instead');
             }
         } catch (error) {
-            setShowError(true);
             // alert('User already exists, please log in instead');
             // You can log the error to see more details in the console
             console.error(error);
@@ -47,30 +50,28 @@ const Register = () => {
             <Text style={styles.logoText}>ServicePlus</Text>
             <Text style={styles.title}>Registrieren</Text>
 
-            {/* {error && <Text style={styles.error}>{error}</Text>} */}
-
-            <TextInput
-                style={styles.input}
+            <Input 
+                id='name'
                 placeholder="Name"
-                onChangeText={(text) => setName(text)}
-                value={name}
+                errorText='falsy'
+                fieldName='name'
+                value={fetchedData.name}
             />
-        
-            <TextInput
-                style={styles.input}
+
+            <Input 
+                id='email'
                 placeholder="Email"
-                onChangeText={(text) => setEmail(text)}
-                value={email}
-
+                errorText='User already exists, please log in instead or choose another email'
+                fieldName='email'
+                value={fetchedData.email}
             />
-            {showError && <Text>User already exists, please log in instead or choose another email</Text>}
 
-            <TextInput
-                style={styles.input}
+            <Input 
+                id='password'
                 placeholder="Password"
-                secureTextEntry
-                onChangeText={(text) => setPassword(text)}
-                value={password}
+                errorText='falsy'
+                fieldName='password'
+                value={fetchedData.password}
             />
 
             <Text style={styles.notice} >Passwort vergessen?</Text>
