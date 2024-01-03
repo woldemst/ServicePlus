@@ -6,7 +6,7 @@ import {
 } from "react-native";
 import { useState } from "react";
 
-import ModalComponent from "../../share/UIElements/Modal";
+import ModalComponent from "../../shared/UIElements/Modal";
 import OrderInfo from "../pages/OrderInfo";
 
 

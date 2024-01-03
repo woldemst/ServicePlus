@@ -1,23 +1,19 @@
-import { View, Text, TextInput, TouchableOpacity ,StyleSheet} from "react-native";
+import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import { useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 
-import Input from "../../share/UIElements/Input";
+import Input from "../../shared/UIElements/Input";
+import { clearField } from "../../actions/userActions";
+import { VALIDATOR_EMAIL, VALIDATOR_MINLENGTH, VALIDATOR_REQUIRE } from "../../util/validators";
+
 
 
 const Register = () => {
+    const dispatch = useDispatch()
     const navigation = useNavigation()
     const fetchedData = useSelector(state => state.user)
-    console.log(fetchedData);
-
-    const [name, setName] = useState('')
-    const [email, setEmail] = useState('')
-    const [password, setPassword] = useState('')
-    
-
-  
 
 
     const handleSubmit = async () => {
@@ -27,19 +23,20 @@ const Register = () => {
         try {
             const response = await axios.post(URL, {
                 name: fetchedData.name,
-                email: fetchedData.email, 
+                email: fetchedData.email,
                 password: fetchedData.password
             })
+
+            dispatch(clearField())
 
             if (response.status === 201) {
                 navigation.navigate('overview');
                 alert('User created');
             } else {
                 // alert('User already exists, please log in instead');
+
             }
         } catch (error) {
-            // alert('User already exists, please log in instead');
-            // You can log the error to see more details in the console
             console.error(error);
         }
     }
@@ -50,43 +47,47 @@ const Register = () => {
             <Text style={styles.logoText}>ServicePlus</Text>
             <Text style={styles.title}>Registrieren</Text>
 
-            <Input 
+            <Input
                 id='name'
                 placeholder="Name"
-                errorText='falsy'
+                errorText='Type a name'
                 fieldName='name'
                 value={fetchedData.name}
+                validators={[VALIDATOR_REQUIRE()]}
             />
 
-            <Input 
+            <Input
                 id='email'
                 placeholder="Email"
-                errorText='User already exists, please log in instead or choose another email'
+                showError
+                errorText='Choose another email'
                 fieldName='email'
                 value={fetchedData.email}
+                validators={[VALIDATOR_EMAIL()]}
             />
 
-            <Input 
+            <Input
                 id='password'
                 placeholder="Password"
-                errorText='falsy'
+                errorText='Type a password'
                 fieldName='password'
                 value={fetchedData.password}
+                validators={[VALIDATOR_MINLENGTH(6)]}
             />
 
-            <Text style={styles.notice} >Passwort vergessen?</Text>
+            <Text style={styles.notice}>Passwort vergessen?</Text>
 
-            <TouchableOpacity style={styles.button} onPress={handleSubmit} >
+            <TouchableOpacity disabled={!fetchedData.isFormValid} style={fetchedData.isFormValid ? styles.button : styles.invalideButton} onPress={handleSubmit} >
                 <Text style={styles.buttonText}>Sign up</Text>
             </TouchableOpacity>
+            
 
 
             <View style={styles.inviteContainer}>
+                <Text style={styles.inviteText}>Sie haben schon einen Account?</Text>
 
-                <Text style={styles.inviteText} >Sie haben schon einen Account? </Text>
-
-                <TouchableOpacity onPress={()=>{navigation.navigate('login')}}>
-                    <Text style={styles.registerBtn} >Zurück zum Login</Text>
+                <TouchableOpacity onPress={() => { navigation.navigate('login') }}>
+                    <Text style={styles.registerBtn}>Zurück zum Login</Text>
                 </TouchableOpacity>
 
             </View>
@@ -99,7 +100,7 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'flex-end',
         padding: 21,
-        paddingBottom: 45, 
+        paddingBottom: 45,
 
     },
     logoText: {
@@ -114,7 +115,7 @@ const styles = StyleSheet.create({
         fontSize: 27,
         fontWeight: '700',
         marginBottom: 16,
-      },
+    },
     input: {
         width: '100%',
         height: 50,
@@ -127,10 +128,10 @@ const styles = StyleSheet.create({
         marginTop: 21,
         marginBottom: 21,
         textAlign: 'right',
-        fontSize: 14, 
+        fontSize: 14,
         fontWeight: '700'
 
-    },  
+    },
     inviteContainer: {
         flexDirection: 'row',
         alignItems: 'center',
@@ -138,27 +139,37 @@ const styles = StyleSheet.create({
         // borderColor: 'red',
         // borderWidth: 2,
 
-    }, 
+    },
     inviteText: {
-        fontSize: 14, 
+        fontSize: 14,
         fontWeight: '400',
-        
+
     },
     registerBtn: {
-        fontSize: 14, 
+        fontSize: 14,
         fontWeight: '700',
         color: '#7A9B76'
     },
     button: {
         height: 53,
         width: '100%',
-        backgroundColor: '#7A9B76', 
+        backgroundColor: '#7A9B76',
         borderRadius: 5,
         justifyContent: 'center',
         flexDirection: "row",
-        justifyContent: "center", 
+        justifyContent: "center",
         alignItems: 'center'
         // flex: 1
+    },
+    invalideButton: {
+        height: 53,
+        width: '100%',
+        backgroundColor: 'gray',
+        borderRadius: 5,
+        justifyContent: 'center',
+        flexDirection: "row",
+        justifyContent: "center",
+        alignItems: 'center'
     },
     buttonText: {
         fontSize: 14,

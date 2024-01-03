@@ -12,7 +12,6 @@ const FirmProfile = props => {
     const auth = useContext(AuthContext)
     const navigation = useNavigation()
     const dispatch = useDispatch()  
-    const router = useRoute()
     const fetchedData = useSelector(state => state.firm)
     const firmArr = fetchedData.firmData[0]
     const [refresh, setRefresh] = useState(false)
@@ -23,6 +22,11 @@ const FirmProfile = props => {
     const handleRefresh = () => setRefresh(prevData => !prevData);
 
 
+
+
+    const refreshScreen = () => {
+        setRefresh(prev = !prev)
+    }
 
     useEffect(() => {
         const fetcheFirm = async () => {

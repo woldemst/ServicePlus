@@ -1,7 +1,7 @@
 import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native"
 import { useEffect, useState } from "react"
 import { useNavigation } from '@react-navigation/native'
-import ModalComponent from "../../../src/share/UIElements/Modal"
+import ModalComponent from "../../../src/shared/UIElements/Modal"
 import WorkerDetails from "../pages/WorkerDetails"
 
 const WorkerItem = (props) => {
@@ -13,11 +13,11 @@ const WorkerItem = (props) => {
         setModalVisible(!isModalVisible)
     }
 
-    
+
     return (
         <>
-            <TouchableOpacity 
-                style={styles.customerContainer}    
+            <TouchableOpacity
+                style={styles.customerContainer}
                 onPress={toggleModal}
             >
                 <View style={styles.customerContent}>
@@ -41,7 +41,7 @@ const WorkerItem = (props) => {
                 </View>
             </TouchableOpacity>
 
-            <ModalComponent 
+            <ModalComponent
                 isVisible={isModalVisible}
                 animationIn="slideInUp" // Specify the slide-up animation
                 animationOut="slideOutDown" // Specify the slide-down animation
@@ -50,32 +50,32 @@ const WorkerItem = (props) => {
 
                 header={<Text style={styles.modalHeadline}>Kundeniformtaion</Text>}
             >
-                <WorkerDetails 
+                <WorkerDetails
                     // functions
-                    toggle={toggleModal} 
+                    toggle={toggleModal}
                     handleRefresh={props.handleRefresh}
-                    id={props.id} 
-                    key={props.id} 
+                    id={props.id}
+                    key={props.id}
                     name={props.name}
                     email={props.email}
-                    // customer={props.customer}
-                    // address={props.address}
-                    // creator={props.creator}
-                    // worker={props.worker}
-                    // contact={props.contact}
-                    // description={props.description}
-                    // website={props.website}
-                    // phone={props.phone}
+                // customer={props.customer}
+                // address={props.address}
+                // creator={props.creator}
+                // worker={props.worker}
+                // contact={props.contact}
+                // description={props.description}
+                // website={props.website}
+                // phone={props.phone}
 
-                    // address 
-                    // street={props.street}
-                    // houseNr={props.houseNr}
-                    // zip={props.zip}
-                    // place={props.place}
+                // address 
+                // street={props.street}
+                // houseNr={props.houseNr}
+                // zip={props.zip}
+                // place={props.place}
 
-                    
+
                 />
-    
+
 
             </ModalComponent>
 
@@ -95,8 +95,8 @@ const styles = StyleSheet.create({
     },
     customerList: {
         paddingTop: 32,
-        paddingBottom: 32, 
-        paddingLeft: 16, 
+        paddingBottom: 32,
+        paddingLeft: 16,
         paddingRight: 16
     },
     customerContainer: {
@@ -158,7 +158,7 @@ const styles = StyleSheet.create({
         color: '#7a9b76',
         fontWeight: '700'
     },
-    arrowWrapper:{
+    arrowWrapper: {
         justifyContent: 'center'
     },
     circleWrapper: {
