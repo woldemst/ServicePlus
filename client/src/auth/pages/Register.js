@@ -7,6 +7,7 @@ import { useDispatch, useSelector } from "react-redux";
 import Input from "../../shared/UIElements/Input";
 import { clearField } from "../../actions/userActions";
 import { VALIDATOR_EMAIL, VALIDATOR_MINLENGTH, VALIDATOR_REQUIRE } from "../../util/validators";
+import Button from "../../shared/UIElements/Button";
 
 
 
@@ -77,10 +78,15 @@ const Register = () => {
 
             <Text style={styles.notice}>Passwort vergessen?</Text>
 
-            <TouchableOpacity disabled={!fetchedData.isFormValid} style={fetchedData.isFormValid ? styles.button : styles.invalideButton} onPress={handleSubmit} >
-                <Text style={styles.buttonText}>Sign up</Text>
-            </TouchableOpacity>
-            
+          
+
+            <Button 
+                disabled={!fetchedData.isFormValid} 
+                style={fetchedData.isFormValid ? styles.button : styles.invalideButton}
+                buttonText={styles.buttonText}
+                onPress={handleSubmit}
+                title={'Sign up'} 
+            />
 
 
             <View style={styles.inviteContainer}>
