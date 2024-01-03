@@ -2,10 +2,10 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import OnboardingNavigator from './src/onboarding/OnboardingNavigator';
 import { NavigationContainer } from '@react-navigation/native';
-import { useCallback, useEffect, useState, useContext} from 'react';
+import { useCallback, useEffect, useState, useContext } from 'react';
 import { Provider } from 'react-redux';
 import React from 'react';
-
+import { useNavigation } from '@react-navigation/native';
 
 import CustomerList from './src/customer/components/CustomerList';
 import CustomerDetails from './src/customer/pages/CustomerDetails';
@@ -16,27 +16,27 @@ import { AuthContext } from './src/context/auth-context';
 import EditProfile from './src/firm/pages/EditProfile';
 import Overview from './src/overview/pages/Overview';
 import OrderView from './src/order/pages/OrderView';
-import Register from './src/auth/pages/Register';
+import Register from "./src/auth/pages/Register";
 import Login from './src/auth/pages/Login';
 import store from './store';
 
 
 export default function App() {
-  const Stack = createNativeStackNavigator() 
+  const Stack = createNativeStackNavigator()
   const auth = useContext(AuthContext)
   const [userToken, setUserToken] = useState(false)
   const [userId, setUserId] = useState(false)
 
-
-  useEffect(()=>{
+  useEffect(() => {
     const getUserData = async () => {
       try {
         const userData = JSON.parse(await AsyncStorage.getItem('userData'))
-        if(userData && userData.token && userData.userId) {
+        if (userData && userData.token) {
           login(userData.usedId, userData.token)
+          setUserToken(userData.token)
         }
 
-
+        // console.log('isLoggedIn:', auth.isLoggedIn);
       } catch (err) {
         console.error('Error retrieving user token:', err);
       }
@@ -44,7 +44,7 @@ export default function App() {
 
     getUserData()
   }, [login])
-  
+
 
   const login = useCallback(async (uid, token) => {
     try {
@@ -52,13 +52,15 @@ export default function App() {
       setUserId(uid)
 
       await AsyncStorage.setItem('userData', JSON.stringify({ userId: uid, token: token }))
+
+
     } catch (err) {
       console.error('Error setting user data:', err);
-      
+
     }
   }, [])
 
-  const logout = useCallback(async() => {
+  const logout = useCallback(async () => {
     try {
       await AsyncStorage.removeItem('userData')
       // window.alert('Are you sure you want to logout?')
@@ -67,26 +69,26 @@ export default function App() {
 
 
     } catch (err) {
-      console.error('Error removing user token:', err); 
+      console.error('Error removing user token:', err);
     }
   }, [])
 
   let routes;
-  
 
-  if(userToken){
+
+  if (userToken) {
     routes = (
       <NavigationContainer>
         <Stack.Navigator>
           {/* when logging out */}
-          <Stack.Screen name='onboarding' component={OnboardingNavigator} options={{ headerShown: false }}/>
+          <Stack.Screen name='onboarding' component={OnboardingNavigator} options={{ headerShown: false }} />
 
           {/* authentification */}
           <Stack.Screen name='login' component={Login} options={{ title: 'Login' }} />
           <Stack.Screen name='register' component={Register} options={{ title: 'Registration' }} />
 
           {/* main */}
-          <Stack.Screen name='overview' component={Overview} options={{ title: 'Overview' }} />
+          <Stack.Screen name='overview' component={Overview} options={{ headerShown: false }} />
 
           {/* orders */}
           <Stack.Screen name='orderView' component={OrderView} options={{ title: 'Order view' }} />
@@ -99,21 +101,25 @@ export default function App() {
 
           {/* workers  */}
           <Stack.Screen name='workerList' component={WorkerList} options={{ title: 'Workers' }} />
-          <Stack.Screen name='createWorker' component={WorkerCreate} options={{ title: 'Worker create'}} />
+          <Stack.Screen name='createWorker' component={WorkerCreate} options={{ title: 'Worker create' }} />
 
         </Stack.Navigator>
       </NavigationContainer>
     )
-  }else{
+  } else {
     routes = (
       <NavigationContainer>
         <Stack.Navigator>
           {/* main */}
-          <Stack.Screen name='onboarding' component={OnboardingNavigator} options={{ headerShown: false }}/>
+          <Stack.Screen name='onboarding' component={OnboardingNavigator} options={{ headerShown: false }} />
 
           {/* authentification */}
           <Stack.Screen name='login' component={Login} options={{ title: 'Login' }} />
           <Stack.Screen name='register' component={Register} options={{ title: 'Registration' }} />
+
+          {/* main */}
+          <Stack.Screen name='overview' component={Overview} options={{ headerShown: false }} />
+
 
         </Stack.Navigator>
       </NavigationContainer>
@@ -121,19 +127,18 @@ export default function App() {
   }
 
   return (
-      <Provider store={store}>
-          <AuthContext.Provider 
-            value={{ 
-              login: login, 
-              logout: logout, 
-              isLogedIn: !!userToken, 
-              userToken: userToken, 
-              userId: userId 
-            }}>
-            <React.Fragment>{routes}</React.Fragment>
-          </AuthContext.Provider>
-      </Provider>
+    <Provider store={store}>
+      <AuthContext.Provider
+        value={{
+          login: login,
+          logout: logout,
+          isLoggedIn: !!userToken,
+          userToken: userToken,
+          userId: userId
+        }}>
+        <React.Fragment>{routes}</React.Fragment>
+      </AuthContext.Provider>
+    </Provider>
   );
 }
 
- 

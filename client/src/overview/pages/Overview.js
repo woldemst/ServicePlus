@@ -1,20 +1,20 @@
 import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { useRoute } from "@react-navigation/native"
-
+import { useNavigation } from "@react-navigation/native";
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
 import AppointmentView from "../../appointment/pages/AppointmentView"
 import OrderView from "../../order/pages/OrderView"
 import FirmProfile from "../../firm/pages/FirmProfile"
 
-import ModalComponent from "../../share/UIElements/Modal"
+import ModalComponent from "../../shared/UIElements/Modal"
 import OrderCreate from "../../order/pages/OrderCreate"
 
 
 const Overview = () => {
     const Tab = createBottomTabNavigator()
-
+    const navigation = useNavigation()
     const [activeTab, setActiveTab] = useState(2)
     const [isModalVisible, setModalVisible] = useState(false);
     const [refresh, setRefresh] = useState(false)
@@ -24,6 +24,29 @@ const Overview = () => {
         setModalVisible(!isModalVisible)
     }
 
+    // useEffect(()=>{
+    //     const updateTitle = () => {
+    //         let title = ''
+    //         switch (activeTab) {
+    //             case 1: 
+    //                 title = 'Terminübersicht'
+    //             break;
+    //             case 2:
+    //                 title = 'Aufträge';
+    //                 break;
+    //             case 3:
+    //                 title = 'Betrieb';
+    //                 break;
+    //             default:
+    //                 title = 'Overview';
+    //                 break;
+    //         }
+
+    //         navigation.setOptions({title})
+    //     }
+
+    //     updateTitle()
+    // }, [activeTab, navigation])
 
 
     return (
@@ -160,7 +183,7 @@ const styles = StyleSheet.create({
     // HEADER: START !!!
     header: {
         width: '100%',
-        paddingTop: 27,
+        paddingTop: 80,
         paddingBottom: 10,
         paddingLeft: 32,
         paddingRight: 32,

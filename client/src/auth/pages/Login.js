@@ -21,6 +21,12 @@ const Login = () => {
         })
         auth.login(response.data.userId, response.data.token)
         navigation.navigate('overview', {title: 'Overview'})
+
+        navigation.reset({
+            index: 0,
+            routes: [{name: 'overview'}]
+        })
+
         setIsLoginMode(prev => !prev)
     }
 

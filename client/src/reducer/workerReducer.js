@@ -4,7 +4,7 @@ const initialState = {
     workerData: [],
 };
 
-const customerReducer = (state = initialState, action) => {
+const workerReducer = (state = initialState, action) => {
     switch (action.type) {
         case UPDATE_WORKER_DATA:
             return {
@@ -22,4 +22,4 @@ const customerReducer = (state = initialState, action) => {
     }
 };
 
-export default customerReducer;
+export default workerReducer;
