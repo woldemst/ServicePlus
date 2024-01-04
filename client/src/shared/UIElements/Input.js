@@ -1,6 +1,6 @@
 import { TextInput, StyleSheet, Text } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
-import { updateAndValidateField, touchField } from '../../actions/userActions'
+import { updateAndValidateField, updateField } from '../../actions/userActions'
 import { useState } from "react";
 
 const Input = props => {
@@ -10,14 +10,24 @@ const Input = props => {
 
     // console.log(fetchedData);
     const handleChange = (val) => {
-        dispatch(updateAndValidateField(props.fieldName, val, props.validators))
+        if(touched){
+            dispatch(updateAndValidateField(props.fieldName, val, props.validators))
+        }else{
+            dispatch(updateField(props.fieldName, val))
+        }
+
     }
 
-    const touchHandler = (fieldName) => {
-        dispatch(touchField(fieldName))
+    const touchHandler = (val) => {
+        console.log('toushed', touched);
         setTouched(true)
 
     }
+
+    const onBlurHandler = () => {
+        console.log('not');
+    }
+
 
 
     return <>
@@ -27,8 +37,9 @@ const Input = props => {
             placeholder={props.placeholder}
             style={!fetchedData[props.fieldName].isValid ? styles.inputInvalid : styles.input}
             onChangeText={handleChange}
-            value={props.value.value}
-            // onFocus={touchHandler}
+            value={props.value}
+            onFocus={touchHandler}
+            onBlur={onBlurHandler}
 
 
         />
