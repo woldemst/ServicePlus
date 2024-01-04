@@ -1,15 +1,12 @@
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
-import { useState } from "react";
 import { useNavigation } from "@react-navigation/native";
-import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
+import axios from "axios";
 
-import Input from "../../shared/UIElements/Input";
-import { clearField } from "../../actions/userActions";
 import { VALIDATOR_EMAIL, VALIDATOR_MINLENGTH, VALIDATOR_REQUIRE } from "../../util/validators";
+import { clearField } from "../../actions/userActions";
 import Button from "../../shared/UIElements/Button";
-
-
+import Input from "../../shared/UIElements/Input";
 
 const Register = () => {
     const dispatch = useDispatch()
@@ -23,9 +20,9 @@ const Register = () => {
 
         try {
             const response = await axios.post(URL, {
-                name: fetchedData.name,
-                email: fetchedData.email,
-                password: fetchedData.password
+                name: fetchedData.name.value,
+                email: fetchedData.email.value,
+                password: fetchedData.password.value
             })
 
             dispatch(clearField())
@@ -50,39 +47,36 @@ const Register = () => {
 
             <Input
                 id='name'
+                fieldName='name'
                 placeholder="Name"
                 errorText='Type a name'
-                fieldName='name'
-                value={fetchedData.name}
+                value={fetchedData.name.value}
                 validators={[VALIDATOR_REQUIRE()]}
             />
 
             <Input
                 id='email'
-                placeholder="Email"
-                showError
-                errorText='Choose another email'
                 fieldName='email'
-                value={fetchedData.email}
+                placeholder="Email"
+                errorText='Choose another email'
+                value={fetchedData.email.value}
                 validators={[VALIDATOR_EMAIL()]}
             />
 
             <Input
                 id='password'
+                fieldName='password'
                 placeholder="Password"
                 errorText='Type a password'
-                fieldName='password'
-                value={fetchedData.password}
+                value={fetchedData.password.value}
                 validators={[VALIDATOR_MINLENGTH(6)]}
             />
 
             <Text style={styles.notice}>Passwort vergessen?</Text>
 
-          
-
             <Button 
-                disabled={!fetchedData.isFormValid} 
                 style={fetchedData.isFormValid ? styles.button : styles.invalideButton}
+                disabled={!fetchedData.isFormValid} 
                 buttonText={styles.buttonText}
                 onPress={handleSubmit}
                 title={'Sign up'} 
@@ -92,7 +86,7 @@ const Register = () => {
             <View style={styles.inviteContainer}>
                 <Text style={styles.inviteText}>Sie haben schon einen Account?</Text>
 
-                <TouchableOpacity onPress={() => { navigation.navigate('login') }}>
+                <TouchableOpacity onPress={() => {navigation.navigate('login') }}>
                     <Text style={styles.registerBtn}>Zurück zum Login</Text>
                 </TouchableOpacity>
 

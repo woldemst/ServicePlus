@@ -5,18 +5,15 @@ const initialState = {
     name: {
         value: '',
         isValid: false,
-        isTouched: false
     },
     email: {
         value: '',
         isValid: false,
-        isTouched: false
 
     },
     password: {
         value: '', 
         isValid: false,
-        isTouched: false
 
     },
     isFormValid: false, 
