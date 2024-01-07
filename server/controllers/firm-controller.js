@@ -1,48 +1,58 @@
 const mongoose = require('mongoose');
 const Firm = require("../models/Firm");
 const HttpError = require("../models/http-error");
+const User = require('../models/User')
 
 const register = async (req, res, next) => {
   // destructuring assignment from bod
-  console.log('request body');
-  console.log(req.body);  
-  const { name, owner, email, street, houseNr, zip, place, phone, website } = req.body;
+  const { name, email, street, houseNr, zip, place, phone, website, userId} = req.body;
 
   let existingFirm;
 
   try {
-    existingFirm = await Firm.findOne({ email }); 
+    existingFirm = await Firm.findOne({ email })
+    console.log(existingFirm);
   } catch (err) {
     const error = new HttpError(
-      "Signing up failed, please try agail later.",
+      "Registering the new firm failed, please try agail later.",
       500
     );
     return next(error);
   }
 
-  // creating new firm
-  const createdFirm = new Firm({
-    name,
-    owner,
-    email,
-    street,
-    houseNr,
-    zip,
-    place,
-    phone,
-    website,
-  });
-
   try {
+    const user = await User.findById(userId)
+    if (!user) {
+      const error = new HttpError('User not found.', 404);
+      return next(error);
+    }
+
+    // creating new firm
+    const createdFirm = new Firm({
+      name,
+      email,
+      street,
+      houseNr,
+      zip,
+      place,
+      phone,
+      website,
+      userId
+    });
+
     await createdFirm.save();
+
+    user.firmId = createdFirm._id; // Assuming firmId is the field that references the Firm model
+    await user.save();
+
+    res.status(201).json({
+      firmId: createdFirm.id, 
+      email: createdFirm.email,
+    });
+
   } catch (err) {
     return next(err);
   }
-
-  res.status(201).json({
-    firmId: createdFirm.id, 
-    email: createdFirm.email,
-  });
 };
 
 const updateFirm = async (req, res, next) => {
@@ -81,7 +91,7 @@ const updateFirm = async (req, res, next) => {
 };
 
 const getFirmProfile = async (req, res, next) => {
-
+  const firmId = req.params.firmId;
   try {
     const firm = await Firm.find();
     res.json(firm);
@@ -94,6 +104,50 @@ const getFirmProfile = async (req, res, next) => {
   }
 };
 
+const getFirmByUserId = async (req, res, next) => {
+  const userId = req.params.userId;  
+
+
+
+  try {
+    const userWithFirm = await User.findById(userId).populate('firm');
+
+    if (!userWithFirm || !userWithFirm.firm) {
+      return next(new HttpError('Could not find firm for the provided user ID.', 404));
+    }
+
+    res.status(200).json({ firm: userWithFirm.firm.toObject({ getters: true }) });
+  } catch (err) {
+    const error = new HttpError('Fetching firm failed, please try again later.', 500);
+    return next(error);
+  }
+
+  // let form;
+  // let userWithFirm;
+  // try {
+  //   userWithFirm = await User.findById(userId).populate('firm');
+  // } catch (err) {
+  //   const error = new HttpError(
+  //     'Fetching firm failed, please try again later.',
+  //     500
+  //   );
+  //   return next(error);
+  // }
+
+  // // if (!form || form.length === 0) {
+  // if (!userWithFirm || userWithFirm.form.length === 0) {
+  //   return next(
+  //     new HttpError('Could not find form for the provided firm id.', 404)
+  //   );
+  // }
+
+  // res
+  //   .status(201)
+  //   .json({ form: userWithFirm.form.toObject({ getters: true }) });
+
+}
+
 exports.register = register;
 exports.updateFirm = updateFirm;
 exports.getFirmProfile = getFirmProfile;
+exports.getFirmByUserId = getFirmByUserId;
