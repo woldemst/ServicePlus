@@ -11,35 +11,23 @@ import { AuthContext } from "../../context/auth-context"
 const FirmProfile = props => {
     const auth = useContext(AuthContext)
     const navigation = useNavigation()
-    const dispatch = useDispatch()  
+    const dispatch = useDispatch()
     const fetchedData = useSelector(state => state.firm)
-    const firmArr = fetchedData.firmData[0]
+    const fetchedFirm = fetchedData.firmData.firm
     const [refresh, setRefresh] = useState(false)
-    // console.log('before getting');
-    // console.log(firmArr);
-    // console.log('props');
-    // console.log(props);
     const handleRefresh = () => setRefresh(prevData => !prevData);
-
-
-
-
-    const refreshScreen = () => {
-        setRefresh(prev = !prev)
-    }
 
     useEffect(() => {
         const fetcheFirm = async () => {
-            try {   
+            try {
 
-                 
-                const response = await axios.get("http://localhost:8000/api/firm/profile")
+
+                const response = await axios.get(`http://localhost:8000/api/firm/profile/${auth.userId}`)
                 dispatch(getFirmData(response.data));
-                // console.log('after getting');
-                // console.log(firmArr);
+                // console.log(response.data);
 
             } catch (err) {
-                console.log("Error fetching firm profile", err);
+                console.log("Error if fetching firm profile", err);
             }
         }
         fetcheFirm()
@@ -54,15 +42,16 @@ const FirmProfile = props => {
     return (
         <>
             <View style={styles.container} >
-                <TouchableOpacity style = {styles.firmContainer} onPress={() => {
-                        navigation.navigate('editProfile', {
-                                name: 'Edit Profile',
-                                firmArr: firmArr,
-                                firmId: firmArr._id,
-                                handleRefresh: handleRefresh
-                            }
-                        )
-                    }}>
+                <TouchableOpacity style={styles.firmContainer} onPress={() => {
+                    navigation.navigate('editProfile', {
+                        name: 'Edit Profile',
+                        fetchedFirm: fetchedFirm,
+                        firmId: fetchedFirm._id,
+                        userId: auth.userId,
+                        handleRefresh: handleRefresh
+                    }
+                    )
+                }}>
 
                     <View style={styles.imageContainer} >
                         <Image style={styles.img} source={require('../../../assets/firmImage.jpeg')} ></Image>
@@ -70,8 +59,8 @@ const FirmProfile = props => {
 
                     <View style={styles.nameContainer} >
                         <View>
-                            <Text style={styles.firmName}>{firmArr?.name}</Text>
-                            <Text style={styles.bossName}>{firmArr?.owner}</Text>   
+                            <Text style={styles.firmName}>{fetchedFirm?.name}</Text>
+                            <Text style={styles.bossName}>{fetchedFirm?.owner}</Text>
                         </View>
                     </View>
 
@@ -79,7 +68,7 @@ const FirmProfile = props => {
 
                 <View style={styles.listContainer} >
                     <TouchableOpacity style={styles.listItem}
-                        onPress={()=> {
+                        onPress={() => {
                             navigation.navigate('workerList', {
                                 name: 'Workers'
                             })
@@ -107,13 +96,13 @@ const FirmProfile = props => {
                 <View style={styles.logoutContainer}>
                     <TouchableOpacity style={styles.listItem} onPress={logout} >
                         <Image style={styles.icon} source={require('../../../assets/firm/logout.png')} />
-                        <Text style={styles.itemText}>Logout</Text> 
+                        <Text style={styles.itemText}>Logout</Text>
                     </TouchableOpacity>
                 </View>
             </View>
 
         </>
-        
+
     )
 }
 
