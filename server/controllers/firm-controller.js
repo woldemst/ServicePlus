@@ -11,7 +11,6 @@ const register = async (req, res, next) => {
 
   try {
     existingFirm = await Firm.findOne({ email })
-    console.log(existingFirm);
   } catch (err) {
     const error = new HttpError(
       "Registering the new firm failed, please try agail later.",
@@ -42,7 +41,7 @@ const register = async (req, res, next) => {
 
     await createdFirm.save();
 
-    user.firmId = createdFirm._id; // Assuming firmId is the field that references the Firm model
+    user.firmId = createdFirm.id; // Assuming firmId is the field that references the Firm model
     await user.save();
 
     res.status(201).json({
@@ -107,44 +106,31 @@ const getFirmProfile = async (req, res, next) => {
 const getFirmByUserId = async (req, res, next) => {
   const userId = req.params.userId;  
 
-
-
   try {
-    const userWithFirm = await User.findById(userId).populate('firm');
-
-    if (!userWithFirm || !userWithFirm.firm) {
-      return next(new HttpError('Could not find firm for the provided user ID.', 404));
+    // Fetch user data by ID to get the associated firmId
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
     }
 
-    res.status(200).json({ firm: userWithFirm.firm.toObject({ getters: true }) });
+    const firmId = user.firmId;
+    
+    // Use firmId to get firm data
+    const firm = await Firm.findById(firmId);
+    console.log(firm);
+    if (!firm) {
+      return res.status(404).json({ message: 'Firm data not found' });
+    }
+
+    res
+      .json({ 
+        firm: firm.toObject({ getters: true}),
+        firmId: firm.firmId
+      });
+
   } catch (err) {
-    const error = new HttpError('Fetching firm failed, please try again later.', 500);
-    return next(error);
+
   }
-
-  // let form;
-  // let userWithFirm;
-  // try {
-  //   userWithFirm = await User.findById(userId).populate('firm');
-  // } catch (err) {
-  //   const error = new HttpError(
-  //     'Fetching firm failed, please try again later.',
-  //     500
-  //   );
-  //   return next(error);
-  // }
-
-  // // if (!form || form.length === 0) {
-  // if (!userWithFirm || userWithFirm.form.length === 0) {
-  //   return next(
-  //     new HttpError('Could not find form for the provided firm id.', 404)
-  //   );
-  // }
-
-  // res
-  //   .status(201)
-  //   .json({ form: userWithFirm.form.toObject({ getters: true }) });
-
 }
 
 exports.register = register;
