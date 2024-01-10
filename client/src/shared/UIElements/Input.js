@@ -19,13 +19,13 @@ const Input = props => {
     }
 
     const touchHandler = (val) => {
-        console.log('toushed', touched);
+        // console.log('toushed', touched);
         setTouched(true)
 
     }
 
     const onBlurHandler = () => {
-        console.log('not');
+        // console.log('not');
     }
 
 
@@ -40,7 +40,6 @@ const Input = props => {
             value={props.value}
             onFocus={touchHandler}
             onBlur={onBlurHandler}
-
 
         />
 
