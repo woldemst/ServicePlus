@@ -1,12 +1,14 @@
-import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
+import { View, Text, TouchableOpacity, StyleSheet} from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { useDispatch, useSelector } from "react-redux";
+import { useState } from "react";
 import axios from "axios";
 
+import { updateUserData } from "../../actions/userActions"
 import { VALIDATOR_EMAIL, VALIDATOR_MINLENGTH, VALIDATOR_REQUIRE } from "../../util/validators";
-import { clearField } from "../../actions/userActions";
 import Button from "../../shared/UIElements/Button";
 import Input from "../../shared/UIElements/Input";
+import Select from "../../shared/UIElements/Select";
 
 const Register = () => {
     const dispatch = useDispatch()
@@ -14,23 +16,26 @@ const Register = () => {
     const fetchedData = useSelector(state => state.user)
 
 
+
+    console.log(fetchedData);
     const handleSubmit = async () => {
         const URL = "http://localhost:8000/api/users/register";
-
 
         try {
             const response = await axios.post(URL, {
                 name: fetchedData.name.value,
                 email: fetchedData.email.value,
-                password: fetchedData.password.value
+                password: fetchedData.password.value,
+                role: fetchedData.role.value
             })
 
-            dispatch(clearField())
+            dispatch(updateUserData(response.data))
+            // console.log(response.data);
 
             if (response.status === 201) {
                 navigation.navigate('overview');
                 alert('User created');
-            } else {
+            } else { 
                 // alert('User already exists, please log in instead');
 
             }
@@ -38,6 +43,11 @@ const Register = () => {
             console.error(error);
         }
     }
+
+    const selectedData = [
+        { key: "1", value: "Owner" },
+        { key: "2", value: "Worker" },
+    ]
 
     return (
         <View style={styles.container}>
@@ -71,6 +81,17 @@ const Register = () => {
                 value={fetchedData.password.value}
                 validators={[VALIDATOR_MINLENGTH(6)]}
             />
+
+            <Select 
+                id='role'
+                save="value"
+                search={false}
+                fieldName='role'
+                placeholder="Role"
+                data={selectedData}
+                validators={[VALIDATOR_REQUIRE()]}
+            />
+
 
             <Text style={styles.notice}>Passwort vergessen?</Text>
 
@@ -180,7 +201,19 @@ const styles = StyleSheet.create({
         color: 'red',
         marginBottom: 12,
     },
-
+    select: {
+        height: 50,
+        borderColor: 'gray',
+        color: 'red',
+        borderWidth: 1,
+        marginTop: 14,
+        alignItems: 'center',
+        borderRadius: 0
+      },
+      placeholder: {
+        color: "red",
+        fontSize: 18, 
+      }
 })
 
 export default Register;
