@@ -2,24 +2,34 @@ import { View, Text, TextInput, TouchableOpacity ,StyleSheet} from "react-native
 import { useState, useContext} from "react";
 import { useNavigation } from "@react-navigation/native";
 import axios from "axios";
+import { updateUserData } from "../../actions/userActions";
 
+import { VALIDATOR_EMAIL, VALIDATOR_MINLENGTH, VALIDATOR_REQUIRE } from "../../util/validators";
+import { useDispatch, useSelector } from "react-redux";
 import { AuthContext } from "../../context/auth-context";
+import Input from "../../shared/UIElements/Input";
 
 const Login = () => {
     const auth = useContext(AuthContext)
     const navigation = useNavigation()
+    const dispatch = useDispatch()
+
     const [isLoginMode, setIsLoginMode] = useState(true)
-    const [email, setEmail] = useState('')
-    const [password, setPassword] = useState('')
+
+    const fetchedData = useSelector(state => state.user)
+    console.log(fetchedData);
 
     const handleSignIn = async() =>{
         const apiUrl = "http://localhost:8000/api/users/login";
 
         const response = await axios.post(apiUrl, {
-            email: email,
-            password: password, 
+            email: fetchedData.email.value,
+            password: fetchedData.password.value, 
         })
-        auth.login(response.data.userId, response.data.token)
+
+        dispatch(updateUserData(response.data))
+
+        auth.login(response.data.userId, response.data.token, response.data.role, response.data.firmId)
         navigation.navigate('overview', {title: 'Overview'})
 
         navigation.reset({
@@ -38,21 +48,25 @@ const Login = () => {
             <Text style={styles.title}>Sign in</Text>
 
             {/* {error && <Text style={styles.error}>{error}</Text>} */}
-
-        
-            <TextInput
-                style={styles.input}
+            
+            <Input 
+                id='email'
+                fieldName='email'
                 placeholder="Email"
-                onChangeText={(text) => setEmail(text)}
-                value={email}
+                errorText='Choose another email'
+                value={fetchedData.email.value}
+                validators={[VALIDATOR_EMAIL()]}
+
             />
 
-            <TextInput
-                style={styles.input}    
-                placeholder="Password"
-                secureTextEntry
-                onChangeText={(text) => setPassword(text)}
-                value={password}
+            <Input 
+                id='password'
+                fieldName='password'
+                placeholder='Password'
+                errorText='Type a password'
+                value={fetchedData.password.value}
+                validators={[VALIDATOR_MINLENGTH(6)]}
+
             />
 
             <Text style={styles.notice} >Passwort vergessen?</Text>
