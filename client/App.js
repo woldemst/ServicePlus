@@ -26,6 +26,8 @@ export default function App() {
   const auth = useContext(AuthContext)
   const [userToken, setUserToken] = useState(false)
   const [userId, setUserId] = useState(false)
+  const [userRole, setUserRole] = useState(null)
+  const [firmId, setFirmId] = useState(null)
 
   useEffect(() => {
     const getUserData = async () => {
@@ -46,13 +48,15 @@ export default function App() {
   }, [login])
 
 
-  const login = useCallback(async (uid, token) => {
+  const login = useCallback(async (uid, token, role, fid) => {
     try {
       setUserToken(token)
       setUserId(uid)
+      setUserRole(role)
+      setFirmId(fid)
+      await AsyncStorage.setItem('userData', JSON.stringify({ userId: uid, token: token, role: role, firmId: fid}))
 
-      await AsyncStorage.setItem('userData', JSON.stringify({ userId: uid, token: token }))
-
+      
 
     } catch (err) {
       console.error('Error setting user data:', err);
@@ -66,12 +70,14 @@ export default function App() {
       // window.alert('Are you sure you want to logout?')
       setUserToken(null)
       setUserId(null)
+      setUserRole(null)
 
 
     } catch (err) {
       console.error('Error removing user token:', err);
     }
   }, [])
+
 
   let routes;
 
@@ -134,7 +140,9 @@ export default function App() {
           logout: logout,
           isLoggedIn: !!userToken,
           userToken: userToken,
-          userId: userId
+          userId: userId,
+          firmId: firmId,
+          role: userRole
         }}>
         <React.Fragment>{routes}</React.Fragment>
       </AuthContext.Provider>
