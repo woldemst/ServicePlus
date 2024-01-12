@@ -1,5 +1,5 @@
 import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native"
-import { useEffect, useState } from "react"
+import { useContext, useEffect, useState } from "react"
 import { useRoute } from "@react-navigation/native"
 import { useNavigation } from "@react-navigation/native";
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -7,9 +7,11 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import AppointmentView from "../../appointment/pages/AppointmentView"
 import OrderView from "../../order/pages/OrderView"
 import FirmProfile from "../../firm/pages/FirmProfile"
+import CreateSggest from "../../firm/pages/CreateSggest";
 
 import ModalComponent from "../../shared/UIElements/Modal"
 import OrderCreate from "../../order/pages/OrderCreate"
+import { AuthContext } from "../../context/auth-context";
 
 
 const Overview = () => {
@@ -19,34 +21,27 @@ const Overview = () => {
     const [isModalVisible, setModalVisible] = useState(false);
     const [refresh, setRefresh] = useState(false)
     const router = useRoute()
-
+    const auth = useContext(AuthContext)
+    const userId = auth.userId
+    
     const toggleModal = () => {
         setModalVisible(!isModalVisible)
     }
 
-    // useEffect(()=>{
-    //     const updateTitle = () => {
-    //         let title = ''
-    //         switch (activeTab) {
-    //             case 1: 
-    //                 title = 'Terminübersicht'
-    //             break;
-    //             case 2:
-    //                 title = 'Aufträge';
-    //                 break;
-    //             case 3:
-    //                 title = 'Betrieb';
-    //                 break;
-    //             default:
-    //                 title = 'Overview';
-    //                 break;
-    //         }
+    const renderFirm = () => {
+        if (activeTab == 3){
 
-    //         navigation.setOptions({title})
-    //     }
+            if (!auth.isLoggedIn){
+               return <CreateSggest />
+            }else{
 
-    //     updateTitle()
-    // }, [activeTab, navigation])
+                return <FirmProfile refresh={refresh} userId={userId}/>
+            }
+        }else{
+            return null
+        }
+    }
+
 
 
     return (
@@ -82,13 +77,13 @@ const Overview = () => {
 
                     </View>
                 </View>
+
                 <View style={styles.mainContent}>
-                    <View style={styles.orderContainer}>
-                        {activeTab == 1 && <AppointmentView />}
-                        {activeTab == 2 && <OrderView />}
-                        {activeTab == 3 && <FirmProfile refresh={refresh} />}
-                    </View>
+                    {activeTab == 1 && <AppointmentView />}
+                    {activeTab == 2 && <OrderView />}
+                    {renderFirm()}
                 </View>
+
                 {/* <View style={styles.mainContent}>
                     <View style={styles.orderContainer}>
                         <Tab.Navigator 
@@ -178,6 +173,7 @@ const styles = StyleSheet.create({
         position: 'relative',
 
 
+
     },
 
     // HEADER: START !!!
@@ -224,13 +220,16 @@ const styles = StyleSheet.create({
     mainContent: {
         // borderColor: 'red', 
         // borderWidth: 2,
+        padding: 32,
 
         flex: 1,
         position: 'relative',
     },
 
     orderContainer: {
-        padding: 32
+                // borderColor: 'red', 
+        // borderWidth: 2,
+
     },
     // MAIN: END !!!
 
