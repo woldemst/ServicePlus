@@ -1,13 +1,14 @@
 import { View, Text, TextInput, TouchableOpacity ,StyleSheet} from "react-native";
 import { useState, useContext} from "react";
 import { useNavigation } from "@react-navigation/native";
-import axios from "axios";
 import { updateUserData } from "../../actions/userActions";
+import axios from "axios";
 
-import { VALIDATOR_EMAIL, VALIDATOR_MINLENGTH, VALIDATOR_REQUIRE } from "../../util/validators";
+import { VALIDATOR_EMAIL, VALIDATOR_MINLENGTH } from "../../util/validators";
 import { useDispatch, useSelector } from "react-redux";
 import { AuthContext } from "../../context/auth-context";
 import Input from "../../shared/UIElements/Input";
+import Button from "../../shared/UIElements/Button";
 
 const Login = () => {
     const auth = useContext(AuthContext)
@@ -15,9 +16,8 @@ const Login = () => {
     const dispatch = useDispatch()
 
     const [isLoginMode, setIsLoginMode] = useState(true)
-
-    const fetchedData = useSelector(state => state.user)
-    console.log(fetchedData);
+    const fetchedData = useSelector(state => state.login)
+    // console.log(fetchedData);
 
     const handleSignIn = async() =>{
         const apiUrl = "http://localhost:8000/api/users/login";
@@ -28,7 +28,7 @@ const Login = () => {
         })
 
         dispatch(updateUserData(response.data))
-
+        alert('Logged in');
         auth.login(response.data.userId, response.data.token, response.data.role, response.data.firmId)
         navigation.navigate('overview', {title: 'Overview'})
 
@@ -40,7 +40,6 @@ const Login = () => {
         setIsLoginMode(prev => !prev)
     }
 
-
     return (
         <View style={styles.container}>
 
@@ -51,30 +50,36 @@ const Login = () => {
             
             <Input 
                 id='email'
+                fetchedData='login'
                 fieldName='email'
                 placeholder="Email"
                 errorText='Choose another email'
                 value={fetchedData.email.value}
                 validators={[VALIDATOR_EMAIL()]}
-
             />
 
             <Input 
                 id='password'
+                fetchedData='login'
                 fieldName='password'
                 placeholder='Password'
                 errorText='Type a password'
                 value={fetchedData.password.value}
                 validators={[VALIDATOR_MINLENGTH(6)]}
-
             />
 
             <Text style={styles.notice} >Passwort vergessen?</Text>
 
-            <TouchableOpacity style={styles.button} onPress={handleSignIn} >
-                <Text style={styles.buttonText}>Sign in</Text>
-            </TouchableOpacity>
+            <Button
+                style={fetchedData.isFormValid ? styles.button : styles.invalideButton}
+                onPress={handleSignIn} 
+                disabled={!fetchedData.isFormValid}
+                title={'Sign in'} 
+                buttonText={styles.buttonText}
+                
+                
 
+            />
 
             <View style={styles.inviteContainer}>
                 <Text style={styles.inviteText} >Haben Sie noch keinen Account? </Text>
@@ -83,7 +88,6 @@ const Login = () => {
                     <Text style={styles.registerBtn} >Registrieren</Text>
                 </TouchableOpacity>
             </View>
-
         </View>
     )
 }
@@ -154,6 +158,16 @@ const styles = StyleSheet.create({
         justifyContent: "center", 
         alignItems: 'center'
         // flex: 1
+    },
+    invalideButton: {
+        height: 53,
+        width: '100%',
+        backgroundColor: 'gray',
+        borderRadius: 5,
+        justifyContent: 'center',
+        flexDirection: "row",
+        justifyContent: "center",
+        alignItems: 'center'
     },
     buttonText: {
         fontSize: 14,

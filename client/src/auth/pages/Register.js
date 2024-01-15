@@ -1,7 +1,6 @@
 import { View, Text, TouchableOpacity, StyleSheet} from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { useDispatch, useSelector } from "react-redux";
-import { useState } from "react";
 import axios from "axios";
 
 import { updateUserData } from "../../actions/userActions"
@@ -13,12 +12,10 @@ import Select from "../../shared/UIElements/Select";
 const Register = () => {
     const dispatch = useDispatch()
     const navigation = useNavigation()
-    const fetchedData = useSelector(state => state.user)
+    const fetchedData = useSelector(state => state.register)
 
-
-
-    console.log(fetchedData);
-    const handleSubmit = async () => {
+    console.log(fetchedData)
+    async function handleSubmit() {
         const URL = "http://localhost:8000/api/users/register";
 
         try {
@@ -27,17 +24,15 @@ const Register = () => {
                 email: fetchedData.email.value,
                 password: fetchedData.password.value,
                 role: fetchedData.role.value
-            })
+            });
 
-            dispatch(updateUserData(response.data))
+            dispatch(updateUserData(response.data));
             // console.log(response.data);
-
             if (response.status === 201) {
                 navigation.navigate('overview');
                 alert('User created');
-            } else { 
+            } else {
                 // alert('User already exists, please log in instead');
-
             }
         } catch (error) {
             console.error(error);
@@ -49,6 +44,7 @@ const Register = () => {
         { key: "2", value: "Worker" },
     ]
 
+
     return (
         <View style={styles.container}>
 
@@ -57,6 +53,7 @@ const Register = () => {
 
             <Input
                 id='name'
+                fetchedData='register'
                 fieldName='name'
                 placeholder="Name"
                 errorText='Type a name'
@@ -66,6 +63,7 @@ const Register = () => {
 
             <Input
                 id='email'
+                fetchedData='register'
                 fieldName='email'
                 placeholder="Email"
                 errorText='Choose another email'
@@ -75,6 +73,7 @@ const Register = () => {
 
             <Input
                 id='password'
+                fetchedData='register'
                 fieldName='password'
                 placeholder="Password"
                 errorText='Type a password'
@@ -84,14 +83,13 @@ const Register = () => {
 
             <Select 
                 id='role'
-                save="value"
                 search={false}
                 fieldName='role'
                 placeholder="Role"
                 data={selectedData}
+                fetchedData='register'
                 validators={[VALIDATOR_REQUIRE()]}
             />
-
 
             <Text style={styles.notice}>Passwort vergessen?</Text>
 

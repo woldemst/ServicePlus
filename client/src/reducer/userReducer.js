@@ -35,8 +35,10 @@ const userReducer = (state = initialState, action) => {
                   isTouched: true
                 }
             }
+            
         case UPDATE_AND_VALIDATE_FIELD:
             const { fieldName, value, validators } = action.payload;
+
             const updatedField = {
                 ...state[fieldName],
                 value,
@@ -49,14 +51,13 @@ const userReducer = (state = initialState, action) => {
             };
 
             // Check the overall form validity
-            // const isFormValid = Object.values(updatedState).every(
-            //     (field) => field.isValid
-            // );
+            let isFormValid = Object.values(updatedState).every((field) => field.isValid);
 
-            let isFormValid = false;
-            if(updatedState.name.isValid && updatedState.email.isValid && updatedState.password.isValid && updatedState.role.isValid){
-                isFormValid = true
-            }
+            // console.log(isFormValid);
+            // let isFormValid = false;
+            // if(updatedState.name.isValid && updatedState.email.isValid && updatedState.password.isValid && updatedState.role.isValid){
+            //     isFormValid = true
+            // }
 
 
             return {
@@ -98,7 +99,7 @@ const userReducer = (state = initialState, action) => {
 
             const updatedDropdown = {
                 ...state[field],
-                value,
+                value: val,
                 isValid: validate(val), 
             };
 
@@ -111,7 +112,7 @@ const userReducer = (state = initialState, action) => {
 
             return {
                 ...updated,
-                formValid,
+                isFormValid: formValid,
             };
 
         case TOUCH_DROPDOWN:
