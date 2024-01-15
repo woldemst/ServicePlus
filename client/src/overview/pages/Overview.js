@@ -27,14 +27,15 @@ const Overview = () => {
     const toggleModal = () => {
         setModalVisible(!isModalVisible)
     }
+    
 
     const renderFirm = () => {
         if (activeTab == 3){
 
-            if (!auth.isLoggedIn){
-               return <CreateSggest />
+            if (!auth.firmId){
+                return <CreateSggest />
             }else{
-
+                
                 return <FirmProfile refresh={refresh} userId={userId}/>
             }
         }else{
@@ -81,6 +82,7 @@ const Overview = () => {
                 <View style={styles.mainContent}>
                     {activeTab == 1 && <AppointmentView />}
                     {activeTab == 2 && <OrderView />}
+                    {/* {activeTab == 3 && !!auth.firmId ? <FirmProfile refresh={refresh} userId={userId}/> : <CreateSggest /> } */}
                     {renderFirm()}
                 </View>
 

@@ -14,7 +14,7 @@ const Register = () => {
     const navigation = useNavigation()
     const fetchedData = useSelector(state => state.register)
 
-    console.log(fetchedData)
+    // console.log(fetchedData)
     async function handleSubmit() {
         const URL = "http://localhost:8000/api/users/register";
 
