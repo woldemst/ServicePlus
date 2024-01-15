@@ -1,46 +1,70 @@
-import { View, Text, TouchableOpacity, StyleSheet} from "react-native";
-import { SelectList } from "react-native-dropdown-select-list";
+import { StyleSheet, TouchableWithoutFeedback} from "react-native";
 import { useDispatch, useSelector } from "react-redux";
-
-import {updateAndValidateField, touchDropdown, updateAndValidateDropdown} from '../../actions/userActions'
+import { updateAndValidateRegisterDropdown, updateAndValidateRegisterField, updateRegisterField } from "../../actions/registerActions";
+import { SelectList } from "react-native-dropdown-select-list";
+import { useState } from "react";
 
 const Select = props => {
     const dispatch = useDispatch()
-    const fetchedData = useSelector(state => state.user)
+    const [touched, setTouched] = useState(false)
+
+    let fetchedData
+    switch (props.fetchedData) {
+        case 'user':
+            fetchedData = useSelector(state => state.user)
+            break
+        case 'register':
+            fetchedData = useSelector(state => state.register)
+            break
+        case 'firm':
+            fetchedData = useSelector(state => state.firm)
+            break
+        case 'client':
+            fetchedData = useSelector(state => state.client)
+            break
+        default:
+            break;
+    }
 
     const handleChange = (val) => {
-        // dispatch(updateAndValidateDropdown(props.fieldName, val)); // Dispatch action for dropdown update
-        dispatch(updateAndValidateField(props.fieldName, val, props.validators))
 
-    };
+          switch (props.fetchedData) {
+              case 'register':
+                  // dispatch(updateAndValidateRegisterDropdown(props.fieldName, val, props.validators))
+                  dispatch(updateAndValidateRegisterField(props.fieldName, val, props.validators))
 
-    // New handler for dropdown touch
-    // const handleTouch = () => {
-    //     dispatch(touchDropdown(props.fieldName)); // Dispatch action for dropdown touch
-    // };
+                  break
+              case 'firm':
 
+                  break
+              case 'client':
+
+                  break
+              default:
+                  break;
+          }
+  }
 
     return <>
         <SelectList 
-            id={props.id}
-            boxStyles={!fetchedData[props.fieldName].isValid ? styles.selectInvalid : styles.select}
-            data={props.data}
             save='value'
+            id={props.id} 
+            data={props.data}
             search={props.search}
             setSelected={handleChange}
-            // onFocus={handleTouch} // Track touch event
+            onFocus={() => setTouched(true)}  
             placeholder={props.placeholder}
+            boxStyles={!fetchedData[props.fieldName].isValid  ? styles.selectInvalid : styles.select}
             inputStyles={!fetchedData[props.fieldName].isValid ? styles.placeholderTextInvalid : styles.placeholderText}
         />
 
     </>
 }
-// {!fetchedData[props.fieldName].isValid ? styles.inputInvalid : styles.input}
+
 const styles = StyleSheet.create({
     select: {
         height: 50,
         borderColor: 'gray',
-        color: 'red',
         borderWidth: 1,
         marginTop: 14,
         alignItems: 'center',
@@ -56,7 +80,7 @@ const styles = StyleSheet.create({
         borderRadius: 0
       },
       placeholderText: {
-        color: "gray",
+        color: "#000",
       },
       placeholderTextInvalid: {
         color: "red",
