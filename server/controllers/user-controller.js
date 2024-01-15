@@ -82,12 +82,13 @@ const login = async (req, res, next) => {
   const passwortDB = identifiedUser.password;
 
   // compare the password
-  let isValidPassword; 
+  let isValidPassword
   try {
     isValidPassword = await bcrypt.compare(password, passwortDB);
     if  (password == passwortDB){
         isValidPassword = true
     }
+
   } catch (err) {
     const error = new HttpError(
       "Could not log you in, please check your credentials and try again.",
@@ -104,12 +105,12 @@ const login = async (req, res, next) => {
     return next(error);
   }
 
+
   const firmId = identifiedUser.firmId
   const firm = await Firm.findById(firmId)
   
   if (!firm) {
-    const error = new HttpError('Firm not found.', 404);
-    return next(error);
+    console.log('Firm not found. User does not have a firm');
   }
 
   let token; 
@@ -124,7 +125,7 @@ const login = async (req, res, next) => {
   } catch (err) {
     const error = new HttpError(
       'Logging in failed, please try again later.',
-      500
+      500 
     );
     return next(error);
   }
