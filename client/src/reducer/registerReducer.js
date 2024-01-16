@@ -1,10 +1,4 @@
-import {
-    TOUCH_REGISTER_FIELD,
-    UPDATE_AND_VALIDATE_REGISTER_FIELD,
-    CLEAR_REGISTER_FIELD,
-    UPDATE_AND_VALIDATE_REGISTER_DROPDOWN,
-    TOUCH_REGISTER_DROPDOWN,
-} from "../actions/registerActions";
+import { UPDATE_AND_VALIDATE_REGISTER_FIELD, CLEAR_REGISTER_FIELD } from "../actions/registerActions";
 import { validate } from "../util/validators";
 
 const initialState = {
@@ -29,18 +23,8 @@ const initialState = {
 
 const registerReducer = (state = initialState, action) => {
   switch (action.type) {
-    case TOUCH_REGISTER_FIELD:
-      return {
-        ...state,
-        [action.payload]: {
-          ...state[action.payload],
-          isTouched: true,
-        },
-      };
-
     case UPDATE_AND_VALIDATE_REGISTER_FIELD:
       const { fieldName, value, validators } = action.payload;
-      
       
       const updatedField = {
         ...state[fieldName],
@@ -56,7 +40,6 @@ const registerReducer = (state = initialState, action) => {
       // Check the overall form validity
       // let isFormValid = Object.values(updatedState).every((field) => field);
 
-      // console.log(updatedState);
       let isFormValid = false;
       if (
         updatedState.name.isValid &&
@@ -96,6 +79,7 @@ const registerReducer = (state = initialState, action) => {
         },
         isFormValid: false,
       };
+    
     default:
       return state;
   }

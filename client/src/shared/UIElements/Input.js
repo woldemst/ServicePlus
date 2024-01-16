@@ -2,6 +2,7 @@ import { TextInput, StyleSheet, Text } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import { updateAndValidateRegisterField, updateRegisterField } from "../../actions/registerActions";
 import { updateAndValidateLoginField, updateLoginField } from "../../actions/loginActions";
+import { updateAndValidateRegisterFirmField, updateRegisterFirmField} from "../../actions/firmActions";
 import { useState } from "react";
 
 const Input = props => {
@@ -40,7 +41,7 @@ const Input = props => {
                     dispatch(updateAndValidateLoginField(props.fieldName, val, props.validators))
                     break
                 case 'firm':
-
+                    dispatch(updateAndValidateRegisterFirmField(props.fieldName, val, props.validators))
                     break
                 case 'client':
 
@@ -59,7 +60,7 @@ const Input = props => {
                     dispatch(updateLoginField(props.fieldName, val))
                     break
                 case 'firm':
-
+                    dispatch(updateRegisterFirmField(props.fieldName, val))
                     break
                 case 'client':
 

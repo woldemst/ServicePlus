@@ -15,10 +15,10 @@ import { useDispatch, useSelector } from "react-redux";
 
 const EditProfile = (props) => {
   const navigation = useNavigation();
-  const { firmId, firmArr, refreshScreen } = useRoute().params;
+  const { firmId, fetchedFirm, refreshScreen } = useRoute().params;
   // const fetchedData = useSelector((state) => state.firm);
-  
-  const [firmData, setFirmData] = useState(firmArr);
+
+  const [firmData, setFirmData] = useState(fetchedFirm);
   const dispatch = useDispatch();
 
   const handleChange = (field, value) => {
@@ -29,8 +29,8 @@ const EditProfile = (props) => {
   };
 
   const handleSubmit = async () => {
-      const URL = `http://localhost:8000/api/firm/update/${firmId}`;
-      
+    const URL = `http://localhost:8000/api/firm/update/${firmId}`;
+
     try {
       const response = await axios.patch(URL, firmData);
       dispatch(updateFirmData(response.data));
@@ -142,7 +142,7 @@ const EditProfile = (props) => {
           </View>
         </ScrollView>
       </View>
-    </> 
+    </>
   );
 };
 

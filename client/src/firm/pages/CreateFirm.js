@@ -1,50 +1,37 @@
-import {
-    View,
-    Text,
-    TextInput,
-    TouchableOpacity,
-    StyleSheet,
-    ScrollView,
-  } from "react-native";
-  import { useNavigation } from "@react-navigation/native";
-  import { useRoute } from "@react-navigation/native";
-  import axios from "axios";
-  import { useState } from "react";
-  import { updateFirmData } from "../../actions/firmActions";
-  import { useDispatch, useSelector } from "react-redux";
+import { View, Text, TouchableOpacity, StyleSheet, ScrollView} from "react-native";
+import { useNavigation } from "@react-navigation/native";
+import { useContext, useState } from "react";
+import axios from "axios";
 
-  
+import { VALIDATOR_EMAIL, VALIDATOR_MINLENGTH, VALIDATOR_REQUIRE } from "../../util/validators";
+import { updateFirmData } from "../../actions/firmActions";
+import { useDispatch, useSelector } from "react-redux";   
+import { AuthContext } from "../../context/auth-context";
+import Input from "../../shared/UIElements/Input";
+import Button from "../../shared/UIElements/Button";
+
 const CreateFirm = props => {
+    const auth = useContext(AuthContext)
+    const dispatch = useDispatch();
     const navigation = useNavigation();
-
     const fetchedData = useSelector((state) => state.firm);
 
-    const [firmData, setFirmData] = useState(fetchedData);
-    const dispatch = useDispatch();
-
-
-    const handleChange = (field, value) => {
-        setFirmData((prevData) => ({
-          ...prevData,
-          [field]: value,
-        }));
-      };
-
-      const handleSubmit = async () => {
+    // console.log(fetchedData);
+    const handleSubmit = async () => {
         const URL = `http://localhost:8000/api/firm/register`;
 
         try {
             const response = await axios.post(URL, {
-                role,
-                name,
-                email,
-                street,
-                houseNr,
-                zip,
-                place,
-                phone, 
-                website,
-                userId: props.userId
+                role: auth.role,
+                userId: props.userId,
+                name: fetchedData.name.value,
+                email: fetchedData.email.value,
+                street: fetchedData.street.value,
+                houseNr: fetchedData.houseNr.value,
+                zip: fetchedData.zip.value,
+                place: fetchedData.place.value,
+                phone: fetchedData.phone.value, 
+                website: fetchedData.website.value,
             })
             dispatch(updateFirmData(response.data))
 
@@ -56,93 +43,121 @@ const CreateFirm = props => {
             
         }
 
-      }
+    }
     return <>
          <View style={styles.container}>
             <ScrollView showsVerticalScrollIndicator={false}>
-            <TextInput
-                style={[styles.input, styles.input.placeholderText]}
-                placeholder="Name des Betriebs"
-                onChangeText={(text) => handleChange("name", text)}
-                value={firmData.name}
-            />
+                <Input 
+                    id='firmName'
+                    fetchedData='firm'
+                    fieldName='name'
+                    placeholder="Name des Betriebs"
+                    errorText='Type a name of firm'
+                    value={fetchedData.name.value}
+                    validators={[VALIDATOR_REQUIRE()]}
 
-            <TextInput
-                style={[styles.input, styles.input.placeholderText]}
-                placeholder="Name des Inhabers"
-                onChangeText={(text) => handleChange("owner", text)}
-                value={firmData.owner}
-            />
-
-            <TextInput
-                style={[styles.input, styles.input.placeholderText]}
-                placeholder="Email"
-                onChangeText={(text) => handleChange("email", text)}
-                value={firmData.email}
-            />
-
-            <View style={styles.streetContainer}>
-                <View style={styles.streetWrapper}>
-                <TextInput
-                    style={[styles.input, styles.input.placeholderText]}
-                    placeholder="Straße"
-                    onChangeText={(text) => handleChange("street", text)}
-                    value={firmData.street}
                 />
+
+                <Input
+                    id='ownerName'
+                    fetchedData='firm'
+                    fieldName='owner'
+                    placeholder="Name des Inhabers"
+                    value={fetchedData.owner.value}
+                    validators={[VALIDATOR_MINLENGTH(6)]}
+
+                />
+
+                <Input
+                    id='firmEmail'
+                    fetchedData='firm'
+                    fieldName='email'
+                    placeholder="Email"
+                    value={fetchedData.email.value}
+                    validators={[VALIDATOR_EMAIL()]}
+                />
+
+                <View style={styles.streetContainer}>
+                    <View style={styles.streetWrapper}>
+                        <Input
+                            id='firmStreet'
+                            fetchedData='firm'
+                            fieldName='street'
+                            placeholder="Straße"
+                            value={fetchedData.street.value}
+                            validators={[VALIDATOR_REQUIRE()]}
+
+                        />
+                    </View>
+
+                    <View style={styles.nrWrapper}>
+                        <Input
+                            fetchedData='firm'
+                            fieldName='houseNr'
+                            placeholder="Nr."
+                            errorText='Type a number of house'
+                            value={fetchedData.houseNr.value}
+                            validators={[VALIDATOR_REQUIRE()]}
+
+                        />
+                    </View>
                 </View>
 
-                <View style={styles.nrWrapper}>
-                <TextInput
-                    style={[styles.input, styles.input.placeholderText]}
-                    placeholder="Nr."
-                    onChangeText={(text) => handleChange("houseNr", text)}
-                    value={firmData.houseNr}
-                />
+                <View style={styles.zipContainer}>
+                    <View style={styles.zipWrapper}>
+                        <Input
+                            id='firmZip'
+                            fetchedData='firm'
+                            fieldName='zip'
+                            placeholder="PLZ"
+                            errorText='Type a ZIP code'
+                            value={fetchedData.zip.value}
+                            validators={[VALIDATOR_REQUIRE()]}
+                        />
+                    </View>
+
+                    <View style={styles.placeWrapper}>
+                        <Input
+                            id='firmPlace'
+                            fetchedData='firm'
+                            fieldName='place'
+                            placeholder="Ort"
+                            errorText='Type a place'
+                            value={fetchedData.place.value}
+                            validators={[VALIDATOR_REQUIRE()]}
+                        />
+                    </View>
                 </View>
-            </View>
 
-            <View style={styles.zipContainer}>
-                <View style={styles.zipWrapper}>
-                <TextInput
-                    style={[styles.input, styles.input.placeholderText]}
-                    placeholder="PLZ"
-                    onChangeText={(text) => handleChange("zip", text)}
-                    value={firmData.zip}
+                <Input
+                    id='firmPhone'
+                    fetchedData='firm'
+                    fieldName='phone'
+                    placeholder="Telefon"
+                    errorText='Type a phone'
+                    value={fetchedData.phone.value}
+                    validators={[VALIDATOR_REQUIRE()]}
                 />
-                </View>
 
-                <View style={styles.placeWrapper}>
-                <TextInput
-                    style={[styles.input, styles.input.placeholderText]}
-                    placeholder="Ort"
-                    onChangeText={(text) => handleChange("place", text)}
-                    value={firmData.place}
+                <Input
+                    id='firmWebsite'
+                    fetchedData='firm'
+                    fieldName='website'
+                    placeholder="Webseite"
+                    errorText='Type a website'
+                    value={fetchedData.website.value}
+                    validators={[VALIDATOR_REQUIRE()]}
                 />
+
+                <View style={styles.btnContainer}>
+                    <Button 
+                        style={fetchedData.isFormValid ? [styles.createBtn, styles.button] : styles.invalideButton}
+                        disabled={!fetchedData.isFormValid} 
+                        buttonText={styles.createBtnText}
+                        onPress={handleSubmit}
+                        title={'Speichern'} 
+                    />
                 </View>
-            </View>
-
-            <TextInput
-                style={[styles.input, styles.input.placeholderText]}
-                placeholder="Telefon"
-                onChangeText={(text) => handleChange("phone", text)}
-                value={firmData.phone}
-            />
-
-            <TextInput
-                style={[styles.input, styles.input.placeholderText]}
-                placeholder="Webseite"
-                onChangeText={(text) => handleChange("website", text)}
-                value={firmData.website}
-            />
-
-            <View style={styles.btnContainer}>
-                <TouchableOpacity
-                style={[styles.createBtn, styles.button]}
-                onPress={handleSubmit}
-                >
-                <Text style={styles.createBtnText}>Speichern</Text>
-                </TouchableOpacity>
-            </View>
             </ScrollView>
         </View>
     </>
@@ -245,6 +260,16 @@ const styles = StyleSheet.create({
       fontSize: 18,
       color: "#fff",
       fontWeight: "700",
+    },
+    invalideButton: {
+        height: 53,
+        width: '100%',
+        backgroundColor: 'gray',
+        borderRadius: 5,
+        justifyContent: 'center',
+        flexDirection: "row",
+        justifyContent: "center",
+        alignItems: 'center'
     },
 
   });
