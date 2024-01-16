@@ -57,7 +57,12 @@ const styles = StyleSheet.create({
     },
     image: {
 
-    }
+    },
+    modalHeadline: {
+        fontSize: 21,
+        color: '#7a9b76',
+        fontWeight: '700'
+    },
 })
 
 export default CreateSggest
