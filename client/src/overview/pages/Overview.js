@@ -33,10 +33,10 @@ const Overview = () => {
         if (activeTab == 3){
 
             if (!auth.firmId){
-                return <CreateSggest />
+                return <CreateSggest userId={userId} />
             }else{
                 
-                return <FirmProfile refresh={refresh} userId={userId}/>
+                return <FirmProfile refresh={refresh} userId={userId} />
             }
         }else{
             return null
