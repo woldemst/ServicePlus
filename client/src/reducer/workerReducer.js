@@ -9,12 +9,12 @@ const workerReducer = (state = initialState, action) => {
         case UPDATE_WORKER_DATA:
             return {
                 ...state,
-                customerData: action.payload,
+                workerData: action.payload,
             };
         case GET_WORKER_DATA:
             return {
                 ...state,
-                customerData: action.payload,
+                workerData: action.payload,
             };
 
         default:

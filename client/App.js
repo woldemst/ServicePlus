@@ -28,13 +28,14 @@ export default function App() {
   const [userId, setUserId] = useState(false)
   const [userRole, setUserRole] = useState(null)
   const [firmId, setFirmId] = useState(null)
+  const [newData, setNewData] = useState()
 
   useEffect(() => {
     const getUserData = async () => {
       try {
         const userData = JSON.parse(await AsyncStorage.getItem('userData'))
         if (userData && userData.token) {
-          login(userData.usedId, userData.token)
+          login(userData.usedId, userData.token, userData.role, userData.firmId)
           setUserToken(userData.token)
         }
 
@@ -78,6 +79,11 @@ export default function App() {
     }
   }, [])
 
+
+  const updateId = id => {
+    setFirmId(id)
+
+  }
 
   let routes;
 
@@ -138,6 +144,7 @@ export default function App() {
         value={{
           login: login,
           logout: logout,
+          updateId: updateId,
           isLoggedIn: !!userToken,
           userToken: userToken,
           userId: userId,

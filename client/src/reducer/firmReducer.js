@@ -1,4 +1,4 @@
-import { UPDATE_FIRM_DATA, GET_FIRM_DATA, UPDATE_AND_VALIDATE_REGISTER_FIRM_FIELD} from "../actions/firmActions";
+import { UPDATE_AND_VALIDATE_REGISTER_FIRM_FIELD} from "../actions/firmActions";
 import { validate } from "../util/validators";
 
 const initialState = {
@@ -51,16 +51,6 @@ const initialState = {
   
 const firmReducer = (state = initialState, action) => {
     switch (action.type) {
-        case UPDATE_FIRM_DATA:
-            return {
-                ...state,
-                firmData: action.payload,
-            };
-        case GET_FIRM_DATA:
-            return {
-                ...state,
-                firmData: action.payload,
-            };
         case UPDATE_AND_VALIDATE_REGISTER_FIRM_FIELD:
             const { fieldName, value, validators } = action.payload;
             

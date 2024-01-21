@@ -2,7 +2,7 @@
 const mongoose = require("mongoose");
 
 const firmSchema = new mongoose.Schema({
-  role: { type: String, required: false, enum: ['owner', 'worker'], default: 'owner' },
+  role: { type: String, required: false, enum: ['Owner', 'Worker'], default: 'Owner' },
   name: { type: String, required: true },
   email: { type: String, required: true, unique: true },
   street: { type: String, required: true },

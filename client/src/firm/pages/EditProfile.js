@@ -15,11 +15,13 @@ import { useDispatch, useSelector } from "react-redux";
 
 const EditProfile = (props) => {
   const navigation = useNavigation();
-  const { firmId, fetchedFirm, refreshScreen } = useRoute().params;
+  const { firmId, fetchedFirm } = useRoute().params;
   // const fetchedData = useSelector((state) => state.firm);
 
   const [firmData, setFirmData] = useState(fetchedFirm);
   const dispatch = useDispatch();
+  const fetchedData = useSelector(state => state.firm.firmData.firm)
+
 
   const handleChange = (field, value) => {
     setFirmData((prevData) => ({
@@ -50,21 +52,21 @@ const EditProfile = (props) => {
             style={[styles.input, styles.input.placeholderText]}
             placeholder="Name des Betriebs"
             onChangeText={(text) => handleChange("name", text)}
-            value={firmData.name}
+            value={fetchedData.name}
           />
 
           <TextInput
             style={[styles.input, styles.input.placeholderText]}
             placeholder="Name des Inhabers"
             onChangeText={(text) => handleChange("owner", text)}
-            value={firmData.owner}
+            value={fetchedData.owner}
           />
 
           <TextInput
             style={[styles.input, styles.input.placeholderText]}
             placeholder="Email"
             onChangeText={(text) => handleChange("email", text)}
-            value={firmData.email}
+            value={fetchedData.email}
           />
 
           <View style={styles.streetContainer}>
@@ -73,7 +75,7 @@ const EditProfile = (props) => {
                 style={[styles.input, styles.input.placeholderText]}
                 placeholder="Straße"
                 onChangeText={(text) => handleChange("street", text)}
-                value={firmData.street}
+                value={fetchedData.street}
               />
             </View>
 
@@ -82,7 +84,7 @@ const EditProfile = (props) => {
                 style={[styles.input, styles.input.placeholderText]}
                 placeholder="Nr."
                 onChangeText={(text) => handleChange("houseNr", text)}
-                value={firmData.houseNr}
+                value={fetchedData.houseNr}
               />
             </View>
           </View>
@@ -93,7 +95,7 @@ const EditProfile = (props) => {
                 style={[styles.input, styles.input.placeholderText]}
                 placeholder="PLZ"
                 onChangeText={(text) => handleChange("zip", text)}
-                value={firmData.zip}
+                value={fetchedData.zip}
               />
             </View>
 
@@ -102,7 +104,7 @@ const EditProfile = (props) => {
                 style={[styles.input, styles.input.placeholderText]}
                 placeholder="Ort"
                 onChangeText={(text) => handleChange("place", text)}
-                value={firmData.place}
+                value={fetchedData.place}
               />
             </View>
           </View>
@@ -111,7 +113,7 @@ const EditProfile = (props) => {
             style={[styles.input, styles.input.placeholderText]}
             placeholder="Telefon"
             onChangeText={(text) => handleChange("phone", text)}
-            value={firmData.phone}
+            value={fetchedData.phone}
           />
 
           {/* <Text style={styles.label}>Branche*</Text>
