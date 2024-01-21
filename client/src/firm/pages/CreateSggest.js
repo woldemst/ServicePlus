@@ -25,7 +25,9 @@ const CreateSggest = props => {
 
     const createFirmCall = () =>{
         toggleModal()
+        props.onFirmCreated()
     }
+
     return <>
         <View style={styles.container}>
             <TouchableOpacity onPress={createFirmCall}>
@@ -41,7 +43,7 @@ const CreateSggest = props => {
 
             header={<Text style={styles.modalHeadline}>Unternehmen hinzufügen</Text>}
         >
-            <CreateFirm />
+            <CreateFirm toggle={toggleModal} />
 
         </ModalComponent>
     </>

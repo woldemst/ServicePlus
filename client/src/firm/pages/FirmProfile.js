@@ -5,26 +5,24 @@ import { useRoute } from "@react-navigation/native"
 import axios from "axios"
 
 import { useDispatch, useSelector } from "react-redux"
-import { getFirmData } from "../../actions/firmActions"
+import { getFirmData } from '../../actions/firmActions'
 import { AuthContext } from "../../context/auth-context"
 
 const FirmProfile = props => {
     const auth = useContext(AuthContext)
     const navigation = useNavigation()
     const dispatch = useDispatch()
-    const fetchedData = useSelector(state => state.firm)
-    const fetchedFirm = fetchedData.firmData.firm
+    const fetchedData = useSelector(state => state.firmActions)
     const [refresh, setRefresh] = useState(false)
     const handleRefresh = () => setRefresh(prevData => !prevData);
 
+    console.log('Stored:',fetchedData);
     useEffect(() => {
         const fetcheFirm = async () => {
             try {
-
-
                 const response = await axios.get(`http://localhost:8000/api/firm/profile/${auth.userId}`)
                 dispatch(getFirmData(response.data));
-                // console.log(response.data);
+                console.log('Goten:',response.data);
 
             } catch (err) {
                 console.log("Error if fetching firm profile", err);
@@ -45,11 +43,11 @@ const FirmProfile = props => {
                 <TouchableOpacity style={styles.firmContainer} onPress={() => {
                     navigation.navigate('editProfile', {
                         name: 'Edit Profile',
-                        fetchedFirm: fetchedFirm,
-                        firmId: fetchedFirm._id,
+                        // fetchedFirm: fetchedData,
+                        firmId: auth.firmId,
                         userId: auth.userId,
                         handleRefresh: handleRefresh
-                    }
+                        }
                     )
                 }}>
 
@@ -59,8 +57,8 @@ const FirmProfile = props => {
 
                     <View style={styles.nameContainer} >
                         <View>
-                            <Text style={styles.firmName}>{fetchedFirm?.name}</Text>
-                            <Text style={styles.bossName}>{fetchedFirm?.owner}</Text>
+                            <Text style={styles.firmName}>{fetchedData.name}</Text>
+                            {/* <Text style={styles.bossName}>{fetchedData.owner}</Text> */}
                         </View>
                     </View>
 

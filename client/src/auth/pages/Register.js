@@ -8,11 +8,14 @@ import { VALIDATOR_EMAIL, VALIDATOR_MINLENGTH, VALIDATOR_REQUIRE } from "../../u
 import Button from "../../shared/UIElements/Button";
 import Input from "../../shared/UIElements/Input";
 import Select from "../../shared/UIElements/Select";
+import { useContext } from "react";
+import { AuthContext } from "../../context/auth-context";
 
 const Register = () => {
     const dispatch = useDispatch()
     const navigation = useNavigation()
     const fetchedData = useSelector(state => state.register)
+    const auth = useContext(AuthContext)
 
     // console.log(fetchedData)
     async function handleSubmit() {
@@ -29,6 +32,7 @@ const Register = () => {
             dispatch(updateUserData(response.data));
             // console.log(response.data);
             if (response.status === 201) {
+                auth.login(response.data.userId, response.data.token, response.data.role, response.data.firmId)
                 navigation.navigate('overview');
                 alert('User created');
             } else {

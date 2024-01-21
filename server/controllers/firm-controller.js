@@ -5,7 +5,7 @@ const User = require('../models/User')
 
 const register = async (req, res, next) => {
   // destructuring assignment from bod
-  const { name, email, street, houseNr, zip, place, phone, website, userId} = req.body;
+  const { name, email, role,  street, houseNr, zip, place, phone, website, userId} = req.body;
 
   let existingFirm;
 
@@ -30,6 +30,7 @@ const register = async (req, res, next) => {
     const createdFirm = new Firm({
       name,
       email,
+      role, 
       street,
       houseNr,
       zip,

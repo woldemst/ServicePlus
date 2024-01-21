@@ -16,14 +16,14 @@ const CreateFirm = props => {
     const navigation = useNavigation();
     const fetchedData = useSelector((state) => state.firm);
 
-    // console.log(fetchedData);
+    // console.log(props);
     const handleSubmit = async () => {
         const URL = `http://localhost:8000/api/firm/register`;
 
         try {
             const response = await axios.post(URL, {
                 role: auth.role,
-                userId: props.userId,
+                userId: auth.userId,
                 name: fetchedData.name.value,
                 email: fetchedData.email.value,
                 street: fetchedData.street.value,
@@ -33,13 +33,15 @@ const CreateFirm = props => {
                 phone: fetchedData.phone.value, 
                 website: fetchedData.website.value,
             })
+            auth.updateId(response.data.firmId)
             dispatch(updateFirmData(response.data))
-
+            props.toggle()
             // props.route.params.handleRefresh();
-            navigation.goBack()
-            console.log("Firm updated!", response.data);
+            navigation.navigate('overview')
+
+            console.log("Firm created!", response.data);
         } catch (err) {
-            console.error("Error updating firm:", err);
+            console.error("Error when creating a firm:", err);
             
         }
 

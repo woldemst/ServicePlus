@@ -20,30 +20,34 @@ const Overview = () => {
     const [activeTab, setActiveTab] = useState(2)
     const [isModalVisible, setModalVisible] = useState(false);
     const [refresh, setRefresh] = useState(false)
-    const router = useRoute()
     const auth = useContext(AuthContext)
-    const userId = auth.userId
-    
+
+    // console.log('auth', auth)
+
+    useEffect(()=>{
+        renderFirm()
+    }, [refresh])
+
     const toggleModal = () => {
         setModalVisible(!isModalVisible)
     }
-    
+    const onFirmCreated = () => {
+        setRefresh(!refresh); // Toggle refresh state to trigger re-render
+      };
 
     const renderFirm = () => {
         if (activeTab == 3){
 
             if (!auth.firmId){
-                return <CreateSggest userId={userId} />
+                return <CreateSggest refresh={refresh} onFirmCreated={onFirmCreated} />
             }else{
                 
-                return <FirmProfile refresh={refresh} userId={userId} />
+                return <FirmProfile refresh={refresh} />
             }
         }else{
             return null
         }
     }
-
-
 
     return (
         <>
@@ -82,7 +86,6 @@ const Overview = () => {
                 <View style={styles.mainContent}>
                     {activeTab == 1 && <AppointmentView />}
                     {activeTab == 2 && <OrderView />}
-                    {/* {activeTab == 3 && !!auth.firmId ? <FirmProfile refresh={refresh} userId={userId}/> : <CreateSggest /> } */}
                     {renderFirm()}
                 </View>
 
