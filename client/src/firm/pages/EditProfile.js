@@ -9,32 +9,40 @@ import {
 import { useNavigation } from "@react-navigation/native";
 import { useRoute } from "@react-navigation/native";
 import axios from "axios";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { updateFirmData } from "../../actions/firmActions";
 import { useDispatch, useSelector } from "react-redux";
+import { AuthContext } from "../../context/auth-context";
+import Input from "../../shared/UIElements/Input";
+import { VALIDATOR_REQUIRE, VALIDATOR_MINLENGTH, VALIDATOR_EMAIL } from "../../util/validators";
+import Button from "../../shared/UIElements/Button";
 
 const EditProfile = (props) => {
+  const auth = useContext(AuthContext)
   const navigation = useNavigation();
-  const { firmId, fetchedFirm } = useRoute().params;
-  // const fetchedData = useSelector((state) => state.firm);
 
-  const [firmData, setFirmData] = useState(fetchedFirm);
   const dispatch = useDispatch();
-  const fetchedData = useSelector(state => state.firm.firmData.firm)
+  const fetchedData = useSelector(state => state.firm)
 
-
-  const handleChange = (field, value) => {
-    setFirmData((prevData) => ({
-      ...prevData,
-      [field]: value,
-    }));
-  };
-
+  console.log('Stored in firmEdit: ',fetchedData);
   const handleSubmit = async () => {
-    const URL = `http://localhost:8000/api/firm/update/${firmId}`;
+    const URL = `http://localhost:8000/api/firm/update/${auth.firmId}`;
+
+    const updatedData = {
+      name: fetchedData.name.value,
+      owner: fetchedData.owner.value,
+      email: fetchedData.email.value,
+      street: fetchedData.street.value,
+      houseNr: fetchedData.houseNr.value,
+      zip: fetchedData.zip.value,
+      place: fetchedData.place.value,
+      phone: fetchedData.phone.value,
+      website: fetchedData.website.value,
+    }
 
     try {
-      const response = await axios.patch(URL, firmData);
+
+      const response = await axios.patch(URL, updatedData);
       dispatch(updateFirmData(response.data));
       props.route.params.handleRefresh();
       navigation.goBack()
@@ -48,72 +56,93 @@ const EditProfile = (props) => {
     <>
       <View style={styles.container}>
         <ScrollView showsVerticalScrollIndicator={false}>
-          <TextInput
-            style={[styles.input, styles.input.placeholderText]}
+
+          <Input
+            id='firmName'
+            fetchedData='firm'
+            fieldName='name'
             placeholder="Name des Betriebs"
-            onChangeText={(text) => handleChange("name", text)}
-            value={fetchedData.name}
+            value={fetchedData.name.value}
+            validators={[VALIDATOR_MINLENGTH(6)]}
+
           />
 
-          <TextInput
-            style={[styles.input, styles.input.placeholderText]}
+          <Input
+            id='ownerName'
+            fetchedData='firm'
+            fieldName='owner'
             placeholder="Name des Inhabers"
-            onChangeText={(text) => handleChange("owner", text)}
-            value={fetchedData.owner}
+            value={fetchedData.owner.value}
+            validators={[VALIDATOR_REQUIRE()]}
+
           />
 
-          <TextInput
-            style={[styles.input, styles.input.placeholderText]}
-            placeholder="Email"
-            onChangeText={(text) => handleChange("email", text)}
-            value={fetchedData.email}
+          <Input
+            id='firmEmail'
+            fetchedData='firm'
+            fieldName='email'
+            placeholder="Name des Betriebs"
+            value={fetchedData.email.value}
+            validators={[VALIDATOR_EMAIL()]}
+
           />
+
 
           <View style={styles.streetContainer}>
             <View style={styles.streetWrapper}>
-              <TextInput
-                style={[styles.input, styles.input.placeholderText]}
+              <Input
+                id='firmStreet'
+                fetchedData='firm'
+                fieldName='street'
                 placeholder="Straße"
-                onChangeText={(text) => handleChange("street", text)}
-                value={fetchedData.street}
+                value={fetchedData.street.value}
+                validators={[VALIDATOR_REQUIRE()]}
               />
             </View>
 
             <View style={styles.nrWrapper}>
-              <TextInput
-                style={[styles.input, styles.input.placeholderText]}
-                placeholder="Nr."
-                onChangeText={(text) => handleChange("houseNr", text)}
-                value={fetchedData.houseNr}
-              />
+              <Input
+                  id='firmHouseNr'
+                  fetchedData='firm'
+                  fieldName='houseNr'
+                  placeholder="Nr."
+                  value={fetchedData.houseNr.value}
+                  validators={[VALIDATOR_REQUIRE()]}
+                />
             </View>
           </View>
 
           <View style={styles.zipContainer}>
             <View style={styles.zipWrapper}>
-              <TextInput
-                style={[styles.input, styles.input.placeholderText]}
-                placeholder="PLZ"
-                onChangeText={(text) => handleChange("zip", text)}
-                value={fetchedData.zip}
-              />
+                <Input
+                  id='firmZip'
+                  fetchedData='firm'
+                  fieldName='zip'
+                  placeholder="PLZ"
+                  value={fetchedData.zip.value}
+                  validators={[VALIDATOR_REQUIRE()]}
+                />
             </View>
 
             <View style={styles.placeWrapper}>
-              <TextInput
-                style={[styles.input, styles.input.placeholderText]}
+              <Input
+                id='firmPlace'
+                fetchedData='firm'
+                fieldName='place'
                 placeholder="Ort"
-                onChangeText={(text) => handleChange("place", text)}
-                value={fetchedData.place}
+                value={fetchedData.place.value}
+                validators={[VALIDATOR_REQUIRE()]}
               />
             </View>
           </View>
 
-          <TextInput
-            style={[styles.input, styles.input.placeholderText]}
+          <Input
+            id='firmPhone'
+            fetchedData='firm'
+            fieldName='phone'
             placeholder="Telefon"
-            onChangeText={(text) => handleChange("phone", text)}
-            value={fetchedData.phone}
+            value={fetchedData.phone.value}
+            validators={[VALIDATOR_REQUIRE()]}
           />
 
           {/* <Text style={styles.label}>Branche*</Text>
@@ -127,20 +156,24 @@ const EditProfile = (props) => {
                 placeholder='Offen'
             /> */}
 
-          <TextInput
-            style={[styles.input, styles.input.placeholderText]}
+
+          <Input
+            id='firmWebsite'
+            fetchedData='firm'
+            fieldName='website'
             placeholder="Webseite"
-            onChangeText={(text) => handleChange("website", text)}
-            value={firmData.website}
+            value={fetchedData.website.value} 
+            validators={[VALIDATOR_REQUIRE()]}
           />
 
           <View style={styles.btnContainer}>
-            <TouchableOpacity
-              style={[styles.createBtn, styles.button]}
+            <Button 
+              style={fetchedData.isFormValid ? [styles.createBtn, styles.button] : styles.invalideButton}
+              disabled={!fetchedData.isFormValid} 
+              buttonText={styles.createBtnText}
               onPress={handleSubmit}
-            >
-              <Text style={styles.createBtnText}>Speichern</Text>
-            </TouchableOpacity>
+              title={'Speichern'} 
+          />
           </View>
         </ScrollView>
       </View>
@@ -241,6 +274,16 @@ const styles = StyleSheet.create({
     fontSize: 18,
     color: "#fff",
     fontWeight: "700",
+  },
+  invalideButton: {
+      height: 53,
+      width: '100%',
+      backgroundColor: 'gray',
+      borderRadius: 5,
+      justifyContent: 'center',
+      flexDirection: "row",
+      justifyContent: "center",
+      alignItems: 'center'
   },
 });
 
