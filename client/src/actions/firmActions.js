@@ -19,7 +19,6 @@ export const updateAndValidateRegisterFirmField = (fieldName, value, validators)
   };
 };
 
-
 export const updateFirmData = (data) => ({
   type: UPDATE_FIRM_DATA,
   payload: data.firm 
@@ -28,6 +27,8 @@ export const updateFirmData = (data) => ({
 export const getFirmData = (data) => ({
   type: GET_FIRM_DATA,
   payload: data.firm 
+  // payload: { field, val }
+
 })
 
 

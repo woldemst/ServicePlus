@@ -90,28 +90,22 @@ const firmReducer = (state = initialState, action) => {
               ...state,
               ...action.payload,
           };
+       
         case GET_FIRM_DATA:
-            // return {
-            //     ...state,
-            //     ...action.payload,
-
-            // };
-
             const receivedFirmData = action.payload;
-            
-            // Transform the received data to fit the expected structure
+
             const transformedFirmData = {
               name: {
                 value: receivedFirmData.name || "",
-                isValid: true, // You may want to validate this based on your logic
+                isValid: false, 
               },
               owner: {
                 value: receivedFirmData.owner || "",
-                isValid: true, // You may want to validate this based on your logic
+                isValid: false, 
               },
               email: {
                 value: receivedFirmData.email || "",
-                isValid: true, // You may want to validate this based on your logic
+                isValid: false,
               },    
               street: {
                 value: receivedFirmData.street || "",
@@ -172,7 +166,7 @@ const firmReducer = (state = initialState, action) => {
             return {
               ...state,
               ...transformedFirmData,
-              isFormValid: true, // You may want to update this based on your logic
+              isFormValid: formValid // You may want to update this based on your logic
               // isFormValid: formValid, // You may want to update this based on your logic
             };  
         default:

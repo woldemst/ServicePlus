@@ -16,14 +16,14 @@ const FirmProfile = props => {
     const [refresh, setRefresh] = useState(false)
     const handleRefresh = () => setRefresh(prevData => !prevData);
 
-    console.log('Stored:',fetchedData);
+    console.log('Stored as Profile:',fetchedData);
 
     useEffect(() => {
         const fetcheFirm = async () => {
             try {
                 const response = await axios.get(`http://localhost:8000/api/firm/profile/${auth.userId}`)
                 dispatch(getFirmData(response.data));
-                console.log('Goten:',response.data); 
+                // console.log('Goten:',response.data); 
 
             } catch (err) {
                 console.log("Error if fetching firm profile", err);
