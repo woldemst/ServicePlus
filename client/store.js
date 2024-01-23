@@ -4,12 +4,10 @@ import customerReducer from './src/reducer/customerReducer';
 import userReducer from './src/reducer/userReducer'
 import registerReducer from './src/reducer/registerReducer';
 import loginReducer from './src/reducer/loginReducer';
-import firmDataReducer from './src/reducer/firmDataReducer';
 
 const store = configureStore({
   reducer: {
     firm: firmReducer,
-    firmActions: firmDataReducer,
     customer: customerReducer,
     user: userReducer,
     register: registerReducer,
