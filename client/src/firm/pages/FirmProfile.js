@@ -12,17 +12,18 @@ const FirmProfile = props => {
     const auth = useContext(AuthContext)
     const navigation = useNavigation()
     const dispatch = useDispatch()
-    const fetchedData = useSelector(state => state.firmActions)
+    const fetchedData = useSelector(state => state.firm)
     const [refresh, setRefresh] = useState(false)
     const handleRefresh = () => setRefresh(prevData => !prevData);
 
     console.log('Stored:',fetchedData);
+
     useEffect(() => {
         const fetcheFirm = async () => {
             try {
                 const response = await axios.get(`http://localhost:8000/api/firm/profile/${auth.userId}`)
                 dispatch(getFirmData(response.data));
-                console.log('Goten:',response.data);
+                console.log('Goten:',response.data); 
 
             } catch (err) {
                 console.log("Error if fetching firm profile", err);
@@ -43,9 +44,6 @@ const FirmProfile = props => {
                 <TouchableOpacity style={styles.firmContainer} onPress={() => {
                     navigation.navigate('editProfile', {
                         name: 'Edit Profile',
-                        // fetchedFirm: fetchedData,
-                        firmId: auth.firmId,
-                        userId: auth.userId,
                         handleRefresh: handleRefresh
                         }
                     )
@@ -57,8 +55,8 @@ const FirmProfile = props => {
 
                     <View style={styles.nameContainer} >
                         <View>
-                            <Text style={styles.firmName}>{fetchedData.name}</Text>
-                            {/* <Text style={styles.bossName}>{fetchedData.owner}</Text> */}
+                            <Text style={styles.firmName}>{fetchedData.name.value}</Text>
+                            <Text style={styles.bossName}>{fetchedData.owner.value}</Text>
                         </View>
                     </View>
 
