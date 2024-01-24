@@ -2,52 +2,52 @@ import { UPDATE_AND_VALIDATE_REGISTER_FIRM_FIELD, UPDATE_FIRM_DATA, GET_FIRM_DAT
 import { validate } from "../util/validators";
 
 const initialState = {
-    name: {
-      value: "",
-      isValid: false,
-    },
-    owner: {
-      value: "",
-      isValid: false,
-    },
-    email: {
-      value: "",
-      isValid: false,
-    },
-    street: {
-      value: "",
-      isValid: false,
-    },
-    houseNr: {
-      value: "",
-      isValid: false,
-    },
-    zip: {
-      value: "",
-      isValid: false,
-    },
-    place: {
-      value: "",
-      isValid: false,
-    },
-    phone: {
-      value: "",
-      isValid: false,
-    },
-    website: {
-      value: "",
-      isValid: false,
-    },
-    role: {
-      value: "",
-      isValid: false,
-    },
-    userId: {
-      value: "",
-      isValid: false,
-    },
-    isFormValid: false,
-  };
+  ownerName: {
+    value: "",
+    isValid: false,
+  },
+  name: {
+    value: "",
+    isValid: false,
+  },
+  email: {
+    value: "",
+    isValid: false,
+  },
+  street: {
+    value: "",
+    isValid: false,
+  },
+  houseNr: {
+    value: "",
+    isValid: false,
+  },
+  zip: {
+    value: "",
+    isValid: false,
+  },
+  place: {
+    value: "",
+    isValid: false,
+  },
+  phone: {
+    value: "",
+    isValid: false,
+  },
+  website: {
+    value: "",
+    isValid: false,
+  },
+  role: {
+    value: "",
+    isValid: false,
+  },
+  userId: {
+    value: "",
+    isValid: false,
+  },
+  isFormValid: false,
+};
   
 const firmReducer = (state = initialState, action) => {
     switch (action.type) {
@@ -55,7 +55,7 @@ const firmReducer = (state = initialState, action) => {
             const { fieldName, value, validators } = action.payload;
             
             const updatedField = {
-                ...state[fieldName],
+                // ...state[fieldName],
                 value,
                 isValid: validate(value, validators),
             };
@@ -68,7 +68,7 @@ const firmReducer = (state = initialState, action) => {
             let isFormValid = false;
             if (
                 updatedState.name.isValid &&
-                updatedState.owner.isValid &&
+                updatedState.ownerName.isValid &&
                 updatedState.email.isValid &&
                 updatedState.street.isValid &&
                 updatedState.houseNr.isValid &&
@@ -80,10 +80,13 @@ const firmReducer = (state = initialState, action) => {
             ) {
                 isFormValid = true;
             }
-        
+            
+            // let isFormValid = Object.values(updatedState).every((field) => field.isValid);
+            
+            console.log('reducer', updatedState);
             return {
                 ...updatedState,
-                isFormValid: isFormValid,
+                isFormValid,
             };
         case UPDATE_FIRM_DATA:
           return {
@@ -94,80 +97,62 @@ const firmReducer = (state = initialState, action) => {
         case GET_FIRM_DATA:
             const receivedFirmData = action.payload;
 
-            const transformedFirmData = {
+            const updatedFirmData = {
+              id: {
+                value: receivedFirmData._id,
+                isValid: false,
+              },
               name: {
-                value: receivedFirmData.name || "",
+                value: receivedFirmData.name,
                 isValid: false, 
               },
-              owner: {
-                value: receivedFirmData.owner || "",
+              ownerName: {
+                value: receivedFirmData.ownerName,
                 isValid: false, 
               },
               email: {
-                value: receivedFirmData.email || "",
+                value: receivedFirmData.email ,
                 isValid: false,
               },    
               street: {
-                value: receivedFirmData.street || "",
+                value: receivedFirmData.street,
                 isValid: false,
               },
               houseNr: {
-                value: receivedFirmData.houseNr || "",
-
+                value: receivedFirmData.houseNr,
                 isValid: false,
               },
               zip: {
-                value: receivedFirmData.zip || "",
-
+                value: receivedFirmData.zip,
                 isValid: false,
               },
               place: {
-                value: receivedFirmData.place || "",
-
+                value: receivedFirmData.place,
                 isValid: false,
               },
               phone: {
-                value: receivedFirmData.phone || "",
-
+                value: receivedFirmData.phone,
                 isValid: false,
               },
               website: {
-                value: receivedFirmData.website || "",
-
+                value: receivedFirmData.website,
                 isValid: false,
               },
               role: {
-                value: receivedFirmData.role || "",
-
+                value: receivedFirmData.role,
                 isValid: false,
               },
               userId: {
-                value: receivedFirmData.userId || "",
+                value: receivedFirmData.userId,
                 isValid: false,
               },
-              // ... continue with other fields
+              isFormValid: false
             };
 
-            let formValid = false;
-              if (
-                transformedFirmData.name.isValid &&
-                transformedFirmData.owner.isValid &&
-                transformedFirmData.email.isValid &&
-                transformedFirmData.street.isValid &&
-                transformedFirmData.houseNr.isValid &&
-                transformedFirmData.zip.isValid &&
-                transformedFirmData.place.isValid &&
-                transformedFirmData.phone.isValid &&
-                transformedFirmData.website.isValid
-
-            ) {
-              formValid = true;
-            }
+     
             return {
-              ...state,
-              ...transformedFirmData,
-              isFormValid: formValid // You may want to update this based on your logic
-              // isFormValid: formValid, // You may want to update this based on your logic
+              // ...state,
+              ...updatedFirmData
             };  
         default:
             return state;

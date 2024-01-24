@@ -4,10 +4,12 @@ import { updateAndValidateRegisterField, updateRegisterField } from "../../actio
 import { updateAndValidateLoginField, updateLoginField } from "../../actions/loginActions";
 import { updateAndValidateRegisterFirmField, updateRegisterFirmField} from "../../actions/firmActions";
 import { useState } from "react";
+import { validate } from "../../util/validators";
 
 const Input = props => {
     const dispatch = useDispatch()
     const [touched, setTouched] = useState(false)
+    const isValid = validate(props.value, props.validators)
 
     let fetchedData
     switch (props.fetchedData) {
@@ -32,43 +34,23 @@ const Input = props => {
 
 
     const handleChange = (val) => {
-        if(touched){
-            switch (props.fetchedData) {
-                case 'register':
-                    dispatch(updateAndValidateRegisterField(props.fieldName, val, props.validators))
-                    break
-                case 'login':
-                    dispatch(updateAndValidateLoginField(props.fieldName, val, props.validators))
-                    break
-                case 'firm':
-                    dispatch(updateAndValidateRegisterFirmField(props.fieldName, val, props.validators))
-                    break
-                case 'client':
+        switch (props.fetchedData) {
+            case 'register':
+                dispatch(updateAndValidateRegisterField(props.fieldName, val, props.validators))
+                break
+            case 'login':
+                dispatch(updateAndValidateLoginField(props.fieldName, val, props.validators))
+                break
+            case 'firm':
+                dispatch(updateAndValidateRegisterFirmField(props.fieldName, val, props.validators))
+                break
+            case 'client':
 
-                    break
-                default:
-                    break;
-            }
-    
-        }else{  
-
-            switch (props.fetchedData) {
-                case 'register':
-                    dispatch(updateRegisterField(props.fieldName, val))
-                    break
-                case 'login':
-                    dispatch(updateLoginField(props.fieldName, val))
-                    break
-                case 'firm':
-                    dispatch(updateRegisterFirmField(props.fieldName, val))
-                    break
-                case 'client':
-
-                    break
-                default:
-                    break;
-            }
+                break
+            default:
+                break;
         }
+
     }
 
 
@@ -84,14 +66,15 @@ const Input = props => {
             id={props.id}
             value={props.value}
             placeholder={props.placeholder}
-            style={!fetchedData[props.fieldName].isValid && touched ? styles.inputInvalid : styles.input}
+            style={!fetchedData[props.fieldName].isValid && !isValid ? styles.inputInvalid : styles.input}
             onChangeText={(text) => handleChange(text)}
             onFocus={() => setTouched(true)}  
+            autoCapitalize="none"  
             // onBlur={onBlurHandler}
 
         />
 
-        {!fetchedData[props.fieldName].isValid && touched && <Text style={styles.errorText}>{props.errorText}</Text>}
+        {!fetchedData[props.fieldName].isValid && !isValid && <Text style={styles.errorText}>{props.errorText}</Text>}
     </>
 }
 const styles = StyleSheet.create({

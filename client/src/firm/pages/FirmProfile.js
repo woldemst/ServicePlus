@@ -16,14 +16,16 @@ const FirmProfile = props => {
     const [refresh, setRefresh] = useState(false)
     const handleRefresh = () => setRefresh(prevData => !prevData);
 
-    console.log('Stored as Profile:',fetchedData);
+    // console.log('Stored as Profile:',fetchedData);
+
+
 
     useEffect(() => {
         const fetcheFirm = async () => {
             try {
                 const response = await axios.get(`http://localhost:8000/api/firm/profile/${auth.userId}`)
                 dispatch(getFirmData(response.data));
-                // console.log('Goten:',response.data); 
+                console.log('Goten:',response.data); 
 
             } catch (err) {
                 console.log("Error if fetching firm profile", err);
@@ -42,8 +44,8 @@ const FirmProfile = props => {
         <>
             <View style={styles.container} >
                 <TouchableOpacity style={styles.firmContainer} onPress={() => {
-                    navigation.navigate('editProfile', {
-                        name: 'Edit Profile',
+                    navigation.navigate('updateProfile', {
+                        name: 'Update Profile',
                         handleRefresh: handleRefresh
                         }
                     )
@@ -56,7 +58,7 @@ const FirmProfile = props => {
                     <View style={styles.nameContainer} >
                         <View>
                             <Text style={styles.firmName}>{fetchedData.name.value}</Text>
-                            <Text style={styles.bossName}>{fetchedData.owner.value}</Text>
+                            <Text style={styles.ownerName}>{fetchedData.ownerName.value}</Text>
                         </View>
                     </View>
 
@@ -127,7 +129,7 @@ const styles = StyleSheet.create({
         fontSize: 16,
         fontWeight: '700'
     },
-    bossName: {
+    ownerName: {
         color: '#9e9e9e',
         fontSize: 14
     },
