@@ -12,29 +12,31 @@ import Button from "../../shared/UIElements/Button";
 
 const CreateFirm = props => {
     const auth = useContext(AuthContext)
-    const dispatch = useDispatch();
     const navigation = useNavigation();
     const fetchedData = useSelector((state) => state.firm);
 
     // console.log(props);
     const handleSubmit = async () => {
-        const URL = `http://localhost:8000/api/firm/register`;
+        const URL = "http://localhost:8000/api/firm/register";
 
         try {
-            const response = await axios.post(URL, {
-                role: auth.role,
-                userId: auth.userId,
-                name: fetchedData.name.value,
-                email: fetchedData.email.value,
-                street: fetchedData.street.value,
-                houseNr: fetchedData.houseNr.value,
-                zip: fetchedData.zip.value,
-                place: fetchedData.place.value,
-                phone: fetchedData.phone.value, 
-                website: fetchedData.website.value,
-            })
+
+          const updatedData = {
+            role: auth.role,
+            userId: auth.userId,
+            name: fetchedData.name.value,
+            ownerName: fetchedData.ownerName.value,
+            email: fetchedData.email.value,
+            street: fetchedData.street.value,
+            houseNr: fetchedData.houseNr.value,
+            zip: fetchedData.zip.value,
+            place: fetchedData.place.value,
+            phone: fetchedData.phone.value, 
+            website: fetchedData.website.value,
+          }
+            const response = await axios.post(URL, updatedData)
             auth.updateId(response.data.firmId)
-            dispatch(updateFirmData(response.data))
+            // dispatch(updateFirmData(response.data))
             props.toggle()
             // props.route.params.handleRefresh();
             navigation.navigate('overview')
@@ -63,9 +65,9 @@ const CreateFirm = props => {
                 <Input
                     id='ownerName'
                     fetchedData='firm'
-                    fieldName='owner'
+                    fieldName='ownerName'
                     placeholder="Name des Inhabers"
-                    value={fetchedData.owner.value}
+                    value={fetchedData.ownerName.value}
                     validators={[VALIDATOR_MINLENGTH(6)]}
 
                 />
