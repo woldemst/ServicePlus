@@ -2,21 +2,23 @@ import { UPDATE_AND_VALIDATE_REGISTER_FIELD, CLEAR_REGISTER_FIELD } from "../act
 import { validate } from "../util/validators";
 
 const initialState = {
-  name: {
-    value: "",
-    isValid: false,
-  },
-  email: {
-    value: "",
-    isValid: false,
-  },
-  password: {
-    value: "",
-    isValid: false,
-  },
-  role: {
-    value: "",
-    isValid: false,
+  inputs: {
+    name: {
+      value: "",
+      isValid: false,
+    },
+    email: {
+      value: "",
+      isValid: false,
+    },
+    password: {
+      value: "",
+      isValid: false,
+    },
+    role: {
+      value: "",
+      isValid: false,
+    },
   },
   isFormValid: false,
 };
@@ -24,36 +26,30 @@ const initialState = {
 const registerReducer = (state = initialState, action) => {
   switch (action.type) {
     case UPDATE_AND_VALIDATE_REGISTER_FIELD:
-      const { fieldName, value, validators } = action.payload;
+      const { fieldName, value, isValid } = action.payload;
       
       const updatedField = {
-        ...state[fieldName],
+        ...state.inputs[fieldName],
         value,
-        isValid: validate(value, validators),
+        isValid,
       };
       
-      const updatedState = {
-        ...state,
+      const updatedInputs = {
+        ...state.inputs,
         [fieldName]: updatedField,
       };
 
       // Check the overall form validity
-      // let isFormValid = Object.values(updatedState).every((field) => field);
-
-      let isFormValid = false;
-      if (
-        updatedState.name.isValid &&
-        updatedState.email.isValid &&
-        updatedState.password.isValid &&
-        updatedState.role.isValid
-      ) {
-        isFormValid = true;
-      }
+      let isFormValid = Object.values(updatedInputs).every(
+        (field) => field.isValid
+      );
 
       return {
-        ...updatedState,
-        isFormValid: isFormValid,
+        ...state,
+        inputs: updatedInputs, // Update the inputs field
+        isFormValid,
       };
+
 
     case CLEAR_REGISTER_FIELD:
       return {

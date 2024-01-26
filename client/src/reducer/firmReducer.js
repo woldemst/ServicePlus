@@ -1,50 +1,44 @@
 import { UPDATE_AND_VALIDATE_REGISTER_FIRM_FIELD, UPDATE_FIRM_DATA, GET_FIRM_DATA} from "../actions/firmActions";
-import { validate } from "../util/validators";
+
 
 const initialState = {
-  ownerName: {
-    value: "",
-    isValid: false,
-  },
-  name: {
-    value: "",
-    isValid: false,
-  },
-  email: {
-    value: "",
-    isValid: false,
-  },
-  street: {
-    value: "",
-    isValid: false,
-  },
-  houseNr: {
-    value: "",
-    isValid: false,
-  },
-  zip: {
-    value: "",
-    isValid: false,
-  },
-  place: {
-    value: "",
-    isValid: false,
-  },
-  phone: {
-    value: "",
-    isValid: false,
-  },
-  website: {
-    value: "",
-    isValid: false,
-  },
-  role: {
-    value: "",
-    isValid: false,
-  },
-  userId: {
-    value: "",
-    isValid: false,
+  inputs: {
+    ownerName: {
+      value: "",
+      isValid: false,
+    },
+    name: {
+      value: "",
+      isValid: false,
+    },
+    email: {
+      value: "",
+      isValid: false,
+    },
+    street: {
+      value: "",
+      isValid: false,
+    },
+    houseNr: {
+      value: "",
+      isValid: false,
+    },
+    zip: {
+      value: "",
+      isValid: false,
+    },
+    place: {
+      value: "",
+      isValid: false,
+    },
+    phone: {
+      value: "",
+      isValid: false,
+    },
+    website: {
+      value: "",
+      isValid: false,
+    },
   },
   isFormValid: false,
 };
@@ -52,41 +46,26 @@ const initialState = {
 const firmReducer = (state = initialState, action) => {
     switch (action.type) {
         case UPDATE_AND_VALIDATE_REGISTER_FIRM_FIELD:
-            const { fieldName, value, validators } = action.payload;
+            const { fieldName, value, isValid } = action.payload;
             
             const updatedField = {
-                // ...state[fieldName],
+                ...state.inputs[fieldName],
                 value,
-                isValid: validate(value, validators),
+                isValid: isValid,
             };
             
-            const updatedState = {
-                ...state,
+            const updatedInputs = {
+              ...state.inputs,
                 [fieldName]: updatedField,
             };
-
-            let isFormValid = false;
-            if (
-                updatedState.name.isValid &&
-                updatedState.ownerName.isValid &&
-                updatedState.email.isValid &&
-                updatedState.street.isValid &&
-                updatedState.houseNr.isValid &&
-                updatedState.zip.isValid &&
-                updatedState.place.isValid &&
-                updatedState.phone.isValid &&
-                updatedState.website.isValid
-
-            ) {
-                isFormValid = true;
-            }
             
-            // let isFormValid = Object.values(updatedState).every((field) => field.isValid);
+            let isFormValid = Object.values(updatedInputs).every((field) => field.isValid);
             
-            console.log('reducer', updatedState);
+            console.log('reducer update', isValid, 'isFormValid', isFormValid);
             return {
-                ...updatedState,
-                isFormValid,
+              ...state,
+              inputs: updatedInputs,
+              isFormValid,
             };
         case UPDATE_FIRM_DATA:
           return {
@@ -98,60 +77,50 @@ const firmReducer = (state = initialState, action) => {
             const receivedFirmData = action.payload;
 
             const updatedFirmData = {
-              id: {
-                value: receivedFirmData._id,
-                isValid: false,
+              inputs: {
+                ownerName: {
+                  value: receivedFirmData.ownerName,
+                  isValid: true, 
+                },
+                name: {
+                  value: receivedFirmData.name,
+                  isValid: true, 
+                },
+                email: {
+                  value: receivedFirmData.email ,
+                  isValid: true,
+                },    
+                street: {
+                  value: receivedFirmData.street,
+                  isValid: true,
+                },
+                houseNr: {
+                  value: receivedFirmData.houseNr,
+                  isValid: true,
+                },
+                zip: {
+                  value: receivedFirmData.zip,
+                  isValid: true,
+                },
+                place: {
+                  value: receivedFirmData.place,
+                  isValid: true,
+                },
+                phone: {
+                  value: receivedFirmData.phone,
+                  isValid: true,
+                },
+                website: {
+                  value: receivedFirmData.website,
+                  isValid: true,
+                },
+
               },
-              name: {
-                value: receivedFirmData.name,
-                isValid: false, 
-              },
-              ownerName: {
-                value: receivedFirmData.ownerName,
-                isValid: false, 
-              },
-              email: {
-                value: receivedFirmData.email ,
-                isValid: false,
-              },    
-              street: {
-                value: receivedFirmData.street,
-                isValid: false,
-              },
-              houseNr: {
-                value: receivedFirmData.houseNr,
-                isValid: false,
-              },
-              zip: {
-                value: receivedFirmData.zip,
-                isValid: false,
-              },
-              place: {
-                value: receivedFirmData.place,
-                isValid: false,
-              },
-              phone: {
-                value: receivedFirmData.phone,
-                isValid: false,
-              },
-              website: {
-                value: receivedFirmData.website,
-                isValid: false,
-              },
-              role: {
-                value: receivedFirmData.role,
-                isValid: false,
-              },
-              userId: {
-                value: receivedFirmData.userId,
-                isValid: false,
-              },
-              isFormValid: false
             };
 
-     
+            // console.log('get',updatedFirmData);
             return {
-              // ...state,
+              ...state,
               ...updatedFirmData
             };  
         default:
