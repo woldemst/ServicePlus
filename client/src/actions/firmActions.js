@@ -27,7 +27,7 @@ export const updateFirmData = (data) => ({
 export const getFirmData = (data) => ({
   type: GET_FIRM_DATA,
   payload: data.firm 
-  // payload: { field, val }
+  // payload: { data.firm, isValid }
 
 })
 

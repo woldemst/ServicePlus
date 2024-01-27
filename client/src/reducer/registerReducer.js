@@ -26,14 +26,14 @@ const initialState = {
 const registerReducer = (state = initialState, action) => {
   switch (action.type) {
     case UPDATE_AND_VALIDATE_REGISTER_FIELD:
-      const { fieldName, value, isValid } = action.payload;
-      
+      const { fieldName, value, validators } = action.payload;
+
       const updatedField = {
         ...state.inputs[fieldName],
         value,
-        isValid,
+        isValid: validate(value, validators)
       };
-      
+
       const updatedInputs = {
         ...state.inputs,
         [fieldName]: updatedField,
@@ -75,7 +75,7 @@ const registerReducer = (state = initialState, action) => {
         },
         isFormValid: false,
       };
-    
+
     default:
       return state;
   }
