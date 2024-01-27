@@ -1,4 +1,4 @@
-import { CLEAR_FIELD, UPDATE_AND_VALIDATE_FIELD, TOUCH_FIELD, TOUCH_DROPDOWN, UPDATE_AND_VALIDATE_DROPDOWN, UPDATE_USER_DATA} from '../actions/userActions'
+import { CLEAR_FIELD, UPDATE_AND_VALIDATE_FIELD, TOUCH_FIELD, TOUCH_DROPDOWN, UPDATE_AND_VALIDATE_DROPDOWN, UPDATE_USER_DATA } from '../actions/userActions'
 import { validate } from '../util/validators';
 
 const initialState = {
@@ -12,16 +12,16 @@ const initialState = {
 
     },
     password: {
-        value: '', 
+        value: '',
         isValid: false,
 
     },
     role: {
-        value: '', 
+        value: '',
         isValid: false,
 
     },
-    isFormValid: false, 
+    isFormValid: false,
 };
 
 const userReducer = (state = initialState, action) => {
@@ -31,11 +31,11 @@ const userReducer = (state = initialState, action) => {
             return {
                 ...state,
                 [action.payload]: {
-                  ...state[action.payload],
-                  isTouched: true
+                    ...state[action.payload],
+                    isTouched: true
                 }
             }
-            
+
         case UPDATE_AND_VALIDATE_FIELD:
             const { fieldName, value, validators } = action.payload;
 
@@ -79,55 +79,27 @@ const userReducer = (state = initialState, action) => {
 
                 },
                 password: {
-                    value: '', 
+                    value: '',
                     isValid: false,
                     isTouched: false
 
                 },
                 role: {
-                    value: '', 
+                    value: '',
                     isValid: false,
                     isTouched: false
 
                 },
-                isFormValid: false, 
+                isFormValid: false,
             };
         // dropdown logic
 
-        case UPDATE_AND_VALIDATE_DROPDOWN:
-            const { field, val } = action.payload;
-
-            const updatedDropdown = {
-                ...state[field],
-                value: val,
-                isValid: validate(val), 
-            };
-
-            const updated= {
-                ...state,
-                [field]: updatedDropdown,
-            };
-
-            let formValid = Object.values(updatedState).every((field) => field.isValid);
-
+        case UPDATE_USER_DATA:
             return {
-                ...updated,
-                isFormValid: formValid,
-            };
+                ...state,
+                ...action.payload
+            }
 
-        case TOUCH_DROPDOWN:
-                return {
-                    ...state,
-                    [action.payload]: {
-                        ...state[action.payload],
-                        isTouched: true,
-                    },
-                };
-        case UPDATE_USER_DATA: 
-        return { 
-            ...state, 
-            ...action.payload
-        }
         default:
             return state;
     }

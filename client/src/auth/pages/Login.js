@@ -1,5 +1,5 @@
-import { View, Text, TextInput, TouchableOpacity ,StyleSheet} from "react-native";
-import { useState, useContext} from "react";
+import { View, Text, TextInput, TouchableOpacity, StyleSheet } from "react-native";
+import { useState, useContext } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { updateUserData } from "../../actions/userActions";
 import axios from "axios";
@@ -19,26 +19,27 @@ const Login = () => {
     const fetchedData = useSelector(state => state.login)
     // console.log(fetchedData);
 
-    const handleSignIn = async() =>{
+    const handleSignIn = async () => {
         const apiUrl = "http://localhost:8000/api/users/login";
 
         const response = await axios.post(apiUrl, {
-            email: fetchedData.email.value,
-            password: fetchedData.password.value, 
+            email: fetchedData.inputs.email.value,
+            password: fetchedData.inputs.password.value,
         })
 
         dispatch(updateUserData(response.data))
-        alert('Logged in');
+        // alert('Logged in');
         auth.login(response.data.userId, response.data.token, response.data.role, response.data.firmId)
-        navigation.navigate('overview', {title: 'Overview'})
+        navigation.navigate('overview', { title: 'Overview' })
 
         navigation.reset({
             index: 0,
-            routes: [{name: 'overview'}]
+            routes: [{ name: 'overview' }]
         })
 
         setIsLoginMode(prev => !prev)
     }
+
 
     return (
         <View style={styles.container}>
@@ -47,24 +48,24 @@ const Login = () => {
             <Text style={styles.title}>Sign in</Text>
 
             {/* {error && <Text style={styles.error}>{error}</Text>} */}
-            
-            <Input 
+
+            <Input
                 id='email'
                 fetchedData='login'
                 fieldName='email'
                 placeholder="Email"
                 errorText='Choose another email'
-                value={fetchedData.email.value}
+                value={fetchedData.inputs.email.value}
                 validators={[VALIDATOR_EMAIL()]}
             />
 
-            <Input 
+            <Input
                 id='password'
                 fetchedData='login'
                 fieldName='password'
                 placeholder='Password'
                 errorText='Type a password'
-                value={fetchedData.password.value}
+                value={fetchedData.inputs.password.value}
                 validators={[VALIDATOR_MINLENGTH(6)]}
             />
 
@@ -72,19 +73,17 @@ const Login = () => {
 
             <Button
                 style={fetchedData.isFormValid ? styles.button : styles.invalideButton}
-                onPress={handleSignIn} 
+                onPress={handleSignIn}
                 disabled={!fetchedData.isFormValid}
-                title={'Sign in'} 
+                title={'Sign in'}
                 buttonText={styles.buttonText}
-                
-                
 
             />
 
             <View style={styles.inviteContainer}>
                 <Text style={styles.inviteText} >Haben Sie noch keinen Account? </Text>
 
-                <TouchableOpacity onPress={()=>{navigation.navigate('register', {name: '​Registrierung'})}}>
+                <TouchableOpacity onPress={() => { navigation.navigate('register', { name: '​Registrierung' }) }}>
                     <Text style={styles.registerBtn} >Registrieren</Text>
                 </TouchableOpacity>
             </View>
@@ -98,7 +97,7 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'flex-end',
         padding: 21,
-        paddingBottom: 45, 
+        paddingBottom: 45,
 
     },
     logoText: {
@@ -113,7 +112,7 @@ const styles = StyleSheet.create({
         fontSize: 27,
         fontWeight: '700',
         marginBottom: 16,
-      },
+    },
     input: {
         width: '100%',
         height: 50,
@@ -126,10 +125,10 @@ const styles = StyleSheet.create({
         marginTop: 21,
         marginBottom: 21,
         textAlign: 'right',
-        fontSize: 14, 
+        fontSize: 14,
         fontWeight: '700'
 
-    },  
+    },
     inviteContainer: {
         flexDirection: 'row',
         alignItems: 'center',
@@ -137,25 +136,25 @@ const styles = StyleSheet.create({
         // borderColor: 'red',
         // borderWidth: 2,
 
-    }, 
+    },
     inviteText: {
-        fontSize: 14, 
+        fontSize: 14,
         fontWeight: '400',
-        
+
     },
     registerBtn: {
-        fontSize: 14, 
+        fontSize: 14,
         fontWeight: '700',
         color: '#7A9B76'
     },
     button: {
         height: 53,
         width: '100%',
-        backgroundColor: '#7A9B76', 
+        backgroundColor: '#7A9B76',
         borderRadius: 5,
         justifyContent: 'center',
         flexDirection: "row",
-        justifyContent: "center", 
+        justifyContent: "center",
         alignItems: 'center'
         // flex: 1
     },

@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity, StyleSheet} from "react-native";
+import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
@@ -23,10 +23,10 @@ const Register = () => {
 
         try {
             const response = await axios.post(URL, {
-                name: fetchedData.name.value,
-                email: fetchedData.email.value,
-                password: fetchedData.password.value,
-                role: fetchedData.role.value
+                name: fetchedData.inputs.name.value,
+                email: fetchedData.inputs.email.value,
+                password: fetchedData.inputs.password.value,
+                role: fetchedData.inputs.role.value
             });
 
             dispatch(updateUserData(response.data));
@@ -61,7 +61,7 @@ const Register = () => {
                 fieldName='name'
                 placeholder="Name"
                 errorText='Type a name'
-                value={fetchedData.name.value}
+                value={fetchedData.inputs.name.value}
                 validators={[VALIDATOR_REQUIRE()]}
             />
 
@@ -71,7 +71,7 @@ const Register = () => {
                 fieldName='email'
                 placeholder="Email"
                 errorText='Choose another email'
-                value={fetchedData.email.value}
+                value={fetchedData.inputs.email.value}
                 validators={[VALIDATOR_EMAIL()]}
             />
 
@@ -81,11 +81,11 @@ const Register = () => {
                 fieldName='password'
                 placeholder="Password"
                 errorText='Type a password'
-                value={fetchedData.password.value}
+                value={fetchedData.inputs.password.value}
                 validators={[VALIDATOR_MINLENGTH(6)]}
             />
 
-            <Select 
+            {/* <Select 
                 id='role'
                 search={false}
                 fieldName='role'
@@ -93,23 +93,23 @@ const Register = () => {
                 data={selectedData}
                 fetchedData='register'
                 validators={[VALIDATOR_REQUIRE()]}
-            />
+            /> */}
 
             <Text style={styles.notice}>Passwort vergessen?</Text>
 
-            <Button 
+            <Button
                 style={fetchedData.isFormValid ? styles.button : styles.invalideButton}
-                disabled={!fetchedData.isFormValid} 
+                disabled={!fetchedData.isFormValid}
                 buttonText={styles.buttonText}
                 onPress={handleSubmit}
-                title={'Sign up'} 
+                title={'Sign up'}
             />
 
 
             <View style={styles.inviteContainer}>
                 <Text style={styles.inviteText}>Sie haben schon einen Account?</Text>
 
-                <TouchableOpacity onPress={() => {navigation.navigate('login') }}>
+                <TouchableOpacity onPress={() => { navigation.navigate('login') }}>
                     <Text style={styles.registerBtn}>Zurück zum Login</Text>
                 </TouchableOpacity>
 
@@ -211,11 +211,11 @@ const styles = StyleSheet.create({
         marginTop: 14,
         alignItems: 'center',
         borderRadius: 0
-      },
-      placeholder: {
+    },
+    placeholder: {
         color: "red",
-        fontSize: 18, 
-      }
+        fontSize: 18,
+    }
 })
 
 export default Register;

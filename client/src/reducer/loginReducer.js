@@ -1,61 +1,50 @@
-import { CLEAR_LOGIN_FIELD, UPDATE_AND_VALIDATE_LOGIN_FIELD, TOUCH_LOGIN_FIELD} from '../actions/loginActions'
+import { CLEAR_LOGIN_FIELD, UPDATE_AND_VALIDATE_LOGIN_FIELD, TOUCH_LOGIN_FIELD } from '../actions/loginActions'
 import { validate } from '../util/validators';
 
 const initialState = {
-    email: {
-        value: '',
-        isValid: false,
+    inputs: {
+        email: {
+            value: '',
+            isValid: false,
+        },
+        password: {
+            value: '',
+            isValid: false,
+        },
     },
-    password: {
-        value: '', 
-        isValid: false,
-    },
-    isFormValid: false, 
+    isFormValid: false,
 };
 
 
 const loginReducer = (state = initialState, action) => {
-    
+
     switch (action.type) {
-        case TOUCH_LOGIN_FIELD:
+        case UPDATE_AND_VALIDATE_LOGIN_FIELD:
+            const { fieldName, value, validators } = action.payload;
+
+            const updatedField = {
+                ...state.inputs[fieldName],
+                value,
+                isValid: validate(value, validators)
+            };
+
+            const updatedInputs = {
+                ...state.inputs,
+                [fieldName]: updatedField,
+            };
+
+            // Check the overall form validity
+            let isFormValid = Object.values(updatedInputs).every(
+                (field) => field.isValid
+            );
+            // console.log(updatedState);
 
             return {
                 ...state,
-                [action.payload]: {
-                  ...state[action.payload],
-                  isTouched: true
-                }
-            }
-        case UPDATE_AND_VALIDATE_LOGIN_FIELD:
-            const { fieldName, value, validators } = action.payload;
-            const updatedField = {
-                ...state[fieldName],
-                value,
-                isValid: validate(value, validators),
-              };
-        
-              const updatedState = {
-                ...state,
-                [fieldName]: updatedField,
-              };
-        
-              // Check the overall form validity
-              // let isFormValid = Object.values(updatedState).every((field) => field);
-        
-              // console.log(updatedState);
-              let isFormValid = false;
-              if (
-                updatedState.email.isValid &&
-                updatedState.password.isValid 
-              ) {
-                isFormValid = true;
-              }
-        
-              return {
-                ...updatedState,
-                isFormValid: isFormValid,
-              };
-        
+                inputs: updatedInputs, // Update the inputs fiel
+                isFormValid,
+            };
+
 
         case CLEAR_LOGIN_FIELD:
             return {
@@ -71,26 +60,26 @@ const loginReducer = (state = initialState, action) => {
 
                 },
                 password: {
-                    value: '', 
+                    value: '',
                     isValid: false,
                     isTouched: false
 
                 },
                 role: {
-                    value: '', 
+                    value: '',
                     isValid: false,
                     isTouched: false
 
                 },
-                isFormValid: false, 
+                isFormValid: false,
             };
-                return {
-                    ...state,
-                    [action.payload]: {
-                        ...state[action.payload],
-                        isTouched: true,
-                    },
-                };
+            return {
+                ...state,
+                [action.payload]: {
+                    ...state[action.payload],
+                    isTouched: true,
+                },
+            };
         default:
             return state;
     }

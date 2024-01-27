@@ -5,7 +5,7 @@ import { useState } from "react";
 
 import { updateAndValidateRegisterField, updateRegisterField } from "../../actions/registerActions";
 import { updateAndValidateLoginField, updateLoginField } from "../../actions/loginActions";
-import { updateAndValidateRegisterFirmField, updateRegisterFirmField} from "../../actions/firmActions";
+import { updateAndValidateRegisterFirmField, updateRegisterFirmField } from "../../actions/firmActions";
 
 const Input = props => {
     const dispatch = useDispatch()
@@ -35,39 +35,29 @@ const Input = props => {
         default:
             break;
     }
-    
-    // Check the overall form validity
-    let isFormValid = Object.values(fetchedData.inputs).every(
-        (field) => field.isValid
-    );
 
-    if(isFormValid){
-        console.log('form',fetchedData.isFormValid);
-        fetchedData.isFormValid = true
-    }
 
-    // console.log('input', fetchedData.inputs[props.fieldName].isValid)
 
     const handleChange = (val) => {
-            switch (props.fetchedData) {
-                case 'register':
-                    dispatch(updateAndValidateRegisterField(props.fieldName, val, isValid))
-                    break
-                case 'login':
-                    dispatch(updateAndValidateLoginField(props.fieldName, val, isValid))
-                    break
-                case 'firm':
-                    dispatch(updateAndValidateRegisterFirmField(props.fieldName, val, isValid))
-                    break
-                case 'worker':
-    
-                    break
-                case 'client':
-    
-                    break
-                default:
-                    break;
-            }
+        switch (props.fetchedData) {
+            case 'register':
+                dispatch(updateAndValidateRegisterField(props.fieldName, val, props.validators))
+                break
+            case 'login':
+                dispatch(updateAndValidateLoginField(props.fieldName, val, props.validators))
+                break
+            case 'firm':
+                dispatch(updateAndValidateRegisterFirmField(props.fieldName, val, props.validators))
+                break
+            case 'worker':
+
+                break
+            case 'client':
+
+                break
+            default:
+                break;
+        }
 
     }
 
@@ -84,15 +74,15 @@ const Input = props => {
             id={props.id}
             value={props.value}
             placeholder={props.placeholder}
-            style={!isValid && !fetchedData.inputs[props.fieldName].isValid ? styles.inputInvalid : styles.input}
+            style={!fetchedData.inputs[props.fieldName].isValid ? styles.inputInvalid : styles.input}
             onChangeText={(text) => handleChange(text)}
-            onFocus={() => setTouched(true)}  
-            autoCapitalize="none"  
-            // onBlur={onBlurHandler}
+            onFocus={() => setTouched(true)}
+            autoCapitalize="none"
+        // onBlur={onBlurHandler}
 
         />
 
-        {!isValid && !fetchedData.inputs[props.fieldName].isValid && <Text style={styles.errorText}>{props.errorText}</Text>}
+        {!fetchedData.inputs[props.fieldName].isValid && <Text style={styles.errorText}>{props.errorText}</Text>}
     </>
 }
 const styles = StyleSheet.create({

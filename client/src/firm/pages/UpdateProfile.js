@@ -10,7 +10,7 @@ import { useNavigation } from "@react-navigation/native";
 import { useRoute } from "@react-navigation/native";
 import axios from "axios";
 import { useContext, useState } from "react";
-import { updateFirmData, updateAndValidateRegisterFirmField} from "../../actions/firmActions";
+import { updateFirmData, updateAndValidateRegisterFirmField } from "../../actions/firmActions";
 import { useDispatch, useSelector } from "react-redux";
 import { AuthContext } from "../../context/auth-context";
 import Input from "../../shared/UIElements/Input";
@@ -25,18 +25,18 @@ const UpdateProfile = (props) => {
   // console.log('Stored in updateFirm: ', fetchedData);
   const handleSubmit = async () => {
     const URL = `http://localhost:8000/api/firm/update/${auth.firmId}`;
-  
+
     try {
       const response = await axios.patch(URL, {
-        ownerName: fetchedData.ownerName.value,
-        name: fetchedData.name.value,
-        email: fetchedData.email.value,
-        street: fetchedData.street.value,
-        houseNr: fetchedData.houseNr.value,
-        zip: fetchedData.zip.value,
-        place: fetchedData.place.value,
-        phone: fetchedData.phone.value,
-        website: fetchedData.website.value,
+        ownerName: fetchedData.inputs.ownerName.value,
+        name: fetchedData.inputs.name.value,
+        email: fetchedData.inputs.email.value,
+        street: fetchedData.inputs.street.value,
+        houseNr: fetchedData.inputs.houseNr.value,
+        zip: fetchedData.inputs.zip.value,
+        place: fetchedData.inputs.place.value,
+        phone: fetchedData.inputs.phone.value,
+        website: fetchedData.inputs.website.value,
       });
 
       props.route.params.handleRefresh();
@@ -57,7 +57,7 @@ const UpdateProfile = (props) => {
             fetchedData='firm'
             fieldName='name'
             placeholder="Name des Betriebs"
-            value={fetchedData.name.value}
+            value={fetchedData.inputs.name.value}
             errorText='Type a name'
             validators={[VALIDATOR_MINLENGTH(6)]}
 
@@ -69,7 +69,7 @@ const UpdateProfile = (props) => {
             fieldName='ownerName'
             errorText='Type owner"s name'
             placeholder="Name des Inhabers"
-            value={fetchedData.ownerName.value}
+            value={fetchedData.inputs.ownerName.value}
             validators={[VALIDATOR_REQUIRE()]}
 
           />
@@ -80,7 +80,7 @@ const UpdateProfile = (props) => {
             fieldName='email'
             errorText='Type an email'
             placeholder="Name des Betriebs"
-            value={fetchedData.email.value}
+            value={fetchedData.inputs.email.value}
             validators={[VALIDATOR_EMAIL()]}
 
           />
@@ -94,7 +94,7 @@ const UpdateProfile = (props) => {
                 fieldName='street'
                 placeholder="Straße"
                 errorText='Type a street'
-                value={fetchedData.street.value}
+                value={fetchedData.inputs.street.value}
                 validators={[VALIDATOR_REQUIRE()]}
               />
             </View>
@@ -106,7 +106,7 @@ const UpdateProfile = (props) => {
                 fieldName='houseNr'
                 placeholder="Nr."
                 errorText='Type a house number'
-                value={fetchedData.houseNr.value}
+                value={fetchedData.inputs.houseNr.value}
                 validators={[VALIDATOR_REQUIRE()]}
               />
             </View>
@@ -120,7 +120,7 @@ const UpdateProfile = (props) => {
                 fieldName='zip'
                 placeholder="PLZ"
                 errorText='Type a zip code'
-                value={fetchedData.zip.value}
+                value={fetchedData.inputs.zip.value}
                 validators={[VALIDATOR_REQUIRE()]}
               />
             </View>
@@ -132,7 +132,7 @@ const UpdateProfile = (props) => {
                 fieldName='place'
                 placeholder="Ort"
                 errorText='Type a place or city'
-                value={fetchedData.place.value}
+                value={fetchedData.inputs.place.value}
                 validators={[VALIDATOR_REQUIRE()]}
               />
             </View>
@@ -144,21 +144,9 @@ const UpdateProfile = (props) => {
             fieldName='phone'
             placeholder="Telefon"
             errorText='Type a telephone number'
-            value={fetchedData.phone.value}
+            value={fetchedData.inputs.phone.value}
             validators={[VALIDATOR_REQUIRE()]}
           />
-
-          {/* <Text style={styles.label}>Branche*</Text>
-
-            <SelectList 
-                style={[styles.select, styles.select.placeholderText]}
-                search={false} 
-                setSelected={(val) => setSelected(val)} 
-                data={data} 
-                save="value"
-                placeholder='Offen'
-            /> */}
-
 
           <Input
             id='firmWebsite'
@@ -166,14 +154,14 @@ const UpdateProfile = (props) => {
             fieldName='website'
             placeholder="Webseite"
             errorText='Type a website'
-            value={fetchedData.website.value}
+            value={fetchedData.inputs.website.value}
             validators={[VALIDATOR_REQUIRE()]}
           />
 
           <View style={styles.btnContainer}>
             <Button
-              style={fetchedData.isFormValid ? [styles.createBtn, styles.button] : styles.invalideButton}
-              // disabled={!fetchedData.isFormValid}
+              style={!fetchedData.isFormValid ? styles.invalideButton : [styles.createBtn, styles.button]}
+              disabled={!fetchedData.isFormValid}
               buttonText={styles.createBtnText}
               onPress={handleSubmit}
               title={'Speichern'}
