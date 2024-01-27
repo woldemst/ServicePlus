@@ -1,24 +1,25 @@
 import { View, Text, StyleSheet, Image, TouchableOpacity, ScrollView } from "react-native"
-import { useEffect, useState } from "react"
+import { useContext, useEffect, useState } from "react"
 // import { useNavigation } from '@react-navigation/native'
-import axios from "axios"
-import WorkerItem from "./WokerItem"
 import { useDispatch, useSelector } from "react-redux"
 import { useNavigation } from "@react-navigation/native"
+import axios from "axios"
+
+import { AuthContext } from "../../context/auth-context"
+import WorkerItem from "./WokerItem"
 
 const WorkerList = () => {
-    const [fetchedData, setFetchedData] = useState([])
+    const auth = useContext(AuthContext)
+    const navigation = useNavigation()
     const dispatch = useDispatch()
-    // console.log(fetchedData);
+    const [fetchedData, setFetchedData] = useState([])
     const [refresh, setRefresh] = useState(false)
     const handleRefresh = () => setRefresh(prevData => !prevData);
-    const navigation = useNavigation()
-
 
     useEffect(()=> {
         const fetchWorkers = async () => {
             try {
-                const response = await axios.get('http://localhost:8000/api/workers/all')
+                const response = await axios.get(`http://localhost:8000/api/workers/${auth.firmId}/all`)
                 setFetchedData(response.data)
             } catch (err) {
                 console.log('Error fetching customers', err);

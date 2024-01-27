@@ -90,36 +90,38 @@ const updateWorkerById = async (req, res, next) => {
 
 const createWorker = async (req, res, next) => {
     const {
+        firmId,
         name, 
         email, 
-        workerNr,
         street, 
         houseNr, 
         zip, 
         place, 
         phone, 
-        mobilePhone, 
-        description 
+        description,
+        // workerNr,
+        // mobilePhone, 
     } = req.body
 
     const createWorker = new Worker({
+        firmId: firmId,
         name: name, 
         email: email, 
-        workerNr: workerNr,
         street: street, 
         houseNr: houseNr, 
         zip: zip, 
         place: place, 
         phone: phone, 
-        mobilePhone: mobilePhone, 
-        description: description
+        description: description,
+        // workerNr: workerNr,
+        // mobilePhone: mobilePhone, 
     })
     
     try {
         await createWorker.save()
     } catch (err) {
         const error = new HttpError(
-        "Something went wrong, could not update profile.",
+        "Something went wrong, could not create profile.",
         500
         );
         return next(error);
@@ -130,7 +132,40 @@ const createWorker = async (req, res, next) => {
     .json({ worker: createWorker.toObject({ getters: true }) });
 }
 
+const getWorkersByFirmId = async (req, res, next) => {
+    const userId = req.params.uid;  
+
+    // let workers;
+    let userWithWorkers;
+    try {
+      userWithWorkers = await User.findById(userId).populate('workers');
+    } catch (err) {
+      const error = new HttpError(
+        'Fetching workers failed, please try again later.',
+        500
+      );
+      return next(error);
+    }
+  
+    // if (!workers || workers.length === 0) {
+    if (!userWithWorkers || userWithWorkers.workers.length === 0) {
+      return next(
+        new HttpError('Could not find workers for the provided firm id.', 404)
+      );
+    }
+  
+    res.json({
+      workers: userWithWorkers.workers.map(worker =>
+        worker.toObject({ getters: true })
+      )
+    });
+
+}
+
+
+
 exports.getAllWorkers = getAllWorkers;
 exports.getWorkerById = getWorkerById;
 exports.updateWorkerById = updateWorkerById;
 exports.createWorker = createWorker;
+exports.getWorkersByFirmId = getWorkersByFirmId;

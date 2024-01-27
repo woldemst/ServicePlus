@@ -1,4 +1,5 @@
-import { UPDATE_WORKER_DATA, GET_WORKER_DATA, UPDATE_AND_VALIDATE_WORDER_FIELD, CLEAR_WORKER_FIELD } from '../actions/workerActions'
+import { UPDATE_AND_VALIDATE_DATA_FIELD } from "../actions/userActions";
+import { UPDATE_AND_VALIDATE_REGISTER_FIRM_FIELD } from "../actions/dataActions";
 import { validate } from '../util/validators';
 
 
@@ -32,7 +33,7 @@ const initialState = {
       value: "",
       isValid: false,
     },
-    description: {
+    website: {
       value: "",
       isValid: false,
     },
@@ -40,10 +41,9 @@ const initialState = {
   isFormValid: false,
 };
 
-const workerReducer = (state = initialState, action) => {
+const firmReducer = (state = initialState, action) => {
   switch (action.type) {
-
-    case UPDATE_AND_VALIDATE_WORDER_FIELD:
+    case UPDATE_AND_VALIDATE_REGISTER_FIRM_FIELD:
       const { fieldName, value, validators } = action.payload;
 
       const updatedField = {
@@ -65,59 +65,65 @@ const workerReducer = (state = initialState, action) => {
         inputs: updatedInputs,
         isFormValid,
       };
-      
-    case UPDATE_WORKER_DATA:
+    case UPDATE_FIRM_DATA:
       return {
         ...state,
-        workerData: action.payload,
+        ...action.payload,
       };
-    case GET_WORKER_DATA:
-      return {
-        ...state,
-        workerData: action.payload,
-      };
-    case CLEAR_WORKER_FIELD:
-      return  {
-        ...state,
+
+    case GET_FIRM_DATA:
+      const receivedFirmData = action.payload;
+
+      const updatedFirmData = {
         inputs: {
+          ownerName: {
+            value: receivedFirmData.ownerName,
+            isValid: true,
+          },
           name: {
-            value: "",
-            isValid: false,
+            value: receivedFirmData.name,
+            isValid: true,
           },
           email: {
-            value: "",
-            isValid: false,
+            value: receivedFirmData.email,
+            isValid: true,
           },
           street: {
-            value: "",
-            isValid: false,
+            value: receivedFirmData.street,
+            isValid: true,
           },
           houseNr: {
-            value: "",
-            isValid: false,
+            value: receivedFirmData.houseNr,
+            isValid: true,
           },
           zip: {
-            value: "",
-            isValid: false,
+            value: receivedFirmData.zip,
+            isValid: true,
           },
           place: {
-            value: "",
-            isValid: false,
+            value: receivedFirmData.place,
+            isValid: true,
           },
           phone: {
-            value: "",
-            isValid: false,
+            value: receivedFirmData.phone,
+            isValid: true,
           },
-          description: {
-            value: "",
-            isValid: false,
+          website: {
+            value: receivedFirmData.website,
+            isValid: true,
           },
         },
-        isFormValid: false,
+        isFormValid: true
+      };
+
+
+      return {
+        ...state,
+        ...updatedFirmData
       };
     default:
       return state;
   }
 };
 
-export default workerReducer;
+export default firmReducer;

@@ -9,11 +9,10 @@ const workerSchema = new mongoose.Schema({
   zip: { type: String, required: true },
   place: { type: String, required: true },
   phone: { type: String, required: false },
-  mobilePhone: { type: String, required: false },
   description: { type: String, required: false },
   // orders: { type: Array, required: false },
 
-  // creator: { type: mongoose.Types.ObjectId, required: true, ref: 'Customer'}, //ref: establish connection between two schemas
+  firmId: { type: mongoose.Types.ObjectId, ref: 'Firm'}, //ref: establish connection between two schemas
   
 });
 
