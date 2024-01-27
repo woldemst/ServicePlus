@@ -12,7 +12,7 @@ const WorkerItem = (props) => {
     const toggleModal = () => {
         setModalVisible(!isModalVisible)
     }
-
+  
 
     return (
         <>

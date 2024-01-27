@@ -1,139 +1,160 @@
 import {
-    View,
-    Text,
-    TextInput,
-    TouchableOpacity,
-    StyleSheet,
-    ScrollView,
-  } from "react-native";
-  import { useEffect, useState } from "react";
-  import {
-    getCustomerData
-  } from "../../actions/customerActions";
-  import axios from "axios";
-  import { useNavigation } from "@react-navigation/native";
+  View,
+  Text,
+  StyleSheet,
+  ScrollView,
+} from "react-native";
+import { useContext, useState } from "react";
+import axios from "axios";
+import { useNavigation } from "@react-navigation/native";
+import { useSelector, useDispatch } from "react-redux";
 
-  
+
+import { VALIDATOR_REQUIRE } from "../../util/validators";
+import { AuthContext } from "../../context/auth-context";
+import Input from "../../shared/UIElements/Input";
+import Button from "../../shared/UIElements/Button";
+import { clearWorkerField } from "../../actions/workerActions";
+
 
 const WorkerCreate = (props) => {
-
+  const auth = useContext(AuthContext)
   const navigation = useNavigation()
-  const [formData, setFormData] =  useState({
-      name: '',
-      email: '', 
-      street: '',
-      houseNr: '',
-      zip: '',
-      place: '',
-      phone: '',
-      website: ''
-  })
-
-  const handleChange = (field, value) => {
-  setFormData((prevData) => ({
-      ...prevData,
-      [field]: value,
-      }));
-  };
-
+  const fetchedData = useSelector(state => state.worker)
+  const dispatch = useDispatch()
 
   const handleSubmit = async () => {
     try {
-        const URL = 'http://localhost:8000/api/workers/new'
-        const response = await axios.post(URL, {
-          ...formData
-        })
-        // console.log(response.data);
-        alert("Wworker created successfully!");
-        props.route.params.handleRefresh();
-        navigation.goBack()
+      const URL = `http://localhost:8000/api/workers/${auth.firmId}/new`
+      const response = await axios.post(URL, {
+        firmId: auth.firmId,
+        name: fetchedData.inputs.name.value,
+        email: fetchedData.inputs.email.value,
+        street: fetchedData.inputs.street.value,
+        houseNr: fetchedData.inputs.houseNr.value,
+        zip: fetchedData.inputs.zip.value,
+        place: fetchedData.inputs.place.value,
+        phone: fetchedData.inputs.phone.value,
+        description: fetchedData.inputs.description.value,
+      })
+
+
+      // console.log(response.data);
+      alert("Worker created successfully!");
+      props.route.params.handleRefresh();
+      navigation.goBack()
+      dispatch(clearWorkerField())
     } catch (err) {
-        console.log("Error if creating a mew worker", err);
-        
+      console.log("Error if creating a mew worker", err);
+
     }
   }
-    return <>
-  <View style={styles.container}>
-          <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
-            <TextInput
-              style={[styles.input, styles.input.placeholderText]}
-              placeholder="Name"
-              onChangeText={(text) => handleChange("name", text)}
-              value={formData.name}
+  return <>
+    <View style={styles.container}>
+      <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
+        <Input
+          id='workerName'
+          fetchedData='worker'
+          fieldName='name'
+          placeholder="Name des Mitarabeiters"
+          errorText='Geben Sie einen Namen für den Mitarbeiter ein'
+          value={fetchedData.inputs.name.value}
+          validators={[VALIDATOR_REQUIRE()]}
+        />
+        <Input
+          id='workerEmail'
+          fetchedData='worker'
+          fieldName='email'
+          placeholder="E-Mail des Mitarabeiters"
+          errorText='Geben Sie ein E-Mail des Mitarbeiters ein'
+          value={fetchedData.inputs.email.value}
+          validators={[VALIDATOR_REQUIRE()]}
+        />
+
+        <View style={styles.streetContainer}>
+          <View style={styles.streetWrapper}>
+            <Input
+              id='workerStreet'
+              fetchedData='worker'
+              fieldName='street'
+              placeholder="Straße des Mitarabeiters"
+              errorText='Geben Sie die Straße des Mitarbeiters ein'
+              value={fetchedData.inputs.street.value}
+              validators={[VALIDATOR_REQUIRE()]}
             />
+          </View>
 
-            <TextInput
-              style={[styles.input, styles.input.placeholderText]}
-              placeholder="Email"
-              onChangeText={(text) => handleChange("email", text)}
-              value={formData.email}
+          <View style={styles.nrWrapper}>
+            <Input
+              id='workerHouseNr'
+              fetchedData='worker'
+              fieldName='houseNr'
+              placeholder="Nr."
+              errorText='Hausnummer'
+              value={fetchedData.inputs.houseNr.value}
+              validators={[VALIDATOR_REQUIRE()]}
             />
-
-            <View style={styles.streetContainer}>
-              <View style={styles.streetWrapper}>
-                <TextInput
-                  style={[styles.input, styles.input.placeholderText]}
-                  placeholder="Straße"
-                  onChangeText={(text) => handleChange("street", text)}
-                  value={formData.street}
-                />
-              </View>
-
-              <View style={styles.nrWrapper}>
-                <TextInput
-                  style={[styles.input, styles.input.placeholderText]}
-                  placeholder="Nr."
-                  onChangeText={(text) => handleChange("houseNr", text)}
-                  value={formData.houseNr}
-                />
-              </View>
-            </View>
-
-            <View style={styles.zipContainer}>
-              <View style={styles.zipWrapper}>
-                <TextInput
-                  style={[styles.input, styles.input.placeholderText]}
-                  placeholder="PLZ"
-                  onChangeText={(text) => handleChange("zip", text)}
-                  value={formData.zip}
-                />
-              </View>
-
-              <View style={styles.placeWrapper}>
-                <TextInput
-                  style={[styles.input, styles.input.placeholderText]}
-                  placeholder="Ort"
-                  onChangeText={(text) => handleChange("place", text)}
-                  value={formData.place}
-                />
-              </View>
-            </View>
-
-            <TextInput
-              style={[styles.input, styles.input.placeholderText]}
-              placeholder="Telefon"
-              onChangeText={(text) => handleChange("phone", text)}
-              value={formData.phone}
-            />
-
-            <TextInput
-              style={[styles.input, styles.input.placeholderText]}
-              placeholder="Webseite"
-              onChangeText={(text) => handleChange("website", text)}
-              value={formData.website}
-            />
-
-            <View style={styles.btnContainer}>
-              <TouchableOpacity
-                style={[styles.createBtn, styles.button]}
-                onPress={handleSubmit}
-              >
-                <Text style={styles.createBtnText}>Anlegen</Text>
-              </TouchableOpacity>
-            </View>
-          </ScrollView>
+          </View>
         </View>
-    </>
+
+        <View style={styles.zipContainer}>
+          <View style={styles.zipWrapper}>
+            <Input
+              id='workerZip'
+              fetchedData='worker'
+              fieldName='zip'
+              placeholder="PLZ"
+              errorText='Geben Sie PLZ des Mitarbeiters ein'
+              value={fetchedData.inputs.zip.value}
+              validators={[VALIDATOR_REQUIRE()]}
+            />
+          </View>
+
+          <View style={styles.placeWrapper}>
+            <Input
+              id='workerPlace'
+              fetchedData='worker'
+              fieldName='place'
+              placeholder="Ort"
+              errorText='Geben Sie den Ort des Mitarbeiters ein'
+              value={fetchedData.inputs.place.value}
+              validators={[VALIDATOR_REQUIRE()]}
+            />
+          </View>
+        </View>
+
+        <Input
+          id='workerPhone'
+          fetchedData='worker'
+          fieldName='phone'
+          placeholder="Mobilenummer"
+          errorText='Geben Sie die Telefonnummer des Mitarbeiters ein'
+          value={fetchedData.inputs.phone.value}
+          validators={[VALIDATOR_REQUIRE()]}
+        />
+
+        <Input
+          id='workerDescr'
+          fetchedData='worker'
+          fieldName='description'
+          placeholder="Beschreibung"
+          errorText='Geben Sie die Beschreibung des Mitarbeiters ein'
+          value={fetchedData.inputs.description.value}
+          validators={[VALIDATOR_REQUIRE()]}
+        />
+
+        <View style={styles.btnContainer}>
+          <Button
+            style={fetchedData.isFormValid ? [styles.createBtn, styles.button] : styles.invalideButton}
+            disabled={!fetchedData.isFormValid}
+            buttonText={styles.createBtnText}
+            onPress={handleSubmit}
+            title={'Anlegen'}
+          />
+        </View>
+      </ScrollView>
+    </View>
+  </>
 }
 
 
@@ -237,5 +258,15 @@ const styles = StyleSheet.create({
     color: "#fff",
     fontWeight: "700",
   },
+  invalideButton: {
+    height: 53,
+    width: '100%',
+    backgroundColor: 'gray',
+    borderRadius: 5,
+    justifyContent: 'center',
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: 'center'
+},
 });
 export default WorkerCreate;
