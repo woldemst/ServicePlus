@@ -7,22 +7,27 @@ import axios from "axios"
 
 import { AuthContext } from "../../context/auth-context"
 import WorkerItem from "./WokerItem"
+import { getWorkerData } from "../../actions/workerActions"
 
 const WorkerList = () => {
     const auth = useContext(AuthContext)
     const navigation = useNavigation()
     const dispatch = useDispatch()
-    const [fetchedData, setFetchedData] = useState([])
-    const [refresh, setRefresh] = useState(false)
+
+    const fetchedData = useSelector(state => state.worker.workersArray.workers)
+    const fetchedDataArray = Object.values(fetchedData);
     const handleRefresh = () => setRefresh(prevData => !prevData);
+    const [refresh, setRefresh] = useState(false)
+
 
     useEffect(()=> {
         const fetchWorkers = async () => {
             try {
                 const response = await axios.get(`http://localhost:8000/api/workers/${auth.firmId}/all`)
-                setFetchedData(response.data)
+
+                dispatch(getWorkerData(response.data))
             } catch (err) {
-                console.log('Error fetching customers', err);
+                console.log('Error fetching workers', err);
             }
         }
         fetchWorkers()
@@ -55,29 +60,23 @@ const WorkerList = () => {
                     </View>
                 </View>
 
-                <View style={styles.customerList}>
-                    {fetchedData.map(customer => (
+                <View style={styles.workerList}>
+                    {fetchedDataArray.map(worker => (
                         <WorkerItem 
-                            id={customer._id} 
-                            key={customer._id} 
-                            name={customer.name}
-                            customerNr={customer.customerNr}
-                            // email={customer.email}
-                            // worker={customer.worker}
-                            // contact={customer.contact}
-                            organisation
-                            // phone={customer.phone}
-                            // contact={customer.contact}
-                            // worker
+                            id={worker._id} 
+                            key={worker._id} 
+                            workerNr={worker._id}
+                            name={worker.name}
+                            email={worker.email}
+                            phone={worker.phone}
+                            description={worker.description}
                             // nextAppointment
-                            // description={contact.description}
-                            // website={customer.website}
 
                             //address
-                            street={customer.street}
-                            houseNr={customer.houseNr}
-                            zip={customer.zip}
-                            place={customer.place}
+                            street={worker.street}
+                            houseNr={worker.houseNr}
+                            zip={worker.zip}
+                            place={worker.place}
 
                             // functions
                             handleRefresh={handleRefresh}
@@ -129,20 +128,20 @@ const styles = StyleSheet.create({
     textContainer: {
 
     },
-    customerList: {
+    workerList: {
         paddingTop: 32,
         paddingBottom: 32, 
         paddingLeft: 16, 
         paddingRight: 16
     },
-    customerContainer: {
+    workerContainer: {
         flexDirection: 'row',
         justifyContent: 'space-between',
 
         // borderColor: 'red',
         // borderWidth: 2
     },
-    customerContent: {
+    workerContent: {
         justifyContent: 'space-between',
         flexDirection: 'row'
     },
@@ -159,7 +158,7 @@ const styles = StyleSheet.create({
         paddingTop: 9,
         paddingBottom: 9,
     },
-    customerName: {
+    workerName: {
         fontSize: 16,
         fontWeight: '700'
     },
