@@ -1,16 +1,31 @@
 const HttpError = require("../models/http-error")
 const Worker = require('../models/Worker')
+const Firm = require('../models/Firm')
 
-const getAllWorkers = async (req, res, next) => {
+const getAllWorkersByFirmId = async (req, res, next) => {
+    const firmId = req.params.firmId
+
     try {
-        const workers = await Worker.find()
-        res.json(workers)
-    } catch (err) {
+
+      const workers = await Worker.find({ firmId: firmId });
+
+      if (!workers || workers.length === 0) {
         const error = new HttpError(
-            "Fetch the workers failed, please try again later.",
-            500
-        )
-        next(error)
+            'Could not find workers for the provided firm id.',
+            404
+          );
+          return next(error);
+      }
+
+      res.json({
+        workers: workers.map(worker => worker.toObject({ getters: true })),
+    });
+    } catch (err) {
+      const error = new HttpError(
+        'Fetching workers failed, please try again later.',
+        500
+      );
+      return next(error);
     }
 }
 
@@ -133,12 +148,30 @@ const createWorker = async (req, res, next) => {
 }
 
 const getWorkersByFirmId = async (req, res, next) => {
-    const userId = req.params.uid;  
+    const firmId = req.params.firmId
+    const workerId = req.params.workerId
 
-    // let workers;
-    let userWithWorkers;
+
     try {
-      userWithWorkers = await User.findById(userId).populate('workers');
+      const firm = await Firm.findById(firmId);
+
+      if (!firm) {
+          return next(new HttpError('Could not find firm for the provided ID.', 404));
+      }
+
+      const workers = await Worker.find({ firmId: firmId });
+
+      if (!workers || workers.length === 0) {
+        const error = new HttpError(
+            'Could not find workers for the provided firm id.',
+            404
+          );
+          return next(error);
+      }
+
+      res.json({
+        workers: workers.map(worker => worker.toObject({ getters: true })),
+    });
     } catch (err) {
       const error = new HttpError(
         'Fetching workers failed, please try again later.',
@@ -146,25 +179,14 @@ const getWorkersByFirmId = async (req, res, next) => {
       );
       return next(error);
     }
-  
-    // if (!workers || workers.length === 0) {
-    if (!userWithWorkers || userWithWorkers.workers.length === 0) {
-      return next(
-        new HttpError('Could not find workers for the provided firm id.', 404)
-      );
-    }
-  
-    res.json({
-      workers: userWithWorkers.workers.map(worker =>
-        worker.toObject({ getters: true })
-      )
-    });
 
+    console.log('firm with Workers',firmWithWorkers);
+  
 }
 
 
 
-exports.getAllWorkers = getAllWorkers;
+exports.getAllWorkersByFirmId = getAllWorkersByFirmId;
 exports.getWorkerById = getWorkerById;
 exports.updateWorkerById = updateWorkerById;
 exports.createWorker = createWorker;

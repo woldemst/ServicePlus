@@ -3,6 +3,7 @@ import { validate } from '../util/validators';
 
 
 const initialState = {
+  workersArray: {},
   inputs: {
     name: {
       value: "",
@@ -74,7 +75,7 @@ const workerReducer = (state = initialState, action) => {
     case GET_WORKER_DATA:
       return {
         ...state,
-        workerData: action.payload,
+        workersArray: action.payload,
       };
     case CLEAR_WORKER_FIELD:
       return  {

@@ -13,14 +13,14 @@ const WorkerItem = (props) => {
         setModalVisible(!isModalVisible)
     }
   
-
+    // console.log(props);
     return (
         <>
             <TouchableOpacity
-                style={styles.customerContainer}
+                style={styles.workerContainer}
                 onPress={toggleModal}
             >
-                <View style={styles.customerContent}>
+                <View style={styles.workerContent}>
                     <View style={styles.circleWrapper}>
                         <Image style={styles.img} source={require('../../../assets/circle.png')} />
                     </View>
@@ -31,8 +31,8 @@ const WorkerItem = (props) => {
                     </View>
                     <View style={styles.nameContainer} >
                         <View key={props._id}>
-                            <Text style={styles.customerName}>{props.name}</Text>
-                            <Text style={styles.bossName}>{props.customerNr}</Text>
+                            <Text style={styles.workerName}>{props.name}</Text>
+                            <Text style={styles.bossName}>{props.workerNr}</Text>
                         </View>
                     </View>
                 </View>
@@ -51,32 +51,22 @@ const WorkerItem = (props) => {
                 header={<Text style={styles.modalHeadline}>Kundeniformtaion</Text>}
             >
                 <WorkerDetails
-                    // functions
-                    toggle={toggleModal}
-                    handleRefresh={props.handleRefresh}
                     id={props.id}
                     key={props.id}
+                    workerNr={props.workerNr}
                     name={props.name}
                     email={props.email}
-                // customer={props.customer}
-                // address={props.address}
-                // creator={props.creator}
-                // worker={props.worker}
-                // contact={props.contact}
-                // description={props.description}
-                // website={props.website}
-                // phone={props.phone}
-
-                // address 
-                // street={props.street}
-                // houseNr={props.houseNr}
-                // zip={props.zip}
-                // place={props.place}
-
-
+                    phone={props.phonbe}
+                    description={props.description}
+                    handleRefresh={props.handleRefresh}
+                    
+                    street={props.street}
+                    houseNr={props.houseNr}
+                    zip={props.zip}
+                    place={props.place}
+                    
+                    toggle={toggleModal}
                 />
-
-
             </ModalComponent>
 
         </>
@@ -93,20 +83,20 @@ const styles = StyleSheet.create({
     textContainer: {
 
     },
-    customerList: {
+    workerList: {
         paddingTop: 32,
         paddingBottom: 32,
         paddingLeft: 16,
         paddingRight: 16
     },
-    customerContainer: {
+    workerContainer: {
         flexDirection: 'row',
         justifyContent: 'space-between',
         marginBottom: 12
         // borderColor: 'red',
         // borderWidth: 2
     },
-    customerContent: {
+    workerContent: {
         justifyContent: 'space-between',
         flexDirection: 'row'
     },
@@ -123,7 +113,7 @@ const styles = StyleSheet.create({
         paddingTop: 9,
         paddingBottom: 9,
     },
-    customerName: {
+    workerName: {
         fontSize: 16,
         fontWeight: '700'
     },

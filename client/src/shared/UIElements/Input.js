@@ -3,9 +3,10 @@ import { useDispatch, useSelector } from "react-redux";
 import { validate } from "../../util/validators";
 import { useState } from "react";
 
-import { updateAndValidateRegisterField, updateRegisterField } from "../../actions/registerActions";
-import { updateAndValidateLoginField, updateLoginField } from "../../actions/loginActions";
-import { updateAndValidateRegisterFirmField, updateRegisterFirmField } from "../../actions/firmActions";
+import { updateAndValidateRegisterField } from "../../actions/registerActions";
+import { updateAndValidateLoginField } from "../../actions/loginActions";
+import { updateAndValidateRegisterFirmField } from "../../actions/firmActions";
+import { updateAndValidateWorker } from "../../actions/workerActions";
 
 const Input = props => {
     const dispatch = useDispatch()
@@ -37,7 +38,7 @@ const Input = props => {
     }
 
 
-
+    // console.log(fetchedData);
     const handleChange = (val) => {
         switch (props.fetchedData) {
             case 'register':
@@ -50,6 +51,7 @@ const Input = props => {
                 dispatch(updateAndValidateRegisterFirmField(props.fieldName, val, props.validators))
                 break
             case 'worker':
+                dispatch(updateAndValidateWorker(props.fieldName, val, props.validators))
 
                 break
             case 'client':
@@ -76,9 +78,9 @@ const Input = props => {
             placeholder={props.placeholder}
             style={!fetchedData.inputs[props.fieldName].isValid ? styles.inputInvalid : styles.input}
             onChangeText={(text) => handleChange(text)}
-            onFocus={() => setTouched(true)}
             autoCapitalize="none"
-        // onBlur={onBlurHandler}
+            // onFocus={() => setTouched(true)}
+            // onBlur={onBlurHandler}
 
         />
 
