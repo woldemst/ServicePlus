@@ -4,11 +4,12 @@ const router = express.Router()
 
 const workerController = require('../controllers/worker-controller')
 
-router.get('/:firmId/all', workerController.getAllWorkers)
-router.get('/:workerId', workerController.getWorkerById)
-router.patch('/:workerId', workerController.updateWorkerById)
+router.get('/:firmId/all', workerController.getAllWorkersByFirmId)
+router.get('/:firmId/:workerId', workerController.getWorkerById)
+router.patch('/:firmId/update/:workerId', workerController.updateWorkerById)
 router.post('/:firmId/new', workerController.createWorker)
-router.get('/:firmId/:userId', workerController.getWorkersByFirmId)
+router.get('/:firmId/:workerId', workerController.getWorkersByFirmId)
 
 module.exports = router;
 
+    
