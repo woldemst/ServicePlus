@@ -62,12 +62,12 @@ const firmReducer = (state = initialState, action) => {
 
       let isFormValid = Object.values(updatedInputs).every((field) => field.isValid);
 
-
       return {
         ...state,
         inputs: updatedInputs,
         isFormValid,
       };
+      
     case UPDATE_FIRM_DATA:
       return {
         ...state,

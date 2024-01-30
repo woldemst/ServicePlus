@@ -1,68 +1,33 @@
 import { TextInput, StyleSheet, Text } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import { validate } from "../../util/validators";
-import { useState } from "react";
+import { useState, useReducer } from "react";
+import dataReducer from "../../reducer/dataReducer";
 
 import { updateAndValidateRegisterField } from "../../actions/registerActions";
 import { updateAndValidateLoginField } from "../../actions/loginActions";
 import { updateAndValidateRegisterFirmField } from "../../actions/firmActions";
 import { updateAndValidateWorker } from "../../actions/workerActions";
+import { updateAndValidateDataField } from "../../actions/dataActions";
+
+
 
 const Input = props => {
+
     const dispatch = useDispatch()
     const [touched, setTouched] = useState(false)
-    const isValid = validate(props.value, props.validators)
-
-    let fetchedData
-    switch (props.fetchedData) {
-        case 'user':
-            fetchedData = useSelector(state => state.user)
-            break
-        case 'register':
-            fetchedData = useSelector(state => state.register)
-            break
-        case 'login':
-            fetchedData = useSelector(state => state.login)
-            break
-        case 'firm':
-            fetchedData = useSelector(state => state.firm)
-            break
-        case 'worker':
-            fetchedData = useSelector(state => state.worker)
-            break
-        case 'client':
-            fetchedData = useSelector(state => state.client)
-            break
-        default:
-            break;
-    }
+    // const isValid = validate(props.value, props.validators)
 
 
-    // console.log(fetchedData);
+    const fetchedData = useSelector((state) => state[props.fetchedData]);
+    // const fetchedData = useSelector((state) => state.dataReducer);
+    // const isValid = fetchedData.inputs[props.fieldName]?.isValid || true;
+    const isValid = fetchedData.inputs[props.fieldName] ? fetchedData.inputs[props.fieldName].isValid : false;
+
+
     const handleChange = (val) => {
-        switch (props.fetchedData) {
-            case 'register':
-                dispatch(updateAndValidateRegisterField(props.fieldName, val, props.validators))
-                break
-            case 'login':
-                dispatch(updateAndValidateLoginField(props.fieldName, val, props.validators))
-                break
-            case 'firm':
-                dispatch(updateAndValidateRegisterFirmField(props.fieldName, val, props.validators))
-                break
-            case 'worker':
-                dispatch(updateAndValidateWorker(props.fieldName, val, props.validators))
-
-                break
-            case 'client':
-
-                break
-            default:
-                break;
-        }
-
-    }
-
+        dispatch(updateAndValidateDataField(props.fieldName, val, props.validators));
+    };
 
     // const onBlurHandler = () => {
 
@@ -76,7 +41,7 @@ const Input = props => {
             id={props.id}
             value={props.value}
             placeholder={props.placeholder}
-            style={!fetchedData.inputs[props.fieldName].isValid ? styles.inputInvalid : styles.input}
+            style={!fetchedData.inputs[props.fieldName]?.isValid ? styles.inputInvalid : styles.input}
             onChangeText={(text) => handleChange(text)}
             autoCapitalize="none"
             // onFocus={() => setTouched(true)}
@@ -84,7 +49,7 @@ const Input = props => {
 
         />
 
-        {!fetchedData.inputs[props.fieldName].isValid && <Text style={styles.errorText}>{props.errorText}</Text>}
+        {!fetchedData.inputs[props.fieldName]?.isValid && <Text style={styles.errorText}>{props.errorText}</Text>}
     </>
 }
 const styles = StyleSheet.create({

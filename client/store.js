@@ -5,6 +5,7 @@ import userReducer from './src/reducer/userReducer'
 import registerReducer from './src/reducer/registerReducer';
 import loginReducer from './src/reducer/loginReducer';
 import workerReducer from './src/reducer/workerReducer';
+import dataReducer from './src/reducer/dataReducer';
 
 const store = configureStore({
   reducer: {
@@ -14,6 +15,7 @@ const store = configureStore({
     firm: firmReducer,
     worker: workerReducer,
     customer: customerReducer,
+    data: dataReducer
     // Add more reducers if needed
   },
 });
