@@ -16,7 +16,7 @@ const Login = () => {
     const dispatch = useDispatch()
 
     const [isLoginMode, setIsLoginMode] = useState(true)
-    const fetchedData = useSelector(state => state.login)
+    const fetchedData = useSelector(state => state.data)
     // console.log(fetchedData);
 
     const handleSignIn = async () => {
@@ -51,21 +51,21 @@ const Login = () => {
 
             <Input
                 id='email'
-                fetchedData='login'
+                fetchedData='data'
                 fieldName='email'
                 placeholder="Email"
                 errorText='Choose another email'
-                value={fetchedData.inputs.email.value}
+                value={fetchedData.email?.value}
                 validators={[VALIDATOR_EMAIL()]}
             />
 
             <Input
                 id='password'
-                fetchedData='login'
+                fetchedData='data'
                 fieldName='password'
                 placeholder='Password'
                 errorText='Type a password'
-                value={fetchedData.inputs.password.value}
+                value={fetchedData.password?.value}
                 validators={[VALIDATOR_MINLENGTH(6)]}
             />
 
