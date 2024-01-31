@@ -1,4 +1,4 @@
-export const UPDATE_AND_VALIDATE_REGISTER_FIRM_FIELD = 'UPDATE_AND_VALIDATE_REGISTER_FIRM_FIELD'
+export const UPDATE_AND_VALIDATE_FIELD = 'UPDATE_AND_VALIDATE_FIELD'
 export const UPDATE_REGISTER_FIRM_FIELD = 'UPDATE_REGISTER_FIRM_FIELD'
 export const GET_FIRM_DATA = 'GET_FIRM_DATA'
 export const UPDATE_FIRM_DATA = 'UPDATE_FIRM_DATA';
@@ -8,9 +8,9 @@ export const updateRegisterFirmField = (fieldName, value) => ({
   payload: { fieldName, value }
 })
 
-export const updateAndValidateRegisterFirmField = (fieldName, value, validators) => {
+export const updateAndValidateField = (fieldName, value, validators) => {
   return {
-    type: UPDATE_AND_VALIDATE_REGISTER_FIRM_FIELD,
+    type: UPDATE_AND_VALIDATE_FIELD,
     payload: {
       fieldName,
       value,

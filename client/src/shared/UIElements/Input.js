@@ -1,13 +1,6 @@
 import { TextInput, StyleSheet, Text } from "react-native";
-import { useDispatch, useSelector } from "react-redux";
 import { validate } from "../../util/validators";
 import { useState } from "react";
-
-import { updateAndValidateRegisterField } from "../../actions/registerActions";
-import { updateAndValidateLoginField } from "../../actions/loginActions";
-import { updateAndValidateRegisterFirmField } from "../../actions/firmActions";
-import { updateAndValidateWorker } from "../../actions/workerActions";
-import { updateAndValidateDataField } from "../../actions/dataActions";
 
 const Input = props => {
     const [touched, setTouched] = useState(false)
@@ -25,7 +18,6 @@ const Input = props => {
             id={props.id}
             value={inputValue}
             placeholder={props.placeholder}
-            // style={!fetchedData.inputs[props.fieldName]?.isValid ? styles.inputInvalid : styles.input}
             style={!isValid ? styles.inputInvalid : styles.input}
             onChangeText={(text) => handleChange(text)}
             autoCapitalize="none"

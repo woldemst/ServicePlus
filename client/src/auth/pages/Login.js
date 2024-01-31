@@ -57,7 +57,6 @@ const Login = () => {
 
             <Input
                 id='email'
-                fetchedData='data'
                 fieldName='email'
                 placeholder="Email"
                 errorText='Choose another email'
@@ -68,7 +67,6 @@ const Login = () => {
 
             <Input
                 id='password'
-                fetchedData='data'
                 fieldName='password'
                 placeholder='Password'
                 errorText='Type a password'
