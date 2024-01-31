@@ -7,22 +7,24 @@ import {
   ScrollView,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import { useRoute } from "@react-navigation/native";
-import axios from "axios";
 import { useContext, useState } from "react";
-import { updateFirmData, updateAndValidateRegisterFirmField } from "../../actions/firmActions";
 import { useDispatch, useSelector } from "react-redux";
+import axios from "axios";
+
+import { VALIDATOR_REQUIRE, VALIDATOR_MINLENGTH, VALIDATOR_EMAIL } from "../../util/validators";
+import { updateAndValidateField } from "../../actions/firmActions";
 import { AuthContext } from "../../context/auth-context";
 import Input from "../../shared/UIElements/Input";
-import { VALIDATOR_REQUIRE, VALIDATOR_MINLENGTH, VALIDATOR_EMAIL } from "../../util/validators";
 import Button from "../../shared/UIElements/Button";
 
 const UpdateProfile = (props) => {
   const auth = useContext(AuthContext)
   const navigation = useNavigation();
   const fetchedData = useSelector(state => state.firm)
+  const dispatch = useDispatch()
 
-  // console.log('Stored in updateFirm: ', fetchedData);
+  console.log('Stored in updateFirm: ', fetchedData.inputs);
+
   const handleSubmit = async () => {
     const URL = `http://localhost:8000/api/firm/update/${auth.firmId}`;
 
@@ -47,6 +49,12 @@ const UpdateProfile = (props) => {
     }
   };
 
+
+  const handleInputChange = (fieldName, value, validators) => {
+    dispatch(updateAndValidateField(fieldName, value, validators))
+    
+}
+
   return (
     <>
       <View style={styles.container}>
@@ -54,60 +62,56 @@ const UpdateProfile = (props) => {
 
           <Input
             id='firmName'
-            fetchedData='firm'
             fieldName='name'
             placeholder="Name des Betriebs"
             value={fetchedData.inputs.name.value}
             errorText='Type a name'
             validators={[VALIDATOR_MINLENGTH(6)]}
-
+            onChange={handleInputChange}
           />
 
           <Input
             id='ownerName'
-            fetchedData='firm'
             fieldName='ownerName'
             errorText='Type owner"s name'
             placeholder="Name des Inhabers"
             value={fetchedData.inputs.ownerName.value}
             validators={[VALIDATOR_REQUIRE()]}
-
+            onChange={handleInputChange}
           />
 
           <Input
             id='firmEmail'
-            fetchedData='firm'
             fieldName='email'
             errorText='Type an email'
             placeholder="Name des Betriebs"
             value={fetchedData.inputs.email.value}
             validators={[VALIDATOR_EMAIL()]}
-
+            onChange={handleInputChange}
           />
-
 
           <View style={styles.streetContainer}>
             <View style={styles.streetWrapper}>
               <Input
                 id='firmStreet'
-                fetchedData='firm'
                 fieldName='street'
                 placeholder="Straße"
                 errorText='Type a street'
                 value={fetchedData.inputs.street.value}
                 validators={[VALIDATOR_REQUIRE()]}
+                onChange={handleInputChange}
               />
             </View>
 
             <View style={styles.nrWrapper}>
               <Input
                 id='firmHouseNr'
-                fetchedData='firm'
                 fieldName='houseNr'
                 placeholder="Nr."
                 errorText='Type a house number'
                 value={fetchedData.inputs.houseNr.value}
                 validators={[VALIDATOR_REQUIRE()]}
+                onChange={handleInputChange}
               />
             </View>
           </View>
@@ -116,46 +120,48 @@ const UpdateProfile = (props) => {
             <View style={styles.zipWrapper}>
               <Input
                 id='firmZip'
-                fetchedData='firm'
                 fieldName='zip'
                 placeholder="PLZ"
                 errorText='Type a zip code'
                 value={fetchedData.inputs.zip.value}
                 validators={[VALIDATOR_REQUIRE()]}
+                onChange={handleInputChange}
               />
             </View>
 
             <View style={styles.placeWrapper}>
               <Input
                 id='firmPlace'
-                fetchedData='firm'
                 fieldName='place'
                 placeholder="Ort"
                 errorText='Type a place or city'
                 value={fetchedData.inputs.place.value}
                 validators={[VALIDATOR_REQUIRE()]}
+                onChange={handleInputChange}
               />
             </View>
           </View>
 
           <Input
             id='firmPhone'
-            fetchedData='firm'
             fieldName='phone'
             placeholder="Telefon"
             errorText='Type a telephone number'
             value={fetchedData.inputs.phone.value}
             validators={[VALIDATOR_REQUIRE()]}
+            onChange={handleInputChange}
+
           />
 
           <Input
             id='firmWebsite'
-            fetchedData='firm'
             fieldName='website'
             placeholder="Webseite"
             errorText='Type a website'
             value={fetchedData.inputs.website.value}
             validators={[VALIDATOR_REQUIRE()]}
+            onChange={handleInputChange}
+
           />
 
           <View style={styles.btnContainer}>
