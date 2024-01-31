@@ -23,8 +23,10 @@ const dataReducer = (state = initialState, action) => {
         [fieldName]: updatedField,
       };
 
+      // console.log(updatedInputs);
       let isFormValid = Object.values(updatedInputs).every((field) => field.isValid);
 
+      console.log(updatedInputs);
       return {
         ...state,
         inputs: updatedInputs,

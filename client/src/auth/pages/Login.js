@@ -9,6 +9,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { AuthContext } from "../../context/auth-context";
 import Input from "../../shared/UIElements/Input";
 import Button from "../../shared/UIElements/Button";
+import { updateAndValidateLoginField } from "../../actions/loginActions";
 
 const Login = () => {
     const auth = useContext(AuthContext)
@@ -16,7 +17,8 @@ const Login = () => {
     const dispatch = useDispatch()
 
     const [isLoginMode, setIsLoginMode] = useState(true)
-    const fetchedData = useSelector(state => state.data)
+    const fetchedData = useSelector(state => state.login)
+
     // console.log(fetchedData);
 
     const handleSignIn = async () => {
@@ -27,8 +29,7 @@ const Login = () => {
             password: fetchedData.inputs.password.value,
         })
 
-        dispatch(updateUserData(response.data))
-        // alert('Logged in');
+        console.log('submited',fetchedData);
         auth.login(response.data.userId, response.data.token, response.data.role, response.data.firmId)
         navigation.navigate('overview', { title: 'Overview' })
 
@@ -38,6 +39,11 @@ const Login = () => {
         })
 
         setIsLoginMode(prev => !prev)
+    }
+
+    const handleInputChange = (fieldName, value, validators) => {
+        dispatch(updateAndValidateLoginField(fieldName, value, validators))
+        
     }
 
 
@@ -55,8 +61,9 @@ const Login = () => {
                 fieldName='email'
                 placeholder="Email"
                 errorText='Choose another email'
-                value={fetchedData.email?.value}
+                value={fetchedData.inputs.email.value}
                 validators={[VALIDATOR_EMAIL()]}
+                onChange={handleInputChange}
             />
 
             <Input
@@ -65,18 +72,20 @@ const Login = () => {
                 fieldName='password'
                 placeholder='Password'
                 errorText='Type a password'
-                value={fetchedData.password?.value}
+                value={fetchedData.inputs.password.value}
                 validators={[VALIDATOR_MINLENGTH(6)]}
+                onChange={handleInputChange}
+
             />
 
             <Text style={styles.notice} >Passwort vergessen?</Text>
 
             <Button
                 style={fetchedData.isFormValid ? styles.button : styles.invalideButton}
-                onPress={handleSignIn}
                 disabled={!fetchedData.isFormValid}
-                title={'Sign in'}
+                onPress={handleSignIn}
                 buttonText={styles.buttonText}
+                title={'Sign in'}
 
             />
 
