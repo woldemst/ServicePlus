@@ -7,10 +7,6 @@ export const clearLoginField = (fieldName, value) => ({
   payload: { fieldName, value }
 })
 
-export const touchLoginField = (fieldName) => ({
-  type: TOUCH_LOGIN_FIELD,
-  payload: fieldName
-})
 
 export const updateAndValidateLoginField = (fieldName, value, validators) => {
   return {

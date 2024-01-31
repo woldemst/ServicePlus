@@ -1,4 +1,4 @@
-import { CLEAR_LOGIN_FIELD, UPDATE_AND_VALIDATE_LOGIN_FIELD, TOUCH_LOGIN_FIELD } from '../actions/loginActions'
+import { CLEAR_LOGIN_FIELD, UPDATE_AND_VALIDATE_LOGIN_FIELD } from '../actions/loginActions'
 import { validate } from '../util/validators';
 
 const initialState = {
@@ -37,7 +37,7 @@ const loginReducer = (state = initialState, action) => {
             let isFormValid = Object.values(updatedInputs).every(
                 (field) => field.isValid
             );
-            // console.log(updatedState);
+
 
             return {
                 ...state,
@@ -47,32 +47,6 @@ const loginReducer = (state = initialState, action) => {
 
 
         case CLEAR_LOGIN_FIELD:
-            return {
-                name: {
-                    value: '',
-                    isValid: false,
-                    isTouched: false
-                },
-                email: {
-                    value: '',
-                    isValid: false,
-                    isTouched: false
-
-                },
-                password: {
-                    value: '',
-                    isValid: false,
-                    isTouched: false
-
-                },
-                role: {
-                    value: '',
-                    isValid: false,
-                    isTouched: false
-
-                },
-                isFormValid: false,
-            };
             return {
                 ...state,
                 [action.payload]: {
