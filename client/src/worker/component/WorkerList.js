@@ -1,37 +1,42 @@
-import { View, Text, StyleSheet, Image, TouchableOpacity, ScrollView } from "react-native"
+import { View, Text, StyleSheet, Image, TouchableOpacity, ScrollView, ActivityIndicator } from "react-native"
 import { useContext, useEffect, useState } from "react"
 // import { useNavigation } from '@react-navigation/native'
 import { useDispatch, useSelector } from "react-redux"
 import { useNavigation } from "@react-navigation/native"
 import axios from "axios"
 
+import { getWorkerData, getWorkersArray } from "../../actions/workerActions"
 import { AuthContext } from "../../context/auth-context"
 import WorkerItem from "./WokerItem"
-import { getWorkerData } from "../../actions/workerActions"
 
 const WorkerList = () => {
     const auth = useContext(AuthContext)
     const navigation = useNavigation()
     const dispatch = useDispatch()
+    const [ loading, setLoading] = useState(true)
 
-    const fetchedData = useSelector(state => state.worker.workersArray.workers)
-    const fetchedDataArray = Object.values(fetchedData);
+    const fetchedData = useSelector(state => state.worker.workersArray)
     const handleRefresh = () => setRefresh(prevData => !prevData);
     const [refresh, setRefresh] = useState(false)
-
+    
 
     useEffect(()=> {
         const fetchWorkers = async () => {
             try {
                 const response = await axios.get(`http://localhost:8000/api/workers/${auth.firmId}/all`)
 
-                dispatch(getWorkerData(response.data))
+                dispatch(getWorkerData(response.data))  
+
+                setLoading(false)
             } catch (err) {
                 console.log('Error fetching workers', err);
+                setLoading(false)
             }
         }
         fetchWorkers()
     }, [refresh])
+
+
 
     return <>
         <View style={styles.container}>
@@ -60,29 +65,30 @@ const WorkerList = () => {
                     </View>
                 </View>
 
-                <View style={styles.workerList}>
-                    {fetchedDataArray.map(worker => (
-                        <WorkerItem 
-                            id={worker._id} 
-                            key={worker._id} 
-                            workerNr={worker._id}
-                            name={worker.name}
-                            email={worker.email}
-                            phone={worker.phone}
-                            description={worker.description}
-                            // nextAppointment
-
-                            //address
-                            street={worker.street}
-                            houseNr={worker.houseNr}
-                            zip={worker.zip}
-                            place={worker.place}
-
-                            // functions
-                            handleRefresh={handleRefresh}
-                        />
-                    ))}
-                </View>
+                    <View style={styles.workerList}>
+                        {loading ? (
+                            <ActivityIndicator size="large" color="#0000ff" />
+                        ) : (
+                            fetchedData.workers.map(worker => (
+                                <WorkerItem 
+                                    id={worker._id} 
+                                    key={worker._id} 
+                                    workerNr={worker._id}
+                                    name={worker.name}
+                                    email={worker.email}
+                                    phone={worker.phone}
+                                    description={worker.description}
+                                    // nextAppointment
+                                    street={worker.street}
+                                    houseNr={worker.houseNr}
+                                    zip={worker.zip}
+                                    place={worker.place}
+                                    handleRefresh={handleRefresh}
+                                />
+                            ))
+                            
+                        )}
+                    </View>
             </ScrollView>
         </View>
     </>
