@@ -47,24 +47,21 @@ const WorkerItem = (props) => {
                 animationOut="slideOutDown" // Specify the slide-down animation
                 onBackdropPress={toggleModal}
                 onBackButtonPress={toggleModal}
-
-                header={<Text style={styles.modalHeadline}>Kundeniformtaion</Text>}
+                header={<Text style={styles.modalHeadline}>Miterbeiteriformtaion</Text>}
             >
                 <WorkerDetails
                     id={props.id}
                     key={props.id}
-                    workerNr={props.workerNr}
                     name={props.name}
                     email={props.email}
-                    phone={props.phonbe}
+                    phone={props.phone}
+                    workerNr={props.workerNr}
                     description={props.description}
                     handleRefresh={props.handleRefresh}
-                    
                     street={props.street}
                     houseNr={props.houseNr}
                     zip={props.zip}
                     place={props.place}
-                    
                     toggle={toggleModal}
                 />
             </ModalComponent>
