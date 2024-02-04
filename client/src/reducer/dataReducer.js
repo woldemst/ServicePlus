@@ -1,38 +1,29 @@
 import { validate } from '../util/validators';
-import { UPDATE_AND_VALIDATE_DATA_FIELD } from '../actions/dataActions';
+import { UPDATE_INPUT } from '../actions/dataActions';
 
 const initialState = {
-  inputs: {},
-  isFormValid: false,
+  newInputs: {},
 };
+
+
 
 const dataReducer = (state = initialState, action) => {
   switch (action.type) {
-
-    case UPDATE_AND_VALIDATE_DATA_FIELD:
+    case UPDATE_INPUT:
+      state = action.payload.initialState
+      const newState = {...state}
       const { fieldName, value, validators } = action.payload;
-
-      const updatedField = {
-        ...state.inputs[fieldName],
-        value,
-        isValid: validate(value, validators)
-      };
-
-      const updatedInputs = {
-        ...state.inputs,
-        [fieldName]: updatedField,
-      };
-
-      // console.log(updatedInputs);
-      let isFormValid = Object.values(updatedInputs).every((field) => field.isValid);
-
-      console.log(updatedInputs);
+      console.log('initialState', newState);
       return {
-        ...state,
-        inputs: updatedInputs,
-        isFormValid,
+        ...newState,
+          inputs: {
+            [fieldName]: {
+              value,
+              isValid: validate(value, validators)
+            },
+            isFormValid: Object.values(newState.inputs).every((field) => field.isValid),
+          }
       };
-      
     default:
       return state;
   }

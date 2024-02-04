@@ -1,4 +1,4 @@
-import { CLEAR_LOGIN_FIELD, UPDATE_AND_VALIDATE_LOGIN_FIELD } from '../actions/loginActions'
+import { UPDATE_AND_VALIDATE_LOGIN_FIELD } from '../actions/loginActions'
 import { validate } from '../util/validators';
 
 const initialState = {
@@ -34,9 +34,7 @@ const loginReducer = (state = initialState, action) => {
             };
 
             // Check the overall form validity
-            let isFormValid = Object.values(updatedInputs).every(
-                (field) => field.isValid
-            );
+            let isFormValid = Object.values(updatedInputs).every((field) => field.isValid);
 
 
             return {
@@ -46,14 +44,6 @@ const loginReducer = (state = initialState, action) => {
             };
 
 
-        case CLEAR_LOGIN_FIELD:
-            return {
-                ...state,
-                [action.payload]: {
-                    ...state[action.payload],
-                    isTouched: true,
-                },
-            };
         default:
             return state;
     }
