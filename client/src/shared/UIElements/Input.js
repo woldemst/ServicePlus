@@ -10,7 +10,7 @@ const Input = props => {
     const handleChange = (val) => {
         setInputValue(val)
         setIsValid(validate(val, props.validators))
-        props.onChange(props.fieldName, val, props.validators);
+        props.onChange(props.fieldName, val, props.validators, props.objectId);
     }
 
     return <>
@@ -23,12 +23,12 @@ const Input = props => {
             autoCapitalize="none"
             // onFocus={() => setTouched(true)}
             // onBlur={onBlurHandler}
-
         />
 
         {!isValid && <Text style={styles.errorText}>{props.errorText}</Text>}
     </>
 }
+
 const styles = StyleSheet.create({
     input: {
         width: '100%',
