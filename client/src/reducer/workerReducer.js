@@ -1,23 +1,76 @@
-import { UPDATE_WORKER_DATA, GET_WORKER_DATA, UPDATE_WORKER, UPDATE_AND_VALIDATE_WORKER_FIELD, CLEAR_WORKER_FIELD } from '../actions/workerActions'
+import { CREATE_WORKER, GET_WORKER_DATA, UPDATE_WORKER, CLEAR_WORKER_FIELD, UPDATE_INPUT } from '../actions/workerActions'
 import { validate } from '../util/validators';
-
 
 const initialState = {
   workersArray: {
     workers: []
-  }
+  },
+  inputs: {
+    name: {
+      value: "",
+      isValid: false,
+    },
+    email: {
+      value: "",
+      isValid: false,
+    },
+    street: {
+      value: "",
+      isValid: false,
+    },
+    houseNr: {
+      value: "",
+      isValid: false,
+    },
+    zip: {
+      value: "",
+      isValid: false,
+    },
+    place: {
+      value: "",
+      isValid: false,
+    },
+    phone: {
+      value: "",
+      isValid: false,
+    },
+    description: {
+      value: "",
+      isValid: false,
+    },
+  },
 };
 
 
 const workerReducer = (state = initialState, action) => {
   switch (action.type) {
-
-    case UPDATE_AND_VALIDATE_WORKER_FIELD:
-      const { fieldName, value, objectId} = action.payload;
+    case UPDATE_INPUT:
+        const { fieldName, value, validators } = action.payload;
+  
+        console.log(action.payload);
+        const updatedField = {
+          ...state.inputs[fieldName],
+          value,
+          isValid: validate(value, validators) 
+        };
+        const updatedInputs = {
+          ...state.inputs,
+          [fieldName]: updatedField,
+        };
+  
+        // let isFormValid = Object.values(updatedInputs).every((field) => field.isValid);
+  
+        return {
+          ...state,
+          inputs: updatedInputs,
+          // isFormValid,
+        };
+    case UPDATE_WORKER:
+      const { field, val, objectId } = action.payload;
 
       const updatedWorker = {
         ...state.workersArray.workers.find(worker => worker._id === objectId),
-        [fieldName]: value,
+        [field]: val,
       };
 
       // console.log(updatedWorker);
@@ -35,60 +88,26 @@ const workerReducer = (state = initialState, action) => {
           workers: updatedWorkersArray,
         },
       };
-      
-    case UPDATE_WORKER_DATA:
-      return {
-        ...state,
-        workerData: action.payload,
-      };
+
     case GET_WORKER_DATA:
       return {
         ...state,
         workersArray: action.payload,
       };
-    // case UPDATE_WORKERS_ARRAY:
-    //   const { fiel, val, vaidate } = action.payload;
 
-    //   const newField = {
-    //     ...state[fiel],
-    //     value,
-    //     isValid: validate(value, validators)
-    //   };
-      
-    //   const newInputs = {
-    //     ...state.inputs,
-    //     [fieldName]: newField,
-    //   };
-    //   // console.log(updatedInputs);
-
-    //   let formValid = Object.values(newInputs).every((field) => field.isValid);
-
-    //   return {
-    //     ...state,
-    //     inputs: newInputs,
-    //     formValid,
-    //   };
-    case UPDATE_WORKER: 
-      const updateWorkers = state.workersArray.workers.map(worker => {
-        if (worker._id === action.playload.workerId){
-          return {
-            ...worker, 
-            ...action.playload.updatedData
-          }
-        }
-
-        return worker
-      })
-
-      return{
+    case CREATE_WORKER:
+      const newWorker = action.payload.worker;
+      // console.log(action.payload);
+      return {
         ...state,
         workersArray: {
-          ...state.workersArray, 
-          workers: updateWorkers
-        }
-      }
+          ...state.workersArray,
+          workers: [...state.workersArray.workers, newWorker],
+        },
+      };
+
     case CLEAR_WORKER_FIELD:
-      return  {
+      return {
         ...state,
         inputs: {
           name: {

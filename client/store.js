@@ -15,7 +15,7 @@ const store = configureStore({
     firm: firmReducer,
     worker: workerReducer,
     customer: customerReducer,
-    data: dataReducer
+    // data: dataReducer
     // Add more reducers if needed
   },
 });
