@@ -18,7 +18,7 @@ import { clearWorkerField, createWorker, updateInput } from "../../actions/worke
 const WorkerCreate = (props) => {
   const auth = useContext(AuthContext)
   const navigation = useNavigation()
-  const fetchedData = useSelector(state => state.worker.inputs)
+  const fetchedData = useSelector(state => state.worker)
 
   // console.log(fetchedData);
   const dispatch = useDispatch()
@@ -28,14 +28,14 @@ const WorkerCreate = (props) => {
 
       const response = await axios.post(URL, {
         firmId: auth.firmId,
-        name: fetchedData.name.value,
-        email: fetchedData.email.value,
-        street: fetchedData.street.value,
-        houseNr: fetchedData.houseNr.value,
-        zip: fetchedData.zip.value,
-        place: fetchedData.place.value,
-        phone: fetchedData.phone.value,
-        description: fetchedData.description.value,
+        name: fetchedData.inputs.name.value,
+        email: fetchedData.inputs.email.value,
+        street: fetchedData.inputs.street.value,
+        houseNr: fetchedData.inputs.houseNr.value,
+        zip: fetchedData.inputs.zip.value,
+        place: fetchedData.inputs.place.value,
+        phone: fetchedData.inputs.phone.value,
+        description: fetchedData.inputs.description.value,
       })
 
       dispatch(createWorker(response.data.worker))
@@ -62,7 +62,7 @@ const WorkerCreate = (props) => {
           fieldName='name'
           placeholder="Name des Mitarabeiters"
           errorText='Geben Sie einen Namen für den Mitarbeiter ein'
-          value={fetchedData.name.value}
+          value={fetchedData.inputs.name.value}
           validators={[VALIDATOR_REQUIRE()]}
           onChange={handleInputChange}
         />
@@ -72,7 +72,7 @@ const WorkerCreate = (props) => {
           fieldName='email'
           placeholder="E-Mail des Mitarabeiters"
           errorText='Geben Sie ein E-Mail des Mitarbeiters ein'
-          value={fetchedData.email.value}
+          value={fetchedData.inputs.email.value}
           validators={[VALIDATOR_REQUIRE()]}
           onChange={handleInputChange}
         />
@@ -84,7 +84,7 @@ const WorkerCreate = (props) => {
               fieldName='street'
               placeholder="Straße des Mitarabeiters"
               errorText='Geben Sie die Straße des Mitarbeiters ein'
-              value={fetchedData.street.value}
+              value={fetchedData.inputs.street.value}
               validators={[VALIDATOR_REQUIRE()]}
               onChange={handleInputChange}
             />
@@ -96,7 +96,7 @@ const WorkerCreate = (props) => {
               fieldName='houseNr'
               placeholder="Nr."
               errorText='Hausnummer'
-              value={fetchedData.houseNr.value}
+              value={fetchedData.inputs.houseNr.value}
               validators={[VALIDATOR_REQUIRE()]}
               onChange={handleInputChange}
             />
@@ -110,7 +110,7 @@ const WorkerCreate = (props) => {
               fieldName='zip'
               placeholder="PLZ"
               errorText='Geben Sie PLZ des Mitarbeiters ein'
-              value={fetchedData.zip.value}
+              value={fetchedData.inputs.zip.value}
               validators={[VALIDATOR_REQUIRE()]}
               onChange={handleInputChange}
             />
@@ -122,7 +122,7 @@ const WorkerCreate = (props) => {
               fieldName='place'
               placeholder="Ort"
               errorText='Geben Sie den Ort des Mitarbeiters ein'
-              value={fetchedData.place.value}
+              value={fetchedData.inputs.place.value}
               validators={[VALIDATOR_REQUIRE()]}
               onChange={handleInputChange}
             />
@@ -134,7 +134,7 @@ const WorkerCreate = (props) => {
           fieldName='phone'
           placeholder="Mobilenummer"
           errorText='Geben Sie die Telefonnummer des Mitarbeiters ein'
-          value={fetchedData.phone.value}
+          value={fetchedData.inputs.phone.value}
           validators={[VALIDATOR_REQUIRE()]}
           onChange={handleInputChange}
 
@@ -145,7 +145,7 @@ const WorkerCreate = (props) => {
           fieldName='description'
           placeholder="Beschreibung"
           errorText='Geben Sie die Beschreibung des Mitarbeiters ein'
-          value={fetchedData.description.value}
+          value={fetchedData.inputs.description.value}
           validators={[VALIDATOR_REQUIRE()]}
           onChange={handleInputChange}
 
@@ -153,9 +153,9 @@ const WorkerCreate = (props) => {
 
         <View style={styles.btnContainer}>
           <Button
-            // style={fetchedData.isFormValid ? [styles.createBtn, styles.button] : styles.invalideButton}
-            style={[styles.createBtn, styles.button]}
-            // disabled={!fetchedData.isFormValid}
+            style={fetchedData.isFormValid ? [styles.createBtn, styles.button] : styles.invalideButton}
+            // style={[styles.createBtn, styles.button]}
+            disabled={!fetchedData.isFormValid}
             buttonText={styles.createBtnText}
             onPress={handleSubmit}
             title={'Anlegen'}
