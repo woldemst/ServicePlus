@@ -13,12 +13,10 @@ export const updateInput = (fieldName, value, validators) =>({
     }
 })
 
-
 export const getWorkerData = newData => ({
     type: GET_WORKER_DATA,
     payload: newData
 })
-
 
 export const updateWorker = (field, val, valid, objectId ) => ({
     type: UPDATE_WORKER,

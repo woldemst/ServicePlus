@@ -13,14 +13,14 @@ import { VALIDATOR_REQUIRE } from "../../util/validators";
 import { AuthContext } from "../../context/auth-context";
 import Input from "../../shared/UIElements/Input";
 import Button from "../../shared/UIElements/Button";
-import { createWorker, updateInput } from "../../actions/workerActions";
+import { clearWorkerField, createWorker, updateInput } from "../../actions/workerActions";
 
 const WorkerCreate = (props) => {
   const auth = useContext(AuthContext)
   const navigation = useNavigation()
   const fetchedData = useSelector(state => state.worker.inputs)
 
-  console.log(fetchedData);
+  // console.log(fetchedData);
   const dispatch = useDispatch()
   const handleSubmit = async () => {
     try {
@@ -43,6 +43,7 @@ const WorkerCreate = (props) => {
       alert("Worker created successfully!");
       props.route.params.handleRefresh();
       navigation.goBack()
+      dispatch(clearWorkerField())
     } catch (err) {
       console.log("Error if creating a mew worker", err);
 
