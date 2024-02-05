@@ -9,90 +9,95 @@ import axios from "axios";
 import { useNavigation } from "@react-navigation/native";
 import { useSelector, useDispatch } from "react-redux";
 
-
 import { VALIDATOR_REQUIRE } from "../../util/validators";
 import { AuthContext } from "../../context/auth-context";
 import Input from "../../shared/UIElements/Input";
 import Button from "../../shared/UIElements/Button";
-import { clearWorkerField } from "../../actions/workerActions";
-
+import { createWorker, updateInput } from "../../actions/workerActions";
 
 const WorkerCreate = (props) => {
   const auth = useContext(AuthContext)
   const navigation = useNavigation()
-  const fetchedData = useSelector(state => state.worker)
-  const dispatch = useDispatch()
+  const fetchedData = useSelector(state => state.worker.inputs)
 
+  console.log(fetchedData);
+  const dispatch = useDispatch()
   const handleSubmit = async () => {
     try {
       const URL = `http://localhost:8000/api/workers/${auth.firmId}/new`
+
       const response = await axios.post(URL, {
         firmId: auth.firmId,
-        name: fetchedData.inputs.name.value,
-        email: fetchedData.inputs.email.value,
-        street: fetchedData.inputs.street.value,
-        houseNr: fetchedData.inputs.houseNr.value,
-        zip: fetchedData.inputs.zip.value,
-        place: fetchedData.inputs.place.value,
-        phone: fetchedData.inputs.phone.value,
-        description: fetchedData.inputs.description.value,
+        name: fetchedData.name.value,
+        email: fetchedData.email.value,
+        street: fetchedData.street.value,
+        houseNr: fetchedData.houseNr.value,
+        zip: fetchedData.zip.value,
+        place: fetchedData.place.value,
+        phone: fetchedData.phone.value,
+        description: fetchedData.description.value,
       })
 
-
+      dispatch(createWorker(response.data.worker))
       // console.log(response.data);
       alert("Worker created successfully!");
       props.route.params.handleRefresh();
       navigation.goBack()
-      dispatch(clearWorkerField())
     } catch (err) {
       console.log("Error if creating a mew worker", err);
 
     }
   }
+
+  const handleInputChange = (fieldName, value, validators) => {
+    dispatch(updateInput(fieldName, value, validators))
+  }
+
   return <>
     <View style={styles.container}>
       <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
         <Input
           id='workerName'
-          fetchedData='worker'
           fieldName='name'
           placeholder="Name des Mitarabeiters"
           errorText='Geben Sie einen Namen für den Mitarbeiter ein'
-          value={fetchedData.inputs.name.value}
+          value={fetchedData.name.value}
           validators={[VALIDATOR_REQUIRE()]}
+          onChange={handleInputChange}
         />
+
         <Input
           id='workerEmail'
-          fetchedData='worker'
           fieldName='email'
           placeholder="E-Mail des Mitarabeiters"
           errorText='Geben Sie ein E-Mail des Mitarbeiters ein'
-          value={fetchedData.inputs.email.value}
+          value={fetchedData.email.value}
           validators={[VALIDATOR_REQUIRE()]}
+          onChange={handleInputChange}
         />
 
         <View style={styles.streetContainer}>
           <View style={styles.streetWrapper}>
             <Input
               id='workerStreet'
-              fetchedData='worker'
               fieldName='street'
               placeholder="Straße des Mitarabeiters"
               errorText='Geben Sie die Straße des Mitarbeiters ein'
-              value={fetchedData.inputs.street.value}
+              value={fetchedData.street.value}
               validators={[VALIDATOR_REQUIRE()]}
+              onChange={handleInputChange}
             />
           </View>
 
           <View style={styles.nrWrapper}>
             <Input
               id='workerHouseNr'
-              fetchedData='worker'
               fieldName='houseNr'
               placeholder="Nr."
               errorText='Hausnummer'
-              value={fetchedData.inputs.houseNr.value}
+              value={fetchedData.houseNr.value}
               validators={[VALIDATOR_REQUIRE()]}
+              onChange={handleInputChange}
             />
           </View>
         </View>
@@ -101,52 +106,55 @@ const WorkerCreate = (props) => {
           <View style={styles.zipWrapper}>
             <Input
               id='workerZip'
-              fetchedData='worker'
               fieldName='zip'
               placeholder="PLZ"
               errorText='Geben Sie PLZ des Mitarbeiters ein'
-              value={fetchedData.inputs.zip.value}
+              value={fetchedData.zip.value}
               validators={[VALIDATOR_REQUIRE()]}
+              onChange={handleInputChange}
             />
           </View>
 
           <View style={styles.placeWrapper}>
             <Input
               id='workerPlace'
-              fetchedData='worker'
               fieldName='place'
               placeholder="Ort"
               errorText='Geben Sie den Ort des Mitarbeiters ein'
-              value={fetchedData.inputs.place.value}
+              value={fetchedData.place.value}
               validators={[VALIDATOR_REQUIRE()]}
+              onChange={handleInputChange}
             />
           </View>
         </View>
 
         <Input
           id='workerPhone'
-          fetchedData='worker'
           fieldName='phone'
           placeholder="Mobilenummer"
           errorText='Geben Sie die Telefonnummer des Mitarbeiters ein'
-          value={fetchedData.inputs.phone.value}
+          value={fetchedData.phone.value}
           validators={[VALIDATOR_REQUIRE()]}
+          onChange={handleInputChange}
+
         />
 
         <Input
           id='workerDescr'
-          fetchedData='worker'
           fieldName='description'
           placeholder="Beschreibung"
           errorText='Geben Sie die Beschreibung des Mitarbeiters ein'
-          value={fetchedData.inputs.description.value}
+          value={fetchedData.description.value}
           validators={[VALIDATOR_REQUIRE()]}
+          onChange={handleInputChange}
+
         />
 
         <View style={styles.btnContainer}>
           <Button
-            style={fetchedData.isFormValid ? [styles.createBtn, styles.button] : styles.invalideButton}
-            disabled={!fetchedData.isFormValid}
+            // style={fetchedData.isFormValid ? [styles.createBtn, styles.button] : styles.invalideButton}
+            style={[styles.createBtn, styles.button]}
+            // disabled={!fetchedData.isFormValid}
             buttonText={styles.createBtnText}
             onPress={handleSubmit}
             title={'Anlegen'}
@@ -267,6 +275,6 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "center",
     alignItems: 'center'
-},
+  },
 });
 export default WorkerCreate;

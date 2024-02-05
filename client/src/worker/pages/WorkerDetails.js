@@ -1,7 +1,7 @@
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, ScrollView, ActivityIndicator } from "react-native";
 import { useContext, useEffect, useState } from "react"
 import { useDispatch, useSelector } from 'react-redux'
-import { updateAndValidateWorkerField, updateWorker } from '../../actions/workerActions'
+import { updateWorker } from '../../actions/workerActions'
 import { useNavigation } from "@react-navigation/native";
 import { AuthContext } from "../../context/auth-context";
 import axios from "axios";
@@ -9,7 +9,6 @@ import axios from "axios";
 import { VALIDATOR_EMAIL, VALIDATOR_REQUIRE } from "../../util/validators";
 import Input from '../../shared/UIElements/Input'
 import Button from '../../shared/UIElements/Button'
-import { getWorkerData } from "../../actions/workerActions";
 
 
 const WorkerDetails = props => {
@@ -47,7 +46,7 @@ const WorkerDetails = props => {
     }, [dispatch])
 
     const handleInputChange = (fieldName, value, validators, objectId ) => {
-        dispatch(updateAndValidateWorkerField(fieldName, value, validators, objectId))
+        dispatch(updateWorker(fieldName, value, validators, objectId))
     }
 
     const handleSubmit = async () => {
@@ -65,8 +64,6 @@ const WorkerDetails = props => {
                 phone: worker.phone,
                 description: worker.description,
             })
-
-            // dispatch(updateWorker(workerId, response.data.worker));
 
             console.log('after api', response.data.worker);
             props.toggle()
