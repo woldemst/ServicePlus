@@ -1,11 +1,17 @@
 import { TextInput, StyleSheet, Text } from "react-native";
 import { validate } from "../../util/validators";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const Input = props => {
     const [touched, setTouched] = useState(false)
-    const [inputValue, setInputValue] = useState(props.value)        
-    const [isValid, setIsValid] = useState(validate(props.value, props.validators))
+    const [inputValue, setInputValue] = useState(props.value)
+    const [isValid, setIsValid] = useState(true)
+
+    useEffect(() => {
+        if (touched) {
+            setIsValid(validate(props.value, props.validators))
+        }
+    }, [inputValue, props.validators, touched])
 
     const handleChange = (val) => {
         setInputValue(val)
@@ -21,8 +27,8 @@ const Input = props => {
             style={!isValid ? styles.inputInvalid : styles.input}
             onChangeText={(text) => handleChange(text)}
             autoCapitalize="none"
-            // onFocus={() => setTouched(true)}
-            // onBlur={onBlurHandler}
+            onFocus={() => setTouched(true)}
+        // onBlur={onBlurHandler}
         />
 
         {!isValid && <Text style={styles.errorText}>{props.errorText}</Text>}
@@ -34,7 +40,7 @@ const styles = StyleSheet.create({
         width: '100%',
         height: 50,
         borderColor: 'gray',
-        borderWidth: 1,
+        borderBottomWidth: 1,
         marginTop: 14,
         padding: 7,
     },
@@ -42,7 +48,7 @@ const styles = StyleSheet.create({
         width: '100%',
         height: 50,
         borderColor: 'red',
-        borderWidth: 1,
+        borderBottomWidth: 1,
         marginTop: 14,
         padding: 7,
     },
