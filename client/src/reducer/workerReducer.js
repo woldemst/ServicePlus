@@ -47,7 +47,7 @@ const workerReducer = (state = initialState, action) => {
     case UPDATE_INPUT:
         const { fieldName, value, validators } = action.payload;
   
-        console.log(action.payload);
+        // console.log(action.payload);
         const updatedField = {
           ...state.inputs[fieldName],
           value,
@@ -58,12 +58,12 @@ const workerReducer = (state = initialState, action) => {
           [fieldName]: updatedField,
         };
   
-        // let isFormValid = Object.values(updatedInputs).every((field) => field.isValid);
+        let isFormValid = Object.values(updatedInputs).every((field) => field.isValid);
   
         return {
           ...state,
           inputs: updatedInputs,
-          // isFormValid,
+          isFormValid,
         };
     case UPDATE_WORKER:
       const { field, val, objectId } = action.payload;
@@ -88,13 +88,11 @@ const workerReducer = (state = initialState, action) => {
           workers: updatedWorkersArray,
         },
       };
-
     case GET_WORKER_DATA:
       return {
         ...state,
         workersArray: action.payload,
       };
-
     case CREATE_WORKER:
       const newWorker = action.payload.worker;
       // console.log(action.payload);
@@ -105,7 +103,6 @@ const workerReducer = (state = initialState, action) => {
           workers: [...state.workersArray.workers, newWorker],
         },
       };
-
     case CLEAR_WORKER_FIELD:
       return {
         ...state,
