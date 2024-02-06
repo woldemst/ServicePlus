@@ -47,31 +47,26 @@ const CustomerItem = (props) => {
                 animationOut="slideOutDown" // Specify the slide-down animation
                 onBackdropPress={toggleModal}
                 onBackButtonPress={toggleModal}
-
                 header={<Text style={styles.modalHeadline}>Kundeniformtaion</Text>}
             >
                 <CustomerDetails
-                    // functions
-                    toggle={toggleModal}
-                    handleRefresh={props.handleRefresh}
                     id={props.id}
                     key={props.id}
                     name={props.name}
                     email={props.email}
-                // customer={props.customer}
-                // address={props.address}
-                // creator={props.creator}
-                // worker={props.worker}
-                // contact={props.contact}
-                // description={props.description}
-                // website={props.website}
-                // phone={props.phone}
-
-                // address 
-                // street={props.street}
-                // houseNr={props.houseNr}
-                // zip={props.zip}
-                // place={props.place}
+                    phone={props.phone}
+                    address={props.address}
+                    creator={props.creator}
+                    worker={props.worker}
+                    contact={props.contact}
+                    description={props.description}
+                    handleRefresh={props.handleRefresh}
+                    website={props.website}
+                    street={props.street}
+                    houseNr={props.houseNr}
+                    zip={props.zip}
+                    place={props.place}
+                    toggle={toggleModal}
 
 
                 />

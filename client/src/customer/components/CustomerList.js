@@ -1,28 +1,37 @@
 import { View, Text, StyleSheet, Image, TouchableOpacity, ScrollView } from "react-native"
-import { useEffect, useState } from "react"
+import { useContext, useEffect, useState } from "react"
 // import { useNavigation } from '@react-navigation/native'
 import axios from "axios"
 import CustomerItem from "./CustomerItem"
 import { useDispatch, useSelector } from "react-redux"
 import { getCustomerData } from "../../actions/customerActions"
 import { useNavigation } from "@react-navigation/native"
+import { AuthContext } from "../../context/auth-context"
 
 const CustomerList = () => {
-    const [fetchedData, setFetchedData] = useState([])
     const dispatch = useDispatch()
-    // console.log(fetchedData);
-    const [refresh, setRefresh] = useState(false)
-    const handleRefresh = () => setRefresh(prevData => !prevData);
     const navigation = useNavigation()
+    const auth = useContext(AuthContext)
+
+    const [loading, setLoading] = useState(true)
+    const [refresh, setRefresh] = useState(false)
+
+    const fetchedData = useSelector(state => state.customer.customersArray)
 
 
-    useEffect(()=> {
+    const handleRefresh = () => setRefresh(prevData => !prevData);
+
+
+    useEffect(() => {
         const fetchCustomers = async () => {
             try {
                 const response = await axios.get('http://localhost:8000/api/customers/all')
-                setFetchedData(response.data)
+                dispatch(getCustomerData(response.data))
+                setLoading(false)
+
             } catch (err) {
                 console.log('Error fetching customers', err);
+                setLoading(false)
             }
         }
         fetchCustomers()
@@ -37,10 +46,10 @@ const CustomerList = () => {
                         </View>
 
                         <View style={styles.headerIconContainer} >
-                            <TouchableOpacity 
-                                style={styles.headerButton} 
+                            <TouchableOpacity
+                                style={styles.headerButton}
                                 onPress={() => {
-                                    navigation.navigate('createCustomer',  { 
+                                    navigation.navigate('createCustomer', {
                                         name: 'Create customer',
                                         handleRefresh: () => handleRefresh()
 
@@ -56,29 +65,21 @@ const CustomerList = () => {
 
                 <View style={styles.customerList}>
                     {fetchedData.map(customer => (
-                        <CustomerItem 
-                            id={customer._id} 
-                            key={customer._id} 
+                        <CustomerItem
+                            id={customer._id}
+                            key={customer._id}
                             name={customer.name}
                             customerNr={customer.customerNr}
-                            // email={customer.email}
-                            // worker={customer.worker}
-                            // contact={customer.contact}
-                            organisation
-                            // phone={customer.phone}
-                            // contact={customer.contact}
-                            // worker
+                            email={customer.email}
+                            worker={customer.worker}
+                            phone={customer.phone}
                             // nextAppointment
-                            // description={contact.description}
-                            // website={customer.website}
-
-                            //address
+                            description={customer.description}
+                            website={customer.website}
                             street={customer.street}
                             houseNr={customer.houseNr}
                             zip={customer.zip}
                             place={customer.place}
-
-                            // functions
                             handleRefresh={handleRefresh}
                         />
                     ))}
@@ -99,7 +100,7 @@ const styles = StyleSheet.create({
 
     },
     header: {
-        
+
         width: '100%',
         paddingTop: 27,
         paddingBottom: 10,
@@ -131,8 +132,8 @@ const styles = StyleSheet.create({
     },
     customerList: {
         paddingTop: 32,
-        paddingBottom: 32, 
-        paddingLeft: 16, 
+        paddingBottom: 32,
+        paddingLeft: 16,
         paddingRight: 16
     },
     customerContainer: {
@@ -194,7 +195,7 @@ const styles = StyleSheet.create({
         color: '#7a9b76',
         fontWeight: '700'
     },
-    arrowWrapper:{
+    arrowWrapper: {
         justifyContent: 'center'
     },
     circleWrapper: {
