@@ -1,10 +1,19 @@
 const HttpError = require("../models/http-error")
 const Customer = require('../models/Customer')
 
-const getAllCustomers = async (req, res, next) => {
+const getAllCustomersByFirmId = async (req, res, next) => {
+  const firmId = req.params.firmId; 
     try {
-        const customers = await Customer.find()
-        res.json(customers)
+        const customers = await Customer.find({ firmId: firmId });
+
+        if (!customers || customers.length === 0) {
+          const error = new HttpError(
+              'Could not find customers for the provided firm id.',
+              404
+            );
+            return next(error);
+        }
+      res.json({customers: customers.map(customer => customer.toObject({getters: true}))})
     } catch (err) {
         const error = new HttpError(
             "Fetch the customers failed, please try again later.",
@@ -106,16 +115,15 @@ const createCustomer = async (req, res, next) => {
    const {
     name, 
     email, 
-    customerNr, 
-    organisation, 
+    // customerNr, 
+    // organisation, 
     street, 
     houseNr, 
     zip, 
     place, 
     phone, 
-    mobilePhone, 
     contact, 
-    worker, 
+    // worker, 
     nextAppointment, 
     website,  
     description 
@@ -125,16 +133,15 @@ const createCustomer = async (req, res, next) => {
   const createCustomer = new Customer({
     name: name, 
     email: email, 
-    customerNr: customerNr, 
-    organisation: organisation, 
+    // customerNr: customerNr, 
+    // organisation: organisation, 
     street: street, 
     houseNr: houseNr, 
     zip: zip, 
     place: place, 
     phone: phone, 
-    mobilePhone: mobilePhone, 
     contact: contact, 
-    worker: worker, 
+    // worker: worker, 
     nextAppointment: nextAppointment, 
     website: website,  
     description: description
@@ -143,17 +150,19 @@ const createCustomer = async (req, res, next) => {
   try {
     await createCustomer.save();
   } catch (err) {
-    console.log(err);
-    return next(err)
+    const error = new HttpError(
+      "Something went wrong, could not create profile.",
+      500
+      );
+      return next(error);
   }
 
   res
     .status(201)
-    // .json({name: createCustomer.name})
     .json({ customer: createCustomer.toObject({ getters: true }) });
 }
 
-exports.getAllCustomers = getAllCustomers; 
+exports.getAllCustomersByFirmId = getAllCustomersByFirmId; 
 exports.getCustomerById = getCustomerById;
 exports.updateCustomerById = updateCustomerById;
 exports.createCustomer = createCustomer;

@@ -1,136 +1,171 @@
-import {
-  View,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  StyleSheet,
-  ScrollView,
-} from "react-native";
-import { useEffect, useState } from "react";
-import {
-  getCustomerData
-} from "../../actions/customerActions";
-import axios from "axios";
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, ScrollView } from "react-native";
+import { useContext, useEffect, useState } from "react";
+import { clearCustomerField, createCustomer, getCustomerData, updateInput } from "../../actions/customerActions";
 import { useNavigation } from "@react-navigation/native";
+import { AuthContext } from "../../context/auth-context";
+import axios from "axios";
+import { useDispatch, useSelector } from "react-redux";
+import Input from "../../shared/UIElements/Input";
+import { VALIDATOR_REQUIRE } from "../../util/validators";
 
 const CreateCustomer = (props) => {
+  const auth = useContext(AuthContext)
   const navigation = useNavigation()
-    const [formData, setFormData] =  useState({
-        name: '',
-        email: '', 
-        street: '',
-        houseNr: '',
-        zip: '',
-        place: '',
-        phone: '',
-        website: ''
-    })
+  const dispatch = useDispatch()
+  const fetchedData = useSelector(state => state.customer)
 
-    const handleChange = (field, value) => {
-    setFormData((prevData) => ({
-        ...prevData,
-        [field]: value,
-        }));
-    };
+  // console.log(fetchedData);
 
   const handleSubmit = async () => {
     try {
-        const URL = 'http://localhost:8000/api/customers/new'
-        const response = await axios.post(URL, {
-          ...formData
-        })
-        // console.log(response.data);
-        alert("Customer created successfully!");
-        props.route.params.handleRefresh();
-        navigation.goBack()
+      const URL = `http://localhost:8000/api/customers/${auth.firmId}/new`
+      const response = await axios.post(URL, {
+        firmId: auth.firmId,
+        name: fetchedData.inputs.name.value,
+        email: fetchedData.inputs.email.value,
+        street: fetchedData.inputs.street.value,
+        houseNr: fetchedData.inputs.houseNr.value,
+        zip: fetchedData.inputs.zip.value,
+        place: fetchedData.inputs.place.value,
+        phone: fetchedData.inputs.phone.value,
+        description: fetchedData.inputs.description.value,
+      })
+
+      dispatch(createCustomer(response.data.customer))
+      alert("Customer created successfully!");
+      props.route.params.handleRefresh();
+      navigation.goBack()
+      dispatch(clearCustomerField())
     } catch (err) {
-        console.log("Error if creating customer", err);
-        
+      console.log("Error if creating customer", err);
+
     }
   };
 
+  const handleInputChange = (fieldName, value, validators) => {
+    dispatch(updateInput(fieldName, value, validators))
+  }
+
+
   return (
     <>
-        <View style={styles.container}>
-          <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
-            <TextInput
-              style={[styles.input, styles.input.placeholderText]}
-              placeholder="Name"
-              onChangeText={(text) => handleChange("name", text)}
-              value={formData.name}
-            />
+      <View style={styles.container}>
+        <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
+          <Input
+            id='customerName'
+            fieldName='name'
+            placeholder="Kundenname"
+            errorText='Geben Sie einen Namen für den Kunde ein'
+            value={fetchedData.inputs.name.value}
+            validators={[VALIDATOR_REQUIRE()]}
+            onChange={handleInputChange}
+          />
 
-            <TextInput
-              style={[styles.input, styles.input.placeholderText]}
-              placeholder="Email"
-              onChangeText={(text) => handleChange("email", text)}
-              value={formData.email}
-            />
+          <Input
+            id='customerEmail'
+            fieldName='email'
+            placeholder="Kundenemail"
+            errorText='Geben Sie eine E-Mail Adresse des Kunden ein'
+            value={fetchedData.inputs.email.value}
+            validators={[VALIDATOR_REQUIRE()]}
+            onChange={handleInputChange}
+          />
 
-            <View style={styles.streetContainer}>
-              <View style={styles.streetWrapper}>
-                <TextInput
-                  style={[styles.input, styles.input.placeholderText]}
-                  placeholder="Straße"
-                  onChangeText={(text) => handleChange("street", text)}
-                  value={formData.street}
-                />
-              </View>
-
-              <View style={styles.nrWrapper}>
-                <TextInput
-                  style={[styles.input, styles.input.placeholderText]}
-                  placeholder="Nr."
-                  onChangeText={(text) => handleChange("houseNr", text)}
-                  value={formData.houseNr}
-                />
-              </View>
+          <View style={styles.streetContainer}>
+            <View style={styles.streetWrapper}>
+              <Input
+                id='customerStreet'
+                fieldName='street'
+                placeholder="Straße des Kunden"
+                errorText='Geben Sie die Straße des Kunden ein'
+                value={fetchedData.inputs.street.value}
+                validators={[VALIDATOR_REQUIRE()]}
+                onChange={handleInputChange}
+              />
             </View>
 
-            <View style={styles.zipContainer}>
-              <View style={styles.zipWrapper}>
-                <TextInput
-                  style={[styles.input, styles.input.placeholderText]}
-                  placeholder="PLZ"
-                  onChangeText={(text) => handleChange("zip", text)}
-                  value={formData.zip}
-                />
-              </View>
+            <View style={styles.nrWrapper}>
+              <Input
+                id='customerHouseNr'
+                fieldName='houseNr'
+                placeholder="Housenummer des Kunden"
+                errorText='Geben Sie die Housenummer des Kunden ein'
+                value={fetchedData.inputs.houseNr.value}
+                validators={[VALIDATOR_REQUIRE()]}
+                onChange={handleInputChange}
+              />
+            </View>
+          </View>
 
-              <View style={styles.placeWrapper}>
-                <TextInput
-                  style={[styles.input, styles.input.placeholderText]}
-                  placeholder="Ort"
-                  onChangeText={(text) => handleChange("place", text)}
-                  value={formData.place}
-                />
-              </View>
+          <View style={styles.zipContainer}>
+            <View style={styles.zipWrapper}>
+              <Input
+                id='customerZip'
+                fieldName='zip'
+                placeholder="PLZ des Kunden"
+                errorText='Geben Sie PLZ des Kunden ein'
+                value={fetchedData.inputs.zip.value}
+                validators={[VALIDATOR_REQUIRE()]}
+                onChange={handleInputChange}
+              />
             </View>
 
-            <TextInput
-              style={[styles.input, styles.input.placeholderText]}
-              placeholder="Telefon"
-              onChangeText={(text) => handleChange("phone", text)}
-              value={formData.phone}
-            />
-
-            <TextInput
-              style={[styles.input, styles.input.placeholderText]}
-              placeholder="Webseite"
-              onChangeText={(text) => handleChange("website", text)}
-              value={formData.website}
-            />
-
-            <View style={styles.btnContainer}>
-              <TouchableOpacity
-                style={[styles.createBtn, styles.button]}
-                onPress={handleSubmit}
-              >
-                <Text style={styles.createBtnText}>Anlegen</Text>
-              </TouchableOpacity>
+            <View style={styles.placeWrapper}>
+              <Input
+                id='customerPlace'
+                fieldName='place'
+                placeholder="Straße des Kunden"
+                errorText='Geben Sie den Ort des Kunden ein'
+                value={fetchedData.inputs.place.value}
+                validators={[VALIDATOR_REQUIRE()]}
+                onChange={handleInputChange}
+              />
             </View>
-          </ScrollView>
-        </View>
+          </View>
+
+          <Input
+            id='customerPhone'
+            fieldName='phone'
+            placeholder="Telefonnummer des Kunden"
+            errorText='Geben Sie die Telefonnummer des Kunden ein'
+            value={fetchedData.inputs.phone.value}
+            validators={[VALIDATOR_REQUIRE()]}
+            onChange={handleInputChange}
+          />
+
+          {/* <Input
+            id='customerWebsite'
+            fieldName='website'
+            placeholder="Website des Kunden"
+            errorText='Geben Sie Website des Kunden ein'
+            value={fetchedData.inputs.website.value}
+            validators={[VALIDATOR_REQUIRE()]}
+            onChange={handleInputChange}
+          /> */}
+
+
+          <Input
+            id='customerDescription'
+            fieldName='description'
+            placeholder="Beschreibung des Kunden"
+            errorText='Geben Sie die Beschreibung des Kunden ein'
+            value={fetchedData.inputs.description.value}
+            validators={[VALIDATOR_REQUIRE()]}
+            onChange={handleInputChange}
+          />
+
+          <View style={styles.btnContainer}>
+            <TouchableOpacity
+              style={[styles.createBtn, styles.button]}
+              onPress={handleSubmit}
+            >
+              <Text style={styles.createBtnText}>Anlegen</Text>
+            </TouchableOpacity>
+          </View>
+
+
+        </ScrollView>
+      </View>
 
     </>
   );

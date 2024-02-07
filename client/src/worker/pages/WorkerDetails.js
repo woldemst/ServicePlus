@@ -18,22 +18,18 @@ const WorkerDetails = props => {
     const auth = useContext(AuthContext)
     const workersArr = useSelector(state => state.worker.workersArray.workers)
     const worker = workersArr.find(worker => worker._id == workerId)
-    const [workerrr, setWorker] = useState()
-    // console.log('workerObj', workerObj);
-    const [ loading, setLoading] = useState(true)
+    const [loading, setLoading] = useState(true)
 
     // console.log("workersArray is ", workersArray);   
     // console.log('fetched workers.:', workersArr);
-    console.log('my worker:', worker);
+    // console.log('my worker:', worker);
     useEffect(() => {
         const fetchWorker = async () => {
 
             try {
                 const response = await axios.get(`http://localhost:8000/api/workers/${auth.firmId}/${workerId}`)
-                setWorker(response.data.worker)
                 setLoading(false)
                 // dispatch(getWorkerData(respose.data))
-
 
             } catch (err) {
                 console.log("Error fetching worker profile", err);
@@ -45,13 +41,12 @@ const WorkerDetails = props => {
 
     }, [dispatch])
 
-    const handleInputChange = (fieldName, value, validators, objectId ) => {
+    const handleInputChange = (fieldName, value, validators, objectId) => {
         dispatch(updateWorker(fieldName, value, validators, objectId))
     }
 
     const handleSubmit = async () => {
         try {
-            // console.log('for api in submit ', workerObj);
             const response = await axios.patch(`http://localhost:8000/api/workers/${auth.firmId}/update/${workerId}`, {
                 workerId: workerId,
                 firmId: auth.firmId,
@@ -65,7 +60,6 @@ const WorkerDetails = props => {
                 description: worker.description,
             })
 
-            console.log('after api', response.data.worker);
             props.toggle()
             props.handleRefresh();
             window.alert('Worker updated!')
@@ -76,7 +70,7 @@ const WorkerDetails = props => {
 
 
     return loading ? (
-        <ActivityIndicator size="large" color="#0000ff" />
+        <ActivityIndicator size="large" color="#7A9B76" />
     ) : (
         <View style={styles.container}>
             <ScrollView showsVerticalScrollIndicator={false}>
@@ -151,7 +145,7 @@ const WorkerDetails = props => {
                             onChange={handleInputChange}
                         />
                     </View>
-                
+
                     <View style={styles.placeWrapper}>
                         <Input
                             id='workerPlace'
@@ -192,7 +186,7 @@ const WorkerDetails = props => {
                     validators={[VALIDATOR_REQUIRE()]}
                     onChange={handleInputChange}
 
-                />  
+                />
 
                 <View style={styles.btnContainer}>
                     <Button

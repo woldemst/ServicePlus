@@ -4,9 +4,7 @@ const Firm = require('../models/Firm')
 
 const getAllWorkersByFirmId = async (req, res, next) => {
     const firmId = req.params.firmId
-
     try {
-
       const workers = await Worker.find({ firmId: firmId });
 
       if (!workers || workers.length === 0) {
@@ -17,8 +15,7 @@ const getAllWorkersByFirmId = async (req, res, next) => {
           return next(error);
       }
 
-      res.json({
-        workers: workers.map(worker => worker.toObject({ getters: true })),
+      res.json({workers: workers.map(worker => worker.toObject({ getters: true })),
     });
     } catch (err) {
       const error = new HttpError(

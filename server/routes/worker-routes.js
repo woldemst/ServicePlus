@@ -8,7 +8,6 @@ router.get('/:firmId/all', workerController.getAllWorkersByFirmId)
 router.get('/:firmId/:workerId', workerController.getWorkerById)
 router.patch('/:firmId/update/:workerId', workerController.updateWorkerById)
 router.post('/:firmId/new', workerController.createWorker)
-// router.get('/:firmId/:workerId', workerController.getWorkersByFirmId)
 
 module.exports = router;
 

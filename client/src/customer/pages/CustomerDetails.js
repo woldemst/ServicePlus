@@ -1,16 +1,18 @@
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, ScrollView } from "react-native";
-import { useEffect, useState } from "react"
+import { useContext, useEffect, useState } from "react"
 import { useDispatch, useSelector } from 'react-redux'
 import { getCustomerData, updateCustomerData} from '../../actions/customerActions'
 import axios from "axios";
 import { useNavigation } from "@react-navigation/native";
+import { AuthContext } from "../../context/auth-context";
  
 const CustomerDetails = props => {
-    const customerId = props.id 
+    const auth = useContext(AuthContext)
     const navigation = useNavigation()
+    const [formData, setFormData] = useState({})
+    const customerId = props.id 
     const dispatch = useDispatch()
     // const fetchedData = useSelector(state => state.customer)
-    const [formData, setFormData] = useState({})
 
 
     useEffect(()=> {    

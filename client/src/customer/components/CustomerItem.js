@@ -67,8 +67,6 @@ const CustomerItem = (props) => {
                     zip={props.zip}
                     place={props.place}
                     toggle={toggleModal}
-
-
                 />
 
 

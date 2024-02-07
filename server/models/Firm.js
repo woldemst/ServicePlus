@@ -11,7 +11,7 @@ const firmSchema = new mongoose.Schema({
   place: { type: String, required: true }, 
   phone: { type: String, required: true },
   website: { type: String, required: true }, 
-  // customer: { type: mongoose.Types.ObjectId, required: true, ref: 'Customer'}, //ref: establish connection between two schemas
+  customers: [{type: mongoose.Types.ObjectId, required: false, ref: 'Customer'}],
   workers: [{type: mongoose.Types.ObjectId, required: false, ref: 'Worker'}],
   userId: {type: mongoose.Types.ObjectId, required: false, ref: 'User'}
 
