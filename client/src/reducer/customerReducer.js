@@ -1,4 +1,5 @@
 import { CREATE_CUSTOMER, GET_CUSTOMER_DATA, UPDATE_CUSTOMER, CLEAR_CUSTOMER_FIELD, UPDATE_INPUT} from '../actions/customerActions'
+import { validate } from '../util/validators';
 
 const initialState = {
     customersArray: {

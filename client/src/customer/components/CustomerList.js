@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, Image, TouchableOpacity, ScrollView } from "react-native"
+import { View, Text, StyleSheet, Image, TouchableOpacity, ScrollView, ActivityIndicator } from "react-native"
 import { useContext, useEffect, useState } from "react"
 // import { useNavigation } from '@react-navigation/native'
 import axios from "axios"
@@ -17,18 +17,15 @@ const CustomerList = () => {
     const [refresh, setRefresh] = useState(false)
 
     const fetchedData = useSelector(state => state.customer.customersArray)
-
-
     const handleRefresh = () => setRefresh(prevData => !prevData);
 
-
+    // console.log(fetchedData);
     useEffect(() => {
         const fetchCustomers = async () => {
             try {
-                const response = await axios.get('http://localhost:8000/api/customers/all')
+                const response = await axios.get(`http://localhost:8000/api/customers/${auth.firmId}all`)
                 dispatch(getCustomerData(response.data))
                 setLoading(false)
-
             } catch (err) {
                 console.log('Error fetching customers', err);
                 setLoading(false)
@@ -40,6 +37,8 @@ const CustomerList = () => {
         <View style={styles.container}>
             <ScrollView showsVerticalScrollIndicator={false}>
                 <View style={styles.header} >
+
+
                     <View style={styles.headerContent}>
                         <View style={styles.textContainer} >
                             <Text style={styles.headerText}>Kunden</Text>
@@ -64,25 +63,30 @@ const CustomerList = () => {
                 </View>
 
                 <View style={styles.customerList}>
-                    {fetchedData.map(customer => (
-                        <CustomerItem
-                            id={customer._id}
-                            key={customer._id}
-                            name={customer.name}
-                            customerNr={customer.customerNr}
-                            email={customer.email}
-                            worker={customer.worker}
-                            phone={customer.phone}
-                            // nextAppointment
-                            description={customer.description}
-                            website={customer.website}
-                            street={customer.street}
-                            houseNr={customer.houseNr}
-                            zip={customer.zip}
-                            place={customer.place}
-                            handleRefresh={handleRefresh}
-                        />
-                    ))}
+                    {loading ? (
+                        <ActivityIndicator size="large" color="#7A9B76" />
+                    ) : (
+                        fetchedData.customers.map(customer => (
+                            <CustomerItem
+                                // id={customer._id}
+                                key={customer._id}
+                                name={customer.name}
+                                // customerNr={customer.customerNr}
+                                email={customer.email}
+                                worker={customer.worker}
+                                phone={customer.phone}
+                                // nextAppointment
+                                description={customer.description}
+                                website={customer.website}
+                                street={customer.street}
+                                houseNr={customer.houseNr}
+                                zip={customer.zip}
+                                place={customer.place}
+                                handleRefresh={handleRefresh}
+                            />
+                        ))
+                    )}
+
                 </View>
             </ScrollView>
         </View>
