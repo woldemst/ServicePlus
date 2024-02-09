@@ -11,7 +11,6 @@ const customerSchema = new mongoose.Schema({
   zip: { type: String, required: true },
   place: { type: String, required: true },
   phone: { type: String, required: false },
-  // mobilePhone: { type: String, required: false },
   contact: { type: String, required: false },
   worker: { type: String, required: false },
   nextAppointment: { type: String, required: false },
