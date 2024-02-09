@@ -30,9 +30,9 @@ export const updateCustomer = (field, val, valid, objectId ) => ({
     }
 })
 
-export const createCustomer = (worker) => ({
+export const createCustomer = (customer) => ({
     type: CREATE_CUSTOMER,
-    payload: { worker }
+    payload: { customer }
 });
 
 

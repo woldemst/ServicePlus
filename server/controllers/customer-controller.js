@@ -3,6 +3,7 @@ const Customer = require('../models/Customer')
 
 const getAllCustomersByFirmId = async (req, res, next) => {
   const firmId = req.params.firmId; 
+
     try {
         const customers = await Customer.find({ firmId: firmId });
 
@@ -112,36 +113,40 @@ const updateCustomerById = async (req, res, next) => {
 }
 
 const createCustomer = async (req, res, next) => {
-   const {
-    name, 
-    email, 
-    // customerNr, 
-    // organisation, 
-    street, 
-    houseNr, 
-    zip, 
-    place, 
-    phone, 
-    contact, 
-    // worker, 
-    nextAppointment, 
-    website,  
-    description 
+  // const firmId = req.params.firmId; 
+
+  const {
+     firmId,
+     // customerNr, 
+     // organisation, 
+     // worker, 
+     name, 
+     email, 
+     street, 
+     houseNr, 
+     zip, 
+     place, 
+     phone, 
+     contact, 
+     nextAppointment, 
+     website,  
+     description 
   } = req.body
   
 
   const createCustomer = new Customer({
-    name: name, 
-    email: email, 
+    firmId: firmId,
     // customerNr: customerNr, 
     // organisation: organisation, 
+    // worker: worker, 
+    name: name, 
+    email: email, 
     street: street, 
     houseNr: houseNr, 
     zip: zip, 
     place: place, 
     phone: phone, 
     contact: contact, 
-    // worker: worker, 
     nextAppointment: nextAppointment, 
     website: website,  
     description: description

@@ -1,12 +1,12 @@
 import { View, Text, StyleSheet, Image, TouchableOpacity, ScrollView, ActivityIndicator } from "react-native"
 import { useContext, useEffect, useState } from "react"
-// import { useNavigation } from '@react-navigation/native'
-import axios from "axios"
-import CustomerItem from "./CustomerItem"
 import { useDispatch, useSelector } from "react-redux"
-import { getCustomerData } from "../../actions/customerActions"
 import { useNavigation } from "@react-navigation/native"
+import axios from "axios"
+
+import { getCustomerData } from "../../actions/customerActions"
 import { AuthContext } from "../../context/auth-context"
+import CustomerItem from "./CustomerItem"
 
 const CustomerList = () => {
     const dispatch = useDispatch()
@@ -20,19 +20,21 @@ const CustomerList = () => {
     const handleRefresh = () => setRefresh(prevData => !prevData);
 
     // console.log(fetchedData);
+
     useEffect(() => {
         const fetchCustomers = async () => {
             try {
-                const response = await axios.get(`http://localhost:8000/api/customers/${auth.firmId}all`)
+                const response = await axios.get(`http://localhost:8000/api/customers/${auth.firmId}/all`)
                 dispatch(getCustomerData(response.data))
                 setLoading(false)
             } catch (err) {
-                console.log('Error fetching customers', err);
+                console.log('Error while fetching customers', err);
                 setLoading(false)
             }
         }
         fetchCustomers()
-    }, [refresh])
+    }, [dispatch, refresh])
+
     return <>
         <View style={styles.container}>
             <ScrollView showsVerticalScrollIndicator={false}>
@@ -68,7 +70,7 @@ const CustomerList = () => {
                     ) : (
                         fetchedData.customers.map(customer => (
                             <CustomerItem
-                                // id={customer._id}
+                                id={customer._id}
                                 key={customer._id}
                                 name={customer.name}
                                 // customerNr={customer.customerNr}

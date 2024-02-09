@@ -34,6 +34,10 @@ const initialState = {
         value: "",
         isValid: false,
       },
+      website: {
+        value: "",
+        isValid: false,
+      },
       description: {
         value: "",
         isValid: false,
@@ -67,24 +71,23 @@ const customerReducer = (state = initialState, action) => {
         case UPDATE_CUSTOMER:
           const { field, val, objectId } = action.payload;
     
-          const updatedWorker = {
-            ...state.customersArray.customers.find(worker => worker._id === objectId),
+          const updatedCustomer = {
+            ...state.customersArray.customers.find(customer => customer._id === objectId),
             [field]: val
           };
     
-          // console.log(updatedWorker);
-          const updatedWorkersArray = state.customersArray.customers.map(worker => {
-            if (worker._id === objectId) {
-              return updatedWorker;
+          const updatedCustomersArray = state.customersArray.customers.map(customer => {
+            if (customer._id === objectId) {
+              return updatedCustomer;
             }
-            return worker;
+            return customer;
           });
     
           return {
             ...state,
             customersArray: {
               ...state.customersArray,
-              customers: updatedWorkersArray,
+              customers: updatedCustomersArray,
             },
           };
         case GET_CUSTOMER_DATA:
@@ -93,7 +96,7 @@ const customerReducer = (state = initialState, action) => {
             customersArray: action.payload,
           };
         case CREATE_CUSTOMER:
-          const newCustomer = action.payload.worker;
+          const newCustomer = action.payload.customer;
           // console.log(action.payload);
           return {
             ...state,
@@ -131,6 +134,10 @@ const customerReducer = (state = initialState, action) => {
                 isValid: false,
               },
               phone: {
+                value: "",
+                isValid: false,
+              },
+              website: {
                 value: "",
                 isValid: false,
               },

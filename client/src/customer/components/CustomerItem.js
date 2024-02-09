@@ -1,18 +1,14 @@
 import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native"
-import { useEffect, useState } from "react"
-import { useNavigation } from '@react-navigation/native'
+import { useState } from "react"
 import ModalComponent from "../../../src/shared/UIElements/Modal"
 import CustomerDetails from "../pages/CustomerDetails"
 
 const CustomerItem = (props) => {
-    const navigation = useNavigation()
-
     const [isModalVisible, setModalVisible] = useState(false);
 
     const toggleModal = () => {
         setModalVisible(!isModalVisible)
     }
-
 
     return (
         <>
@@ -68,8 +64,6 @@ const CustomerItem = (props) => {
                     place={props.place}
                     toggle={toggleModal}
                 />
-
-
             </ModalComponent>
 
         </>
