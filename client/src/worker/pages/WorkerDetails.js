@@ -1,12 +1,12 @@
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, ScrollView, ActivityIndicator } from "react-native";
 import { useContext, useEffect, useState } from "react"
 import { useDispatch, useSelector } from 'react-redux'
-import { updateWorker } from '../../actions/workerActions'
 import { useNavigation } from "@react-navigation/native";
-import { AuthContext } from "../../context/auth-context";
 import axios from "axios";
 
 import { VALIDATOR_EMAIL, VALIDATOR_REQUIRE } from "../../util/validators";
+import { AuthContext } from "../../context/auth-context";
+import { updateWorker } from '../../actions/workerActions'
 import Input from '../../shared/UIElements/Input'
 import Button from '../../shared/UIElements/Button'
 
@@ -20,8 +20,6 @@ const WorkerDetails = props => {
     const worker = workersArr.find(worker => worker._id == workerId)
     const [loading, setLoading] = useState(true)
 
-    // console.log("workersArray is ", workersArray);   
-    // console.log('fetched workers.:', workersArr);
     // console.log('my worker:', worker);
     useEffect(() => {
         const fetchWorker = async () => {
@@ -34,11 +32,9 @@ const WorkerDetails = props => {
             } catch (err) {
                 console.log("Error fetching worker profile", err);
                 setLoading(false)
-
             }
         }
         fetchWorker()
-
     }, [dispatch])
 
     const handleInputChange = (fieldName, value, validators, objectId) => {
