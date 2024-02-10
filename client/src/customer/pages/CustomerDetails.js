@@ -1,159 +1,195 @@
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, ScrollView } from "react-native";
-import { useContext, useEffect, useState } from "react"
-import { useDispatch, useSelector } from 'react-redux'
-import { getCustomerData, updateCustomerData} from '../../actions/customerActions'
-import axios from "axios";
+import { useContext, useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigation } from "@react-navigation/native";
+import axios from "axios";
+
+import { getCustomerData, updateCustomerData } from "../../actions/customerActions";
 import { AuthContext } from "../../context/auth-context";
- 
-const CustomerDetails = props => {
-    const auth = useContext(AuthContext)
-    const navigation = useNavigation()
-    const [formData, setFormData] = useState({})
-    const customerId = props.id 
-    const dispatch = useDispatch()
-    // const fetchedData = useSelector(state => state.customer)
+import { updateCustomer } from "../../actions/customerActions";
+import Input from "../../shared/UIElements/Input";
+import { VALIDATOR_REQUIRE, VALIDATOR_EMAIL } from "../../util/validators";
 
+const CustomerDetails = (props) => {
+    const customerId = props.id;
+    const navigation = useNavigation();
+    const auth = useContext(AuthContext);
 
-    useEffect(()=> {    
+    const dispatch = useDispatch();
+    const customersArray = useSelector((state) => state.customer.customersArray.customers);
+    const customer = customersArray.find(customer => customer._id == customerId)
+    // console.log(customer);
+
+    useEffect(() => {
         const fetchCustomer = async () => {
             try {
-                const response = await axios.get(`http://localhost:8000/api/customers/${customerId}`)
+                const response = await axios.get(
+                    `http://localhost:8000/api/customers/${auth.firmId}/${customerId}`
+                );
 
-                dispatch(getCustomerData(response.data.customer))
-                setFormData(response.data.customer)
+                // dispatch(getCustomerData(response.data.customer));
             } catch (err) {
                 console.log("Error fetching customer profile", err);
             }
-        }
-        fetchCustomer()
+        };
+        fetchCustomer();
+    }, [dispatch]);
 
-    }, [dispatch])
-
-
-    const handleChange = (field, value) => {
-        setFormData(prevData => ({
-            ...prevData, 
-            [field]: value
-        }))
-    }
-
+    const handleInputChange = (fieldName, value, validators, objectId) => {
+        dispatch(updateCustomer(fieldName, value, validators, objectId));
+    };
 
     const handleSubmit = async () => {
-
         try {
-            const response = await axios.patch(`http://localhost:8000/api/customers/${customerId}`, formData)
-            dispatch(updateCustomerData(response.data))
-            props.toggle()
+            const response = await axios.patch(
+                `http://localhost:8000/api/customers/${auth.firmId}/update/${customerId}`, {
+                customerId: customerId,
+                firmId: auth.firmId,
+                name: customer.name,
+                email: customer.email,
+                street: customer.street,
+                houseNr: customer.houseNr,
+                zip: customer.zip,
+                place: customer.place,
+                phone: customer.phone,
+                website: customer.website,
+            });
+            props.toggle();
             props.handleRefresh();
-            window.alert('Customer updated!')
+            window.alert("Customer updated!");
         } catch (err) {
             console.log("Error fetching while updating customers' profile", err);
         }
-    }
-    
+    };
 
-    return <>
-        <View>
-            <View style={styles.container}> 
+    return (
+        <>
+            <View style={styles.container}>
                 <ScrollView showsVerticalScrollIndicator={false}>
+                    <Input
+                        id="customerName"
+                        fieldName="name"
+                        placeholder="Name des Kunden"
+                        errorText="Geben Sie den Namen des Kunden"
+                        objectId={customerId}
+                        value={customer.name}
+                        validators={[VALIDATOR_REQUIRE()]}
+                        onChange={handleInputChange}
+                    />
 
-                <TextInput
-                    style={[styles.input, styles.input.placeholderText]}
-                    placeholder="Name"
-                    onChangeText={(text) => handleChange('name', text)}
-                    value={formData.name}
-                />
+                    <Input
+                        id="customerEmail"
+                        objectId={customerId}
+                        fieldName="email"
+                        placeholder="E-Mail des Kunden"
+                        errorText="Geben Sie die Straße des Kunden"
+                        value={customer.email}
+                        validators={[VALIDATOR_EMAIL()]}
+                        onChange={handleInputChange}
+                    />
+                    <View style={styles.streetContainer}>
+                        <View style={styles.streetWrapper}>
+                            <Input
+                                id="customerStreet"
+                                objectId={customerId}
+                                fieldName="street"
+                                placeholder="Straße des Kunden"
+                                errorText="Geben Sie die Straße des Kunden ein"
+                                value={customer.street}
+                                validators={[VALIDATOR_REQUIRE()]}
+                                onChange={handleInputChange}
+                            />
+                        </View>
 
-                <TextInput
-                    style={[styles.input, styles.input.placeholderText]}
-                    placeholder="Email"
-                    onChangeText={(text) => handleChange('email', text)}
-                    value={formData.email}
-                />
+                        <View style={styles.nrWrapper}>
+                            <Input
+                                id="customerHouseNr"
+                                objectId={customerId}
+                                fieldName="houseNr"
+                                placeholder="Housnummmer des Kunden"
+                                errorText="Geben Sie die Housnummmer des Kunden ein"
+                                value={customer.houseNr}
+                                validators={[VALIDATOR_REQUIRE()]}
+                                onChange={handleInputChange}
+                            />
+                        </View>
+                    </View>
+                    <View style={styles.zipContainer}>
+                        <View style={styles.zipWrapper}>
+                            <Input
+                                id="customerZip"
+                                objectId={customerId}
+                                fieldName="zip"
+                                placeholder="PLZ des Kunden"
+                                errorText="Geben Sie das PLZ des Kunden ein"
+                                value={customer.zip}
+                                validators={[VALIDATOR_REQUIRE()]}
+                                onChange={handleInputChange}
+                            />
+                        </View>
 
-                <View style={styles.streetContainer}>
-                    <View style={styles.streetWrapper}>
-                        <TextInput
-                            style={[styles.input, styles.input.placeholderText]}
-                            placeholder="Straße"
-                            onChangeText={(text) => handleChange('street', text)}
-                            value={formData.street}
-                        />
+
+                        <View style={styles.placeWrapper}>
+                            <Input
+                                id="customerPlace"
+                                objectId={customerId}
+                                fieldName="place"
+                                placeholder="Der Ort des Kunden"
+                                errorText="Geben Sie den Ort des Kunden ein"
+                                value={customer.place}
+                                validators={[VALIDATOR_REQUIRE()]}
+                                onChange={handleInputChange}
+                            />
+                        </View>
                     </View>
 
-                    <View style={styles.nrWrapper}>
-                        <TextInput
-                            style={[styles.input, styles.input.placeholderText]}
-                            placeholder="Nr."
-                            onChangeText={(text) => handleChange('houseNr', text)}
-                            value={formData.houseNr}
-                        />
+
+                    <Input
+                        id="customerPhone"
+                        objectId={customerId}
+                        fieldName="place"
+                        placeholder="Telefonnumer"
+                        errorText="Geben Sie die Telefonnumer Kunden ein"
+                        value={customer.phone}
+                        validators={[VALIDATOR_REQUIRE()]}
+                        onChange={handleInputChange}
+                    />
+
+                    <Input
+                        id="customerWebsite"
+                        objectId={customerId}
+                        fieldName="website"
+                        placeholder="Website"
+                        errorText="Geben Sie die Webseite des Kunden ein"
+                        value={customer.website}
+                        validators={[VALIDATOR_REQUIRE()]}
+                        onChange={handleInputChange}
+                    />
+                    <View style={styles.btnContainer}>
+                        <TouchableOpacity
+                            style={[styles.createBtn, styles.button]}
+                            onPress={handleSubmit}
+                        >
+                            <Text style={styles.createBtnText}>Speichern</Text>
+                        </TouchableOpacity>
                     </View>
-                </View>
-
-                <View style={styles.zipContainer}>
-                    <View style={styles.zipWrapper}>
-                        <TextInput
-                            style={[styles.input, styles.input.placeholderText]}
-                            placeholder="PLZ"
-                            onChangeText={(text) => handleChange('zip', text)}
-                            value={formData.zip}
-                        />
-                    </View>
-                
-                    <View style={styles.placeWrapper}>
-                        <TextInput
-                            style={[styles.input, styles.input.placeholderText]}
-                            placeholder="Ort"
-                            onChangeText={(text) => handleChange('place', text)}
-                            value={formData.place}
-                        />
-                    </View>
-                </View>
-
-                <TextInput
-                    style={[styles.input, styles.input.placeholderText]}
-                    placeholder="Telefon"
-                    onChangeText={(text) => handleChange('phone', text)}
-                    value={formData.phone}
-                />
-
-                <TextInput
-                    style={[styles.input, styles.input.placeholderText]}
-                    placeholder="Webseite"
-                    onChangeText={(text) => handleChange('website', text)}
-                    value={formData.website}
-                />
-
-                <View style={styles.btnContainer}>
-                    <TouchableOpacity 
-                        style={[styles.createBtn, styles.button]} 
-                        onPress={handleSubmit} 
-                    >
-                        <Text style={styles.createBtnText}>Speichern</Text>
-                    </TouchableOpacity>
-                </View>
-
                 </ScrollView>
             </View>
-        </View>  
-    </>
-}
-
-
+        </>
+    );
+};
 
 const styles = StyleSheet.create({
     container: {
-        backgroundColor: '#fff',
-        paddingTop: 20
+        backgroundColor: "#fff",
+        paddingTop: 20,
     },
     input: {
-        width: '100%',
+        width: "100%",
         height: 50,
-        borderColor: 'gray',
-        borderBottomWidth: 1, 
-        borderColor: '#e0e0e0', 
+        borderColor: "gray",
+        borderBottomWidth: 1,
+        borderColor: "#e0e0e0",
         // marginTop: 6,
         marginBottom: 16,
         padding: 7,
@@ -162,56 +198,56 @@ const styles = StyleSheet.create({
     },
 
     select: {
-        margin: 15, 
+        margin: 15,
         fontSize: 18,
         borderRadius: 6,
     },
     textArea: {
-        width: '100%',
+        width: "100%",
         height: 130, // Adjust the height as needed
-        borderColor: '#e0e0e0', 
+        borderColor: "#e0e0e0",
         borderWidth: 1,
-        marginBottom: 30, 
+        marginBottom: 30,
         paddingTop: 7,
         paddingBottom: 7,
-        paddingLeft: 7, 
+        paddingLeft: 7,
         paddingRight: 7,
         fontSize: 18,
         borderRadius: 6,
     },
     placeholderText: {
-        color: 'gray',
+        color: "gray",
         fontSize: 18, // Set the font size of the placeholder text
     },
     streetContainer: {
-        flexDirection: 'row',
-        justifyContent: 'space-between'
+        flexDirection: "row",
+        justifyContent: "space-between",
     },
     streetWrapper: {
-        width: '75%'
+        width: "75%",
     },
     nrWrapper: {
-        width: '20%' 
+        width: "20%",
     },
     zipContainer: {
-        flexDirection: 'row',
-        justifyContent: 'space-between'
+        flexDirection: "row",
+        justifyContent: "space-between",
     },
     zipWrapper: {
-        width: '35%'
+        width: "35%",
     },
     placeWrapper: {
-        width: '60%'
+        width: "60%",
     },
     label: {
         marginTop: 12,
         marginBottom: 6,
-        fontSize: 18
+        fontSize: 18,
     },
 
     btnContainer: {
-        flexDirection: 'row',
-        marginTop: 50
+        flexDirection: "row",
+        marginTop: 50,
     },
 
     button: {
@@ -221,24 +257,21 @@ const styles = StyleSheet.create({
         paddingTop: 14,
         paddingBottom: 14,
         borderRadius: 5,
-        width: '100%',
-        justifyContent: 'center',
+        width: "100%",
+        justifyContent: "center",
         flexDirection: "row",
-        justifyContent: "center", 
-        alignItems: 'center'
+        justifyContent: "center",
+        alignItems: "center",
     },
 
-
-
-    createBtn:{
-        backgroundColor: '#7A9B76', 
+    createBtn: {
+        backgroundColor: "#7A9B76",
     },
-    createBtnText:{
+    createBtnText: {
         fontSize: 18,
-        color: '#fff',
-        fontWeight: '700'
+        color: "#fff",
+        fontWeight: "700",
     },
-
-})
+});
 
 export default CustomerDetails;
