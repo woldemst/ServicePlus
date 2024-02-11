@@ -1,24 +1,21 @@
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, ScrollView, ActivityIndicator } from "react-native";
 import { useContext, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigation } from "@react-navigation/native";
 import axios from "axios";
 
-import { getCustomerData, updateCustomerData } from "../../actions/customerActions";
+import { VALIDATOR_REQUIRE, VALIDATOR_EMAIL } from "../../util/validators";
 import { AuthContext } from "../../context/auth-context";
 import { updateCustomer } from "../../actions/customerActions";
 import Input from "../../shared/UIElements/Input";
-import { VALIDATOR_REQUIRE, VALIDATOR_EMAIL } from "../../util/validators";
 
 const CustomerDetails = (props) => {
     const customerId = props.id;
-    const navigation = useNavigation();
     const auth = useContext(AuthContext);
 
     const dispatch = useDispatch();
     const customersArray = useSelector((state) => state.customer.customersArray.customers);
     const customer = customersArray.find(customer => customer._id == customerId)
-    console.log(customer);
+    // console.log(customer);
 
     const handleInputChange = (fieldName, value, validators, objectId) => {
         dispatch(updateCustomer(fieldName, value, validators, objectId));
@@ -50,130 +47,129 @@ const CustomerDetails = (props) => {
 
 
     return !customer ? (
-        <ActivityIndicator size="large" color="#7A9B76" />
+        <ActivityIndicator style={styles.loader} size="large" color="#7A9B76" />
+
     ) : (
         <View style={styles.container}>
-            <ScrollView showsVerticalScrollIndicator={false}>
-                <Input
-                    id="customerName"
-                    fieldName="name"
-                    placeholder="Name des Kunden"
-                    errorText="Geben Sie den Namen des Kunden"
-                    objectId={customerId}
-                    value={customer.name}
-                    validators={[VALIDATOR_REQUIRE()]}
-                    onChange={handleInputChange}
-                />
+            <Input
+                id="customerName"
+                fieldName="name"
+                placeholder="Name des Kunden"
+                errorText="Geben Sie den Namen des Kunden"
+                objectId={customerId}
+                value={customer.name}
+                validators={[VALIDATOR_REQUIRE()]}
+                onChange={handleInputChange}
+            />
 
-                <Input
-                    id="customerEmail"
-                    objectId={customerId}
-                    fieldName="email"
-                    placeholder="E-Mail des Kunden"
-                    errorText="Geben Sie eine E-Mail des Kunden"
-                    value={customer.email}
-                    validators={[VALIDATOR_EMAIL()]}
-                    onChange={handleInputChange}
-                />
-                <View style={styles.streetContainer}>
-                    <View style={styles.streetWrapper}>
-                        <Input
-                            id="customerStreet"
-                            objectId={customerId}
-                            fieldName="street"
-                            placeholder="Straße des Kunden"
-                            errorText="Geben Sie die Straße des Kunden ein"
-                            value={customer.street}
-                            validators={[VALIDATOR_REQUIRE()]}
-                            onChange={handleInputChange}
-                        />
-                    </View>
-
-                    <View style={styles.nrWrapper}>
-                        <Input
-                            id="customerHouseNr"
-                            objectId={customerId}
-                            fieldName="houseNr"
-                            placeholder="Housnummmer des Kunden"
-                            errorText="Geben Sie die Housnummmer des Kunden ein"
-                            value={customer.houseNr}
-                            validators={[VALIDATOR_REQUIRE()]}
-                            onChange={handleInputChange}
-                        />
-                    </View>
+            <Input
+                id="customerEmail"
+                objectId={customerId}
+                fieldName="email"
+                placeholder="E-Mail des Kunden"
+                errorText="Geben Sie eine E-Mail des Kunden"
+                value={customer.email}
+                validators={[VALIDATOR_EMAIL()]}
+                onChange={handleInputChange}
+            />
+            <View style={styles.streetContainer}>
+                <View style={styles.streetWrapper}>
+                    <Input
+                        id="customerStreet"
+                        objectId={customerId}
+                        fieldName="street"
+                        placeholder="Straße des Kunden"
+                        errorText="Geben Sie die Straße des Kunden ein"
+                        value={customer.street}
+                        validators={[VALIDATOR_REQUIRE()]}
+                        onChange={handleInputChange}
+                    />
                 </View>
-                <View style={styles.zipContainer}>
-                    <View style={styles.zipWrapper}>
-                        <Input
-                            id="customerZip"
-                            objectId={customerId}
-                            fieldName="zip"
-                            placeholder="PLZ des Kunden"
-                            errorText="Geben Sie das PLZ des Kunden ein"
-                            value={customer.zip}
-                            validators={[VALIDATOR_REQUIRE()]}
-                            onChange={handleInputChange}
-                        />
-                    </View>
 
-
-                    <View style={styles.placeWrapper}>
-                        <Input
-                            id="customerPlace"
-                            objectId={customerId}
-                            fieldName="place"
-                            placeholder="Der Ort des Kunden"
-                            errorText="Geben Sie den Ort des Kunden ein"
-                            value={customer.place}
-                            validators={[VALIDATOR_REQUIRE()]}
-                            onChange={handleInputChange}
-                        />
-                    </View>
+                <View style={styles.nrWrapper}>
+                    <Input
+                        id="customerHouseNr"
+                        objectId={customerId}
+                        fieldName="houseNr"
+                        placeholder="Housnummmer des Kunden"
+                        errorText="Geben Sie die Housnummmer des Kunden ein"
+                        value={customer.houseNr}
+                        validators={[VALIDATOR_REQUIRE()]}
+                        onChange={handleInputChange}
+                    />
+                </View>
+            </View>
+            <View style={styles.zipContainer}>
+                <View style={styles.zipWrapper}>
+                    <Input
+                        id="customerZip"
+                        objectId={customerId}
+                        fieldName="zip"
+                        placeholder="PLZ des Kunden"
+                        errorText="Geben Sie das PLZ des Kunden ein"
+                        value={customer.zip}
+                        validators={[VALIDATOR_REQUIRE()]}
+                        onChange={handleInputChange}
+                    />
                 </View>
 
 
-                <Input
-                    id="customerPhone"
-                    objectId={customerId}
-                    fieldName="place"
-                    placeholder="Telefonnumer"
-                    errorText="Geben Sie die Telefonnumer Kunden ein"
-                    value={customer.phone}
-                    validators={[VALIDATOR_REQUIRE()]}
-                    onChange={handleInputChange}
-                />
-
-                <Input
-                    id="customerWebsite"
-                    objectId={customerId}
-                    fieldName="website"
-                    placeholder="Website"
-                    errorText="Geben Sie die Webseite des Kunden ein"
-                    value={customer.website}
-                    validators={[VALIDATOR_REQUIRE()]}
-                    onChange={handleInputChange}
-                />
-
-                <Input
-                    id="customerDescription"
-                    objectId={customerId}
-                    fieldName="description"
-                    placeholder="Beschreibung"
-                    errorText="Geben Sie die BEschreibung des Kunden ein"
-                    value={customer.description}
-                    validators={[VALIDATOR_REQUIRE()]}
-                    onChange={handleInputChange}
-                />
-
-                <View style={styles.btnContainer}>
-                    <TouchableOpacity
-                        style={[styles.createBtn, styles.button]}
-                        onPress={handleSubmit}
-                    >
-                        <Text style={styles.createBtnText}>Speichern</Text>
-                    </TouchableOpacity>
+                <View style={styles.placeWrapper}>
+                    <Input
+                        id="customerPlace"
+                        objectId={customerId}
+                        fieldName="place"
+                        placeholder="Der Ort des Kunden"
+                        errorText="Geben Sie den Ort des Kunden ein"
+                        value={customer.place}
+                        validators={[VALIDATOR_REQUIRE()]}
+                        onChange={handleInputChange}
+                    />
                 </View>
-            </ScrollView>
+            </View>
+
+
+            <Input
+                id="customerPhone"
+                objectId={customerId}
+                fieldName="place"
+                placeholder="Telefonnumer"
+                errorText="Geben Sie die Telefonnumer Kunden ein"
+                value={customer.phone}
+                validators={[VALIDATOR_REQUIRE()]}
+                onChange={handleInputChange}
+            />
+
+            <Input
+                id="customerWebsite"
+                objectId={customerId}
+                fieldName="website"
+                placeholder="Website"
+                errorText="Geben Sie die Webseite des Kunden ein"
+                value={customer.website}
+                validators={[VALIDATOR_REQUIRE()]}
+                onChange={handleInputChange}
+            />
+
+            <Input
+                id="customerDescription"
+                objectId={customerId}
+                fieldName="description"
+                placeholder="Beschreibung"
+                errorText="Geben Sie die BEschreibung des Kunden ein"
+                value={customer.description}
+                validators={[VALIDATOR_REQUIRE()]}
+                onChange={handleInputChange}
+            />
+
+            <View style={styles.btnContainer}>
+                <TouchableOpacity
+                    style={[styles.createBtn, styles.button]}
+                    onPress={handleSubmit}
+                >
+                    <Text style={styles.createBtnText}>Speichern</Text>
+                </TouchableOpacity>
+            </View>
         </View>
     )
 };
@@ -270,6 +266,11 @@ const styles = StyleSheet.create({
         fontSize: 18,
         color: "#fff",
         fontWeight: "700",
+    },
+    loader: {
+        flex: 1,
+        // borderWidth: 1,
+        // borderColor: 'red',
     },
 });
 

@@ -57,7 +57,6 @@ const WorkerList = () => {
                                 }} >
                                 <Image style={styles.headerIcon} source={require('../../../assets/customer/user_plus.png')} />
                             </TouchableOpacity>
-
                         </View>
 
                     </View>
@@ -65,7 +64,8 @@ const WorkerList = () => {
 
                 <View style={styles.workerList}>
                     {loading ? (
-                        <ActivityIndicator size="large" color="#7A9B76" />
+                        <ActivityIndicator style={styles.loader} size="large" color="#7A9B76" />
+
                     ) : (
                         fetchedData.workers.map(worker => (
                             <WorkerItem
@@ -95,8 +95,8 @@ const WorkerList = () => {
 
 const styles = StyleSheet.create({
     container: {
-        // borderWidth: 2, 
-        // borderColor: 'red'
+        // borderWidth: 2,
+        // borderColor: 'red',
 
         backgroundColor: '#fff',
         flex: 1,
@@ -136,7 +136,7 @@ const styles = StyleSheet.create({
         paddingTop: 32,
         paddingBottom: 32,
         paddingLeft: 16,
-        paddingRight: 16
+        paddingRight: 16,
     },
     workerContainer: {
         flexDirection: 'row',
@@ -205,7 +205,10 @@ const styles = StyleSheet.create({
         width: '13%',
         // borderColor: 'red',
         // borderWidth: 2
-    }
+    },
+    loader: {
+        flex: 1,
+    },
 })
 
 

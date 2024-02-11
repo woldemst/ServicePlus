@@ -66,7 +66,7 @@ const CustomerList = () => {
 
                 <View style={styles.customerList}>
                     {loading ? (
-                        <ActivityIndicator size="large" color="#7A9B76" />
+                        <ActivityIndicator style={styles.loader} size="large" color="#7A9B76" />
                     ) : (
                         fetchedData.customers.map(customer => (
                             <CustomerItem
@@ -209,7 +209,10 @@ const styles = StyleSheet.create({
         width: '13%',
         // borderColor: 'red',
         // borderWidth: 2
-    }
+    },
+    loader: {
+        flex: 1,
+    },
 })
 
 
