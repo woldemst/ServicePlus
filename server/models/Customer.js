@@ -14,6 +14,7 @@ const customerSchema = new mongoose.Schema({
   contact: { type: String, required: false },
   worker: { type: String, required: false },
   nextAppointment: { type: String, required: false },
+  website: { type: String, required: false },
   description: { type: String, required: false },
   // orders: { type: Array, required: false },
 

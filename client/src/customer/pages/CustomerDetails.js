@@ -14,27 +14,11 @@ const CustomerDetails = (props) => {
     const customerId = props.id;
     const navigation = useNavigation();
     const auth = useContext(AuthContext);
-    const [loading, setLoading] = useState(true)
 
     const dispatch = useDispatch();
     const customersArray = useSelector((state) => state.customer.customersArray.customers);
     const customer = customersArray.find(customer => customer._id == customerId)
-    // console.log(customer);
-
-    useEffect(() => {
-        const fetchCustomer = async () => {
-            try {
-                const response = await axios.get(
-                    `http://localhost:8000/api/customers/${auth.firmId}/${customerId}`);
-                    setLoading(false)
-                // dispatch(getCustomerData(response.data.customer));
-            } catch (err) {
-                console.log("Error fetching customer profile", err);
-                setLoading(false)
-            }
-        };
-        fetchCustomer();
-    }, [dispatch]);
+    console.log(customer);
 
     const handleInputChange = (fieldName, value, validators, objectId) => {
         dispatch(updateCustomer(fieldName, value, validators, objectId));
@@ -54,6 +38,7 @@ const CustomerDetails = (props) => {
                 place: customer.place,
                 phone: customer.phone,
                 website: customer.website,
+                description: customer.description,
             });
             props.toggle();
             props.handleRefresh();
@@ -63,7 +48,8 @@ const CustomerDetails = (props) => {
         }
     };
 
-    return loading ? (
+
+    return !customer ? (
         <ActivityIndicator size="large" color="#7A9B76" />
     ) : (
         <View style={styles.container}>
@@ -84,7 +70,7 @@ const CustomerDetails = (props) => {
                     objectId={customerId}
                     fieldName="email"
                     placeholder="E-Mail des Kunden"
-                    errorText="Geben Sie die Straße des Kunden"
+                    errorText="Geben Sie eine E-Mail des Kunden"
                     value={customer.email}
                     validators={[VALIDATOR_EMAIL()]}
                     onChange={handleInputChange}
@@ -167,6 +153,18 @@ const CustomerDetails = (props) => {
                     validators={[VALIDATOR_REQUIRE()]}
                     onChange={handleInputChange}
                 />
+
+                <Input
+                    id="customerDescription"
+                    objectId={customerId}
+                    fieldName="description"
+                    placeholder="Beschreibung"
+                    errorText="Geben Sie die BEschreibung des Kunden ein"
+                    value={customer.description}
+                    validators={[VALIDATOR_REQUIRE()]}
+                    onChange={handleInputChange}
+                />
+
                 <View style={styles.btnContainer}>
                     <TouchableOpacity
                         style={[styles.createBtn, styles.button]}

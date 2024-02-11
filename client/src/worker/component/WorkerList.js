@@ -1,35 +1,33 @@
 import { View, Text, StyleSheet, Image, TouchableOpacity, ScrollView, ActivityIndicator } from "react-native"
 import { useContext, useEffect, useState } from "react"
-// import { useNavigation } from '@react-navigation/native'
 import { useDispatch, useSelector } from "react-redux"
 import { useNavigation } from "@react-navigation/native"
 import axios from "axios"
 
-import { getWorkerData, getWorkersArray } from "../../actions/workerActions"
+import { getWorkerData } from "../../actions/workerActions"
 import { AuthContext } from "../../context/auth-context"
 import WorkerItem from "./WokerItem"
 
 const WorkerList = () => {
-    const auth = useContext(AuthContext)
-    const navigation = useNavigation()
     const dispatch = useDispatch()
-    const [ loading, setLoading] = useState(true)
+    const navigation = useNavigation()
+    const auth = useContext(AuthContext)
+
+    const [loading, setLoading] = useState(true)
+    const [refresh, setRefresh] = useState(false)
 
     const fetchedData = useSelector(state => state.worker.workersArray)
     const handleRefresh = () => setRefresh(prevData => !prevData);
-    const [refresh, setRefresh] = useState(false)
-    
 
-    useEffect(()=> {
+    // console.log(fetchedData);
+    useEffect(() => {
         const fetchWorkers = async () => {
             try {
                 const response = await axios.get(`http://localhost:8000/api/workers/${auth.firmId}/all`)
-
-                dispatch(getWorkerData(response.data))  
-
+                dispatch(getWorkerData(response.data))
                 setLoading(false)
             } catch (err) {
-                console.log('Error fetching workers', err);
+                console.log('Error wwhile fetching workers', err);
                 setLoading(false)
             }
         }
@@ -48,10 +46,10 @@ const WorkerList = () => {
                         </View>
 
                         <View style={styles.headerIconContainer} >
-                            <TouchableOpacity 
-                                style={styles.headerButton} 
+                            <TouchableOpacity
+                                style={styles.headerButton}
                                 onPress={() => {
-                                    navigation.navigate('createWorker',  { 
+                                    navigation.navigate('createWorker', {
                                         name: 'Create worker',
                                         handleRefresh: () => handleRefresh()
 
@@ -65,30 +63,30 @@ const WorkerList = () => {
                     </View>
                 </View>
 
-                    <View style={styles.workerList}>
-                        {loading ? (
-                            <ActivityIndicator size="large" color="#0000ff" />
-                        ) : (
-                            fetchedData.workers.map(worker => (
-                                <WorkerItem 
-                                    id={worker._id} 
-                                    key={worker._id} 
-                                    workerNr={worker._id}
-                                    name={worker.name}
-                                    email={worker.email}
-                                    phone={worker.phone}
-                                    description={worker.description}
-                                    // nextAppointment
-                                    street={worker.street}
-                                    houseNr={worker.houseNr}
-                                    zip={worker.zip}
-                                    place={worker.place}
-                                    handleRefresh={handleRefresh}
-                                />
-                            ))
-                            
-                        )}
-                    </View>
+                <View style={styles.workerList}>
+                    {loading ? (
+                        <ActivityIndicator size="large" color="#7A9B76" />
+                    ) : (
+                        fetchedData.workers.map(worker => (
+                            <WorkerItem
+                                id={worker._id}
+                                key={worker._id}
+                                workerNr={worker._id}
+                                name={worker.name}
+                                email={worker.email}
+                                phone={worker.phone}
+                                description={worker.description}
+                                // nextAppointment
+                                street={worker.street}
+                                houseNr={worker.houseNr}
+                                zip={worker.zip}
+                                place={worker.place}
+                                handleRefresh={handleRefresh}
+                            />
+                        ))
+
+                    )}
+                </View>
             </ScrollView>
         </View>
     </>
@@ -104,7 +102,7 @@ const styles = StyleSheet.create({
         flex: 1,
     },
     header: {
-        
+
         width: '100%',
         paddingTop: 27,
         paddingBottom: 10,
@@ -136,8 +134,8 @@ const styles = StyleSheet.create({
     },
     workerList: {
         paddingTop: 32,
-        paddingBottom: 32, 
-        paddingLeft: 16, 
+        paddingBottom: 32,
+        paddingLeft: 16,
         paddingRight: 16
     },
     workerContainer: {
@@ -199,7 +197,7 @@ const styles = StyleSheet.create({
         color: '#7a9b76',
         fontWeight: '700'
     },
-    arrowWrapper:{
+    arrowWrapper: {
         justifyContent: 'center'
     },
     circleWrapper: {

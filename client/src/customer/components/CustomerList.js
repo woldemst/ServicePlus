@@ -33,7 +33,7 @@ const CustomerList = () => {
             }
         }
         fetchCustomers()
-    }, [dispatch, refresh])
+    }, [refresh])
 
     return <>
         <View style={styles.container}>

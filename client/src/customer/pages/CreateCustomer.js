@@ -28,6 +28,7 @@ const CreateCustomer = (props) => {
         zip: fetchedData.inputs.zip.value,
         place: fetchedData.inputs.place.value,
         phone: fetchedData.inputs.phone.value,
+        website: fetchedData.inputs.website.value,
         description: fetchedData.inputs.description.value,
       })
 
@@ -54,7 +55,7 @@ const CreateCustomer = (props) => {
           <Input
             id='customerName'
             fieldName='name'
-            placeholder="Kundenname"
+            placeholder="Name"
             errorText='Geben Sie einen Namen für den Kunde ein'
             value={fetchedData.inputs.name.value}
             validators={[VALIDATOR_REQUIRE()]}
@@ -64,7 +65,7 @@ const CreateCustomer = (props) => {
           <Input
             id='customerEmail'
             fieldName='email'
-            placeholder="Kundenemail"
+            placeholder="E-Mail"
             errorText='Geben Sie eine E-Mail Adresse des Kunden ein'
             value={fetchedData.inputs.email.value}
             validators={[VALIDATOR_REQUIRE()]}
@@ -76,7 +77,7 @@ const CreateCustomer = (props) => {
               <Input
                 id='customerStreet'
                 fieldName='street'
-                placeholder="Straße des Kunden"
+                placeholder="Straße"
                 errorText='Geben Sie die Straße des Kunden ein'
                 value={fetchedData.inputs.street.value}
                 validators={[VALIDATOR_REQUIRE()]}
@@ -88,7 +89,7 @@ const CreateCustomer = (props) => {
               <Input
                 id='customerHouseNr'
                 fieldName='houseNr'
-                placeholder="Housenummer des Kunden"
+                placeholder="Housenummer"
                 errorText='Geben Sie die Housenummer des Kunden ein'
                 value={fetchedData.inputs.houseNr.value}
                 validators={[VALIDATOR_REQUIRE()]}
@@ -102,7 +103,7 @@ const CreateCustomer = (props) => {
               <Input
                 id='customerZip'
                 fieldName='zip'
-                placeholder="PLZ des Kunden"
+                placeholder="PLZ"
                 errorText='Geben Sie PLZ des Kunden ein'
                 value={fetchedData.inputs.zip.value}
                 validators={[VALIDATOR_REQUIRE()]}
@@ -114,7 +115,7 @@ const CreateCustomer = (props) => {
               <Input
                 id='customerPlace'
                 fieldName='place'
-                placeholder="Straße des Kunden"
+                placeholder="Ort"
                 errorText='Geben Sie den Ort des Kunden ein'
                 value={fetchedData.inputs.place.value}
                 validators={[VALIDATOR_REQUIRE()]}
@@ -126,28 +127,28 @@ const CreateCustomer = (props) => {
           <Input
             id='customerPhone'
             fieldName='phone'
-            placeholder="Telefonnummer des Kunden"
-            errorText='Geben Sie die Telefonnummer des Kunden ein'
+            placeholder="Telefonnummer"
+            errorText='Telefonnummer des Kunden ein'
             value={fetchedData.inputs.phone.value}
             validators={[VALIDATOR_REQUIRE()]}
             onChange={handleInputChange}
           />
 
-          {/* <Input
+          <Input
             id='customerWebsite'
             fieldName='website'
-            placeholder="Website des Kunden"
+            placeholder="Website"
             errorText='Geben Sie Website des Kunden ein'
             value={fetchedData.inputs.website.value}
             validators={[VALIDATOR_REQUIRE()]}
             onChange={handleInputChange}
-          /> */}
+          />
 
 
           <Input
             id='customerDescription'
             fieldName='description'
-            placeholder="Beschreibung des Kunden"
+            placeholder="Beschreibung"
             errorText='Geben Sie die Beschreibung des Kunden ein'
             value={fetchedData.inputs.description.value}
             validators={[VALIDATOR_REQUIRE()]}

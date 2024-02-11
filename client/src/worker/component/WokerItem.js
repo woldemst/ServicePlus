@@ -1,11 +1,9 @@
 import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native"
 import { useEffect, useState } from "react"
-import { useNavigation } from '@react-navigation/native'
 import ModalComponent from "../../../src/shared/UIElements/Modal"
 import WorkerDetails from "../pages/WorkerDetails"
 
 const WorkerItem = (props) => {
-    const navigation = useNavigation()
 
     const [isModalVisible, setModalVisible] = useState(false);
 
