@@ -35,12 +35,27 @@ const CustomerList = () => {
         fetchCustomers()
     }, [refresh])
 
+    if (fetchedData.customers.length === 0) {
+        return (
+            <View style={styles.suggestContainer}>
+                <Text style={styles.addText}>Noch kein Kunde</Text>
+
+                <View style={styles.centeredImageContainer}>
+                    <TouchableOpacity
+                        onPress={() => {navigation.navigate('createCustomer', {handleRefresh: () => handleRefresh()}) }} >
+                        <Image style={styles.addImg} source={require('../../../assets/firm/add.png')} />
+                    </TouchableOpacity>
+
+                </View>
+
+            </View>
+        )
+    }
+
     return <>
         <View style={styles.container}>
             <ScrollView showsVerticalScrollIndicator={false}>
                 <View style={styles.header} >
-
-
                     <View style={styles.headerContent}>
                         <View style={styles.textContainer} >
                             <Text style={styles.headerText}>Kunden</Text>
@@ -213,6 +228,28 @@ const styles = StyleSheet.create({
     loader: {
         flex: 1,
     },
+    // if no customer yet 
+    suggestContainer: {
+        flex: 1,
+        justifyContent: 'center',
+        paddingTop: 16,
+
+    },
+    addText: {
+        fontSize: 21,
+        textAlign: 'center',
+
+    },
+    centeredImageContainer: {
+        flex: 1,
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    addImg: {
+        // borderColor: 'red',
+        // borderWidth: 2
+
+    }
 })
 
 
