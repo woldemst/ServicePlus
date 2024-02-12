@@ -15,7 +15,6 @@ const initialState = {
     isFormValid: false,
 };
 
-
 const loginReducer = (state = initialState, action) => {
 
     switch (action.type) {
@@ -36,13 +35,11 @@ const loginReducer = (state = initialState, action) => {
             // Check the overall form validity
             let isFormValid = Object.values(updatedInputs).every((field) => field.isValid);
 
-
             return {
                 ...state,
                 inputs: updatedInputs, // Update the inputs fiel
                 isFormValid,
             };
-
 
         default:
             return state;

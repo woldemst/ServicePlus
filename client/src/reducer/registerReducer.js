@@ -15,10 +15,12 @@ const initialState = {
       value: "",
       isValid: false,
     },
-    role: {
-      value: "",
-      isValid: false,
-    },
+  },
+  selects: {
+    role: [
+      { key: "1", value: "Owner", isValid: false },
+      { key: "2", value: "Worker", isValid: false },
+    ],
   },
   isFormValid: false,
 };
@@ -39,41 +41,63 @@ const registerReducer = (state = initialState, action) => {
         [fieldName]: updatedField,
       };
 
-      // Check the overall form validity
+
+      let updatedSelects;
+      if (fieldName === 'role') {
+        updatedSelects = {
+          ...state.selects,
+          [fieldName]: state.selects[fieldName].map(option => ({
+            ...option,
+            isValid: option.key === value ? updatedField.isValid : option.isValid,
+          })),
+        }
+
+      }
+      else {
+        updatedSelects = {
+          ...state.selects,
+        }
+      }
+
+      let isRoleValid;
+      if (fieldName === 'role') {
+        isRoleValid = updatedField.isValid
+
+      }
+
+
       let isFormValid = Object.values(updatedInputs).every(
         (field) => field.isValid
-      );
+      ) && isRoleValid;
+
 
       return {
         ...state,
-        inputs: updatedInputs, // Update the inputs field
+        inputs: updatedInputs,
+        selects: updatedSelects,
         isFormValid,
       };
-
-
     case CLEAR_REGISTER_FIELD:
       return {
-        name: {
-          value: "",
-          isValid: false,
-          isTouched: false,
-        },
-        email: {
-          value: "",
-          isValid: false,
-          isTouched: false,
-        },
-        password: {
-          value: "",
-          isValid: false,
-          isTouched: false,
-        },
-        role: {
-          value: "",
-          isValid: false,
-          isTouched: false,
-        },
-        isFormValid: false,
+        // name: {
+        //   value: "",
+        //   isValid: false,
+        // },
+        // email: {
+        //   value: "",
+        //   isValid: false,
+        // },
+        // password: {
+        //   value: "",
+        //   isValid: false,
+        // },
+        // role: {
+        //   value: "",
+        //   isValid: false,
+        // },
+        // isFormValid: false,
+
+        ...initialState,
       };
 
     default:

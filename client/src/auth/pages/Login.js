@@ -5,11 +5,11 @@ import { updateUserData } from "../../actions/userActions";
 import axios from "axios";
 
 import { VALIDATOR_EMAIL, VALIDATOR_MINLENGTH } from "../../util/validators";
+import { updateAndValidateLoginField } from "../../actions/loginActions";
 import { useDispatch, useSelector } from "react-redux";
 import { AuthContext } from "../../context/auth-context";
 import Input from "../../shared/UIElements/Input";
 import Button from "../../shared/UIElements/Button";
-import { updateAndValidateLoginField } from "../../actions/loginActions";
 
 const Login = () => {
     const auth = useContext(AuthContext)
