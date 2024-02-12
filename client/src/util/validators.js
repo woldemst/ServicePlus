@@ -6,6 +6,10 @@ const VALIDATOR_TYPE_MAX = 'MAX';
 const VALIDATOR_TYPE_EMAIL = 'EMAIL';
 const VALIDATOR_TYPE_FILE = 'FILE';
 
+const VALIDATOR_TYPE_SELECT = 'SELECT';
+
+export const VALIDATOR_SELECT = () => ({ type: VALIDATOR_TYPE_SELECT });
+
 export const VALIDATOR_REQUIRE = () => ({ type: VALIDATOR_TYPE_REQUIRE });
 export const VALIDATOR_FILE = () => ({ type: VALIDATOR_TYPE_FILE });
 export const VALIDATOR_MINLENGTH = val => ({
@@ -40,6 +44,11 @@ export const validate = (value, validators) => {
     }
     if (validator.type === VALIDATOR_TYPE_EMAIL) {
       isValid = isValid && /^\S+@\S+\.\S+$/.test(value);
+    }
+    // Add the new validator logic for SELECT
+    if (validator.type === VALIDATOR_TYPE_SELECT) {
+      // Custom validation for SELECT type
+      isValid = isValid && value !== null && value !== undefined && value !== ''; // Adjust the condition as needed
     }
   }
   return isValid;

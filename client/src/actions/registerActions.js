@@ -14,13 +14,13 @@ export const updateRegisterField = (fieldName, value) => ({
   payload: { fieldName, value }
 })
 
-export const updateAndValidateRegisterField = (fieldName, value, isValid) => {
+export const updateAndValidateRegisterField = (fieldName, value, validators) => {
   return {
     type: UPDATE_AND_VALIDATE_REGISTER_FIELD,
     payload: {
       fieldName,
       value,
-      isValid
+      validators
     }
   };
 };
