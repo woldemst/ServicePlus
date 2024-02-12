@@ -5,7 +5,6 @@ import { NavigationContainer } from '@react-navigation/native';
 import { useCallback, useEffect, useState, useContext } from 'react';
 import { Provider } from 'react-redux';
 import React from 'react';
-import { useNavigation } from '@react-navigation/native';
 
 import CustomerList from './src/customer/components/CustomerList';
 import CustomerDetails from './src/customer/pages/CustomerDetails';
@@ -13,7 +12,7 @@ import CreateCustomer from './src/customer/pages/CreateCustomer';
 import WorkerList from './src/worker/component/WorkerList';
 import WorkerCreate from './src/worker/pages/WorkerCreate';
 import { AuthContext } from './src/context/auth-context';
-import EditProfile from './src/firm/pages/EditProfile';
+import UpdateProfile from './src/firm/pages/UpdateProfile';
 import Overview from './src/overview/pages/Overview';
 import OrderView from './src/order/pages/OrderView';
 import Register from "./src/auth/pages/Register";
@@ -55,9 +54,9 @@ export default function App() {
       setUserId(uid)
       setUserRole(role)
       setFirmId(fid)
-      await AsyncStorage.setItem('userData', JSON.stringify({ userId: uid, token: token, role: role, firmId: fid}))
+      await AsyncStorage.setItem('userData', JSON.stringify({ userId: uid, token: token, role: role, firmId: fid }))
 
-      
+
 
     } catch (err) {
       console.error('Error setting user data:', err);
@@ -105,7 +104,7 @@ export default function App() {
           {/* orders */}
           <Stack.Screen name='orderView' component={OrderView} options={{ title: 'Order view' }} />
 
-          <Stack.Screen name='editProfile' component={EditProfile} options={{ title: 'Edit Profile' }} />
+          <Stack.Screen name='updateProfile' component={UpdateProfile} options={{ title: 'Edit Profile' }} />
           {/* customers */}
           <Stack.Screen name='customerList' component={CustomerList} options={{ title: 'Customers' }} />
           <Stack.Screen name='createCustomer' component={CreateCustomer} options={{ title: 'Create Customer' }} />
@@ -137,6 +136,7 @@ export default function App() {
       </NavigationContainer>
     )
   }
+
 
   return (
     <Provider store={store}>
