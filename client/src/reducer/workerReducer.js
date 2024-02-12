@@ -45,32 +45,32 @@ const initialState = {
 const workerReducer = (state = initialState, action) => {
   switch (action.type) {
     case UPDATE_INPUT:
-        const { fieldName, value, validators } = action.payload;
-  
-        // console.log(action.payload);
-        const updatedField = {
-          ...state.inputs[fieldName],
-          value,
-          isValid: validate(value, validators) 
-        };
-        const updatedInputs = {
-          ...state.inputs,
-          [fieldName]: updatedField,
-        };
-  
-        let isFormValid = Object.values(updatedInputs).every((field) => field.isValid);
-  
-        return {
-          ...state,
-          inputs: updatedInputs,
-          isFormValid,
-        };
+      const { fieldName, value, validators } = action.payload;
+
+      // console.log(action.payload);
+      const updatedField = {
+        ...state.inputs[fieldName],
+        value,
+        isValid: validate(value, validators)
+      };
+      const updatedInputs = {
+        ...state.inputs,
+        [fieldName]: updatedField,
+      };
+
+      let isFormValid = Object.values(updatedInputs).every((field) => field.isValid);
+
+      return {
+        ...state,
+        inputs: updatedInputs,
+        isFormValid,
+      };
     case UPDATE_WORKER:
       const { field, val, objectId } = action.payload;
 
       const updatedWorker = {
         ...state.workersArray.workers.find(worker => worker._id === objectId),
-        [field]: val,
+        [field]: val
       };
 
       // console.log(updatedWorker);

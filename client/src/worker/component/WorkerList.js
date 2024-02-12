@@ -8,6 +8,7 @@ import { getWorkerData } from "../../actions/workerActions"
 import { AuthContext } from "../../context/auth-context"
 import WorkerItem from "./WokerItem"
 
+
 const WorkerList = () => {
     const dispatch = useDispatch()
     const navigation = useNavigation()
@@ -27,7 +28,7 @@ const WorkerList = () => {
                 dispatch(getWorkerData(response.data))
                 setLoading(false)
             } catch (err) {
-                console.log('Error wwhile fetching workers', err);
+                console.log('Error while fetching workers', err);
                 setLoading(false)
             }
         }
@@ -35,6 +36,27 @@ const WorkerList = () => {
     }, [refresh])
 
 
+    if (fetchedData.workers.length === 0) {
+        return (
+            <View style={styles.suggestContainer}>
+                <Text style={styles.addText}>Noch kein Mitarbeiter</Text>
+
+                <View style={styles.centeredImageContainer}>
+                    <TouchableOpacity
+                        onPress={() => {
+                            navigation.navigate('createWorker', {
+                                handleRefresh: () => handleRefresh()
+
+                            })
+                        }} >
+                        <Image style={styles.addImg} source={require('../../../assets/firm/add.png')} />
+                    </TouchableOpacity>
+
+                </View>
+
+            </View>
+        )
+    }
 
     return <>
         <View style={styles.container}>
@@ -209,6 +231,28 @@ const styles = StyleSheet.create({
     loader: {
         flex: 1,
     },
+    // if no worker 
+    suggestContainer: {
+        flex: 1,
+        justifyContent: 'center',
+        paddingTop: 16,
+
+    },
+    addText: {
+        fontSize: 21,
+        textAlign: 'center',
+
+    },
+    centeredImageContainer: {
+        flex: 1,
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    addImg: {
+        // borderColor: 'red',
+        // borderWidth: 2
+
+    }
 })
 
 

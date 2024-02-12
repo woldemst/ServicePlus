@@ -1,13 +1,8 @@
-import {
-  View,
-  Text,
-  StyleSheet,
-  ScrollView,
-} from "react-native";
+import { View, Text, StyleSheet, ScrollView } from "react-native";
 import { useContext, useState } from "react";
-import axios from "axios";
 import { useNavigation } from "@react-navigation/native";
 import { useSelector, useDispatch } from "react-redux";
+import axios from "axios";
 
 import { VALIDATOR_REQUIRE } from "../../util/validators";
 import { AuthContext } from "../../context/auth-context";
@@ -17,11 +12,11 @@ import { clearWorkerField, createWorker, updateInput } from "../../actions/worke
 
 const WorkerCreate = (props) => {
   const auth = useContext(AuthContext)
+  const dispatch = useDispatch()
   const navigation = useNavigation()
   const fetchedData = useSelector(state => state.worker)
 
   // console.log(fetchedData);
-  const dispatch = useDispatch()
   const handleSubmit = async () => {
     try {
       const URL = `http://localhost:8000/api/workers/${auth.firmId}/new`
@@ -154,7 +149,6 @@ const WorkerCreate = (props) => {
         <View style={styles.btnContainer}>
           <Button
             style={fetchedData.isFormValid ? [styles.createBtn, styles.button] : styles.invalideButton}
-            // style={[styles.createBtn, styles.button]}
             disabled={!fetchedData.isFormValid}
             buttonText={styles.createBtnText}
             onPress={handleSubmit}

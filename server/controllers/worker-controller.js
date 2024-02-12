@@ -117,6 +117,7 @@ const createWorker = async (req, res, next) => {
 
     const createWorker = new Worker({
         firmId: firmId,
+        // workerNr: workerNr,
         name: name, 
         email: email, 
         street: street, 
@@ -125,7 +126,6 @@ const createWorker = async (req, res, next) => {
         place: place, 
         phone: phone, 
         description: description,
-        // workerNr: workerNr,
         // mobilePhone: mobilePhone, 
     })
     
