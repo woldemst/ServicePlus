@@ -18,6 +18,7 @@ import OrderView from './src/order/pages/OrderView';
 import Register from "./src/auth/pages/Register";
 import Login from './src/auth/pages/Login';
 import store from './store';
+import OrderCreate from './src/order/pages/OrderCreate';
 
 
 export default function App() {
@@ -27,7 +28,6 @@ export default function App() {
   const [userId, setUserId] = useState(false)
   const [userRole, setUserRole] = useState(null)
   const [firmId, setFirmId] = useState(null)
-  const [newData, setNewData] = useState()
 
   useEffect(() => {
     const getUserData = async () => {
@@ -103,8 +103,11 @@ export default function App() {
 
           {/* orders */}
           <Stack.Screen name='orderView' component={OrderView} options={{ title: 'Order view' }} />
+          <Stack.Screen name='orderCreate' component={OrderCreate} options={{ title: 'Create order' }} />
 
+          {/* firm */}
           <Stack.Screen name='updateProfile' component={UpdateProfile} options={{ title: 'Edit Profile' }} />
+
           {/* customers */}
           <Stack.Screen name='customerList' component={CustomerList} options={{ title: 'Customers' }} />
           <Stack.Screen name='createCustomer' component={CreateCustomer} options={{ title: 'Create Customer' }} />

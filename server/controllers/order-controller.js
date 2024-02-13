@@ -1,16 +1,25 @@
 const Order = require("../models/Order");
 const HttpError = require("../models/http-error");
 
-const getAllOrders = async (req, res, next) => {
+const getAllOrdersByFirmId = async (req, res, next) => {
+  const firmId = req.params.firmId;
+
   try {
-    const orders = await Order.find();
-    res.json(orders);
+    const orders = await Order.find({ firmId: firmId });
+
+    if (!orders || orders.length === 0) {
+      const error = new HttpError(
+          'Could not find orders for the provided firm id.',
+          404
+        );
+        return next(error);
+    }
+    res.json({orders: orders.map(order => order.toObject({getters: true}))})
   } catch (err) {
     const error = new HttpError(
       "Fetch the orders failed, please try again later",
       500
     );
-
     next(error);
   }
 };
@@ -41,14 +50,16 @@ const createOrder = async (req, res, next) => {
   try {
     await createdOrder.save();
   } catch (err) {
-    console.log(err);
-    return next(err);
+    const error = new HttpError(
+      "Something went wrong, could not create order.",
+      500
+    );
+    return next(error);
   }
 
-  res.status(201).json({
-    // orderId: createdOrder.id,
-    name: createdOrder.name,
-  });
+  res
+    .status(201)
+    .json({ name: createdOrder.name });
 };
 
 const getOrderById = async (req, res, next) => {
@@ -71,11 +82,11 @@ const getOrderById = async (req, res, next) => {
       'Could not find order for the provided id.',
       404
     );
-}
+  }
 
-  res.json({ order: order.toObject({getters: true}) })
+  res.json({ order: order.toObject({ getters: true }) })
 };
 
-exports.getAllOrders = getAllOrders;
+exports.getAllOrdersByFirmId = getAllOrdersByFirmId;
 exports.createOrder = createOrder;
 exports.getOrderById = getOrderById;
