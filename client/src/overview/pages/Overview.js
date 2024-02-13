@@ -24,7 +24,7 @@ const Overview = () => {
 
     // console.log('auth', auth)
 
-    useEffect(()=>{
+    useEffect(() => {
         renderFirm()
     }, [refresh])
 
@@ -33,18 +33,18 @@ const Overview = () => {
     }
     const onFirmCreated = () => {
         setRefresh(!refresh); // Toggle refresh state to trigger re-render
-      };
+    };
 
     const renderFirm = () => {
-        if (activeTab == 3){
+        if (activeTab == 3) {
 
-            if (!auth.firmId){
+            if (!auth.firmId) {
                 return <CreateSggest refresh={refresh} onFirmCreated={onFirmCreated} />
-            }else{
-                
+            } else {
+
                 return <FirmProfile refresh={refresh} />
             }
-        }else{
+        } else {
             return null
         }
     }
@@ -77,7 +77,6 @@ const Overview = () => {
                                     <Image style={styles.headerIcon} source={require('../../../assets/filter.png')} />
                                 </TouchableOpacity>
                             )}
-
                         </View>
 
                     </View>
@@ -232,8 +231,8 @@ const styles = StyleSheet.create({
     },
 
     orderContainer: {
-                // borderColor: 'red', 
-        // borderWidth: 2,
+        // borderColor: 'red',
+        // borderWidth: 4
 
     },
     // MAIN: END !!!

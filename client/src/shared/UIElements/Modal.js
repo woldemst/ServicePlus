@@ -24,9 +24,7 @@ const ModalComponent = (props) => {
         <View style={[styles.modalContainer, { height: props.modalHeight || '80%' }]}>
           <View style={styles.modalHeader}>{props.header}</View>
 
-          <ScrollView
-            howsVerticalScrollIndicator={false}>
-
+          <ScrollView showsVerticalScrollIndicator={false}>
             <View style={styles.modalContent}>
               {props.children}
             </View>
