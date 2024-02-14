@@ -7,44 +7,43 @@ import {
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { SelectList } from "react-native-dropdown-select-list";
-import { useState } from "react";
+import { useContext, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
+
+import { VALIDATOR_REQUIRE, VALIDATOR_SELECT } from "../../util/validators";
+import { AuthContext } from "../../context/auth-context";
+import Input from "../../shared/UIElements/Input";
+import Button from "../../shared/UIElements/Button";
+import Select from "../../shared/UIElements/Select";
+import { updateField } from "../../actions/orderActions";
 
 const OrderCreate = (props) => {
   const navigation = useNavigation();
-  const [selectedValue, setSelectedValue] = useState("");
+  const auth = useContext(AuthContext)
 
-  const [selected, setSelected] = useState("");
+  const dispatch = useDispatch()
+  const fetchedData = useSelector(state => state.order)
+  const contactOptions = fetchedData.selects.contact;
+  const workerOptions = fetchedData.selects.worker;
+  const customerOptions = fetchedData.selects.customer;
 
-  const [name, setName] = useState("");
-  const [creator, setCreator] = useState("");
-  const [worker, setWorker] = useState("");
-  const [date, setDate] = useState("");
-  const [customer, setCustomer] = useState("");
-  const [status, setStatus] = useState("");
-  const [contact, setContact] = useState("");
-  const [description, setDescription] = useState("");
-
-
+  console.log(fetchedData.selects);
 
   const handleSubmit = async () => {
     const URL = "http://localhost:8000/api/orders/create";
 
     try {
       const response = await axios.post(URL, {
-        name: name,
-        creator: creator,
-        worker: worker,
-        date: date,
-        customer: customer,
-        status: status,
-        contact: contact,
-        description: description,
+        name: fetchedData.inputs.name.value,
+        worker: fetchedData.selects.worker.name,
+        customer: fetchedData.selects.customer.name,
+        // status: status,
+        contact: fetchedData.selects.contact.name,
+        description: descrifetchedData.inputs.description.value,
       });
       // console.log(response);
       props.toggle();
-
-
 
       alert("Order created successfully!");
     } catch (err) {
@@ -52,87 +51,109 @@ const OrderCreate = (props) => {
     }
   };
 
+  const handleInputChange = (fieldName, value, validators, objectId) => {
+    dispatch(updateField(fieldName, value, validators, objectId))
+  }
+
+
   return (
     <>
       <View>
         <Text style={styles.label}>Auftragsname</Text>
 
-        <TextInput
-          style={[styles.input, styles.placeholderText]}
-          placeholder="Name"
-          onChangeText={(text) => setName(text)}
-          value={name}
+        <Input
+          id='workerName'
+          fieldName='name'
+          placeholder="Name des Mitarabeiters"
+          errorText='Geben Sie einen Namen für den Auftrag ein'
+          value={fetchedData.inputs.name.value}
+          validators={[VALIDATOR_REQUIRE()]}
+          onChange={handleInputChange}
         />
 
         <Text style={styles.label}>Kunde</Text>
-        <SelectList
-          style={[styles.select, styles.placeholderText]}
-          setSelected={(val) => setCustomer(val)}
-          data={[
-            { key: "1", value: "Herr Kunde" },
-            { key: "2", value: "Frau Kundin" },
-            { key: "3", value: "Diverse Kunde" },
-          ]}
+
+        <Select
+          id='customer'
+          objectId='select'
           search={false}
-          save="value"
+          fieldName='customer'
           placeholder="Auswählen"
+          style={[styles.select, styles.select.placeholderText]}
+          data={customerOptions}
+          validators={[VALIDATOR_SELECT()]}
+          onChange={handleInputChange}
         />
 
         <Text style={styles.label}>Mitarbeiter</Text>
 
-        <SelectList
-          style={[styles.select, styles.select.placeholderText]}
+        <Select
+          id='worker'
+          objectId='select'
           search={false}
-          setSelected={(val) => setWorker(val)}
-          data={[
-            { key: "1", value: "Mitarbeiter 1" },
-            { key: "2", value: "Mitarbeiter 2" },
-            { key: "3", value: "Mitarbeiter 3" },
-          ]}
-          save="value"
+          fieldName='worker'
           placeholder="Auswählen"
+          style={[styles.select, styles.select.placeholderText]}
+          data={workerOptions}
+          validators={[VALIDATOR_SELECT()]}
+          onChange={handleInputChange}
         />
 
         <Text style={styles.label}>Ansprechspartner</Text>
 
-        <SelectList
-          style={[styles.select, styles.select.placeholderText]}
+        <Select
+          id='contact'
+          objectId='select'
           search={false}
-          setSelected={(val) => setContact(val)}
-          data={[
-            { key: "1", value: "Herr Dirk" },
-            { key: "2", value: "Frau Siebel" },
-            { key: "3", value: "Frau Stamm" },
-          ]}
-          save="value"
+          fieldName='contact'
           placeholder="Auswählen"
+          style={[styles.select, styles.select.placeholderText]}
+          data={contactOptions}
+          validators={[VALIDATOR_SELECT()]}
+          onChange={handleInputChange}
         />
+
 
         <Text style={styles.label}>Beschreibung</Text>
 
-        <TextInput
+        {/* <TextInput
           style={[styles.textArea, styles.placeholderText]}
           placeholder="Beschreibung"
           onChangeText={(text) => setDescription(text)}
           value={description}
           multiline={true}
           numberOfLines={4} // Adjust the number of lines as needed
+        /> */}
+
+        <Input
+          id='workerDescr'
+          fieldName='description'
+          // placeholder="Beschreibung"
+          style={[styles.textArea, styles.placeholderText]}
+          errorText='Geben Sie die Beschreibung des Auftrags ein'
+          value={fetchedData.inputs.description.value}
+          validators={[VALIDATOR_REQUIRE()]}
+          onChange={handleInputChange}
+          // multiline={true}
+          numberOfLines={4}
+
         />
 
         <View style={styles.btnContainer}>
-          <TouchableOpacity
+          <Button
             style={[styles.cancelBtn, styles.button]}
+            buttonText={styles.cancelBtnText}
             onPress={() => props.toggle()}
-          >
-            <Text style={styles.cancelBtnText}>Abbrechen</Text>
-          </TouchableOpacity>
+            title={'Abbrechen'}
+          />
 
-          <TouchableOpacity
-            style={[styles.createBtn, styles.button]}
+          <Button
+            style={fetchedData.isFormValid ? [styles.createBtn, styles.button] : styles.invalideButton}
+            disabled={!fetchedData.isFormValid}
+            buttonText={styles.createBtnText}
             onPress={handleSubmit}
-          >
-            <Text style={styles.createBtnText}>Anlegen</Text>
-          </TouchableOpacity>
+            title={'Anlegen'}
+          />
         </View>
       </View>
     </>
@@ -181,6 +202,7 @@ const styles = StyleSheet.create({
   },
 
   btnContainer: {
+    marginTop: 16,
     flexDirection: "row",
     justifyContent: "space-between",
   },
@@ -191,7 +213,7 @@ const styles = StyleSheet.create({
     paddingRight: 16,
     paddingTop: 8,
     paddingBottom: 8,
-    width: 140,
+    width: '40%',
     borderRadius: 5,
     justifyContent: "center",
     flexDirection: "row",
@@ -214,6 +236,16 @@ const styles = StyleSheet.create({
     fontSize: 18,
     color: "#fff",
     fontWeight: "700",
+  },
+  invalideButton: {
+    height: 53,
+    width: '40%',
+    backgroundColor: 'gray',
+    borderRadius: 5,
+    justifyContent: 'center',
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: 'center'
   },
 });
 

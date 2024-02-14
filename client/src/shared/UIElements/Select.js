@@ -18,7 +18,7 @@ const Select = props => {
 
   const handleChange = val => {
     setIsValid(validate(val, props.validators))
-    props.onChange(props.fieldName, val, props.validators);
+    props.onChange(props.fieldName, val, props.validators, props.objectId);
 
 
   }
@@ -34,6 +34,7 @@ const Select = props => {
       placeholder={props.placeholder}
       boxStyles={!isValid ? styles.selectInvalid : styles.select}
       inputStyles={!isValid ? styles.placeholderTextInvalid : styles.placeholderText}
+      dropdownStyles={styles.dropdown}
     />
 
   </>
@@ -46,7 +47,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     marginTop: 14,
     alignItems: 'center',
-    borderRadius: 0
+    borderRadius: 6
   },
   selectInvalid: {
     borderColor: 'red',
@@ -55,7 +56,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     marginTop: 14,
     alignItems: 'center',
-    borderRadius: 0
+    borderRadius: 6
   },
   placeholderText: {
     color: "#000",
@@ -63,6 +64,9 @@ const styles = StyleSheet.create({
   placeholderTextInvalid: {
     color: "red",
 
+  },
+  dropdown: {
+    borderRadius: 6
   }
 
 })

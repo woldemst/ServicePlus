@@ -106,7 +106,6 @@ const styles = StyleSheet.create({
     suggestContainer: {
         flex: 1,
         position: "relative",
-        // justifyContent: 'center',
         // borderColor: "green",
         // borderWidth: 2,
     },
