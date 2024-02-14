@@ -28,6 +28,8 @@ const Input = props => {
             onChangeText={(text) => handleChange(text)}
             autoCapitalize="none"
             onFocus={() => setTouched(true)}
+            multiline={props.multiline}
+            numberOfLines={props.numberOfLines}
         // onBlur={onBlurHandler}
         />
 
