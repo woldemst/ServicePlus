@@ -1,5 +1,6 @@
 const Order = require("../models/Order");
 const HttpError = require("../models/http-error");
+const Firm = require("../models/Firm");
 
 const getAllOrdersByFirmId = async (req, res, next) => {
   const firmId = req.params.firmId;
@@ -9,12 +10,12 @@ const getAllOrdersByFirmId = async (req, res, next) => {
 
     if (!orders || orders.length === 0) {
       const error = new HttpError(
-          'Could not find orders for the provided firm id.',
-          404
-        );
-        return next(error);
+        'Could not find orders for the provided firm id.',
+        404
+      );
+      return next(error);
     }
-    res.json({orders: orders.map(order => order.toObject({getters: true}))})
+    res.json({ orders: orders.map(order => order.toObject({ getters: true })) })
   } catch (err) {
     const error = new HttpError(
       "Fetch the orders failed, please try again later",
@@ -25,7 +26,10 @@ const getAllOrdersByFirmId = async (req, res, next) => {
 };
 
 const createOrder = async (req, res, next) => {
+  // const firmId = req.params.firmId;
+  console.log(req);
   const {
+    firmId,
     name,
     creator,
     worker,
@@ -37,15 +41,22 @@ const createOrder = async (req, res, next) => {
   } = req.body;
 
   const createdOrder = new Order({
+    firmId: firmId,
     name: name,
-    creator: creator,
+    // creator: creator, // auth.userId in frontend 
+    // worker: worker,
+    // date: date,
+    // status: status,
     worker: worker,
-    date: date,
     customer: customer,
-    status: status,
     contact: contact,
     description: description,
   });
+
+  await Firm.updateOne(
+    { _id: firmId },
+    { $push: { orders: createdOrder._id } },
+  )
 
   try {
     await createdOrder.save();
@@ -59,7 +70,7 @@ const createOrder = async (req, res, next) => {
 
   res
     .status(201)
-    .json({ name: createdOrder.name });
+    .json({ order: createdOrder.toObject({ getters: true }) });
 };
 
 const getOrderById = async (req, res, next) => {
