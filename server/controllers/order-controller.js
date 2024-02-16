@@ -27,7 +27,7 @@ const getAllOrdersByFirmId = async (req, res, next) => {
 
 const createOrder = async (req, res, next) => {
   // const firmId = req.params.firmId;
-  console.log(req);
+  console.log(req.body);
   const {
     firmId,
     name,

@@ -1,17 +1,12 @@
 import { View, Text, StyleSheet, ScrollView } from "react-native"
-
 import OrderList from '../components/OrderList'
 
 
 const OrderView = () => {
     return (
-
         <View style={styles.container} >
-            {/* <ScrollView style={styles.scroll} showsVerticalScrollIndicator={false}> */}
             <OrderList />
-            {/* </ScrollView> */}
         </View>
-
     )
 }
 

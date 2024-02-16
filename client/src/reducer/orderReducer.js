@@ -1,4 +1,4 @@
-import { GET_ORDERS, UPDATE_FIELD, UPDATE_ORDER_DATA } from '../actions/orderActions';
+import { GET_ORDERS, UPDATE_FIELD, UPDATE_ORDER_DATA, CLEAR_ORDER_DATA} from '../actions/orderActions';
 import { validate } from '../util/validators';
 
 const initialState = {
@@ -60,6 +60,11 @@ const initialState = {
       { key: "3", value: "Diverse Kunde" },
     ]
   },
+  selectedOptions: {
+    customer: "",
+    worker: "",
+    contact: "",
+  },
 };
 
 const orderReducer = (state = initialState, action) => {
@@ -67,53 +72,78 @@ const orderReducer = (state = initialState, action) => {
     case UPDATE_FIELD:
       const { fieldName, value, validators, objectId } = action.payload;
 
-      const updatedField = {
-        ...state.inputs[fieldName],
-        value,
-        isValid: validate(value, validators)
-      };
-
-      const updatedInputs = {
-        ...state.inputs,
-        [fieldName]: updatedField,
-      };
-
-
       let updatedSelects;
+
+      let updatedSelectedOptions;
       if (objectId === 'select') {
+
         updatedSelects = {
           ...state.selects,
-          [fieldName]: state.selects[fieldName].map(option => ({
-            ...option,
-            isValid: option.key === value ? updatedField.isValid : option.isValid,
-          })),
-        }
-
-      }
-      else {
-        updatedSelects = {
-          ...state.selects,
-        }
-      }
-
-      let isRoleValid;
-      if (fieldName === 'role') {
-        isRoleValid = updatedField.isValid
-
-      }
+          [fieldName]: state.selects[fieldName].map(option =>
+            option.key === value.key ? { ...option, value: value.value } : option
+          ),
+        };
 
 
-      let isFormValid = Object.values(updatedInputs).every(
-        (field) => field.isValid
-      ) && isRoleValid;
-
-
-      return {
-        ...state,
-        inputs: updatedInputs,
-        selects: updatedSelects,
-        isFormValid,
+      updatedSelectedOptions = {
+        ...state.selectedOptions,
+        [fieldName]: value
       };
+
+        // let isRoleValid;
+        // if (fieldName === 'select') ƒ{
+        //   isRoleValid = updatedInputField.isValid && updatedSelectField.isValid
+        // }
+
+
+
+        // let isFormValid = Object.values(updatedInputs).every(
+        //   (field) => field.isValid
+        // ) && isRoleValid;
+
+        return {
+          ...state,
+          selects: updatedSelects,
+          selectedOptions: updatedSelectedOptions
+          // isFormValid: isFormValid
+        };
+
+
+      } else {
+        const updatedInputField = {
+          ...state.inputs[fieldName],
+          value,
+          isValid: validate(value, validators)
+        };
+
+        const updatedInputs = {
+          ...state.inputs,
+          [fieldName]: updatedInputField,
+        };
+
+        updatedSelects = {
+          ...state.selects,
+        }
+
+        // let isRoleValid;
+        // if (fieldName === 'select') {
+        //   isRoleValid = updatedInputField.isValid && updatedSelectField.isValid
+        // }
+
+        // let isFormValid = Object.values(updatedInputs).every(
+        //   (field) => field.isValid
+        // ) && isRoleValid;
+
+        return {
+          ...state,
+          inputs: updatedInputs,
+          // isFormValid: isFormValid
+        };
+
+      }
+
+
+
 
     // case UPDATE_ORDER_DATA:
     //   const { field, val, objectId } = action.payload;
@@ -137,6 +167,7 @@ const orderReducer = (state = initialState, action) => {
     //       orders: updatedOrdersArray,
     //     },
     //   };
+
     case GET_ORDERS:
       return {
         ...state,
@@ -152,49 +183,10 @@ const orderReducer = (state = initialState, action) => {
     //       orders: [...state.ordersArray.orders, newOrder],
     //     },
     //   };
-    // case CLEAR_CUSTOMER_FIELD:
-    //   return {
-    //     ...state,
-    //     inputs: {
-    //       name: {
-    //         value: "",
-    //         isValid: false,
-    //       },
-    //       email: {
-    //         value: "",
-    //         isValid: false,
-    //       },
-    //       street: {
-    //         value: "",
-    //         isValid: false,
-    //       },
-    //       houseNr: {
-    //         value: "",
-    //         isValid: false,
-    //       },
-    //       zip: {
-    //         value: "",
-    //         isValid: false,
-    //       },
-    //       place: {
-    //         value: "",
-    //         isValid: false,
-    //       },
-    //       phone: {
-    //         value: "",
-    //         isValid: false,
-    //       },
-    //       website: {
-    //         value: "",
-    //         isValid: false,
-    //       },
-    //       description: {
-    //         value: "",
-    //         isValid: false,
-    //       },
-    //     },
-    //     isFormValid: false,
-    //   };
+    case CLEAR_ORDER_DATA:
+      return {
+        ...state
+      };
     default:
       return state;
   }
