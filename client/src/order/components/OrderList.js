@@ -7,7 +7,7 @@ import {
     ScrollView,
     ActivityIndicator,
 } from "react-native";
-import { useContext, useEffect, useState } from "react";
+import { useCallback, useContext, useEffect, useState } from "react";
 import axios from "axios";
 
 import { useDispatch, useSelector } from "react-redux";
@@ -18,7 +18,7 @@ import OrderItem from "./OrderItem";
 import ModalComponent from "../../shared/UIElements/Modal";
 import OrderCreate from "../pages/OrderCreate";
 
-const OrderList = () => {
+const OrderList = (props) => {
     const dispatch = useDispatch();
     const auth = useContext(AuthContext);
     const navigation = useNavigation();
@@ -29,6 +29,8 @@ const OrderList = () => {
     const [refresh, setRefresh] = useState(false);
 
     const fetchedData = useSelector((state) => state.order.ordersArray);
+    const handleRefresh = useCallback(() => setRefresh(!props.refresh), []);
+
 
     useEffect(() => {
         const fetchOrders = async () => {
@@ -48,7 +50,7 @@ const OrderList = () => {
 
     const toggleModal = () => {
         setModalVisible(!isModalVisible);
-    };
+    }
 
     if (fetchedData.orders.length === 0) {
         return (
@@ -73,7 +75,7 @@ const OrderList = () => {
                     onBackButtonPress={toggleModal}
                     header={<Text style={styles.modalHeadline}>Auftrag hinzufügen</Text>}
                 >
-                    <OrderCreate toggle={toggleModal} />
+                    <OrderCreate handleRefresh={handleRefresh} toggle={toggleModal} />
                 </ModalComponent>
             </>
         );

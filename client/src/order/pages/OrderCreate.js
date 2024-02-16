@@ -16,7 +16,7 @@ import { AuthContext } from "../../context/auth-context";
 import Input from "../../shared/UIElements/Input";
 import Button from "../../shared/UIElements/Button";
 import Select from "../../shared/UIElements/Select";
-import { updateField } from "../../actions/orderActions";
+import { updateField, clearOrderData } from "../../actions/orderActions";
 
 const OrderCreate = (props) => {
   const navigation = useNavigation();
@@ -28,22 +28,26 @@ const OrderCreate = (props) => {
   const workerOptions = fetchedData.selects.worker;
   const customerOptions = fetchedData.selects.customer;
 
-  console.log(fetchedData.selects);
+  // console.log(fetchedData.selectedOptions);
+  console.log('props', props);
 
   const handleSubmit = async () => {
-    const URL = "http://localhost:8000/api/orders/create";
+    const URL = `http://localhost:8000/api/orders/${auth.firmId}/new`;
 
     try {
       const response = await axios.post(URL, {
+        firmId: auth.firmId,
         name: fetchedData.inputs.name.value,
-        worker: fetchedData.selects.worker.name,
-        customer: fetchedData.selects.customer.name,
+        worker: fetchedData.selectedOptions.worker,
+        customer: fetchedData.selectedOptions.customer,
+        contact: fetchedData.selectedOptions.contact,
+        description: fetchedData.inputs.description.value,
         // status: status,
-        contact: fetchedData.selects.contact.name,
-        description: descrifetchedData.inputs.description.value,
       });
-      // console.log(response);
+
       props.toggle();
+      props.handleRefresh();
+      // dispatch(clearOrderData())
 
       alert("Order created successfully!");
     } catch (err) {
@@ -113,7 +117,6 @@ const OrderCreate = (props) => {
           onChange={handleInputChange}
         />
 
-
         <Text style={styles.label}>Beschreibung</Text>
 
         {/* <TextInput
@@ -149,7 +152,7 @@ const OrderCreate = (props) => {
 
           <Button
             style={fetchedData.isFormValid ? [styles.createBtn, styles.button] : styles.invalideButton}
-            disabled={!fetchedData.isFormValid}
+            // disabled={!fetchedData.isFormValid}
             buttonText={styles.createBtnText}
             onPress={handleSubmit}
             title={'Anlegen'}
