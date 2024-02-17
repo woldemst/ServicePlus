@@ -52,36 +52,6 @@ const Overview = () => {
     return (
         <>
             <View style={styles.container}>
-                <View style={styles.header} >
-                    <View style={styles.headerContent}>
-                        <View style={styles.textContainer} >
-                            {activeTab == 1 && <Text style={styles.headerText}>Terminübersicht</Text>}
-                            {activeTab == 2 && <Text style={styles.headerText}>Aufträge</Text>}
-                            {activeTab == 3 && <Text style={styles.headerText}>Betrieb</Text>}
-                        </View>
-
-                        <View style={styles.headerIconContainer} >
-                            {activeTab == 1 && (
-                                <TouchableOpacity style={styles.headerButton} >
-                                    <Image style={styles.headerIcon} source={require('../../../assets/calendar_plus.png')} />
-                                </TouchableOpacity>
-                            )}
-                            {activeTab == 2 && (
-                                <TouchableOpacity style={styles.headerButton} onPress={toggleModal} >
-                                    <Image style={styles.headerIcon} source={require('../../../assets/calendar_plus.png')} />
-                                </TouchableOpacity>
-                            )}
-
-                            {activeTab !== 3 && (
-                                <TouchableOpacity style={styles.headerButton} >
-                                    <Image style={styles.headerIcon} source={require('../../../assets/filter.png')} />
-                                </TouchableOpacity>
-                            )}
-                        </View>
-
-                    </View>
-                </View>
-
                 <View style={styles.mainContent}>
                     {activeTab == 1 && <AppointmentView />}
                     {activeTab == 2 && <OrderView />}
@@ -159,7 +129,7 @@ const Overview = () => {
 
                 header={<Text style={styles.modalHeadline}>Auftrag hinzufügen</Text>}
             >
-                <OrderCreate toggle={toggleModal} />
+                <OrderCreate refresh={refresh} toggle={toggleModal} />
             </ModalComponent>
 
 
@@ -175,56 +145,13 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: '#fff',
         position: 'relative',
-
-
-
     },
-
-    // HEADER: START !!!
-    header: {
-        width: '100%',
-        paddingTop: 80,
-        paddingBottom: 10,
-        paddingLeft: 32,
-        paddingRight: 32,
-        position: 'fixed',
-        top: 0,
-        borderBottomColor: '#eee',
-        borderBottomWidth: 1
-
-    },
-    headerContent: {
-
-        flexDirection: 'row',
-        justifyContent: 'space-between'
-    },
-    textContainer: {
-
-    },
-    headerText: {
-        fontSize: 21,
-        fontWeight: '400'
-    },
-    headerIconContainer: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        width: '20%'
-    },
-    headerButton: {
-        justifyContent: 'center',
-        alignItems: 'center'
-    },
-    headerIcon: {
-        width: 24,
-        height: 24
-    },
-    // HEADER: END !!!
 
     // MAIN: START !!!
     mainContent: {
         // borderColor: 'red', 
         // borderWidth: 2,
-        padding: 32,
+        // padding: 32,
 
         flex: 1,
         position: 'relative',
