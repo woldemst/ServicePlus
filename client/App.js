@@ -4,6 +4,7 @@ import OnboardingNavigator from './src/onboarding/OnboardingNavigator';
 import { NavigationContainer } from '@react-navigation/native';
 import { useCallback, useEffect, useState, useContext } from 'react';
 import { Provider } from 'react-redux';
+import { AuthContext } from './src/context/auth-context';
 import React from 'react';
 
 import CustomerList from './src/customer/components/CustomerList';
@@ -11,14 +12,13 @@ import CustomerDetails from './src/customer/pages/CustomerDetails';
 import CreateCustomer from './src/customer/pages/CreateCustomer';
 import WorkerList from './src/worker/component/WorkerList';
 import WorkerCreate from './src/worker/pages/WorkerCreate';
-import { AuthContext } from './src/context/auth-context';
 import UpdateProfile from './src/firm/pages/UpdateProfile';
+import OrderCreate from './src/order/pages/OrderCreate';
 import Overview from './src/overview/pages/Overview';
 import OrderView from './src/order/pages/OrderView';
 import Register from "./src/auth/pages/Register";
 import Login from './src/auth/pages/Login';
 import store from './store';
-import OrderCreate from './src/order/pages/OrderCreate';
 
 
 export default function App() {
