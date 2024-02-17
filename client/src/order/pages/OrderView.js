@@ -22,26 +22,26 @@ const OrderView = () => {
     }
     return (
         <>
-            <View style={styles.container} >
-                <View style={styles.header} >
-                    <View style={styles.headerContent}>
+            <View style={styles.header} >
+                <View style={styles.headerContent}>
 
-                        <View style={styles.textContainer} >
-                            <Text style={styles.headerText}>Aufträge</Text>
-                        </View>
-
-                        <View style={styles.headerIconContainer} >
-                            <TouchableOpacity style={styles.headerButton} onPress={toggleModal} >
-                                <Image style={styles.headerIcon} source={require('../../../assets/add_new.png')} />
-                            </TouchableOpacity>
-
-                            <TouchableOpacity style={styles.headerButton} >
-                                <Image style={styles.headerIcon} source={require('../../../assets/filter.png')} />
-                            </TouchableOpacity>
-                        </View>
-
+                    <View style={styles.textContainer} >
+                        <Text style={styles.headerText}>Aufträge</Text>
                     </View>
+
+                    <View style={styles.headerIconContainer} >
+                        <TouchableOpacity style={styles.headerButton} onPress={toggleModal} >
+                            <Image style={styles.headerIcon} source={require('../../../assets/add_new.png')} />
+                        </TouchableOpacity>
+
+                        <TouchableOpacity style={styles.headerButton} >
+                            <Image style={styles.headerIcon} source={require('../../../assets/filter.png')} />
+                        </TouchableOpacity>
+                    </View>
+
                 </View>
+            </View>
+            <View style={styles.content} >
                 <OrderList />
             </View>
 
@@ -61,25 +61,19 @@ const OrderView = () => {
 }
 
 const styles = StyleSheet.create({
-    container: {
-        paddingTop: 60,
-        padding: 24,
-        backgroundColor: '#fff',
-        flex: 1,
-
-    },
     header: {
+        paddingLeft: 24,
+        paddingRight: 24,
+        backgroundColor: '#fff',
+        marginTop: 50,
         width: '100%',
-        marginBottom: 16,
         paddingTop: 16,
         paddingBottom: 16,
-        paddingLeft: 0,
-        paddingRight: 0,
         position: 'fixed',
         top: 0,
         borderBottomColor: '#eee',
         borderBottomWidth: 1,
-
+        
     },
     headerContent: {
 
@@ -105,6 +99,10 @@ const styles = StyleSheet.create({
     headerIcon: {
         width: 24,
         height: 24
+    },
+    content: {
+        padding: 24,
+        flex: 1,
     },
 })
 
