@@ -6,7 +6,7 @@ import {
     StyleSheet,
     ScrollView,
     Image
-  } from "react-native";
+} from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { useRoute } from "@react-navigation/native";
 import axios from "axios";
@@ -16,14 +16,14 @@ import ModalComponent from "../../shared/UIElements/Modal";
 import CreateFirm from "./CreateFirm";
 
 
-const CreateSggest = props => {
+const CreateSuggest = props => {
     const [isModalVisible, setIsModalVisible] = useState(false)
 
     const toggleModal = () => {
         setIsModalVisible(!isModalVisible)
     }
 
-    const createFirmCall = () =>{
+    const createFirmCall = () => {
         toggleModal()
         props.onFirmCreated()
     }
@@ -31,7 +31,7 @@ const CreateSggest = props => {
     return <>
         <View style={styles.container}>
             <TouchableOpacity onPress={createFirmCall}>
-                <Image style={styles.image} source={require('../../../assets/firm/add.png')}/>
+                <Image style={styles.image} source={require('../../../assets/firm/add.png')} />
             </TouchableOpacity>
         </View>
         <ModalComponent
@@ -51,7 +51,7 @@ const CreateSggest = props => {
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1, 
+        flex: 1,
         alignItems: 'center',
         justifyContent: 'center',
         // borderColor: 'red',
@@ -67,4 +67,4 @@ const styles = StyleSheet.create({
     },
 })
 
-export default CreateSggest
+export default CreateSuggest
