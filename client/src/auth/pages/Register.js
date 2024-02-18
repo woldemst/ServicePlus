@@ -3,19 +3,22 @@ import { useNavigation } from "@react-navigation/native";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 
-import { updateUserData } from "../../actions/userActions"
-import { VALIDATOR_EMAIL, VALIDATOR_MINLENGTH, VALIDATOR_REQUIRE } from "../../util/validators";
+
+import { VALIDATOR_EMAIL, VALIDATOR_MINLENGTH, VALIDATOR_REQUIRE, VALIDATOR_SELECT } from "../../util/validators";
 import Button from "../../shared/UIElements/Button";
 import Input from "../../shared/UIElements/Input";
 import Select from "../../shared/UIElements/Select";
 import { useContext } from "react";
 import { AuthContext } from "../../context/auth-context";
 
+import { updateAndValidateRegisterField } from "../../actions/registerActions";
+
 const Register = () => {
     const dispatch = useDispatch()
     const navigation = useNavigation()
     const fetchedData = useSelector(state => state.register)
     const auth = useContext(AuthContext)
+    const options = fetchedData.selects.role || [];
 
     // console.log(fetchedData)
     async function handleSubmit() {
@@ -29,24 +32,24 @@ const Register = () => {
                 role: fetchedData.inputs.role.value
             });
 
-            dispatch(updateUserData(response.data));
-            // console.log(response.data);
+            // dispatch(updateUserData(response.data));
+
             if (response.status === 201) {
                 auth.login(response.data.userId, response.data.token, response.data.role, response.data.firmId)
-                navigation.navigate('overview');
-                alert('User created');
+                navigation.navigate('overviewNavigator');
+                // alert('User created');
             } else {
-                // alert('User already exists, please log in instead');
+                alert('User already exists, please log in instead');
             }
         } catch (error) {
             console.error(error);
         }
     }
 
-    const selectedData = [
-        { key: "1", value: "Owner" },
-        { key: "2", value: "Worker" },
-    ]
+
+    const handleInputChange = (fieldName, value, validators) => {
+        dispatch(updateAndValidateRegisterField(fieldName, value, validators))
+    }
 
 
     return (
@@ -57,43 +60,44 @@ const Register = () => {
 
             <Input
                 id='name'
-                fetchedData='register'
                 fieldName='name'
                 placeholder="Name"
                 errorText='Type a name'
                 value={fetchedData.inputs.name.value}
                 validators={[VALIDATOR_REQUIRE()]}
+                onChange={handleInputChange}
             />
 
             <Input
                 id='email'
-                fetchedData='register'
                 fieldName='email'
                 placeholder="Email"
                 errorText='Choose another email'
                 value={fetchedData.inputs.email.value}
                 validators={[VALIDATOR_EMAIL()]}
+                onChange={handleInputChange}
             />
 
             <Input
                 id='password'
-                fetchedData='register'
                 fieldName='password'
                 placeholder="Password"
                 errorText='Type a password'
                 value={fetchedData.inputs.password.value}
                 validators={[VALIDATOR_MINLENGTH(6)]}
+                onChange={handleInputChange}
+
             />
 
-            {/* <Select 
+            <Select
                 id='role'
                 search={false}
                 fieldName='role'
                 placeholder="Role"
-                data={selectedData}
-                fetchedData='register'
-                validators={[VALIDATOR_REQUIRE()]}
-            /> */}
+                data={options}
+                validators={[VALIDATOR_SELECT()]}
+                onChange={handleInputChange}
+            />
 
             <Text style={styles.notice}>Passwort vergessen?</Text>
 
@@ -103,6 +107,7 @@ const Register = () => {
                 buttonText={styles.buttonText}
                 onPress={handleSubmit}
                 title={'Sign up'}
+
             />
 
 
