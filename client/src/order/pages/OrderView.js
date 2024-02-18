@@ -21,7 +21,7 @@ const OrderView = () => {
         setModalVisible(!isModalVisible)
     }
     return (
-        <>
+        <View style={styles.orderContainer}>
             <View style={styles.header} >
                 <View style={styles.headerContent}>
 
@@ -56,11 +56,15 @@ const OrderView = () => {
             >
                 <OrderCreate refresh={refresh} toggle={toggleModal} />
             </ModalComponent>
-        </>
+        </View>
     )
 }
 
 const styles = StyleSheet.create({
+    orderContainer: {
+        backgroundColor: '#fff',
+        flex: 1,
+    },
     header: {
         paddingLeft: 24,
         paddingRight: 24,
@@ -73,7 +77,9 @@ const styles = StyleSheet.create({
         top: 0,
         borderBottomColor: '#eee',
         borderBottomWidth: 1,
-        
+        backgroundColor: '#fff'
+
+
     },
     headerContent: {
 
@@ -103,6 +109,7 @@ const styles = StyleSheet.create({
     content: {
         padding: 24,
         flex: 1,
+        backgroundColor: '#fff'
     },
 })
 

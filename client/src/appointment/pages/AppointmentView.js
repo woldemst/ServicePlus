@@ -3,7 +3,7 @@ import AppointmentList from '../components/AppointmentList'
 
 const AppointmentView = () => {
     return (
-        <>
+        <View style={styles.appontmentContainer}>
             <View style={styles.header} >
                 <View style={styles.headerContent}>
                     <View style={styles.textContainer} >
@@ -24,11 +24,15 @@ const AppointmentView = () => {
             <View style={styles.content}>
                 <AppointmentList />
             </View>
-        </>
+        </View>
     )
 }
 
 const styles = StyleSheet.create({
+    appontmentContainer: {
+        backgroundColor: '#fff',
+        flex: 1,
+    },
     header: {
         paddingLeft: 24,
         paddingRight: 24,
@@ -41,7 +45,7 @@ const styles = StyleSheet.create({
         top: 0,
         borderBottomColor: '#eee',
         borderBottomWidth: 1,
-        
+
     },
     headerContent: {
 
@@ -71,6 +75,7 @@ const styles = StyleSheet.create({
     content: {
         padding: 24,
         flex: 1,
+        backgroundColor: '#fff'
     },
 })
 
