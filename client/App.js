@@ -14,7 +14,6 @@ import WorkerList from './src/worker/component/WorkerList';
 import WorkerCreate from './src/worker/pages/WorkerCreate';
 import UpdateProfile from './src/firm/pages/UpdateProfile';
 import OrderCreate from './src/order/pages/OrderCreate';
-// import Overview from './src/overview/pages/Overview';
 import OrderView from './src/order/pages/OrderView';
 import Register from "./src/auth/pages/Register";
 import Login from './src/auth/pages/Login';
@@ -100,7 +99,6 @@ export default function App() {
           <Stack.Screen name='register' component={Register} options={{ headerShown: false }} />
 
           {/* main */}
-          {/* <Stack.Screen name='overview' component={Overview} options={{ headerShown: false }} /> */}
           <Stack.Screen name='overviewNavigator' component={OverviewNavigator} options={{ headerShown: false }} />
 
 
@@ -135,7 +133,6 @@ export default function App() {
           <Stack.Screen name='register' component={Register} options={{ title: 'Registration' }} />
 
           {/* main */}
-          {/* <Stack.Screen name='overview' component={Overview} options={{ headerShown: false }} /> */}
           <Stack.Screen name='overviewNavigator' component={OverviewNavigator} options={{ headerShown: false }} />
 
 

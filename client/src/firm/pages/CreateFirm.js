@@ -39,7 +39,7 @@ const CreateFirm = props => {
       const response = await axios.post(URL, updatedData)
       auth.updateId(response.data.firmId)
       props.toggle()
-      navigation.navigate('overview')
+      navigation.navigate('overviewNavigator')
 
       console.log("Firm created!", response.data);
     } catch (err) {
@@ -52,7 +52,7 @@ const CreateFirm = props => {
 
   const handleInputChange = (fieldName, value, validators) => {
     dispatch(updateAndValidateField(fieldName, value, validators))
-}
+  }
   return <>
     <View style={styles.container}>
       <Input
@@ -128,7 +128,7 @@ const CreateFirm = props => {
             errorText='Type a place'
             value={fetchedData.inputs.place.value}
             validators={[VALIDATOR_REQUIRE()]}
-            onChange={handleInputChange} 
+            onChange={handleInputChange}
           />
         </View>
       </View>

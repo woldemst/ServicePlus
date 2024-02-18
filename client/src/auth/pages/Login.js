@@ -29,13 +29,13 @@ const Login = () => {
             password: fetchedData.inputs.password.value,
         })
 
-        console.log('submited',fetchedData);
+        // console.log('submited',fetchedData);
         auth.login(response.data.userId, response.data.token, response.data.role, response.data.firmId)
-        navigation.navigate('overview', { title: 'Overview' })
+        navigation.navigate('overviewNavigator')
 
         navigation.reset({
             index: 0,
-            routes: [{ name: 'overview' }]
+            routes: [{ name: 'overviewNavigator' }]
         })
 
         setIsLoginMode(prev => !prev)

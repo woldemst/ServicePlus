@@ -21,31 +21,44 @@ const OrderView = () => {
         setModalVisible(!isModalVisible)
     }
     return (
-        <View style={styles.orderContainer}>
-            <View style={styles.header} >
-                <View style={styles.headerContent}>
+        <>
+            <View style={styles.orderContainer}>
+                <View style={styles.header} >
+                    <View style={styles.headerContent}>
 
-                    <View style={styles.textContainer} >
-                        <Text style={styles.headerText}>Aufträge</Text>
+                        <View style={styles.textContainer} >
+                            <Text style={styles.headerText}>Aufträge</Text>
+                        </View>
+
+                        <View style={styles.headerIconContainer} >
+                            <TouchableOpacity style={styles.headerButton} onPress={toggleModal} >
+                                <Image style={styles.headerIcon} source={require('../../../assets/add_new.png')} />
+                            </TouchableOpacity>
+
+                            <TouchableOpacity style={styles.headerButton} >
+                                <Image style={styles.headerIcon} source={require('../../../assets/filter.png')} />
+                            </TouchableOpacity>
+                        </View>
+
                     </View>
-
-                    <View style={styles.headerIconContainer} >
-                        <TouchableOpacity style={styles.headerButton} onPress={toggleModal} >
-                            <Image style={styles.headerIcon} source={require('../../../assets/add_new.png')} />
-                        </TouchableOpacity>
-
-                        <TouchableOpacity style={styles.headerButton} >
-                            <Image style={styles.headerIcon} source={require('../../../assets/filter.png')} />
-                        </TouchableOpacity>
-                    </View>
-
                 </View>
-            </View>
-            <View style={styles.content} >
-                <OrderList />
-            </View>
+                <View style={styles.content} >
+                    <OrderList />
+                </View>
 
-            <ModalComponent
+                <ModalComponent
+                    isVisible={isModalVisible}
+                    animationIn="slideInUp" // Specify the slide-up animation
+                    animationOut="slideOutDown" // Specify the slide-down animation
+                    onBackdropPress={toggleModal}
+                    onBackButtonPress={toggleModal}
+
+                    header={<Text style={styles.modalHeadline}>Auftrag hinzufügen</Text>}
+                >
+                    <OrderCreate refresh={refresh} toggle={toggleModal} />
+                </ModalComponent>
+            </View>
+            {/* <ModalComponent
                 isVisible={isModalVisible}
                 animationIn="slideInUp" // Specify the slide-up animation
                 animationOut="slideOutDown" // Specify the slide-down animation
@@ -55,8 +68,8 @@ const OrderView = () => {
                 header={<Text style={styles.modalHeadline}>Auftrag hinzufügen</Text>}
             >
                 <OrderCreate refresh={refresh} toggle={toggleModal} />
-            </ModalComponent>
-        </View>
+            </ModalComponent> */}
+        </>
     )
 }
 
