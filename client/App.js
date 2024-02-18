@@ -14,11 +14,12 @@ import WorkerList from './src/worker/component/WorkerList';
 import WorkerCreate from './src/worker/pages/WorkerCreate';
 import UpdateProfile from './src/firm/pages/UpdateProfile';
 import OrderCreate from './src/order/pages/OrderCreate';
-import Overview from './src/overview/pages/Overview';
+// import Overview from './src/overview/pages/Overview';
 import OrderView from './src/order/pages/OrderView';
 import Register from "./src/auth/pages/Register";
 import Login from './src/auth/pages/Login';
 import store from './store';
+import OverviewNavigator from './src/overview/pages/OverviewNavigator';
 
 
 export default function App() {
@@ -95,14 +96,16 @@ export default function App() {
           <Stack.Screen name='onboarding' component={OnboardingNavigator} options={{ headerShown: false }} />
 
           {/* authentification */}
-          <Stack.Screen name='login' component={Login} options={{ title: 'Login' }} />
-          <Stack.Screen name='register' component={Register} options={{ title: 'Registration' }} />
+          <Stack.Screen name='login' component={Login} options={{ headerShown: false }} />
+          <Stack.Screen name='register' component={Register} options={{ headerShown: false }} />
 
           {/* main */}
-          <Stack.Screen name='overview' component={Overview} options={{ headerShown: false }} />
+          {/* <Stack.Screen name='overview' component={Overview} options={{ headerShown: false }} /> */}
+          <Stack.Screen name='overviewNavigator' component={OverviewNavigator} options={{ headerShown: false }} />
+
 
           {/* orders */}
-          <Stack.Screen name='orderView' component={OrderView} options={{ title: 'Order view' }} />
+          <Stack.Screen name='orderView' component={OrderView}  />
           <Stack.Screen name='orderCreate' component={OrderCreate} options={{ title: 'Create order' }} />
 
           {/* firm */}
@@ -132,7 +135,8 @@ export default function App() {
           <Stack.Screen name='register' component={Register} options={{ title: 'Registration' }} />
 
           {/* main */}
-          <Stack.Screen name='overview' component={Overview} options={{ headerShown: false }} />
+          {/* <Stack.Screen name='overview' component={Overview} options={{ headerShown: false }} /> */}
+          <Stack.Screen name='overviewNavigator' component={OverviewNavigator} options={{ headerShown: false }} />
 
 
         </Stack.Navigator>

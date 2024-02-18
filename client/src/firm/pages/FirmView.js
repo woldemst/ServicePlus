@@ -3,7 +3,7 @@ import FirmItem from "../components/FirmItem"
 
 const FirmView = () => {
     return (
-        <>
+        <View style={styles.firmContainer}>
             <View style={styles.header} >
                 <View style={styles.headerContent}>
                     <View style={styles.textContainer} >
@@ -15,11 +15,15 @@ const FirmView = () => {
             <View style={styles.content} >
                 <FirmItem />
             </View>
-        </>
+        </View>
     )
 }
 
 const styles = StyleSheet.create({
+    firmContainer: {
+        backgroundColor: '#fff',
+        flex: 1,
+    },
     header: {
         paddingLeft: 24,
         paddingRight: 24,
@@ -62,6 +66,7 @@ const styles = StyleSheet.create({
     content: {
         padding: 24,
         flex: 1,
+        backgroundColor: '#fff'
     },
 
 })
