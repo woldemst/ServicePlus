@@ -17,11 +17,8 @@ const OverviewNavigator = () => {
             <Tab.Navigator
                 initialRouteName={activeTab}
                 tabBarPosition="bottom"
-                tabBarIndicator={false}
-                tabBarIndicatorStyle={{
-                    backgroundColor: 'transparent'
-                }}
                 screenOptions={{
+                    tabBarIndicator: () => null,
                     tabBarLabelStyle: { fontSize: 10 },
 
                 }}
