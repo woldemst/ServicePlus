@@ -10,17 +10,10 @@ const FirmView = () => {
     const auth = useContext(AuthContext)
     const [refresh, setRefresh] = useState(false)
 
-    // useEffect(() => {
-    //     renderFirm()
-    // }, [refresh])
-
-
     const onFirmCreated = () => {
         setRefresh(!refresh); // Toggle refresh state to trigger re-render
     };
-
-
-
+    
 
     return (
         <>

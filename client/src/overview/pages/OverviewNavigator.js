@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { View, Image } from "react-native"
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs'
 
@@ -12,6 +12,8 @@ const Tab = createMaterialTopTabNavigator()
 const OverviewNavigator = () => {
     const [activeTab, setActiveTab] = useState('OrderView');
 
+
+
     return (
         <View style={{ flex: 1 }}>
             <Tab.Navigator
@@ -20,12 +22,15 @@ const OverviewNavigator = () => {
                 screenOptions={{
                     tabBarIndicator: () => null,
                     tabBarLabelStyle: { fontSize: 10 },
-
                 }}
 
                 onTabPress={({ route }) => {
-                    const index = Tab.Navigator.router.getStateForRouteName(route.name).index;
-                    setActiveTab(index);
+
+                    const routeIndex = route.state?.index; // Get the index of the current route
+
+                    if (routeIndex !== undefined && routeIndex !== activeTab) {
+                        setActiveTab(route.name);
+                    }
 
                 }}
             >

@@ -6,7 +6,6 @@ import {
   StyleSheet,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import { SelectList } from "react-native-dropdown-select-list";
 import { useContext, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
@@ -19,7 +18,6 @@ import Select from "../../shared/UIElements/Select";
 import { updateField, clearOrderData } from "../../actions/orderActions";
 
 const OrderCreate = (props) => {
-  const navigation = useNavigation();
   const auth = useContext(AuthContext)
 
   const dispatch = useDispatch()
@@ -29,7 +27,7 @@ const OrderCreate = (props) => {
   const customerOptions = fetchedData.selects.customer;
 
   // console.log(fetchedData.selectedOptions);
-  console.log('props', props);
+  // console.log('props', props);
 
   const handleSubmit = async () => {
     const URL = `http://localhost:8000/api/orders/${auth.firmId}/new`;
@@ -58,7 +56,6 @@ const OrderCreate = (props) => {
   const handleInputChange = (fieldName, value, validators, objectId) => {
     dispatch(updateField(fieldName, value, validators, objectId))
   }
-
 
   return (
     <>
