@@ -1,22 +1,20 @@
 import { TextInput, StyleSheet, Text } from "react-native";
 import { validate } from "../../util/validators";
 import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { setInput } from "../../actions/inputActions";
 
 const Input = props => {
+    const dispatch = useDispatch()
     const [touched, setTouched] = useState(false)
     const [inputValue, setInputValue] = useState(props.value)
     const [isValid, setIsValid] = useState(true)
 
-    useEffect(() => {
-        if (touched) {
-            setIsValid(validate(props.value, props.validators))
-        }
-    }, [inputValue, props.validators, touched])
 
     const handleChange = (val) => {
         setInputValue(val)
         setIsValid(validate(val, props.validators))
-        props.onChange(props.fieldName, val, props.validators, props.objectId);
+        dispatch(setInput(props.fieldName, val, props.validators));
     }
 
     return <>
@@ -27,9 +25,9 @@ const Input = props => {
             style={!isValid ? styles.inputInvalid : styles.input}
             onChangeText={(text) => handleChange(text)}
             autoCapitalize="none"
-            onFocus={() => setTouched(true)}
             multiline={props.multiline}
             numberOfLines={props.numberOfLines}
+        // onFocus={() => setTouched(true)}
         // onBlur={onBlurHandler}
         />
 
@@ -42,7 +40,8 @@ const styles = StyleSheet.create({
         width: '100%',
         height: 50,
         borderColor: 'gray',
-        borderBottomWidth: 1,
+        borderWidth: 1,
+        borderRadius: 4,
         marginTop: 14,
         padding: 7,
     },
@@ -50,7 +49,8 @@ const styles = StyleSheet.create({
         width: '100%',
         height: 50,
         borderColor: 'red',
-        borderBottomWidth: 1,
+        borderWidth: 1,
+        borderRadius: 4,
         marginTop: 14,
         padding: 7,
     },
