@@ -1,12 +1,12 @@
-import { configureStore} from '@reduxjs/toolkit'
+import { configureStore } from '@reduxjs/toolkit'
 import firmReducer from './src/reducer/firmReducer';
 import customerReducer from './src/reducer/customerReducer';
 import userReducer from './src/reducer/userReducer'
 import registerReducer from './src/reducer/registerReducer';
 import loginReducer from './src/reducer/loginReducer';
 import workerReducer from './src/reducer/workerReducer';
-import dataReducer from './src/reducer/dataReducer';
 import orderReducer from './src/reducer/orderReducer';
+import inputReducer from './src/reducer/inputReducer';
 
 const store = configureStore({
   reducer: {
@@ -16,9 +16,9 @@ const store = configureStore({
     firm: firmReducer,
     worker: workerReducer,
     customer: customerReducer,
-    order: orderReducer
-    // data: dataReducer
-    // Add more reducers if needed
+    order: orderReducer,
+    input: inputReducer,
+
   },
 });
 
