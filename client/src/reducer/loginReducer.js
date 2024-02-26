@@ -1,4 +1,4 @@
-import { UPDATE_AND_VALIDATE_LOGIN_FIELD } from '../actions/loginActions'
+import { UPDATE_OBJECT } from '../actions/loginActions'
 import { validate } from '../util/validators';
 
 const initialState = {
@@ -18,29 +18,11 @@ const initialState = {
 const loginReducer = (state = initialState, action) => {
 
     switch (action.type) {
-        case UPDATE_AND_VALIDATE_LOGIN_FIELD:
-            const { fieldName, value, validators } = action.payload;
-
-            const updatedField = {
-                ...state.inputs[fieldName],
-                value,
-                isValid: validate(value, validators)
-            };
-
-            const updatedInputs = {
-                ...state.inputs,
-                [fieldName]: updatedField,
-            };
-
-            // Check the overall form validity
-            let isFormValid = Object.values(updatedInputs).every((field) => field.isValid);
-
+        case UPDATE_OBJECT:
             return {
                 ...state,
-                inputs: updatedInputs, // Update the inputs fiel
-                isFormValid,
-            };
-
+                inputs: action.payload 
+            }
         default:
             return state;
     }

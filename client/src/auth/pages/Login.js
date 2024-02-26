@@ -1,11 +1,12 @@
 import { View, Text, TextInput, TouchableOpacity, StyleSheet } from "react-native";
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { updateUserData } from "../../actions/userActions";
 import axios from "axios";
 
 import { VALIDATOR_EMAIL, VALIDATOR_MINLENGTH } from "../../util/validators";
-import { updateAndValidateLoginField } from "../../actions/loginActions";
+import { updateObject } from "../../actions/loginActions";
+import { setInitialData } from "../../actions/inputActions";
 import { useDispatch, useSelector } from "react-redux";
 import { AuthContext } from "../../context/auth-context";
 import Input from "../../shared/UIElements/Input";
@@ -17,11 +18,30 @@ const Login = () => {
     const dispatch = useDispatch()
 
     const [isLoginMode, setIsLoginMode] = useState(true)
-    const fetchedData = useSelector(state => state.login)
+    const fetchedData = useSelector(state => state.input)
+    const [isInitialDataSet, setIsInitialDataSet] = useState(false);
 
-    // console.log(fetchedData);
+    useEffect(() => {
+        dispatch(
+            setInitialData({
+                email: {
+                    value: '',
+                    isValid: false,
+                },
+                password: {
+                    value: '',
+                    isValid: false,
+                },
+            })
+        )
+        setIsInitialDataSet(true)
+    }, [])
+
+    console.log(fetchedData);
 
     const handleSignIn = async () => {
+        console.log("before submitting in handleSignIn", fetchedData);
+
         const apiUrl = "http://localhost:8000/api/users/login";
 
         const response = await axios.post(apiUrl, {
@@ -29,6 +49,8 @@ const Login = () => {
             password: fetchedData.inputs.password.value,
         })
 
+        // dispatch(updateObject(response.data))
+        console.log('response', response.data);
         // console.log('submited',fetchedData);
         auth.login(response.data.userId, response.data.token, response.data.role, response.data.firmId)
         navigation.navigate('overviewNavigator')
@@ -41,10 +63,6 @@ const Login = () => {
         setIsLoginMode(prev => !prev)
     }
 
-    const handleInputChange = (fieldName, value, validators) => {
-        dispatch(updateAndValidateLoginField(fieldName, value, validators))
-        
-    }
 
 
     return (
@@ -54,33 +72,35 @@ const Login = () => {
             <Text style={styles.title}>Sign in</Text>
 
             {/* {error && <Text style={styles.error}>{error}</Text>} */}
+            {isInitialDataSet && (
+                <>
+                    <Input
+                        id='email'
+                        fieldName='email'
+                        placeholder="Email"
+                        errorText='Choose another email'
+                        value={fetchedData.inputs.email.value}
+                        validators={[VALIDATOR_EMAIL()]}
+                    />
 
-            <Input
-                id='email'
-                fieldName='email'
-                placeholder="Email"
-                errorText='Choose another email'
-                value={fetchedData.inputs.email.value}
-                validators={[VALIDATOR_EMAIL()]}
-                onChange={handleInputChange}
-            />
+                    <Input
+                        id='password'
+                        fieldName='password'
+                        placeholder='Password'
+                        errorText='Type a password'
+                        value={fetchedData.inputs.password.value}
+                        validators={[VALIDATOR_MINLENGTH(6)]}
+                    />
 
-            <Input
-                id='password'
-                fieldName='password'
-                placeholder='Password'
-                errorText='Type a password'
-                value={fetchedData.inputs.password.value}
-                validators={[VALIDATOR_MINLENGTH(6)]}
-                onChange={handleInputChange}
-
-            />
+                </>
+            )}
 
             <Text style={styles.notice} >Passwort vergessen?</Text>
 
             <Button
-                style={fetchedData.isFormValid ? styles.button : styles.invalideButton}
-                disabled={!fetchedData.isFormValid}
+                style={styles.button}
+                // style={fetchedData.isFormValid ? styles.button : styles.invalideButton}
+                // disabled={!fetchedData.isFormValid}
                 onPress={handleSignIn}
                 buttonText={styles.buttonText}
                 title={'Sign in'}
