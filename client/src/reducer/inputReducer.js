@@ -1,25 +1,13 @@
-import { SET_INPUT } from "../actions/inputActions";
+import { SET_INPUT, SET_INITIAL_DATA } from "../actions/inputActions";
 import { validate } from "../util/validators";
 
-const initialState = {
-  inputs: {
-    email: {
-      value: '',
-      isValid: false,
-    },
-    password: {
-      value: '',
-      isValid: false,
-    },
-  },
-  isFormValid: false
-};
+const initialState = {};
 
 const inputReducer = (state = initialState, action) => {
   switch (action.type) {
     case SET_INPUT:
       const { fieldName, value, validators } = action.payload;
-      
+
       const updatedInputField = {
         ...state.inputs[fieldName],
         value,
@@ -38,6 +26,15 @@ const inputReducer = (state = initialState, action) => {
         inputs: updatedInputs,
         isFormValid: isFormValid
       }
+    case SET_INITIAL_DATA:
+      console.log(action.payload);
+      return {
+        ...state,
+        inputs: {
+          ...state.inputs,
+          ...action.payload,
+        },
+      };
 
     default:
       return state;
