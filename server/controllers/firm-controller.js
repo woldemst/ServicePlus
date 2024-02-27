@@ -59,7 +59,7 @@ const register = async (req, res, next) => {
 const updateFirm = async (req, res, next) => {
   // destructuring assignment from body
   const firmId = req.params.firmId;
-  const { name, owner, email, street, houseNr, zip, place, phone, website } = req.body;
+  const { name, ownerName, email, street, houseNr, zip, place, phone, website } = req.body;
 
 
   let updatedFirm
@@ -73,7 +73,7 @@ const updateFirm = async (req, res, next) => {
     }
   
     updatedFirm.name = name,
-    updatedFirm.owner = owner,
+    updatedFirm.ownerName = ownerName,
     updatedFirm.email = email,
     updatedFirm.street = street,
     updatedFirm.houseNr = houseNr,
