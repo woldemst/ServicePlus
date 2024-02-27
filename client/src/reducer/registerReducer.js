@@ -1,4 +1,6 @@
 import { UPDATE_AND_VALIDATE_REGISTER_FIELD, CLEAR_REGISTER_FIELD } from "../actions/registerActions";
+import { SET_INPUT } from '../actions/inputActions';
+import { SET_SELECT } from "../actions/selectActions";
 import { validate } from "../util/validators";
 
 const initialState = {
@@ -18,19 +20,26 @@ const initialState = {
   },
   selects: {
     role: [
-      { key: "1", value: "Owner", isValid: false },
-      { key: "2", value: "Worker", isValid: false },
+      { key: "1", value: "Owner" },
+      { key: "2", value: "Worker" },
     ],
+  },
+  selectedOptions: {
+    role: {
+      value: "",
+      isValid: false,
+    }
   },
   isFormValid: false,
 };
 
 const registerReducer = (state = initialState, action) => {
   switch (action.type) {
-    case UPDATE_AND_VALIDATE_REGISTER_FIELD:
+
+    case SET_INPUT:
       const { fieldName, value, validators } = action.payload;
 
-      const updatedField = {
+      const updatedInputField = {
         ...state.inputs[fieldName],
         value,
         isValid: validate(value, validators)
@@ -38,68 +47,51 @@ const registerReducer = (state = initialState, action) => {
 
       const updatedInputs = {
         ...state.inputs,
-        [fieldName]: updatedField,
+        [fieldName]: updatedInputField,
       };
 
-
-      let updatedSelects;
-      if (fieldName === 'role') {
-        updatedSelects = {
-          ...state.selects,
-          [fieldName]: state.selects[fieldName].map(option => ({
-            ...option,
-            isValid: option.key === value ? updatedField.isValid : option.isValid,
-          })),
-        }
-
-      }
-      else {
-        updatedSelects = {
-          ...state.selects,
-        }
-      }
-
-      let isRoleValid;
-      if (fieldName === 'role') {
-        isRoleValid = updatedField.isValid
-
-      }
-
-
-      let isFormValid = Object.values(updatedInputs).every(
-        (field) => field.isValid
-      ) && isRoleValid;
-
+      let isFormValid = Object.values(updatedInputs).every((field) => field.isValid);
 
       return {
         ...state,
         inputs: updatedInputs,
-        selects: updatedSelects,
-        isFormValid,
+        isFormValid: isFormValid
+      }
+
+    case SET_SELECT:
+      const { field, val, valid } = action.payload;
+
+      const updatedSelectField = {
+        ...state.inputs[field],
+        value,
+        isValid: validate(val, valid)
       };
-    case CLEAR_REGISTER_FIELD:
+
+
+      let updatedSelects;
+      updatedSelects = {
+        ...state.selects,
+        [field]: state.selects[field].map(option => ({
+          ...option,
+          isValid: option.key === val ? updatedSelectField.isValid : option.isValid,
+        })),
+      }
+
+      let updatedSelectedOptions;
+
+      updatedSelectedOptions = {
+        ...state.selectedOptions,
+        [field]: {
+          value: val,
+          isValid: validate(val, valid)
+        }
+      };
+
       return {
-        // name: {
-        //   value: "",
-        //   isValid: false,
-        // },
-        // email: {
-        //   value: "",
-        //   isValid: false,
-        // },
-        // password: {
-        //   value: "",
-        //   isValid: false,
-        // },
-        // role: {
-        //   value: "",
-        //   isValid: false,
-        // },
-        // isFormValid: false,
-
-        ...initialState,
+        ...state,
+        selects: updatedSelects,
+        selectedOptions: updatedSelectedOptions,
       };
-
     default:
       return state;
   }
