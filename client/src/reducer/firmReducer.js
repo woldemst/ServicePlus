@@ -1,4 +1,5 @@
 import { UPDATE_AND_VALIDATE_FIELD, UPDATE_FIRM_DATA, GET_FIRM_DATA } from "../actions/firmActions";
+import { SET_INPUT } from "../actions/inputActions";
 import { validate } from '../util/validators';
 
 
@@ -46,10 +47,10 @@ const initialState = {
 
 const firmReducer = (state = initialState, action) => {
   switch (action.type) {
-    case UPDATE_AND_VALIDATE_FIELD:
+    case SET_INPUT:
       const { fieldName, value, validators } = action.payload;
 
-      const updatedField = {
+      const updatedInputField = {
         ...state.inputs[fieldName],
         value,
         isValid: validate(value, validators)
@@ -57,7 +58,7 @@ const firmReducer = (state = initialState, action) => {
 
       const updatedInputs = {
         ...state.inputs,
-        [fieldName]: updatedField,
+        [fieldName]: updatedInputField,
       };
 
       let isFormValid = Object.values(updatedInputs).every((field) => field.isValid);
@@ -65,8 +66,8 @@ const firmReducer = (state = initialState, action) => {
       return {
         ...state,
         inputs: updatedInputs,
-        isFormValid,
-      };
+        isFormValid: isFormValid
+      }
       
     case UPDATE_FIRM_DATA:
       return {
