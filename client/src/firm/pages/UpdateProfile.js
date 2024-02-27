@@ -23,15 +23,15 @@ const UpdateProfile = (props) => {
   const fetchedData = useSelector(state => state.firm)
   const dispatch = useDispatch()
 
-  // console.log('Stored in updateFirm: ', fetchedData.inputs);
+  console.log('Stored in updateFirm: ', fetchedData.inputs);
 
   const handleSubmit = async () => {
     const URL = `http://localhost:8000/api/firm/update/${auth.firmId}`;
 
     try {
       const response = await axios.patch(URL, {
-        ownerName: fetchedData.inputs.ownerName.value,
         name: fetchedData.inputs.name.value,
+        ownerName: fetchedData.inputs.ownerName.value,
         email: fetchedData.inputs.email.value,
         street: fetchedData.inputs.street.value,
         houseNr: fetchedData.inputs.houseNr.value,
@@ -50,9 +50,6 @@ const UpdateProfile = (props) => {
   };
 
 
-  const handleInputChange = (fieldName, value, validators) => {
-    dispatch(updateAndValidateField(fieldName, value, validators))   
-  }
 
   return (
     <>
@@ -66,7 +63,6 @@ const UpdateProfile = (props) => {
             value={fetchedData.inputs.name.value}
             errorText='Type a name'
             validators={[VALIDATOR_MINLENGTH(6)]}
-            onChange={handleInputChange}
           />
 
           <Input
@@ -76,7 +72,6 @@ const UpdateProfile = (props) => {
             placeholder="Name des Inhabers"
             value={fetchedData.inputs.ownerName.value}
             validators={[VALIDATOR_REQUIRE()]}
-            onChange={handleInputChange}
           />
 
           <Input
@@ -86,7 +81,6 @@ const UpdateProfile = (props) => {
             placeholder="Name des Betriebs"
             value={fetchedData.inputs.email.value}
             validators={[VALIDATOR_EMAIL()]}
-            onChange={handleInputChange}
           />
 
           <View style={styles.streetContainer}>
@@ -98,7 +92,6 @@ const UpdateProfile = (props) => {
                 errorText='Type a street'
                 value={fetchedData.inputs.street.value}
                 validators={[VALIDATOR_REQUIRE()]}
-                onChange={handleInputChange}
               />
             </View>
 
@@ -110,7 +103,6 @@ const UpdateProfile = (props) => {
                 errorText='Type a house number'
                 value={fetchedData.inputs.houseNr.value}
                 validators={[VALIDATOR_REQUIRE()]}
-                onChange={handleInputChange}
               />
             </View>
           </View>
@@ -124,7 +116,6 @@ const UpdateProfile = (props) => {
                 errorText='Type a zip code'
                 value={fetchedData.inputs.zip.value}
                 validators={[VALIDATOR_REQUIRE()]}
-                onChange={handleInputChange}
               />
             </View>
 
@@ -136,7 +127,6 @@ const UpdateProfile = (props) => {
                 errorText='Type a place or city'
                 value={fetchedData.inputs.place.value}
                 validators={[VALIDATOR_REQUIRE()]}
-                onChange={handleInputChange}
               />
             </View>
           </View>
@@ -148,8 +138,6 @@ const UpdateProfile = (props) => {
             errorText='Type a telephone number'
             value={fetchedData.inputs.phone.value}
             validators={[VALIDATOR_REQUIRE()]}
-            onChange={handleInputChange}
-
           />
 
           <Input
@@ -159,7 +147,7 @@ const UpdateProfile = (props) => {
             errorText='Type a website'
             value={fetchedData.inputs.website.value}
             validators={[VALIDATOR_REQUIRE()]}
-            onChange={handleInputChange}
+           
 
           />
 
