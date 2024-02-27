@@ -4,11 +4,11 @@ import { useNavigation } from "@react-navigation/native";
 import { useSelector, useDispatch } from "react-redux";
 import axios from "axios";
 
-import { VALIDATOR_REQUIRE } from "../../util/validators";
+import { clearWorkerField, createWorker } from "../../actions/workerActions";
+import { VALIDATOR_EMAIL, VALIDATOR_REQUIRE } from "../../util/validators";
 import { AuthContext } from "../../context/auth-context";
 import Input from "../../shared/UIElements/Input";
 import Button from "../../shared/UIElements/Button";
-import { clearWorkerField, createWorker, updateInput } from "../../actions/workerActions";
 
 const WorkerCreate = (props) => {
   const auth = useContext(AuthContext)
@@ -41,13 +41,9 @@ const WorkerCreate = (props) => {
       dispatch(clearWorkerField())
     } catch (err) {
       console.log("Error if creating a mew worker", err);
-
     }
   }
 
-  const handleInputChange = (fieldName, value, validators) => {
-    dispatch(updateInput(fieldName, value, validators))
-  }
 
   return <>
     <View style={styles.container}>
@@ -59,7 +55,6 @@ const WorkerCreate = (props) => {
           errorText='Geben Sie einen Namen für den Mitarbeiter ein'
           value={fetchedData.inputs.name.value}
           validators={[VALIDATOR_REQUIRE()]}
-          onChange={handleInputChange}
         />
 
         <Input
@@ -68,8 +63,7 @@ const WorkerCreate = (props) => {
           placeholder="E-Mail des Mitarabeiters"
           errorText='Geben Sie ein E-Mail des Mitarbeiters ein'
           value={fetchedData.inputs.email.value}
-          validators={[VALIDATOR_REQUIRE()]}
-          onChange={handleInputChange}
+          validators={[VALIDATOR_EMAIL()]}
         />
 
         <View style={styles.streetContainer}>
@@ -81,7 +75,6 @@ const WorkerCreate = (props) => {
               errorText='Geben Sie die Straße des Mitarbeiters ein'
               value={fetchedData.inputs.street.value}
               validators={[VALIDATOR_REQUIRE()]}
-              onChange={handleInputChange}
             />
           </View>
 
@@ -93,7 +86,6 @@ const WorkerCreate = (props) => {
               errorText='Hausnummer'
               value={fetchedData.inputs.houseNr.value}
               validators={[VALIDATOR_REQUIRE()]}
-              onChange={handleInputChange}
             />
           </View>
         </View>
@@ -107,7 +99,6 @@ const WorkerCreate = (props) => {
               errorText='Geben Sie PLZ des Mitarbeiters ein'
               value={fetchedData.inputs.zip.value}
               validators={[VALIDATOR_REQUIRE()]}
-              onChange={handleInputChange}
             />
           </View>
 
@@ -119,7 +110,6 @@ const WorkerCreate = (props) => {
               errorText='Geben Sie den Ort des Mitarbeiters ein'
               value={fetchedData.inputs.place.value}
               validators={[VALIDATOR_REQUIRE()]}
-              onChange={handleInputChange}
             />
           </View>
         </View>
@@ -131,8 +121,6 @@ const WorkerCreate = (props) => {
           errorText='Geben Sie die Telefonnummer des Mitarbeiters ein'
           value={fetchedData.inputs.phone.value}
           validators={[VALIDATOR_REQUIRE()]}
-          onChange={handleInputChange}
-
         />
 
         <Input
@@ -142,8 +130,6 @@ const WorkerCreate = (props) => {
           errorText='Geben Sie die Beschreibung des Mitarbeiters ein'
           value={fetchedData.inputs.description.value}
           validators={[VALIDATOR_REQUIRE()]}
-          onChange={handleInputChange}
-
         />
 
         <View style={styles.btnContainer}>
