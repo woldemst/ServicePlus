@@ -19,10 +19,6 @@ const WorkerDetails = props => {
 
     // console.log('my worker:', worker);
 
-    const handleInputChange = (fieldName, value, validators, objectId) => {
-        dispatch(updateWorker(fieldName, value, validators, objectId))
-    }
-
     const handleSubmit = async () => {
         try {
             const response = await axios.patch(`http://localhost:8000/api/workers/${auth.firmId}/update/${workerId}`, {
@@ -61,8 +57,6 @@ const WorkerDetails = props => {
                 errorText='Type a name of worker'
                 value={worker.name}
                 validators={[VALIDATOR_REQUIRE()]}
-                onChange={handleInputChange}
-
             />
 
             <Input
@@ -74,8 +68,6 @@ const WorkerDetails = props => {
                 errorText='Type an email of worker'
                 value={worker.email}
                 validators={[VALIDATOR_EMAIL()]}
-                onChange={handleInputChange}
-
             />
 
             <View style={styles.streetContainer}>
@@ -89,8 +81,6 @@ const WorkerDetails = props => {
                         errorText='Type an email of worker'
                         value={worker.street}
                         validators={[VALIDATOR_REQUIRE()]}
-                        onChange={handleInputChange}
-
                     />
                 </View>
 
@@ -104,7 +94,6 @@ const WorkerDetails = props => {
                         errorText='House number'
                         value={worker.houseNr}
                         validators={[VALIDATOR_REQUIRE()]}
-                        onChange={handleInputChange}
                     />
                 </View>
             </View>
@@ -120,7 +109,6 @@ const WorkerDetails = props => {
                         errorText='Type a zip code of worker'
                         value={worker.zip}
                         validators={[VALIDATOR_REQUIRE()]}
-                        onChange={handleInputChange}
                     />
                 </View>
 
@@ -134,8 +122,6 @@ const WorkerDetails = props => {
                         errorText='Type a place of worker'
                         value={worker.place}
                         validators={[VALIDATOR_REQUIRE()]}
-                        onChange={handleInputChange}
-
                     />
                 </View>
             </View>
@@ -149,8 +135,6 @@ const WorkerDetails = props => {
                 errorText='Type a phone of worker'
                 value={worker.phone}
                 validators={[VALIDATOR_REQUIRE()]}
-                onChange={handleInputChange}
-
             />
 
             <Input
@@ -162,8 +146,6 @@ const WorkerDetails = props => {
                 errorText='Type a description of the worker'
                 value={worker.description}
                 validators={[VALIDATOR_REQUIRE()]}
-                onChange={handleInputChange}
-
             />
 
             <View style={styles.btnContainer}>

@@ -16,7 +16,7 @@ const Input = props => {
     const handleChange = (val) => {
         setInputValue(val)
         setIsValid(validate(val, props.validators))
-        dispatch(setInput(props.fieldName, val, props.validators));
+        dispatch(setInput(props.fieldName, val, props.validators, props.objectId));
     }
 
     return <>
