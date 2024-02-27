@@ -8,7 +8,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { AuthContext } from "../../context/auth-context";
 import Input from "../../shared/UIElements/Input";
 import Button from "../../shared/UIElements/Button";
-import { updateAndValidateField } from "../../actions/firmActions";
 
 const CreateFirm = props => {
   const auth = useContext(AuthContext)
@@ -17,7 +16,7 @@ const CreateFirm = props => {
   const dispatch = useDispatch()
   const fetchedData = useSelector((state) => state.firm);
 
-  // console.log(props);
+  // console.log(fetchedData);
   const handleSubmit = async () => {
     const URL = "http://localhost:8000/api/firm/register";
 
@@ -49,60 +48,60 @@ const CreateFirm = props => {
 
   }
 
-
-  const handleInputChange = (fieldName, value, validators) => {
-    dispatch(updateAndValidateField(fieldName, value, validators))
-  }
   return <>
     <View style={styles.container}>
       <Input
         id='firmName'
+        reducer='firm'
         fieldName='name'
         placeholder="Name des Betriebs"
         errorText='Type a name of firm'
         value={fetchedData.inputs.name.value}
         validators={[VALIDATOR_REQUIRE()]}
-        onChange={handleInputChange}
       />
 
       <Input
         id='ownerName'
+        reducer='firm'
         fieldName='ownerName'
         placeholder="Name des Inhabers"
         value={fetchedData.inputs.ownerName.value}
         validators={[VALIDATOR_MINLENGTH(6)]}
-        onChange={handleInputChange}
+
       />
 
       <Input
         id='firmEmail'
+        reducer='firm'
         fieldName='email'
         placeholder="Email"
         value={fetchedData.inputs.email.value}
         validators={[VALIDATOR_EMAIL()]}
-        onChange={handleInputChange}
+
       />
 
       <View style={styles.streetContainer}>
         <View style={styles.streetWrapper}>
           <Input
             id='firmStreet'
+            reducer='firm'
             fieldName='street'
             placeholder="Straße"
             value={fetchedData.inputs.street.value}
             validators={[VALIDATOR_REQUIRE()]}
-            onChange={handleInputChange}
+
           />
         </View>
 
         <View style={styles.nrWrapper}>
           <Input
             fieldName='houseNr'
+            reducer='firm'
             placeholder="Nr."
             errorText='Number'
             value={fetchedData.inputs.houseNr.value}
             validators={[VALIDATOR_REQUIRE()]}
-            onChange={handleInputChange}
+
           />
         </View>
       </View>
@@ -112,23 +111,25 @@ const CreateFirm = props => {
           <Input
             id='firmZip'
             fieldName='zip'
+            reducer='firm'
             placeholder="PLZ"
             errorText='Type a ZIP code'
             value={fetchedData.inputs.zip.value}
             validators={[VALIDATOR_REQUIRE()]}
-            onChange={handleInputChange}
+
           />
         </View>
 
         <View style={styles.placeWrapper}>
           <Input
             id='firmPlace'
+            reducer='firm'
             fieldName='place'
             placeholder="Ort"
             errorText='Type a place'
             value={fetchedData.inputs.place.value}
             validators={[VALIDATOR_REQUIRE()]}
-            onChange={handleInputChange}
+
           />
         </View>
       </View>
@@ -136,21 +137,23 @@ const CreateFirm = props => {
       <Input
         id='firmPhone'
         fieldName='phone'
+        reducer='firm'
         placeholder="Telefon"
         errorText='Type a phone'
         value={fetchedData.inputs.phone.value}
         validators={[VALIDATOR_REQUIRE()]}
-        onChange={handleInputChange}
+
       />
 
       <Input
         id='firmWebsite'
+        reducer='firm'
         fieldName='website'
         placeholder="Webseite"
         errorText='Type a website'
         value={fetchedData.inputs.website.value}
         validators={[VALIDATOR_REQUIRE()]}
-        onChange={handleInputChange}
+
       />
 
       <View style={styles.btnContainer}>
