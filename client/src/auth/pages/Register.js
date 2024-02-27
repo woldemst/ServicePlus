@@ -8,16 +8,16 @@ import { VALIDATOR_EMAIL, VALIDATOR_MINLENGTH, VALIDATOR_REQUIRE, VALIDATOR_SELE
 import Button from "../../shared/UIElements/Button";
 import Input from "../../shared/UIElements/Input";
 import Select from "../../shared/UIElements/Select";
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../../context/auth-context";
 
-import { updateAndValidateRegisterField } from "../../actions/registerActions";
 
 const Register = () => {
-    const dispatch = useDispatch()
-    const navigation = useNavigation()
-    const fetchedData = useSelector(state => state.register)
     const auth = useContext(AuthContext)
+    const navigation = useNavigation()
+    const dispatch = useDispatch()
+
+    const fetchedData = useSelector(state => state.register)
     const options = fetchedData.selects.role || [];
 
     // console.log(fetchedData)
@@ -29,10 +29,10 @@ const Register = () => {
                 name: fetchedData.inputs.name.value,
                 email: fetchedData.inputs.email.value,
                 password: fetchedData.inputs.password.value,
-                role: fetchedData.inputs.role.value
+                role: fetchedData.selectedOptions.role.value
             });
 
-            // dispatch(updateUserData(response.data));
+
 
             if (response.status === 201) {
                 auth.login(response.data.userId, response.data.token, response.data.role, response.data.firmId)
@@ -46,12 +46,6 @@ const Register = () => {
         }
     }
 
-
-    const handleInputChange = (fieldName, value, validators) => {
-        dispatch(updateAndValidateRegisterField(fieldName, value, validators))
-    }
-
-
     return (
         <View style={styles.container}>
 
@@ -60,50 +54,52 @@ const Register = () => {
 
             <Input
                 id='name'
+                reducer='register'
                 fieldName='name'
                 placeholder="Name"
                 errorText='Type a name'
                 value={fetchedData.inputs.name.value}
                 validators={[VALIDATOR_REQUIRE()]}
-                onChange={handleInputChange}
             />
 
             <Input
                 id='email'
+                reducer='register'
                 fieldName='email'
                 placeholder="Email"
                 errorText='Choose another email'
                 value={fetchedData.inputs.email.value}
                 validators={[VALIDATOR_EMAIL()]}
-                onChange={handleInputChange}
             />
 
             <Input
                 id='password'
+                reducer='register'
                 fieldName='password'
                 placeholder="Password"
                 errorText='Type a password'
                 value={fetchedData.inputs.password.value}
                 validators={[VALIDATOR_MINLENGTH(6)]}
-                onChange={handleInputChange}
 
             />
 
             <Select
                 id='role'
+                reducer='register'
                 search={false}
                 fieldName='role'
                 placeholder="Role"
                 data={options}
                 validators={[VALIDATOR_SELECT()]}
-                onChange={handleInputChange}
             />
+
 
             <Text style={styles.notice}>Passwort vergessen?</Text>
 
             <Button
-                style={fetchedData.isFormValid ? styles.button : styles.invalideButton}
-                disabled={!fetchedData.isFormValid}
+                style={styles.button}
+                // style={fetchedData.isFormValid ? styles.button : styles.invalideButton}
+                // disabled={!fetchedData.isFormValid}
                 buttonText={styles.buttonText}
                 onPress={handleSubmit}
                 title={'Sign up'}
