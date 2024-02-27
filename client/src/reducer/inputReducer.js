@@ -1,40 +1,31 @@
-import { SET_INPUT, SET_INITIAL_DATA } from "../actions/inputActions";
+import { SET_INITIAL_DATA, RESET_INITIAL_DATA } from "../actions/inputActions";
 import { validate } from "../util/validators";
 
 const initialState = {};
 
 const inputReducer = (state = initialState, action) => {
   switch (action.type) {
-    case SET_INPUT:
-      const { fieldName, value, validators } = action.payload;
+    // case SET_INPUT:
+    //   const { fieldName, value, validators } = action.payload;
 
-      const updatedInputField = {
-        ...state.inputs[fieldName],
-        value,
-        isValid: validate(value, validators)
-      };
+    //   const updatedInputField = {
+    //     ...state.inputs[fieldName],
+    //     value,
+    //     isValid: validate(value, validators)
+    //   };
 
-      const updatedInputs = {
-        ...state.inputs,
-        [fieldName]: updatedInputField,
-      };
+    //   const updatedInputs = {
+    //     ...state.inputs,
+    //     [fieldName]: updatedInputField,
+    //   };
 
-      let isFormValid = Object.values(updatedInputs).every((field) => field.isValid);
+    //   // let isFormValid = Object.values(updatedInputs).every((field) => field.isValid);
 
-      return {
-        ...state,
-        inputs: updatedInputs,
-        isFormValid: isFormValid
-      }
-    case SET_INITIAL_DATA:
-      console.log(action.payload);
-      return {
-        ...state,
-        inputs: {
-          ...state.inputs,
-          ...action.payload,
-        },
-      };
+    //   return {
+    //     ...state,
+    //     inputs: updatedInputs,
+    //     // isFormValid: isFormValid
+    //   }
 
     default:
       return state;
