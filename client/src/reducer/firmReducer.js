@@ -68,7 +68,7 @@ const firmReducer = (state = initialState, action) => {
         inputs: updatedInputs,
         isFormValid: isFormValid
       }
-      
+
     case UPDATE_FIRM_DATA:
       return {
         ...state,

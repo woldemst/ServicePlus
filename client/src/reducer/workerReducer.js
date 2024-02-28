@@ -42,7 +42,6 @@ const initialState = {
   },
 };
 
-
 const workerReducer = (state = initialState, action) => {
   switch (action.type) {
     case GET_WORKER_DATA:
