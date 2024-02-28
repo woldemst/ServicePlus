@@ -23,7 +23,7 @@ const UpdateProfile = (props) => {
   const fetchedData = useSelector(state => state.firm)
   const dispatch = useDispatch()
 
-  console.log('Stored in updateFirm: ', fetchedData.inputs);
+  // console.log('Stored in updateFirm: ', fetchedData.inputs);
 
   const handleSubmit = async () => {
     const URL = `http://localhost:8000/api/firm/update/${auth.firmId}`;

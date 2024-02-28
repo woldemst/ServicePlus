@@ -5,7 +5,7 @@ import axios from "axios";
 
 import { VALIDATOR_REQUIRE, VALIDATOR_EMAIL } from "../../util/validators";
 import { AuthContext } from "../../context/auth-context";
-import { updateCustomer } from "../../actions/customerActions";
+import { clearCustomerField } from "../../actions/customerActions";
 import Input from "../../shared/UIElements/Input";
 
 const CustomerDetails = (props) => {
@@ -17,9 +17,6 @@ const CustomerDetails = (props) => {
     const customer = customersArray.find(customer => customer._id == customerId)
     // console.log(customer);
 
-    const handleInputChange = (fieldName, value, validators, objectId) => {
-        dispatch(updateCustomer(fieldName, value, validators, objectId));
-    };
 
     const handleSubmit = async () => {
         try {
@@ -37,6 +34,8 @@ const CustomerDetails = (props) => {
                 website: customer.website,
                 description: customer.description,
             });
+            dispatch(clearCustomerField())
+
             props.toggle();
             props.handleRefresh();
             window.alert("Customer updated!");
@@ -59,7 +58,6 @@ const CustomerDetails = (props) => {
                 objectId={customerId}
                 value={customer.name}
                 validators={[VALIDATOR_REQUIRE()]}
-                onChange={handleInputChange}
             />
 
             <Input
@@ -70,7 +68,7 @@ const CustomerDetails = (props) => {
                 errorText="Geben Sie eine E-Mail des Kunden"
                 value={customer.email}
                 validators={[VALIDATOR_EMAIL()]}
-                onChange={handleInputChange}
+
             />
             <View style={styles.streetContainer}>
                 <View style={styles.streetWrapper}>
@@ -82,7 +80,6 @@ const CustomerDetails = (props) => {
                         errorText="Geben Sie die Straße des Kunden ein"
                         value={customer.street}
                         validators={[VALIDATOR_REQUIRE()]}
-                        onChange={handleInputChange}
                     />
                 </View>
 
@@ -95,7 +92,6 @@ const CustomerDetails = (props) => {
                         errorText="Geben Sie die Housnummmer des Kunden ein"
                         value={customer.houseNr}
                         validators={[VALIDATOR_REQUIRE()]}
-                        onChange={handleInputChange}
                     />
                 </View>
             </View>
@@ -109,7 +105,6 @@ const CustomerDetails = (props) => {
                         errorText="Geben Sie das PLZ des Kunden ein"
                         value={customer.zip}
                         validators={[VALIDATOR_REQUIRE()]}
-                        onChange={handleInputChange}
                     />
                 </View>
 
@@ -123,7 +118,6 @@ const CustomerDetails = (props) => {
                         errorText="Geben Sie den Ort des Kunden ein"
                         value={customer.place}
                         validators={[VALIDATOR_REQUIRE()]}
-                        onChange={handleInputChange}
                     />
                 </View>
             </View>
@@ -137,7 +131,6 @@ const CustomerDetails = (props) => {
                 errorText="Geben Sie die Telefonnumer Kunden ein"
                 value={customer.phone}
                 validators={[VALIDATOR_REQUIRE()]}
-                onChange={handleInputChange}
             />
 
             <Input
@@ -148,7 +141,6 @@ const CustomerDetails = (props) => {
                 errorText="Geben Sie die Webseite des Kunden ein"
                 value={customer.website}
                 validators={[VALIDATOR_REQUIRE()]}
-                onChange={handleInputChange}
             />
 
             <Input
@@ -159,14 +151,10 @@ const CustomerDetails = (props) => {
                 errorText="Geben Sie die BEschreibung des Kunden ein"
                 value={customer.description}
                 validators={[VALIDATOR_REQUIRE()]}
-                onChange={handleInputChange}
             />
 
             <View style={styles.btnContainer}>
-                <TouchableOpacity
-                    style={[styles.createBtn, styles.button]}
-                    onPress={handleSubmit}
-                >
+                <TouchableOpacity style={[styles.createBtn, styles.button]} onPress={handleSubmit} >
                     <Text style={styles.createBtnText}>Speichern</Text>
                 </TouchableOpacity>
             </View>

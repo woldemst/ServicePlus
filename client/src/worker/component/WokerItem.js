@@ -53,13 +53,13 @@ const WorkerItem = (props) => {
                     name={props.name}
                     email={props.email}
                     phone={props.phone}
-                    workerNr={props.workerNr}
-                    description={props.description}
-                    handleRefresh={props.handleRefresh}
                     street={props.street}
                     houseNr={props.houseNr}
                     zip={props.zip}
                     place={props.place}
+                    workerNr={props.workerNr}
+                    description={props.description}
+                    handleRefresh={props.handleRefresh}
                     toggle={toggleModal}
                 />
             </ModalComponent>

@@ -32,7 +32,7 @@ const CreateCustomer = (props) => {
         description: fetchedData.inputs.description.value,
       })
 
-      dispatch(createCustomer(response.data.customer))
+      // dispatch(createCustomer(response.data.customer))
       alert("Customer created successfully!");
       props.route.params.handleRefresh();
       navigation.goBack()
@@ -42,11 +42,6 @@ const CreateCustomer = (props) => {
 
     }
   };
-
-  const handleInputChange = (fieldName, value, validators) => {
-    dispatch(updateInput(fieldName, value, validators))
-  }
-
 
   return (
     <>
@@ -59,7 +54,6 @@ const CreateCustomer = (props) => {
             errorText='Geben Sie einen Namen für den Kunde ein'
             value={fetchedData.inputs.name.value}
             validators={[VALIDATOR_REQUIRE()]}
-            onChange={handleInputChange}
           />
 
           <Input
@@ -69,7 +63,6 @@ const CreateCustomer = (props) => {
             errorText='Geben Sie eine E-Mail Adresse des Kunden ein'
             value={fetchedData.inputs.email.value}
             validators={[VALIDATOR_REQUIRE()]}
-            onChange={handleInputChange}
           />
 
           <View style={styles.streetContainer}>
@@ -81,7 +74,6 @@ const CreateCustomer = (props) => {
                 errorText='Geben Sie die Straße des Kunden ein'
                 value={fetchedData.inputs.street.value}
                 validators={[VALIDATOR_REQUIRE()]}
-                onChange={handleInputChange}
               />
             </View>
 
@@ -93,7 +85,6 @@ const CreateCustomer = (props) => {
                 errorText='Geben Sie die Housenummer des Kunden ein'
                 value={fetchedData.inputs.houseNr.value}
                 validators={[VALIDATOR_REQUIRE()]}
-                onChange={handleInputChange}
               />
             </View>
           </View>
@@ -107,7 +98,6 @@ const CreateCustomer = (props) => {
                 errorText='Geben Sie PLZ des Kunden ein'
                 value={fetchedData.inputs.zip.value}
                 validators={[VALIDATOR_REQUIRE()]}
-                onChange={handleInputChange}
               />
             </View>
 
@@ -119,7 +109,6 @@ const CreateCustomer = (props) => {
                 errorText='Geben Sie den Ort des Kunden ein'
                 value={fetchedData.inputs.place.value}
                 validators={[VALIDATOR_REQUIRE()]}
-                onChange={handleInputChange}
               />
             </View>
           </View>
@@ -131,7 +120,6 @@ const CreateCustomer = (props) => {
             errorText='Telefonnummer des Kunden ein'
             value={fetchedData.inputs.phone.value}
             validators={[VALIDATOR_REQUIRE()]}
-            onChange={handleInputChange}
           />
 
           <Input
@@ -141,7 +129,6 @@ const CreateCustomer = (props) => {
             errorText='Geben Sie Website des Kunden ein'
             value={fetchedData.inputs.website.value}
             validators={[VALIDATOR_REQUIRE()]}
-            onChange={handleInputChange}
           />
 
 
@@ -152,18 +139,13 @@ const CreateCustomer = (props) => {
             errorText='Geben Sie die Beschreibung des Kunden ein'
             value={fetchedData.inputs.description.value}
             validators={[VALIDATOR_REQUIRE()]}
-            onChange={handleInputChange}
           />
 
           <View style={styles.btnContainer}>
-            <TouchableOpacity
-              style={[styles.createBtn, styles.button]}
-              onPress={handleSubmit}
-            >
+            <TouchableOpacity style={[styles.createBtn, styles.button]} onPress={handleSubmit} >
               <Text style={styles.createBtnText}>Anlegen</Text>
             </TouchableOpacity>
           </View>
-
 
         </ScrollView>
       </View>
