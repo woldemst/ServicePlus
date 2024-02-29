@@ -20,7 +20,7 @@ const userReducer = (state = initialState, action) => {
 
 
         case UPDATE_USER_DATA:
-            console.log('from reducer', action.payload);
+            console.log('from user reducer', action.payload);
             return {
                 ...state,
                 inputs: action.payload

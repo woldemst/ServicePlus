@@ -1,13 +1,15 @@
 import { View, Text, TextInput, TouchableOpacity, StyleSheet } from "react-native";
 import { useState, useContext, useEffect } from "react";
-import { useNavigation } from "@react-navigation/native";
 import { useDispatch, useSelector } from "react-redux";
+import { useNavigation } from "@react-navigation/native";
 import axios from "axios";
 
 import { VALIDATOR_EMAIL, VALIDATOR_MINLENGTH } from "../../util/validators";
 import { AuthContext } from "../../context/auth-context";
-import Input from "../../shared/UIElements/Input";
 import Button from "../../shared/UIElements/Button";
+import Input from "../../shared/UIElements/Input";
+import { updateUserData } from "../../actions/userActions";
+import { validate } from "../../util/validators";
 
 const Login = () => {
     const auth = useContext(AuthContext)
@@ -18,12 +20,41 @@ const Login = () => {
     const fetchedData = useSelector(state => state.login)
 
     // console.log(fetchedData);
+    const [formData, setFormData] = useState({
+        inputs: {
+            email: {
+                value: '',
+                isValid: false,
+            },
+            password: {
+                value: '',
+                isValid: false,
+            },
+        }
+    })
+
+    const updateFormData = (fieldName, value, validators) => {
+        setFormData((prevFormData) => ({
+            ...prevFormData,
+            inputs: {
+                ...prevFormData.inputs,
+                [fieldName]: {
+                    value,
+                    isValid: validate(value, validators),
+                },
+            },
+        }));
+    }
+
+
     const handleSignIn = async () => {
+
+        dispatch(updateUserData(formData))
         const apiUrl = "http://localhost:8000/api/users/login";
 
         const response = await axios.post(apiUrl, {
-            email: fetchedData.inputs.email.value,
-            password: fetchedData.inputs.password.value,
+            email: formData.inputs.email.value,
+            password: formData.inputs.password.value,
         })
 
         console.log('response', response.data);
@@ -54,8 +85,9 @@ const Login = () => {
                 fieldName='email'
                 placeholder="Email"
                 errorText='Choose another email'
-                value={fetchedData.inputs.email.value}
+                value={formData.inputs.email.value}
                 validators={[VALIDATOR_EMAIL()]}
+                updateFormData={updateFormData}
             />
 
             <Input
@@ -64,8 +96,9 @@ const Login = () => {
                 fieldName='password'
                 placeholder='Password'
                 errorText='Type a password'
-                value={fetchedData.inputs.password.value}
+                value={formData.inputs.password.value}
                 validators={[VALIDATOR_MINLENGTH(6)]}
+                updateFormData={updateFormData}
             />
 
             <Text style={styles.notice} >Passwort vergessen?</Text>

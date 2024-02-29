@@ -2,7 +2,6 @@ import { TextInput, StyleSheet, Text } from "react-native";
 import { validate } from "../../util/validators";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { setInput } from "../../actions/inputActions";
 
 const Input = props => {
     const dispatch = useDispatch()
@@ -10,13 +9,16 @@ const Input = props => {
     const [inputValue, setInputValue] = useState(props.value)
     const [isValid, setIsValid] = useState(true)
     const fetchedData = useSelector((state) => state[props.reducer]);
-
+    const updateFormData = props.updateFormData
     // console.log(fetchedData);
 
     const handleChange = (val) => {
+
         setInputValue(val)
         setIsValid(validate(val, props.validators))
-        dispatch(setInput(props.fieldName, val, props.validators, props.objectId));
+        // dispatch(setInput(props.fieldName, val, props.validators, props.objectId));
+        updateFormData(props.fieldName, val, props.validators);
+
     }
 
     return <>
