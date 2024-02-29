@@ -22,9 +22,11 @@ const OrderView = () => {
     const auth = useContext(AuthContext)
     const fetchedData = useSelector((state) => state.order.ordersArray);
 
+    // console.log(fetchedData);
     const [isModalVisible, setModalVisible] = useState(false);
     const [refresh, setRefresh] = useState(false)
     const handleRefresh = () => setRefresh(!refresh);
+    const [isLoaded, setIsLoaded] = useState(true)
 
     useEffect(() => {
         const fetchOrders = async () => {
@@ -33,8 +35,11 @@ const OrderView = () => {
                     `http://localhost:8000/api/orders/${auth.firmId}/all`
                 );
                 dispatch(getOrders(response.data));
+                setIsLoaded(false)
             } catch (err) {
                 console.log("Error if fetching orders", err);
+                setIsLoaded(false)
+
             }
         };
         fetchOrders();
@@ -44,86 +49,82 @@ const OrderView = () => {
         setModalVisible(!isModalVisible)
     }
 
-    if (fetchedData.orders.length === 0) {
-        return (
-            <>
-                <View style={styles.orderContainer}>
-                    <View style={styles.suggestHeader} >
-                        <View style={styles.headerContent} >
 
-                            <View style={styles.textContainer} >
-                                <Text style={styles.addText}>Noch kein Auftrag</Text>
-                            </View>
-                        </View>
-                    </View>
-                    <View style={styles.suggestContainer}>
-                        <View style={styles.centeredImageContainer}>
-                            <TouchableOpacity onPress={toggleModal}>
-                                <Image
-                                    style={styles.addImg}
-                                    source={require("../../../assets/firm/add.png")}
-                                />
-                            </TouchableOpacity>
-                        </View>
-                    </View>
-
-                </View>
-
-                <ModalComponent
-                    isVisible={isModalVisible}
-                    animationIn="slideInUp" // Specify the slide-up animation
-                    animationOut="slideOutDown" // Specify the slide-down animation
-                    onBackdropPress={toggleModal}
-                    onBackButtonPress={toggleModal}
-
-                    header={<Text style={styles.modalHeadline}>Auftrag hinzufügen</Text>}
-                >
-                    <OrderCreate handleRefresh={handleRefresh} toggle={toggleModal} />
-                </ModalComponent>
-            </>
-        );
-    }
-
-    return (
-        <>
-
+    if (isLoaded || !fetchedData.orders) {
+        return <>
             <View style={styles.orderContainer}>
-                <View style={styles.header} >
-                    <View style={styles.headerContent}>
+                <View style={styles.suggestHeader} >
+                    <View style={styles.headerContent} >
 
                         <View style={styles.textContainer} >
-                            <Text style={styles.headerText}>Aufträge</Text>
+                            <Text style={styles.addText}>Noch kein Auftrag</Text>
                         </View>
-
-                        <View style={styles.headerIconContainer} >
-                            <TouchableOpacity style={styles.headerButton} onPress={toggleModal} >
-                                <Image style={styles.headerIcon} source={require('../../../assets/add_new.png')} />
-                            </TouchableOpacity>
-
-                            <TouchableOpacity style={styles.headerButton} >
-                                <Image style={styles.headerIcon} source={require('../../../assets/filter.png')} />
-                            </TouchableOpacity>
-                        </View>
-
                     </View>
                 </View>
-                <View style={styles.content} >
-                    <OrderList />
+                <View style={styles.suggestContainer}>
+                    <View style={styles.centeredImageContainer}>
+                        <TouchableOpacity onPress={toggleModal}>
+                            <Image
+                                style={styles.addImg}
+                                source={require("../../../assets/firm/add.png")}
+                            />
+                        </TouchableOpacity>
+                    </View>
                 </View>
 
-                <ModalComponent
-                    isVisible={isModalVisible}
-                    animationIn="slideInUp" // Specify the slide-up animation
-                    animationOut="slideOutDown" // Specify the slide-down animation
-                    onBackdropPress={toggleModal}
-                    onBackButtonPress={toggleModal}
-
-                    header={<Text style={styles.modalHeadline}>Auftrag hinzufügen</Text>}
-                >
-                    <OrderCreate handleRefresh={handleRefresh} toggle={toggleModal} />
-                </ModalComponent>
             </View>
+
+            <ModalComponent
+                isVisible={isModalVisible}
+                animationIn="slideInUp" // Specify the slide-up animation
+                animationOut="slideOutDown" // Specify the slide-down animation
+                onBackdropPress={toggleModal}
+                onBackButtonPress={toggleModal}
+
+                header={<Text style={styles.modalHeadline}>Auftrag hinzufügen</Text>}
+            >
+                <OrderCreate handleRefresh={handleRefresh} toggle={toggleModal} />
+            </ModalComponent>
         </>
+    }
+
+    return !isLoaded && (
+        <View style={styles.orderContainer}>
+            <View style={styles.header} >
+                <View style={styles.headerContent}>
+
+                    <View style={styles.textContainer} >
+                        <Text style={styles.headerText}>Aufträge</Text>
+                    </View>
+
+                    <View style={styles.headerIconContainer} >
+                        <TouchableOpacity style={styles.headerButton} onPress={toggleModal} >
+                            <Image style={styles.headerIcon} source={require('../../../assets/add_new.png')} />
+                        </TouchableOpacity>
+
+                        <TouchableOpacity style={styles.headerButton} >
+                            <Image style={styles.headerIcon} source={require('../../../assets/filter.png')} />
+                        </TouchableOpacity>
+                    </View>
+
+                </View>
+            </View>
+            <View style={styles.content} >
+                <OrderList />
+            </View>
+
+            <ModalComponent
+                isVisible={isModalVisible}
+                animationIn="slideInUp" // Specify the slide-up animation
+                animationOut="slideOutDown" // Specify the slide-down animation
+                onBackdropPress={toggleModal}
+                onBackButtonPress={toggleModal}
+
+                header={<Text style={styles.modalHeadline}>Auftrag hinzufügen</Text>}
+            >
+                <OrderCreate handleRefresh={handleRefresh} toggle={toggleModal} />
+            </ModalComponent>
+        </View>
     )
 }
 
