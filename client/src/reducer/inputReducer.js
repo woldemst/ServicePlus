@@ -1,4 +1,4 @@
-import { SET_INITIAL_DATA, RESET_INITIAL_DATA } from "../actions/inputActions";
+// import { SET_INPUT } from "../actions/inputActions";
 import { validate } from "../util/validators";
 
 const initialState = {};

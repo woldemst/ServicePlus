@@ -20,44 +20,18 @@ const Login = () => {
     const fetchedData = useSelector(state => state.login)
 
     // console.log(fetchedData);
-    const [formData, setFormData] = useState({
-        inputs: {
-            email: {
-                value: '',
-                isValid: false,
-            },
-            password: {
-                value: '',
-                isValid: false,
-            },
-        }
-    })
 
-    const updateFormData = (fieldName, value, validators) => {
-        setFormData((prevFormData) => ({
-            ...prevFormData,
-            inputs: {
-                ...prevFormData.inputs,
-                [fieldName]: {
-                    value,
-                    isValid: validate(value, validators),
-                },
-            },
-        }));
-    }
 
 
     const handleSignIn = async () => {
-
-        dispatch(updateUserData(formData))
         const apiUrl = "http://localhost:8000/api/users/login";
 
         const response = await axios.post(apiUrl, {
-            email: formData.inputs.email.value,
-            password: formData.inputs.password.value,
+            email: fetchedData.inputs.email.value,
+            password: fetchedData.inputs.password.value,
         })
 
-        console.log('response', response.data);
+        // console.log('response', response.data);
         auth.login(response.data.userId, response.data.token, response.data.role, response.data.firmId)
         navigation.navigate('overviewNavigator')
 
@@ -82,23 +56,23 @@ const Login = () => {
             <Input
                 id='email'
                 reducer='login'
+                reducerKey='login'
                 fieldName='email'
                 placeholder="Email"
                 errorText='Choose another email'
-                value={formData.inputs.email.value}
+                value={fetchedData.inputs.email.value}
                 validators={[VALIDATOR_EMAIL()]}
-                updateFormData={updateFormData}
             />
 
             <Input
                 id='password'
                 reducer='login'
+                reducerKey='login'
                 fieldName='password'
                 placeholder='Password'
                 errorText='Type a password'
-                value={formData.inputs.password.value}
+                value={fetchedData.inputs.password.value}
                 validators={[VALIDATOR_MINLENGTH(6)]}
-                updateFormData={updateFormData}
             />
 
             <Text style={styles.notice} >Passwort vergessen?</Text>
