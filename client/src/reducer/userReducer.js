@@ -2,17 +2,29 @@ import { CLEAR_FIELD, UPDATE_USER_DATA } from '../actions/userActions'
 import { validate } from '../util/validators';
 
 const initialState = {
-    // inputs: {
-    //     email: {
-    //         value: '',
-    //         isValid: false,
-    //     },
-    //     password: {
-    //         value: '',
-    //         isValid: false,
-    //     },
-    // },
-    // isFormValid: false,
+    inputs: {
+        email: {
+            value: '',
+            isValid: false,
+        },
+        password: {
+            value: '',
+            isValid: false,
+        },
+        selects: {
+            role: [
+              { key: "1", value: "Owner" },
+              { key: "2", value: "Worker" },
+            ],
+          },
+          selectedOptions: {
+            role: {
+              value: "",
+              isValid: false,
+            }
+          },
+    },
+    isFormValid: false,
 };
 
 const userReducer = (state = initialState, action) => {
@@ -23,8 +35,11 @@ const userReducer = (state = initialState, action) => {
             console.log('from user reducer', action.payload);
             return {
                 ...state,
-                inputs: action.payload
-            }
+                inputs: {
+                    ...state.inputs,
+                    ...action.payload.inputs,
+                },
+            };
 
         default:
             return state;

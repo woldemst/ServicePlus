@@ -10,8 +10,7 @@ const Select = props => {
   const dispatch = useDispatch()
   const [touched, setTouched] = useState(false)
   const [isValid, setIsValid] = useState(true)
-  const fetchedData = useSelector((state) => state[props.reducer]);
-
+  const fetchedData = useSelector((state) => state[props.reducerKey]);
 
 
   // useEffect(() => {
@@ -22,7 +21,8 @@ const Select = props => {
 
   const handleChange = val => {
     setIsValid(validate(val, props.validators))
-    dispatch(setSelect(props.fieldName, val, props.validators))
+    dispatch(setSelect(props.fieldName, val, props.validators, props.objectId, props.reducerKey))
+
   }
 
   return <>

@@ -21,6 +21,7 @@ const loginReducer = (state = initialState, action) => {
     switch (action.type) {
         case UPDATE_USER_DATA:
             // console.log('from reducer', action.payload);
+
             return {
                 ...state,
                 inputs: action.payload
@@ -35,25 +36,28 @@ const loginReducer = (state = initialState, action) => {
             };
 
         case SET_INPUT:
-            const { fieldName, value, validators } = action.payload;
+            const {fieldName, value, validators, reducerKey} = action.payload;
+            // console.log(action.payload);
 
-            const updatedInputField = {
-                ...state.inputs[fieldName],
-                value,
-                isValid: validate(value, validators)
-            };
-
-            const updatedInputs = {
-                ...state.inputs,
-                [fieldName]: updatedInputField,
-            };
-
-            let isFormValid = Object.values(updatedInputs).every((field) => field.isValid);
-
-            return {
-                ...state,
-                inputs: updatedInputs,
-                isFormValid: isFormValid
+            if (reducerKey === 'login'){
+                const updatedInputField = {
+                    ...state.inputs[fieldName],
+                    value,
+                    isValid: validate(value, validators)
+                };
+    
+                const updatedInputs = {
+                    ...state.inputs,
+                    [fieldName]: updatedInputField,
+                };
+    
+                let isFormValid = Object.values(updatedInputs).every((field) => field.isValid);
+    
+                return {
+                    ...state,
+                    inputs: updatedInputs,
+                    isFormValid: isFormValid
+                }
             }
 
         default:

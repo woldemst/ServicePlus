@@ -10,6 +10,7 @@ import OrderItem from "./OrderItem";
 
 const OrderList = (props) => {
     const fetchedData = useSelector((state) => state.order.ordersArray);
+    // console.log(fetchedData);
 
     return (
         <>

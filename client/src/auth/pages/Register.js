@@ -10,7 +10,7 @@ import Input from "../../shared/UIElements/Input";
 import Select from "../../shared/UIElements/Select";
 import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../../context/auth-context";
-
+import { validate } from "../../util/validators";
 
 const Register = () => {
     const auth = useContext(AuthContext)
@@ -19,6 +19,7 @@ const Register = () => {
 
     const fetchedData = useSelector(state => state.register)
     const options = fetchedData.selects.role || [];
+
 
     // console.log(fetchedData)
     async function handleSubmit() {
@@ -54,43 +55,45 @@ const Register = () => {
 
             <Input
                 id='name'
-                reducer='register'
+                reducerKey='register'
                 fieldName='name'
                 placeholder="Name"
                 errorText='Type a name'
                 value={fetchedData.inputs.name.value}
                 validators={[VALIDATOR_REQUIRE()]}
+
             />
 
             <Input
                 id='email'
-                reducer='register'
+                reducerKey='register'
                 fieldName='email'
                 placeholder="Email"
                 errorText='Choose another email'
                 value={fetchedData.inputs.email.value}
                 validators={[VALIDATOR_EMAIL()]}
+
             />
 
             <Input
                 id='password'
-                reducer='register'
+                reducerKey='register'
                 fieldName='password'
                 placeholder="Password"
                 errorText='Type a password'
                 value={fetchedData.inputs.password.value}
                 validators={[VALIDATOR_MINLENGTH(6)]}
-
             />
 
             <Select
                 id='role'
-                reducer='register'
+                reducerKey='register'
                 search={false}
                 fieldName='role'
                 placeholder="Role"
                 data={options}
                 validators={[VALIDATOR_SELECT()]}
+
             />
 
 
