@@ -100,44 +100,46 @@ const workerReducer = (state = initialState, action) => {
       };
 
     case SET_INPUT:
-      const { fieldName, value, validators, objectId } = action.payload;
+      const { fieldName, value, validators, objectId, reducerKey } = action.payload;
 
-      console.log(action.payload);
-      const updatedInputField = {
-        ...state.inputs[fieldName],
-        value,
-        isValid: validate(value, validators)
-      };
-
-      const updatedInputs = {
-        ...state.inputs,
-        [fieldName]: updatedInputField,
-      };
-
-      const updatedWorker = {
-        ...state.workersArray.workers.find(worker => worker._id === objectId),
-        [fieldName]: value
-      };
-
-      const updatedWorkersArray = state.workersArray.workers.map(worker => {
-        if (worker._id === objectId) {
-          return updatedWorker;
+      // console.log(action.payload);
+      if (reducerKey === 'worker'){
+        const updatedInputField = {
+          ...state.inputs[fieldName],
+          value,
+          isValid: validate(value, validators)
+        };
+  
+        const updatedInputs = {
+          ...state.inputs,
+          [fieldName]: updatedInputField,
+        };
+  
+        const updatedWorker = {
+          ...state.workersArray.workers.find(worker => worker._id === objectId),
+          [fieldName]: value
+        };
+  
+        const updatedWorkersArray = state.workersArray.workers.map(worker => {
+          if (worker._id === objectId) {
+            return updatedWorker;
+          }
+          return worker;
+        });
+  
+        let isFormValid = Object.values(updatedInputs).every((field) => field.isValid);
+  
+        return {
+          ...state,
+          workersArray: {
+            ...state.workersArray,
+            workers: updatedWorkersArray,
+          },
+          inputs: updatedInputs,
+          isFormValid: isFormValid
         }
-        return worker;
-      });
-
-      let isFormValid = Object.values(updatedInputs).every((field) => field.isValid);
-
-      return {
-        ...state,
-        workersArray: {
-          ...state.workersArray,
-          workers: updatedWorkersArray,
-        },
-        inputs: updatedInputs,
-        isFormValid: isFormValid
       }
-
+     
     default:
       return state;
   }

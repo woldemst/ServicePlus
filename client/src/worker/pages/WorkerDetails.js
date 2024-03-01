@@ -51,6 +51,7 @@ const WorkerDetails = props => {
             <Input
                 id='workerName'
                 objectId={workerId}
+                reducerKey='worker'
                 fetchedData='worker'
                 fieldName='name'
                 placeholder="Name des Mitarbeiter"
@@ -62,6 +63,7 @@ const WorkerDetails = props => {
             <Input
                 id='workerEmail'
                 objectId={workerId}
+                reducerKey='worker'
                 fetchedData='worker'
                 fieldName='email'
                 placeholder="Email des Mitarbeiter"
@@ -75,6 +77,7 @@ const WorkerDetails = props => {
                     <Input
                         id='workerStreet'
                         objectId={workerId}
+                        reducerKey='worker'
                         fetchedData='worker'
                         fieldName='street'
                         placeholder="Straße des Mitarbeiter"
@@ -88,6 +91,7 @@ const WorkerDetails = props => {
                     <Input
                         id='workerHouseNr'
                         objectId={workerId}
+                        reducerKey='worker'
                         fetchedData='worker'
                         fieldName='houseNr'
                         placeholder="Housnummer des Mitarbeiter"
@@ -103,6 +107,7 @@ const WorkerDetails = props => {
                     <Input
                         id='workerZip'
                         objectId={workerId}
+                        reducerKey='worker'
                         fetchedData='worker'
                         fieldName='zip'
                         placeholder="PLZ des Mitarbeiter"
@@ -116,6 +121,7 @@ const WorkerDetails = props => {
                     <Input
                         id='workerPlace'
                         objectId={workerId}
+                        reducerKey='worker'
                         fetchedData='worker'
                         fieldName='place'
                         placeholder="Ort des Mitarbeiter"
@@ -129,6 +135,7 @@ const WorkerDetails = props => {
             <Input
                 id='workerPhone'
                 objectId={workerId}
+                reducerKey='worker'
                 fetchedData='worker'
                 fieldName='phone'
                 placeholder="Phone des Mitarbeiter"
@@ -140,6 +147,7 @@ const WorkerDetails = props => {
             <Input
                 id='workerDeskr'
                 objectId={workerId}
+                reducerKey='worker'
                 fetchedData='worker'
                 fieldName='description'
                 placeholder="Beschreibung des Mitarbeiter"
