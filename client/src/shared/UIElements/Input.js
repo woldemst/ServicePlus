@@ -16,7 +16,6 @@ const Input = props => {
         setInputValue(val)
         setIsValid(validate(val, props.validators))
         dispatch(setInput(props.fieldName, val, props.validators, props.objectId, props.reducerKey));
-
     }
 
     return <>

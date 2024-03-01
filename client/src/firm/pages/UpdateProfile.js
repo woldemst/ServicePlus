@@ -58,6 +58,7 @@ const UpdateProfile = (props) => {
 
           <Input
             id='firmName'
+            reducerKey='firm'
             fieldName='name'
             placeholder="Name des Betriebs"
             value={fetchedData.inputs.name.value}
@@ -67,6 +68,7 @@ const UpdateProfile = (props) => {
 
           <Input
             id='ownerName'
+            reducerKey='firm'
             fieldName='ownerName'
             errorText='Type owner"s name'
             placeholder="Name des Inhabers"
@@ -76,6 +78,7 @@ const UpdateProfile = (props) => {
 
           <Input
             id='firmEmail'
+            reducerKey='firm'
             fieldName='email'
             errorText='Type an email'
             placeholder="Name des Betriebs"
@@ -87,6 +90,7 @@ const UpdateProfile = (props) => {
             <View style={styles.streetWrapper}>
               <Input
                 id='firmStreet'
+                reducerKey='firm'
                 fieldName='street'
                 placeholder="Straße"
                 errorText='Type a street'
@@ -98,6 +102,7 @@ const UpdateProfile = (props) => {
             <View style={styles.nrWrapper}>
               <Input
                 id='firmHouseNr'
+                reducerKey='firm'
                 fieldName='houseNr'
                 placeholder="Nr."
                 errorText='Type a house number'
@@ -111,6 +116,7 @@ const UpdateProfile = (props) => {
             <View style={styles.zipWrapper}>
               <Input
                 id='firmZip'
+                reducerKey='firm'
                 fieldName='zip'
                 placeholder="PLZ"
                 errorText='Type a zip code'
@@ -122,6 +128,7 @@ const UpdateProfile = (props) => {
             <View style={styles.placeWrapper}>
               <Input
                 id='firmPlace'
+                reducerKey='firm'
                 fieldName='place'
                 placeholder="Ort"
                 errorText='Type a place or city'
@@ -133,6 +140,7 @@ const UpdateProfile = (props) => {
 
           <Input
             id='firmPhone'
+            reducerKey='firm'
             fieldName='phone'
             placeholder="Telefon"
             errorText='Type a telephone number'
@@ -142,12 +150,12 @@ const UpdateProfile = (props) => {
 
           <Input
             id='firmWebsite'
+            reducerKey='firm'
             fieldName='website'
             placeholder="Webseite"
             errorText='Type a website'
             value={fetchedData.inputs.website.value}
             validators={[VALIDATOR_REQUIRE()]}
-           
 
           />
 

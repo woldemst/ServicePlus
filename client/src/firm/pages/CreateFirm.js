@@ -16,12 +16,11 @@ const CreateFirm = props => {
   const dispatch = useDispatch()
   const fetchedData = useSelector((state) => state.firm);
 
-  // console.log(fetchedData);
+  // console.log('fetched data from the firm', fetchedData);
   const handleSubmit = async () => {
     const URL = "http://localhost:8000/api/firm/register";
 
     try {
-
       const updatedData = {
         role: auth.role,
         userId: auth.userId,
@@ -52,7 +51,7 @@ const CreateFirm = props => {
     <View style={styles.container}>
       <Input
         id='firmName'
-        reducer='firm'
+        reducerKey='firm'
         fieldName='name'
         placeholder="Name des Betriebs"
         errorText='Type a name of firm'
@@ -62,7 +61,7 @@ const CreateFirm = props => {
 
       <Input
         id='ownerName'
-        reducer='firm'
+        reducerKey='firm'
         fieldName='ownerName'
         placeholder="Name des Inhabers"
         value={fetchedData.inputs.ownerName.value}
@@ -72,7 +71,7 @@ const CreateFirm = props => {
 
       <Input
         id='firmEmail'
-        reducer='firm'
+        reducerKey='firm'
         fieldName='email'
         placeholder="Email"
         value={fetchedData.inputs.email.value}
@@ -84,7 +83,7 @@ const CreateFirm = props => {
         <View style={styles.streetWrapper}>
           <Input
             id='firmStreet'
-            reducer='firm'
+            reducerKey='firm'
             fieldName='street'
             placeholder="Straße"
             value={fetchedData.inputs.street.value}
@@ -96,7 +95,7 @@ const CreateFirm = props => {
         <View style={styles.nrWrapper}>
           <Input
             fieldName='houseNr'
-            reducer='firm'
+            reducerKey='firm'
             placeholder="Nr."
             errorText='Number'
             value={fetchedData.inputs.houseNr.value}
@@ -111,7 +110,7 @@ const CreateFirm = props => {
           <Input
             id='firmZip'
             fieldName='zip'
-            reducer='firm'
+            reducerKey='firm'
             placeholder="PLZ"
             errorText='Type a ZIP code'
             value={fetchedData.inputs.zip.value}
@@ -123,7 +122,7 @@ const CreateFirm = props => {
         <View style={styles.placeWrapper}>
           <Input
             id='firmPlace'
-            reducer='firm'
+            reducerKey='firm'
             fieldName='place'
             placeholder="Ort"
             errorText='Type a place'
@@ -137,7 +136,7 @@ const CreateFirm = props => {
       <Input
         id='firmPhone'
         fieldName='phone'
-        reducer='firm'
+        reducerKey='firm'
         placeholder="Telefon"
         errorText='Type a phone'
         value={fetchedData.inputs.phone.value}
@@ -147,7 +146,7 @@ const CreateFirm = props => {
 
       <Input
         id='firmWebsite'
-        reducer='firm'
+        reducerKey='firm'
         fieldName='website'
         placeholder="Webseite"
         errorText='Type a website'

@@ -4,8 +4,9 @@ const HttpError = require("../models/http-error");
 const User = require('../models/User')
 
 const register = async (req, res, next) => {
-  // destructuring assignment from bod
-  const { name, ownerName, email, role,  street, houseNr, zip, place, phone, website, userId} = req.body;
+  // destructuring assignment from body
+  const { name, ownerName, email, role, street, houseNr, zip, place, phone, website, userId } = req.body;
+
 
   let existingFirm;
 
@@ -19,6 +20,12 @@ const register = async (req, res, next) => {
     return next(error);
   }
 
+  // Check if the firm with the same email already exists
+  if (existingFirm) {
+    const error = new HttpError("A firm with the same email already exists.", 422);
+    return next(error);
+  }
+
   try {
     const user = await User.findById(userId)
     if (!user) {
@@ -28,10 +35,10 @@ const register = async (req, res, next) => {
 
     // creating new firm
     const createdFirm = new Firm({
-      name,
       ownerName,
+      name,
       email,
-      role, 
+      role,
       street,
       houseNr,
       zip,
@@ -47,7 +54,7 @@ const register = async (req, res, next) => {
     await user.save();
 
     res.status(201).json({
-      firmId: createdFirm.id, 
+      firmId: createdFirm.id,
       email: createdFirm.email,
     });
 
@@ -71,19 +78,19 @@ const updateFirm = async (req, res, next) => {
       const error = new HttpError('Could not find firm for the provided ID.', 404);
       return next(error);
     }
-  
+
     updatedFirm.name = name,
-    updatedFirm.ownerName = ownerName,
-    updatedFirm.email = email,
-    updatedFirm.street = street,
-    updatedFirm.houseNr = houseNr,
-    updatedFirm.zip = zip,
-    updatedFirm.place = place,
-    updatedFirm.phone = phone,
-    updatedFirm.website = website,
-  
-    await updatedFirm.save();
-  
+      updatedFirm.ownerName = ownerName,
+      updatedFirm.email = email,
+      updatedFirm.street = street,
+      updatedFirm.houseNr = houseNr,
+      updatedFirm.zip = zip,
+      updatedFirm.place = place,
+      updatedFirm.phone = phone,
+      updatedFirm.website = website,
+
+      await updatedFirm.save();
+
     res.status(200).json({ firm: updatedFirm.toObject({ getters: true }) });
   } catch (err) {
     const error = new HttpError('Something went wrong, could not update profile.', 500);
@@ -106,7 +113,7 @@ const getFirmProfile = async (req, res, next) => {
 };
 
 const getFirmByUserId = async (req, res, next) => {
-  const userId = req.params.userId;  
+  const userId = req.params.userId;
 
   try {
     // Fetch user data by ID to get the associated firmId
@@ -116,7 +123,7 @@ const getFirmByUserId = async (req, res, next) => {
     }
 
     const firmId = user.firmId;
-    
+
     // Use firmId to get firm data
     const firm = await Firm.findById(firmId);
     console.log(firm);
@@ -125,8 +132,8 @@ const getFirmByUserId = async (req, res, next) => {
     }
 
     res
-      .json({ 
-        firm: firm.toObject({ getters: true}),
+      .json({
+        firm: firm.toObject({ getters: true }),
         firmId: firm.firmId
       });
 
