@@ -12,8 +12,8 @@ const CreateCustomer = (props) => {
   const auth = useContext(AuthContext)
   const navigation = useNavigation()
   const dispatch = useDispatch()
-  const fetchedData = useSelector(state => state.customer)
 
+  const fetchedData = useSelector(state => state.customer)
   // console.log(fetchedData);
 
   const handleSubmit = async () => {
@@ -49,6 +49,7 @@ const CreateCustomer = (props) => {
         <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
           <Input
             id='customerName'
+            reducerKey='customer'
             fieldName='name'
             placeholder="Name"
             errorText='Geben Sie einen Namen für den Kunde ein'
@@ -58,6 +59,7 @@ const CreateCustomer = (props) => {
 
           <Input
             id='customerEmail'
+            reducerKey='customer'
             fieldName='email'
             placeholder="E-Mail"
             errorText='Geben Sie eine E-Mail Adresse des Kunden ein'
@@ -69,6 +71,7 @@ const CreateCustomer = (props) => {
             <View style={styles.streetWrapper}>
               <Input
                 id='customerStreet'
+                reducerKey='customer'
                 fieldName='street'
                 placeholder="Straße"
                 errorText='Geben Sie die Straße des Kunden ein'
@@ -80,6 +83,7 @@ const CreateCustomer = (props) => {
             <View style={styles.nrWrapper}>
               <Input
                 id='customerHouseNr'
+                reducerKey='customer'
                 fieldName='houseNr'
                 placeholder="Housenummer"
                 errorText='Geben Sie die Housenummer des Kunden ein'
@@ -93,6 +97,7 @@ const CreateCustomer = (props) => {
             <View style={styles.zipWrapper}>
               <Input
                 id='customerZip'
+                reducerKey='customer'
                 fieldName='zip'
                 placeholder="PLZ"
                 errorText='Geben Sie PLZ des Kunden ein'
@@ -104,6 +109,7 @@ const CreateCustomer = (props) => {
             <View style={styles.placeWrapper}>
               <Input
                 id='customerPlace'
+                reducerKey='customer'
                 fieldName='place'
                 placeholder="Ort"
                 errorText='Geben Sie den Ort des Kunden ein'
@@ -115,6 +121,7 @@ const CreateCustomer = (props) => {
 
           <Input
             id='customerPhone'
+            reducerKey='customer'
             fieldName='phone'
             placeholder="Telefonnummer"
             errorText='Telefonnummer des Kunden ein'
@@ -124,6 +131,7 @@ const CreateCustomer = (props) => {
 
           <Input
             id='customerWebsite'
+            reducerKey='customer'
             fieldName='website'
             placeholder="Website"
             errorText='Geben Sie Website des Kunden ein'
@@ -134,6 +142,7 @@ const CreateCustomer = (props) => {
 
           <Input
             id='customerDescription'
+            reducerKey='customer'
             fieldName='description'
             placeholder="Beschreibung"
             errorText='Geben Sie die Beschreibung des Kunden ein'

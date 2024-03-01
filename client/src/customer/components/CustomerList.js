@@ -13,7 +13,7 @@ const CustomerList = () => {
     const navigation = useNavigation()
     const auth = useContext(AuthContext)
 
-    const [loading, setLoading] = useState(true)
+    const [isLoaded, setisLoaded] = useState(true)
     const [refresh, setRefresh] = useState(false)
 
     const fetchedData = useSelector(state => state.customer.customersArray)
@@ -26,23 +26,24 @@ const CustomerList = () => {
             try {
                 const response = await axios.get(`http://localhost:8000/api/customers/${auth.firmId}/all`)
                 dispatch(getCustomerData(response.data))
-                setLoading(false)
+                setisLoaded(false)
             } catch (err) {
                 console.log('Error while fetching customers', err);
-                setLoading(false)
+                setisLoaded(false)
             }
         }
         fetchCustomers()
     }, [refresh])
+    if (isLoaded || fetchedData.customers.length === 0) {
 
-    if (fetchedData.customers.length === 0) {
+        // if (fetchedData.customers.length === 0) {
         return (
             <View style={styles.suggestContainer}>
                 <Text style={styles.addText}>Noch kein Kunde</Text>
 
                 <View style={styles.centeredImageContainer}>
                     <TouchableOpacity
-                        onPress={() => {navigation.navigate('createCustomer', {handleRefresh: () => handleRefresh()}) }} >
+                        onPress={() => { navigation.navigate('createCustomer', { handleRefresh: () => handleRefresh() }) }} >
                         <Image style={styles.addImg} source={require('../../../assets/firm/add.png')} />
                     </TouchableOpacity>
 
@@ -52,7 +53,7 @@ const CustomerList = () => {
         )
     }
 
-    return <>
+    return !isLoaded && (
         <View style={styles.container}>
             <ScrollView showsVerticalScrollIndicator={false}>
                 <View style={styles.header} >
@@ -80,7 +81,7 @@ const CustomerList = () => {
                 </View>
 
                 <View style={styles.customerList}>
-                    {loading ? (
+                    {isLoaded ? (
                         <ActivityIndicator style={styles.loader} size="large" color="#7A9B76" />
                     ) : (
                         fetchedData.customers.map(customer => (
@@ -107,7 +108,7 @@ const CustomerList = () => {
                 </View>
             </ScrollView>
         </View>
-    </>
+    )
 }
 
 
