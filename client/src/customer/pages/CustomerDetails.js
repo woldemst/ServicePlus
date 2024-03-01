@@ -53,17 +53,19 @@ const CustomerDetails = (props) => {
             <Input
                 id="customerName"
                 fieldName="name"
+                objectId={customerId}
+                reducerKey="customer"
                 placeholder="Name des Kunden"
                 errorText="Geben Sie den Namen des Kunden"
-                objectId={customerId}
                 value={customer.name}
                 validators={[VALIDATOR_REQUIRE()]}
             />
 
             <Input
                 id="customerEmail"
-                objectId={customerId}
                 fieldName="email"
+                objectId={customerId}
+                reducerKey="customer"
                 placeholder="E-Mail des Kunden"
                 errorText="Geben Sie eine E-Mail des Kunden"
                 value={customer.email}
@@ -75,6 +77,7 @@ const CustomerDetails = (props) => {
                     <Input
                         id="customerStreet"
                         objectId={customerId}
+                        reducerKey="customer"
                         fieldName="street"
                         placeholder="Straße des Kunden"
                         errorText="Geben Sie die Straße des Kunden ein"
@@ -87,6 +90,7 @@ const CustomerDetails = (props) => {
                     <Input
                         id="customerHouseNr"
                         objectId={customerId}
+                        reducerKey="customer"
                         fieldName="houseNr"
                         placeholder="Housnummmer des Kunden"
                         errorText="Geben Sie die Housnummmer des Kunden ein"
@@ -100,6 +104,7 @@ const CustomerDetails = (props) => {
                     <Input
                         id="customerZip"
                         objectId={customerId}
+                        reducerKey="customer"
                         fieldName="zip"
                         placeholder="PLZ des Kunden"
                         errorText="Geben Sie das PLZ des Kunden ein"
@@ -113,6 +118,7 @@ const CustomerDetails = (props) => {
                     <Input
                         id="customerPlace"
                         objectId={customerId}
+                        reducerKey="customer"
                         fieldName="place"
                         placeholder="Der Ort des Kunden"
                         errorText="Geben Sie den Ort des Kunden ein"
@@ -126,6 +132,7 @@ const CustomerDetails = (props) => {
             <Input
                 id="customerPhone"
                 objectId={customerId}
+                reducerKey="customer"
                 fieldName="place"
                 placeholder="Telefonnumer"
                 errorText="Geben Sie die Telefonnumer Kunden ein"
@@ -136,6 +143,7 @@ const CustomerDetails = (props) => {
             <Input
                 id="customerWebsite"
                 objectId={customerId}
+                reducerKey="customer"
                 fieldName="website"
                 placeholder="Website"
                 errorText="Geben Sie die Webseite des Kunden ein"
@@ -146,6 +154,7 @@ const CustomerDetails = (props) => {
             <Input
                 id="customerDescription"
                 objectId={customerId}
+                reducerKey="customer"
                 fieldName="description"
                 placeholder="Beschreibung"
                 errorText="Geben Sie die BEschreibung des Kunden ein"

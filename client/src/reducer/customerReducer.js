@@ -48,49 +48,6 @@ const initialState = {
 
 const customerReducer = (state = initialState, action) => {
   switch (action.type) {
-    // case UPDATE_INPUT:
-    //   const { fieldName, value, validators } = action.payload;
-
-    //   // console.log(action.payload);
-    //   const updatedField = {
-    //     ...state.inputs[fieldName],
-    //     value,
-    //     isValid: validate(value, validators)
-    //   };
-    //   const updatedInputs = {
-    //     ...state.inputs,
-    //     [fieldName]: updatedField,
-    //   };
-
-    //   let isFormValid = Object.values(updatedInputs).every((field) => field.isValid);
-
-    //   return {
-    //     ...state,
-    //     inputs: updatedInputs,
-    //     isFormValid,
-    //   };
-    // case UPDATE_CUSTOMER:
-    //   const { field, val, objectId } = action.payload;
-
-    //   const updatedCustomer = {
-    //     ...state.customersArray.customers.find(customer => customer._id === objectId),
-    //     [field]: val
-    //   };
-
-    //   const updatedCustomersArray = state.customersArray.customers.map(customer => {
-    //     if (customer._id === objectId) {
-    //       return updatedCustomer;
-    //     }
-    //     return customer;
-    //   });
-
-    //   return {
-    //     ...state,
-    //     customersArray: {
-    //       ...state.customersArray,
-    //       customers: updatedCustomersArray,
-    //     },
-    //   };
     case GET_CUSTOMER_DATA:
       return {
         ...state,
@@ -151,44 +108,46 @@ const customerReducer = (state = initialState, action) => {
       };
 
     case SET_INPUT:
-      const { fieldName, value, validators, objectId } = action.payload;
+      const { fieldName, value, validators, objectId, reducerKey } = action.payload;
 
-      console.log(action.payload);
-      const updatedInputField = {
-        ...state.inputs[fieldName],
-        value,
-        isValid: validate(value, validators)
-      };
-
-      const updatedInputs = {
-        ...state.inputs,
-        [fieldName]: updatedInputField,
-      };
-
-      const updatedWorker = {
-        ...state.customersArray.customers.find(worker => worker._id === objectId),
-        [fieldName]: value
-      };
-
-      const updatedWorkersArray = state.customersArray.customers.map(worker => {
-        if (worker._id === objectId) {
-          return updatedWorker;
+      // console.log(action.payload);
+      if (reducerKey === 'customer'){
+        const updatedInputField = {
+          ...state.inputs[fieldName],
+          value,
+          isValid: validate(value, validators)
+        };
+  
+        const updatedInputs = {
+          ...state.inputs,
+          [fieldName]: updatedInputField,
+        };
+  
+        const updatedWorker = {
+          ...state.customersArray.customers.find(worker => worker._id === objectId),
+          [fieldName]: value
+        };
+  
+        const updatedWorkersArray = state.customersArray.customers.map(worker => {
+          if (worker._id === objectId) {
+            return updatedWorker;
+          }
+          return worker;
+        });
+  
+        let isFormValid = Object.values(updatedInputs).every((field) => field.isValid);
+  
+        return {
+          ...state,
+          customersArray: {
+            ...state.customersArray,
+            customers: updatedWorkersArray,
+          },
+          inputs: updatedInputs,
+          isFormValid: isFormValid
         }
-        return worker;
-      });
-
-      let isFormValid = Object.values(updatedInputs).every((field) => field.isValid);
-
-      return {
-        ...state,
-        customersArray: {
-          ...state.customersArray,
-          customers: updatedWorkersArray,
-        },
-        inputs: updatedInputs,
-        isFormValid: isFormValid
       }
-
+     
     default:
       return state;
   }
