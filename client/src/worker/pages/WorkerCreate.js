@@ -50,6 +50,7 @@ const WorkerCreate = (props) => {
       <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
         <Input
           id='workerName'
+          reducerKey='worker'
           fieldName='name'
           placeholder="Name des Mitarabeiters"
           errorText='Geben Sie einen Namen für den Mitarbeiter ein'
@@ -59,6 +60,7 @@ const WorkerCreate = (props) => {
 
         <Input
           id='workerEmail'
+          reducerKey='worker'
           fieldName='email'
           placeholder="E-Mail des Mitarabeiters"
           errorText='Geben Sie ein E-Mail des Mitarbeiters ein'
@@ -70,6 +72,7 @@ const WorkerCreate = (props) => {
           <View style={styles.streetWrapper}>
             <Input
               id='workerStreet'
+              reducerKey='worker'
               fieldName='street'
               placeholder="Straße des Mitarabeiters"
               errorText='Geben Sie die Straße des Mitarbeiters ein'
@@ -81,6 +84,7 @@ const WorkerCreate = (props) => {
           <View style={styles.nrWrapper}>
             <Input
               id='workerHouseNr'
+              reducerKey='worker'
               fieldName='houseNr'
               placeholder="Nr."
               errorText='Hausnummer'
@@ -94,6 +98,7 @@ const WorkerCreate = (props) => {
           <View style={styles.zipWrapper}>
             <Input
               id='workerZip'
+              reducerKey='worker'
               fieldName='zip'
               placeholder="PLZ"
               errorText='Geben Sie PLZ des Mitarbeiters ein'
@@ -105,6 +110,7 @@ const WorkerCreate = (props) => {
           <View style={styles.placeWrapper}>
             <Input
               id='workerPlace'
+              reducerKey='worker'
               fieldName='place'
               placeholder="Ort"
               errorText='Geben Sie den Ort des Mitarbeiters ein'
@@ -116,6 +122,7 @@ const WorkerCreate = (props) => {
 
         <Input
           id='workerPhone'
+          reducerKey='worker'
           fieldName='phone'
           placeholder="Mobilenummer"
           errorText='Geben Sie die Telefonnummer des Mitarbeiters ein'
@@ -125,6 +132,7 @@ const WorkerCreate = (props) => {
 
         <Input
           id='workerDescr'
+          reducerKey='worker'
           fieldName='description'
           placeholder="Beschreibung"
           errorText='Geben Sie die Beschreibung des Mitarbeiters ein'

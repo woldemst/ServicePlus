@@ -14,7 +14,7 @@ const WorkerList = () => {
     const navigation = useNavigation()
     const auth = useContext(AuthContext)
 
-    const [loading, setLoading] = useState(true)
+    const [isLoaded, setisLoaded] = useState(true)
     const [refresh, setRefresh] = useState(false)
 
     const fetchedData = useSelector(state => state.worker.workersArray)
@@ -26,17 +26,17 @@ const WorkerList = () => {
             try {
                 const response = await axios.get(`http://localhost:8000/api/workers/${auth.firmId}/all`)
                 dispatch(getWorkerData(response.data))
-                setLoading(false)
+                setisLoaded(false)
             } catch (err) {
                 console.log('Error while fetching workers', err);
-                setLoading(false)
+                setisLoaded(false)
             }
         }
         fetchWorkers()
     }, [refresh])
 
 
-    if (fetchedData.workers.length === 0) {
+    if (isLoaded || fetchedData.workers.length === 0) {
         return (
             <View style={styles.suggestContainer}>
                 <Text style={styles.addText}>Noch kein Mitarbeiter</Text>
@@ -58,7 +58,7 @@ const WorkerList = () => {
         )
     }
 
-    return <>
+    return !isLoaded && (
         <View style={styles.container}>
             <ScrollView showsVerticalScrollIndicator={false}>
                 <View style={styles.header} >
@@ -85,7 +85,7 @@ const WorkerList = () => {
                 </View>
 
                 <View style={styles.workerList}>
-                    {loading ? (
+                    {isLoaded ? (
                         <ActivityIndicator style={styles.loader} size="large" color="#7A9B76" />
 
                     ) : (
@@ -111,7 +111,7 @@ const WorkerList = () => {
                 </View>
             </ScrollView>
         </View>
-    </>
+    )    
 }
 
 
