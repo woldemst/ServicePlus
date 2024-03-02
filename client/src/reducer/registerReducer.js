@@ -1,5 +1,3 @@
-import { CLEAR_REGISTER_FIELD } from "../actions/registerActions";
-import { SET_INPUT } from '../actions/inputActions';
 import { SET_SELECT } from "../actions/selectActions";
 import { validate } from "../util/validators";
 
@@ -36,29 +34,6 @@ const initialState = {
 const registerReducer = (state = initialState, action) => {
   switch (action.type) {
 
-    case SET_INPUT:
-      const { fieldName, value, validators, reducerKey } = action.payload;
-
-      if (reducerKey === 'register') {
-        const updatedInputField = {
-          ...state.inputs[fieldName],
-          value,
-          isValid: validate(value, validators)
-        };
-
-        const updatedInputs = {
-          ...state.inputs,
-          [fieldName]: updatedInputField,
-        };
-
-        let isFormValid = Object.values(updatedInputs).every((field) => field.isValid);
-
-        return {
-          ...state,
-          inputs: updatedInputs,
-          isFormValid: isFormValid
-        }
-      }
 
     case SET_SELECT:
       const { field, val, valid, key } = action.payload;
