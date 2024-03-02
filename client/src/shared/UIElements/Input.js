@@ -9,9 +9,9 @@ const Input = props => {
     const [touched, setTouched] = useState(false)
     const [inputValue, setInputValue] = useState(props.value)
     const [isValid, setIsValid] = useState(true)
-    const fetchedData = useSelector((state) => state[props.reducerKey]);
+    // const fetchedData = useSelector((state) => state[props.reducerKey]);
     // console.log(fetchedData);
-
+    
     const handleChange = (val) => {
         setInputValue(val)
         setIsValid(validate(val, props.validators))

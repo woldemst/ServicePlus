@@ -5,11 +5,10 @@ import { useNavigation } from "@react-navigation/native";
 import axios from "axios";
 
 import { VALIDATOR_EMAIL, VALIDATOR_MINLENGTH } from "../../util/validators";
+import { setInitialInputData } from "../../actions/inputActions";
 import { AuthContext } from "../../context/auth-context";
 import Button from "../../shared/UIElements/Button";
 import Input from "../../shared/UIElements/Input";
-import { updateUserData } from "../../actions/userActions";
-import { validate } from "../../util/validators";
 
 const Login = () => {
     const auth = useContext(AuthContext)
@@ -17,13 +16,31 @@ const Login = () => {
     const dispatch = useDispatch()
 
     const [isLoginMode, setIsLoginMode] = useState(true)
-    const fetchedData = useSelector(state => state.login)
+    const fetchedData = useSelector(state => state.input)
+
+    const [isLoaded, setIsLoaded] = useState(false)
+
+    const initialState = {
+        email: {
+            value: '',
+            isValid: false,
+        },
+        password: {
+            value: '',
+            isValid: false,
+        },
+    };
+
+    useEffect(() => {
+        setIsLoaded(true)
+        dispatch(setInitialInputData(initialState))
+    }, [])
+
 
     // console.log(fetchedData);
 
-
-
     const handleSignIn = async () => {
+        console.log('for the api', fetchedData);
         const apiUrl = "http://localhost:8000/api/users/login";
 
         const response = await axios.post(apiUrl, {
@@ -44,7 +61,6 @@ const Login = () => {
     }
 
 
-
     return (
         <View style={styles.container}>
 
@@ -53,27 +69,32 @@ const Login = () => {
 
             {/* {error && <Text style={styles.error}>{error}</Text>} */}
 
-            <Input
-                id='email'
-                reducer='login'
-                reducerKey='login'
-                fieldName='email'
-                placeholder="Email"
-                errorText='Choose another email'
-                value={fetchedData.inputs.email.value}
-                validators={[VALIDATOR_EMAIL()]}
-            />
+            {isLoaded && (
+                <>
+                    <Input
+                        id='email'
+                        reducer='login'
+                        reducerKey='login'
+                        fieldName='email'
+                        placeholder="Email"
+                        errorText='Choose another email'
+                        value={fetchedData.inputs.email.value}
+                        validators={[VALIDATOR_EMAIL()]}
+                    />
 
-            <Input
-                id='password'
-                reducer='login'
-                reducerKey='login'
-                fieldName='password'
-                placeholder='Password'
-                errorText='Type a password'
-                value={fetchedData.inputs.password.value}
-                validators={[VALIDATOR_MINLENGTH(6)]}
-            />
+                    <Input
+                        id='password'
+                        reducer='login'
+                        reducerKey='login'
+                        fieldName='password'
+                        placeholder='Password'
+                        errorText='Type a password'
+                        value={fetchedData.inputs.password.value}
+                        validators={[VALIDATOR_MINLENGTH(6)]}
+                    />
+
+                </>
+            )}
 
             <Text style={styles.notice} >Passwort vergessen?</Text>
 
