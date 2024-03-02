@@ -1,36 +1,77 @@
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
-import { useNavigation } from "@react-navigation/native";
+import { useContext, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useNavigation } from "@react-navigation/native";
 import axios from "axios";
 
 
 import { VALIDATOR_EMAIL, VALIDATOR_MINLENGTH, VALIDATOR_REQUIRE, VALIDATOR_SELECT } from "../../util/validators";
-import Button from "../../shared/UIElements/Button";
-import Input from "../../shared/UIElements/Input";
-import Select from "../../shared/UIElements/Select";
-import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../../context/auth-context";
-import { validate } from "../../util/validators";
+import Button from "../../shared/UIElements/Button";
+import Select from "../../shared/UIElements/Select";
+import Input from "../../shared/UIElements/Input";
+import { setInitialSelectData } from "../../actions/selectActions";
+import { setInitialInputData } from "../../actions/inputActions";
+
 
 const Register = () => {
     const auth = useContext(AuthContext)
     const navigation = useNavigation()
     const dispatch = useDispatch()
 
-    const fetchedData = useSelector(state => state.register)
-    const options = fetchedData.selects.role || [];
+    const [isLoaded, setIsLoaded] = useState(false)
 
+    const initialInputState = {
+        name: {
+            value: "",
+            isValid: false,
+        },
+        email: {
+            value: "",
+            isValid: false,
+        },
+        password: {
+            value: "",
+            isValid: false,
+        },
+    }
 
-    // console.log(fetchedData)
+    const initialSelectState = {
+        selects: {
+            role: [
+                { key: "1", value: "Owner" },
+                { key: "2", value: "Worker" },
+            ],
+        },
+        selectedOptions: {
+            role: {
+                value: "",
+                isValid: false,
+            }
+        },
+    };
+
+    useEffect(() => {
+        setIsLoaded(true)
+        dispatch(setInitialInputData(initialInputState))
+        dispatch(setInitialSelectData(initialSelectState))
+    }, [])
+
+    const fetchedInputData = useSelector(state => state.input)
+    const fetchedSelectData = useSelector(state => state.select)
+    const options = initialSelectState.selects.role;
+
+    // console.log(fetchedSelectData)
     async function handleSubmit() {
         const URL = "http://localhost:8000/api/users/register";
 
+        console.log('before api', fetchedSelectData);
         try {
             const response = await axios.post(URL, {
-                name: fetchedData.inputs.name.value,
-                email: fetchedData.inputs.email.value,
-                password: fetchedData.inputs.password.value,
-                role: fetchedData.selectedOptions.role.value
+                name: fetchedInputData.inputs.name.value,
+                email: fetchedInputData.inputs.email.value,
+                password: fetchedInputData.inputs.password.value,
+                role: fetchedSelectData.selectedOptions.role.value
             });
 
 
@@ -53,48 +94,54 @@ const Register = () => {
             <Text style={styles.logoText}>ServicePlus</Text>
             <Text style={styles.title}>Registrieren</Text>
 
-            <Input
-                id='name'
-                reducerKey='register'
-                fieldName='name'
-                placeholder="Name"
-                errorText='Type a name'
-                value={fetchedData.inputs.name.value}
-                validators={[VALIDATOR_REQUIRE()]}
+            {isLoaded && (
+                <>
 
-            />
+                    <Input
+                        id='name'
+                        reducerKey='register'
+                        fieldName='name'
+                        placeholder="Name"
+                        errorText='Type a name'
+                        value={fetchedInputData.inputs.name.value}
+                        validators={[VALIDATOR_REQUIRE()]}
 
-            <Input
-                id='email'
-                reducerKey='register'
-                fieldName='email'
-                placeholder="Email"
-                errorText='Choose another email'
-                value={fetchedData.inputs.email.value}
-                validators={[VALIDATOR_EMAIL()]}
+                    />
 
-            />
+                    <Input
+                        id='email'
+                        reducerKey='register'
+                        fieldName='email'
+                        placeholder="Email"
+                        errorText='Choose another email'
+                        value={fetchedInputData.inputs.email.value}
+                        validators={[VALIDATOR_EMAIL()]}
 
-            <Input
-                id='password'
-                reducerKey='register'
-                fieldName='password'
-                placeholder="Password"
-                errorText='Type a password'
-                value={fetchedData.inputs.password.value}
-                validators={[VALIDATOR_MINLENGTH(6)]}
-            />
+                    />
 
-            <Select
-                id='role'
-                reducerKey='register'
-                search={false}
-                fieldName='role'
-                placeholder="Role"
-                data={options}
-                validators={[VALIDATOR_SELECT()]}
+                    <Input
+                        id='password'
+                        reducerKey='register'
+                        fieldName='password'
+                        placeholder="Password"
+                        errorText='Type a password'
+                        value={fetchedInputData.inputs.password.value}
+                        validators={[VALIDATOR_MINLENGTH(6)]}
+                    />
 
-            />
+                    <Select
+                        id='role'
+                        reducerKey='register'
+                        search={false}
+                        fieldName='role'
+                        placeholder="Role"
+                        data={options}
+                        validators={[VALIDATOR_SELECT()]}
+
+                    />
+                </>
+            )}
+
 
 
             <Text style={styles.notice}>Passwort vergessen?</Text>

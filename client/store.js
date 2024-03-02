@@ -7,6 +7,7 @@ import loginReducer from './src/reducer/loginReducer';
 import workerReducer from './src/reducer/workerReducer';
 import orderReducer from './src/reducer/orderReducer';
 import inputReducer from './src/reducer/inputReducer';
+import selectReducer from './src/reducer/selectReducer';
 
 const store = configureStore({
   reducer: {
@@ -18,7 +19,7 @@ const store = configureStore({
     customer: customerReducer,
     order: orderReducer,
     input: inputReducer,
-
+    select: selectReducer
   },
 });
 
