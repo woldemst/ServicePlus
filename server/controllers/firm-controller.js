@@ -7,27 +7,19 @@ const register = async (req, res, next) => {
   // destructuring assignment from body
   const { name, ownerName, email, role, street, houseNr, zip, place, phone, website, userId } = req.body;
 
-
   let existingFirm;
 
   try {
     existingFirm = await Firm.findOne({ email })
-  } catch (err) {
-    const error = new HttpError(
-      "Registering the new firm failed, please try agail later.",
-      500
-    );
-    return next(error);
-  }
 
-  // Check if the firm with the same email already exists
-  if (existingFirm) {
-    const error = new HttpError("A firm with the same email already exists.", 422);
-    return next(error);
-  }
+    // Check if the firm with the same email already exists
+    if (existingFirm) {
+      const error = new HttpError("A firm with the same email already exists.", 422);
+      return next(error);
+    }
 
-  try {
     const user = await User.findById(userId)
+
     if (!user) {
       const error = new HttpError('User not found.', 404);
       return next(error);
@@ -53,13 +45,19 @@ const register = async (req, res, next) => {
     user.firmId = createdFirm.id; // Assuming firmId is the field that references the Firm model
     await user.save();
 
-    res.status(201).json({
-      firmId: createdFirm.id,
-      email: createdFirm.email,
-    });
+    res
+      .status(201)
+      .json({
+        firmId: createdFirm.id,
+        email: createdFirm.email,
+      });
 
   } catch (err) {
-    return next(err);
+    const error = new HttpError(
+      "Registering the new firm failed, please try agail later.",
+      500
+    );
+    return next(error);
   }
 };
 
