@@ -7,14 +7,13 @@ const Firm = require('../models/Firm')
 const register = async (req, res, next) => {
   const { name, email, password, role} = req.body;
 
+  let existingUser;
   try {
-    let existingUser = await User.findOne({ email });
-
+     existingUser = await User.findOne({ email });
 
     if (existingUser) {
       return res.status(422).json({ message: 'User exists already, please login instead.' });
     }
-
 
     const hashedPassword = await bcrypt.hash(password, 12);
 
