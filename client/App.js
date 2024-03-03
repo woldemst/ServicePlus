@@ -28,6 +28,11 @@ export default function App() {
   const [userId, setUserId] = useState(false)
   const [userRole, setUserRole] = useState(null)
   const [firmId, setFirmId] = useState(null)
+  const [refresh, setRefresh] = useState(false)
+
+
+  const handleRefresh = () => setRefresh(prevData => !prevData);
+
 
   useEffect(() => {
     const getUserData = async () => {
@@ -103,7 +108,7 @@ export default function App() {
 
 
           {/* orders */}
-          <Stack.Screen name='orderView' component={OrderView}  />
+          <Stack.Screen name='orderView' component={OrderView} />
           <Stack.Screen name='orderCreate' component={OrderCreate} options={{ title: 'Create order' }} />
 
           {/* firm */}
@@ -153,7 +158,10 @@ export default function App() {
           userToken: userToken,
           userId: userId,
           firmId: firmId,
-          role: userRole
+          role: userRole,
+          refresh: refresh,
+          handleRefresh: handleRefresh
+
         }}>
         <React.Fragment>{routes}</React.Fragment>
       </AuthContext.Provider>

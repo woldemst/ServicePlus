@@ -2,11 +2,13 @@ import { createContext } from "react";
 
 export const AuthContext = createContext({
     isLoggedIn: false,
-    userId: null, 
+    userId: null,
     firmId: null,
-    userToken: null, 
+    userToken: null,
     role: null,
-    login: () => {},
-    logout: () => {},
-    updateId: (id) => {}
+    login: () => { },
+    logout: () => { },
+    updateId: (id) => { },
+    refresh: false, // Add a refresh flag
+    handleRefresh: () => { }, // Add a function to handle refresh
 })

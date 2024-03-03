@@ -1,5 +1,5 @@
 import { View, Text, StyleSheet, ScrollView } from "react-native";
-import { useContext, useState } from "react";
+import { useContext, useState, useEffect } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { useSelector, useDispatch } from "react-redux";
 import axios from "axios";
@@ -9,14 +9,56 @@ import { VALIDATOR_EMAIL, VALIDATOR_REQUIRE } from "../../util/validators";
 import { AuthContext } from "../../context/auth-context";
 import Input from "../../shared/UIElements/Input";
 import Button from "../../shared/UIElements/Button";
+import { setInitialInputData } from "../../actions/inputActions";
 
 const WorkerCreate = (props) => {
   const auth = useContext(AuthContext)
   const dispatch = useDispatch()
   const navigation = useNavigation()
-  const fetchedData = useSelector(state => state.worker)
 
-  // console.log(fetchedData);
+  const [isLoaded, setIsLoaded] = useState(false)
+  const fetchedData = useSelector(state => state.input)
+
+  const initialState = {
+    name: {
+      value: "",
+      isValid: false,
+    },
+    email: {
+      value: "",
+      isValid: false,
+    },
+    street: {
+      value: "",
+      isValid: false,
+    },
+    houseNr: {
+      value: "",
+      isValid: false,
+    },
+    zip: {
+      value: "",
+      isValid: false,
+    },
+    place: {
+      value: "",
+      isValid: false,
+    },
+    phone: {
+      value: "",
+      isValid: false,
+    },
+    description: {
+      value: "",
+      isValid: false,
+    },
+  };
+  useEffect(() => {
+    dispatch(setInitialInputData(initialState))
+    setIsLoaded(true)
+  }, [])
+
+  // console.log('worker create', fetchedData);
   const handleSubmit = async () => {
     try {
       const URL = `http://localhost:8000/api/workers/${auth.firmId}/new`
@@ -33,19 +75,21 @@ const WorkerCreate = (props) => {
         description: fetchedData.inputs.description.value,
       })
 
-      dispatch(createWorker(response.data.worker))
+      // dispatch(createWorker(response.data.worker))
       // console.log(response.data);
       alert("Worker created successfully!");
+
+
       props.route.params.handleRefresh();
       navigation.goBack()
-      dispatch(clearWorkerField())
+      // dispatch(clearWorkerField())
     } catch (err) {
       console.log("Error if creating a mew worker", err);
     }
   }
 
 
-  return <>
+  return isLoaded && (
     <View style={styles.container}>
       <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
         <Input
@@ -151,7 +195,7 @@ const WorkerCreate = (props) => {
         </View>
       </ScrollView>
     </View>
-  </>
+  )
 }
 
 
@@ -266,4 +310,5 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   },
 });
+
 export default WorkerCreate;

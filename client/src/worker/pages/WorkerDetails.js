@@ -8,30 +8,75 @@ import { AuthContext } from "../../context/auth-context";
 import { updateWorker } from '../../actions/workerActions'
 import Input from '../../shared/UIElements/Input'
 import Button from '../../shared/UIElements/Button'
+import { setInitialInputData } from "../../actions/inputActions";
 
 
 const WorkerDetails = props => {
     const workerId = props.id
     const dispatch = useDispatch()
     const auth = useContext(AuthContext)
+
+    const [isLoaded, setIsLoaded] = useState(false)
+
+
     const workersArr = useSelector(state => state.worker.workersArray.workers)
     const worker = workersArr.find(worker => worker._id == workerId)
 
-    // console.log('my worker:', worker);
+    const fetchedData = useSelector(state => state.input)
+
+    const initialState = {
+        name: {
+            value: worker.name,
+            isValid: false,
+        },
+        email: {
+            value: worker.email,
+            isValid: false,
+        },
+        street: {
+            value: worker.street,
+            isValid: false,
+        },
+        houseNr: {
+            value: worker.houseNr,
+            isValid: false,
+        },
+        zip: {
+            value: worker.zip,
+            isValid: false,
+        },
+        place: {
+            value: worker.place,
+            isValid: false,
+        },
+        phone: {
+            value: worker.phone,
+            isValid: false,
+        },
+        description: {
+            value: worker.description,
+            isValid: false,
+        },
+    };
+
+    useEffect(() => {
+        dispatch(setInitialInputData(initialState))
+        setIsLoaded(true)
+    }, [])
 
     const handleSubmit = async () => {
         try {
             const response = await axios.patch(`http://localhost:8000/api/workers/${auth.firmId}/update/${workerId}`, {
                 workerId: workerId,
                 firmId: auth.firmId,
-                name: worker.name,
-                email: worker.email,
-                street: worker.street,
-                houseNr: worker.houseNr,
-                zip: worker.zip,
-                place: worker.place,
-                phone: worker.phone,
-                description: worker.description,
+                name: fetchedData.inputs.name.value,
+                email: fetchedData.inputs.email.value,
+                street: fetchedData.inputs.street.value,
+                houseNr: fetchedData.inputs.houseNr.value,
+                zip: fetchedData.inputs.zip.value,
+                place: fetchedData.inputs.place.value,
+                phone: fetchedData.inputs.phone.value,
+                description: fetchedData.inputs.description.value,
             })
 
             props.toggle()
@@ -47,114 +92,118 @@ const WorkerDetails = props => {
         <ActivityIndicator style={styles.loader} size="large" color="#7A9B76" />
     ) : (
         <View style={styles.container}>
-
-            <Input
-                id='workerName'
-                objectId={workerId}
-                reducerKey='worker'
-                fetchedData='worker'
-                fieldName='name'
-                placeholder="Name des Mitarbeiter"
-                errorText='Type a name of worker'
-                value={worker.name}
-                validators={[VALIDATOR_REQUIRE()]}
-            />
-
-            <Input
-                id='workerEmail'
-                objectId={workerId}
-                reducerKey='worker'
-                fetchedData='worker'
-                fieldName='email'
-                placeholder="Email des Mitarbeiter"
-                errorText='Type an email of worker'
-                value={worker.email}
-                validators={[VALIDATOR_EMAIL()]}
-            />
-
-            <View style={styles.streetContainer}>
-                <View style={styles.streetWrapper}>
+            {isLoaded && (
+                <>
                     <Input
-                        id='workerStreet'
+                        id='workerName'
                         objectId={workerId}
                         reducerKey='worker'
                         fetchedData='worker'
-                        fieldName='street'
-                        placeholder="Straße des Mitarbeiter"
+                        fieldName='name'
+                        placeholder="Name des Mitarbeiter"
+                        errorText='Type a name of worker'
+                        // value={worker.name}
+                        value={fetchedData.inputs.name.value}
+                        validators={[VALIDATOR_REQUIRE()]}
+                    />
+
+                    <Input
+                        id='workerEmail'
+                        objectId={workerId}
+                        reducerKey='worker'
+                        fetchedData='worker'
+                        fieldName='email'
+                        placeholder="Email des Mitarbeiter"
                         errorText='Type an email of worker'
-                        value={worker.street}
-                        validators={[VALIDATOR_REQUIRE()]}
+                        value={fetchedData.inputs.email.value}
+                        validators={[VALIDATOR_EMAIL()]}
                     />
-                </View>
 
-                <View style={styles.nrWrapper}>
+                    <View style={styles.streetContainer}>
+                        <View style={styles.streetWrapper}>
+                            <Input
+                                id='workerStreet'
+                                objectId={workerId}
+                                reducerKey='worker'
+                                fetchedData='worker'
+                                fieldName='street'
+                                placeholder="Straße des Mitarbeiter"
+                                errorText='Type an email of worker'
+                                value={fetchedData.inputs.street.value}
+                                validators={[VALIDATOR_REQUIRE()]}
+                            />
+                        </View>
+
+                        <View style={styles.nrWrapper}>
+                            <Input
+                                id='workerHouseNr'
+                                objectId={workerId}
+                                reducerKey='worker'
+                                fetchedData='worker'
+                                fieldName='houseNr'
+                                placeholder="Housnummer des Mitarbeiter"
+                                errorText='House number'
+                                value={fetchedData.inputs.houseNr.value}
+                                validators={[VALIDATOR_REQUIRE()]}
+                            />
+                        </View>
+                    </View>
+
+                    <View style={styles.zipContainer}>
+                        <View style={styles.zipWrapper}>
+                            <Input
+                                id='workerZip'
+                                objectId={workerId}
+                                reducerKey='worker'
+                                fetchedData='worker'
+                                fieldName='zip'
+                                placeholder="PLZ des Mitarbeiter"
+                                errorText='Type a zip code of worker'
+                                value={fetchedData.inputs.zip.value}
+                                validators={[VALIDATOR_REQUIRE()]}
+                            />
+                        </View>
+
+                        <View style={styles.placeWrapper}>
+                            <Input
+                                id='workerPlace'
+                                objectId={workerId}
+                                reducerKey='worker'
+                                fetchedData='worker'
+                                fieldName='place'
+                                placeholder="Ort des Mitarbeiter"
+                                errorText='Type a place of worker'
+                                value={fetchedData.inputs.place.value}
+                                validators={[VALIDATOR_REQUIRE()]}
+                            />
+                        </View>
+                    </View>
+
                     <Input
-                        id='workerHouseNr'
+                        id='workerPhone'
                         objectId={workerId}
                         reducerKey='worker'
                         fetchedData='worker'
-                        fieldName='houseNr'
-                        placeholder="Housnummer des Mitarbeiter"
-                        errorText='House number'
-                        value={worker.houseNr}
+                        fieldName='phone'
+                        placeholder="Phone des Mitarbeiter"
+                        errorText='Type a phone of worker'
+                        value={fetchedData.inputs.phone.value}
                         validators={[VALIDATOR_REQUIRE()]}
                     />
-                </View>
-            </View>
 
-            <View style={styles.zipContainer}>
-                <View style={styles.zipWrapper}>
                     <Input
-                        id='workerZip'
+                        id='workerDeskr'
                         objectId={workerId}
                         reducerKey='worker'
                         fetchedData='worker'
-                        fieldName='zip'
-                        placeholder="PLZ des Mitarbeiter"
-                        errorText='Type a zip code of worker'
-                        value={worker.zip}
+                        fieldName='description'
+                        placeholder="Beschreibung des Mitarbeiter"
+                        errorText='Type a description of the worker'
+                        value={fetchedData.inputs.description.value}
                         validators={[VALIDATOR_REQUIRE()]}
                     />
-                </View>
-
-                <View style={styles.placeWrapper}>
-                    <Input
-                        id='workerPlace'
-                        objectId={workerId}
-                        reducerKey='worker'
-                        fetchedData='worker'
-                        fieldName='place'
-                        placeholder="Ort des Mitarbeiter"
-                        errorText='Type a place of worker'
-                        value={worker.place}
-                        validators={[VALIDATOR_REQUIRE()]}
-                    />
-                </View>
-            </View>
-
-            <Input
-                id='workerPhone'
-                objectId={workerId}
-                reducerKey='worker'
-                fetchedData='worker'
-                fieldName='phone'
-                placeholder="Phone des Mitarbeiter"
-                errorText='Type a phone of worker'
-                value={worker.phone}
-                validators={[VALIDATOR_REQUIRE()]}
-            />
-
-            <Input
-                id='workerDeskr'
-                objectId={workerId}
-                reducerKey='worker'
-                fetchedData='worker'
-                fieldName='description'
-                placeholder="Beschreibung des Mitarbeiter"
-                errorText='Type a description of the worker'
-                value={worker.description}
-                validators={[VALIDATOR_REQUIRE()]}
-            />
+                </>
+            )}
 
             <View style={styles.btnContainer}>
                 <Button
