@@ -40,7 +40,7 @@ const Login = () => {
     // console.log(fetchedData);
 
     const handleSignIn = async () => {
-        console.log('for the api', fetchedData);
+        // console.log('for the api', fetchedData);
         const apiUrl = "http://localhost:8000/api/users/login";
 
         const response = await axios.post(apiUrl, {
