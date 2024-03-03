@@ -1,6 +1,4 @@
-import { UPDATE_AND_VALIDATE_FIELD, UPDATE_FIRM_DATA, GET_FIRM_DATA } from "../actions/firmActions";
-import { SET_INPUT } from "../actions/inputActions";
-import { validate } from '../util/validators';
+import { UPDATE_FIRM_DATA, GET_FIRM_DATA } from "../actions/firmActions";
 
 const initialState = {
   inputs: {
@@ -12,64 +10,11 @@ const initialState = {
       value: "",
       isValid: false,
     },
-    email: {
-      value: "",
-      isValid: false,
-    },
-    street: {
-      value: "",
-      isValid: false,
-    },
-    houseNr: {
-      value: "",
-      isValid: false,
-    },
-    zip: {
-      value: "",
-      isValid: false,
-    },
-    place: {
-      value: "",
-      isValid: false,
-    },
-    phone: {
-      value: "",
-      isValid: false,
-    },
-    website: {
-      value: "",
-      isValid: false,
-    },
   },
-  isFormValid: false,
 };
 
 const firmReducer = (state = initialState, action) => {
   switch (action.type) {
-    case SET_INPUT:
-      const { fieldName, value, validators, reducerKey } = action.payload;
-
-      if (reducerKey === 'firm'){
-        const updatedInputField = {
-          ...state.inputs[fieldName],
-          value,
-          isValid: validate(value, validators)
-        };
-  
-        const updatedInputs = {
-          ...state.inputs,
-          [fieldName]: updatedInputField,
-        };
-  
-        let isFormValid = Object.values(updatedInputs).every((field) => field.isValid);
-  
-        return {
-          ...state,
-          inputs: updatedInputs,
-          isFormValid: isFormValid
-        }
-      }
-
     case UPDATE_FIRM_DATA:
       return {
         ...state,
@@ -89,38 +34,8 @@ const firmReducer = (state = initialState, action) => {
             value: receivedFirmData.name,
             isValid: true,
           },
-          email: {
-            value: receivedFirmData.email,
-            isValid: true,
-          },
-          street: {
-            value: receivedFirmData.street,
-            isValid: true,
-          },
-          houseNr: {
-            value: receivedFirmData.houseNr,
-            isValid: true,
-          },
-          zip: {
-            value: receivedFirmData.zip,
-            isValid: true,
-          },
-          place: {
-            value: receivedFirmData.place,
-            isValid: true,
-          },
-          phone: {
-            value: receivedFirmData.phone,
-            isValid: true,
-          },
-          website: {
-            value: receivedFirmData.website,
-            isValid: true,
-          },
         },
-        isFormValid: true
       };
-
 
       return {
         ...state,

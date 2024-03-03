@@ -1,8 +1,6 @@
 import {
   View,
   Text,
-  TextInput,
-  TouchableOpacity,
   StyleSheet,
   ScrollView,
 } from "react-native";
@@ -12,7 +10,6 @@ import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 
 import { VALIDATOR_REQUIRE, VALIDATOR_MINLENGTH, VALIDATOR_EMAIL } from "../../util/validators";
-import { updateAndValidateField } from "../../actions/firmActions";
 import { AuthContext } from "../../context/auth-context";
 import Input from "../../shared/UIElements/Input";
 import Button from "../../shared/UIElements/Button";
@@ -20,10 +17,12 @@ import Button from "../../shared/UIElements/Button";
 const UpdateProfile = (props) => {
   const auth = useContext(AuthContext)
   const navigation = useNavigation();
-  const fetchedData = useSelector(state => state.firm)
-  const dispatch = useDispatch()
+  // const fetchedData = useSelector(state => state.firm)
+  const fetchedData = useSelector(state => state.input)
 
-  // console.log('Stored in updateFirm: ', fetchedData.inputs);
+  // const dispatch = useDispatch()
+
+  console.log('Stored in updateFirm: ', fetchedData.inputs);
 
   const handleSubmit = async () => {
     const URL = `http://localhost:8000/api/firm/update/${auth.firmId}`;
@@ -48,8 +47,6 @@ const UpdateProfile = (props) => {
       console.error("Error updating firm:", err);
     }
   };
-
-
 
   return (
     <>

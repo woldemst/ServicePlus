@@ -1,6 +1,6 @@
 import { View, Text, TouchableOpacity, StyleSheet, ScrollView } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import axios from "axios";
 
 import { VALIDATOR_EMAIL, VALIDATOR_MINLENGTH, VALIDATOR_REQUIRE } from "../../util/validators";
@@ -8,24 +8,71 @@ import { useDispatch, useSelector } from "react-redux";
 import { AuthContext } from "../../context/auth-context";
 import Input from "../../shared/UIElements/Input";
 import Button from "../../shared/UIElements/Button";
+import { setInitialInputData } from "../../actions/inputActions";
 
 const CreateFirm = props => {
   const auth = useContext(AuthContext)
   const navigation = useNavigation();
 
   const dispatch = useDispatch()
-  const fetchedData = useSelector((state) => state.firm);
+  // const fetchedData = useSelector((state) => state.firm);
+  const fetchedData = useSelector((state) => state.input);
+  const [isLoaded, setIsLoaded] = useState(false)
 
-  // console.log('fetched data from the firm', fetchedData);
+  const initialState = {
+    ownerName: {
+      value: "",
+      isValid: false,
+    },
+    name: {
+      value: "",
+      isValid: false,
+    },
+    email: {
+      value: "",
+      isValid: false,
+    },
+    street: {
+      value: "",
+      isValid: false,
+    },
+    houseNr: {
+      value: "",
+      isValid: false,
+    },
+    zip: {
+      value: "",
+      isValid: false,
+    },
+    place: {
+      value: "",
+      isValid: false,
+    },
+    phone: {
+      value: "",
+      isValid: false,
+    },
+    website: {
+      value: "",
+      isValid: false,
+    },
+  };
+
+  useEffect(() => {
+    setIsLoaded(true)
+    dispatch(setInitialInputData(initialState))
+  }, [])
+
   const handleSubmit = async () => {
+    // console.log('fetched data before api', fetchedData);
     const URL = "http://localhost:8000/api/firm/register";
 
     try {
       const updatedData = {
         role: auth.role,
         userId: auth.userId,
-        name: fetchedData.inputs.name.value,
         ownerName: fetchedData.inputs.ownerName.value,
+        name: fetchedData.inputs.name.value,
         email: fetchedData.inputs.email.value,
         street: fetchedData.inputs.street.value,
         houseNr: fetchedData.inputs.houseNr.value,
@@ -34,6 +81,7 @@ const CreateFirm = props => {
         phone: fetchedData.inputs.phone.value,
         website: fetchedData.inputs.website.value,
       }
+
       const response = await axios.post(URL, updatedData)
       auth.updateId(response.data.firmId)
       props.toggle()
@@ -47,7 +95,7 @@ const CreateFirm = props => {
 
   }
 
-  return <>
+  return isLoaded && (
     <View style={styles.container}>
       <Input
         id='firmName'
@@ -66,7 +114,6 @@ const CreateFirm = props => {
         placeholder="Name des Inhabers"
         value={fetchedData.inputs.ownerName.value}
         validators={[VALIDATOR_MINLENGTH(6)]}
-
       />
 
       <Input
@@ -76,7 +123,6 @@ const CreateFirm = props => {
         placeholder="Email"
         value={fetchedData.inputs.email.value}
         validators={[VALIDATOR_EMAIL()]}
-
       />
 
       <View style={styles.streetContainer}>
@@ -88,7 +134,6 @@ const CreateFirm = props => {
             placeholder="Straße"
             value={fetchedData.inputs.street.value}
             validators={[VALIDATOR_REQUIRE()]}
-
           />
         </View>
 
@@ -100,7 +145,6 @@ const CreateFirm = props => {
             errorText='Number'
             value={fetchedData.inputs.houseNr.value}
             validators={[VALIDATOR_REQUIRE()]}
-
           />
         </View>
       </View>
@@ -115,7 +159,6 @@ const CreateFirm = props => {
             errorText='Type a ZIP code'
             value={fetchedData.inputs.zip.value}
             validators={[VALIDATOR_REQUIRE()]}
-
           />
         </View>
 
@@ -128,7 +171,6 @@ const CreateFirm = props => {
             errorText='Type a place'
             value={fetchedData.inputs.place.value}
             validators={[VALIDATOR_REQUIRE()]}
-
           />
         </View>
       </View>
@@ -141,7 +183,6 @@ const CreateFirm = props => {
         errorText='Type a phone'
         value={fetchedData.inputs.phone.value}
         validators={[VALIDATOR_REQUIRE()]}
-
       />
 
       <Input
@@ -152,13 +193,11 @@ const CreateFirm = props => {
         errorText='Type a website'
         value={fetchedData.inputs.website.value}
         validators={[VALIDATOR_REQUIRE()]}
-
       />
 
       <View style={styles.btnContainer}>
         <Button
-          style={!fetchedData.isFormValid ? styles.invalideButton :
-            [styles.createBtn, styles.button]}
+          style={!fetchedData.isFormValid ? styles.invalideButton : [styles.createBtn, styles.button]}
           disabled={!fetchedData.isFormValid}
           buttonText={styles.createBtnText}
           onPress={handleSubmit}
@@ -166,7 +205,7 @@ const CreateFirm = props => {
         />
       </View>
     </View>
-  </>
+  )
 }
 
 const styles = StyleSheet.create({
