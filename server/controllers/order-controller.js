@@ -1,6 +1,7 @@
 const Order = require("../models/Order");
 const HttpError = require("../models/http-error");
 const Firm = require("../models/Firm");
+const Worker = require('../models/Worker')
 
 const getAllOrdersByFirmId = async (req, res, next) => {
   const firmId = req.params.firmId;
@@ -27,7 +28,7 @@ const getAllOrdersByFirmId = async (req, res, next) => {
 
 const createOrder = async (req, res, next) => {
   // const firmId = req.params.firmId;
-  console.log(req.body);
+
   const {
     firmId,
     name,
@@ -98,6 +99,34 @@ const getOrderById = async (req, res, next) => {
   res.json({ order: order.toObject({ getters: true }) })
 };
 
+const getAllWorkersAsOptions = async (req, res, next) => {
+  const firmId = req.params.firmId
+  try {
+    const workers = await Worker.find({ firmId: firmId });
+
+    if (!workers || workers.length === 0) {
+      const error = new HttpError(
+        'Could not find workers for the provided firm id.',
+        404
+      );
+      return next(error);
+    }
+
+    res.json({
+      workers: workers.map(worker => worker.toObject({ getters: true })),
+    });
+  } catch (err) {
+    const error = new HttpError(
+      'Fetching workers failed, please try again later.',
+      500
+    );
+    return next(error);
+  }
+}
+
 exports.getAllOrdersByFirmId = getAllOrdersByFirmId;
 exports.createOrder = createOrder;
 exports.getOrderById = getOrderById;
+
+//
+exports.getAllWorkersAsOptions = getAllWorkersAsOptions;
