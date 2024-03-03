@@ -5,7 +5,7 @@ import {
   ScrollView,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 
@@ -13,16 +13,22 @@ import { VALIDATOR_REQUIRE, VALIDATOR_MINLENGTH, VALIDATOR_EMAIL } from "../../u
 import { AuthContext } from "../../context/auth-context";
 import Input from "../../shared/UIElements/Input";
 import Button from "../../shared/UIElements/Button";
+import { setInitialInputData } from "../../actions/inputActions";
 
 const UpdateProfile = (props) => {
   const auth = useContext(AuthContext)
   const navigation = useNavigation();
-  // const fetchedData = useSelector(state => state.firm)
+  const dispatch = useDispatch()
+  const fetchedFirmData = useSelector(state => state.firm)
   const fetchedData = useSelector(state => state.input)
+  const [isLoaded, setIsLoaded] = useState(false)
 
-  // const dispatch = useDispatch()
+  useEffect(() => {
+    dispatch(setInitialInputData(fetchedFirmData.inputs))
+    setIsLoaded(true)
+  }, [])
 
-  console.log('Stored in updateFirm: ', fetchedData.inputs);
+  // console.log('Stored in updateFirm: ', fetchedData.inputs);
 
   const handleSubmit = async () => {
     const URL = `http://localhost:8000/api/firm/update/${auth.firmId}`;
@@ -48,126 +54,125 @@ const UpdateProfile = (props) => {
     }
   };
 
-  return (
-    <>
-      <View style={styles.container}>
-        <ScrollView showsVerticalScrollIndicator={false}>
+  return isLoaded && (
+    <View style={styles.container}>
+      <ScrollView showsVerticalScrollIndicator={false}>
 
-          <Input
-            id='firmName'
-            reducerKey='firm'
-            fieldName='name'
-            placeholder="Name des Betriebs"
-            value={fetchedData.inputs.name.value}
-            errorText='Type a name'
-            validators={[VALIDATOR_MINLENGTH(6)]}
-          />
+        <Input
+          id='firmName'
+          reducerKey='firm'
+          fieldName='name'
+          placeholder="Name des Betriebs"
+          value={fetchedData.inputs.name.value}
+          errorText='Type a name'
+          validators={[VALIDATOR_MINLENGTH(6)]}
+        />
 
-          <Input
-            id='ownerName'
-            reducerKey='firm'
-            fieldName='ownerName'
-            errorText='Type owner"s name'
-            placeholder="Name des Inhabers"
-            value={fetchedData.inputs.ownerName.value}
-            validators={[VALIDATOR_REQUIRE()]}
-          />
+        <Input
+          id='ownerName'
+          reducerKey='firm'
+          fieldName='ownerName'
+          errorText='Type owner"s name'
+          placeholder="Name des Inhabers"
+          value={fetchedData.inputs.ownerName.value}
+          validators={[VALIDATOR_REQUIRE()]}
+        />
 
-          <Input
-            id='firmEmail'
-            reducerKey='firm'
-            fieldName='email'
-            errorText='Type an email'
-            placeholder="Name des Betriebs"
-            value={fetchedData.inputs.email.value}
-            validators={[VALIDATOR_EMAIL()]}
-          />
+        <Input
+          id='firmEmail'
+          reducerKey='firm'
+          fieldName='email'
+          errorText='Type an email'
+          placeholder="Name des Betriebs"
+          value={fetchedData.inputs.email.value}
+          validators={[VALIDATOR_EMAIL()]}
+        />
 
-          <View style={styles.streetContainer}>
-            <View style={styles.streetWrapper}>
-              <Input
-                id='firmStreet'
-                reducerKey='firm'
-                fieldName='street'
-                placeholder="Straße"
-                errorText='Type a street'
-                value={fetchedData.inputs.street.value}
-                validators={[VALIDATOR_REQUIRE()]}
-              />
-            </View>
-
-            <View style={styles.nrWrapper}>
-              <Input
-                id='firmHouseNr'
-                reducerKey='firm'
-                fieldName='houseNr'
-                placeholder="Nr."
-                errorText='Type a house number'
-                value={fetchedData.inputs.houseNr.value}
-                validators={[VALIDATOR_REQUIRE()]}
-              />
-            </View>
-          </View>
-
-          <View style={styles.zipContainer}>
-            <View style={styles.zipWrapper}>
-              <Input
-                id='firmZip'
-                reducerKey='firm'
-                fieldName='zip'
-                placeholder="PLZ"
-                errorText='Type a zip code'
-                value={fetchedData.inputs.zip.value}
-                validators={[VALIDATOR_REQUIRE()]}
-              />
-            </View>
-
-            <View style={styles.placeWrapper}>
-              <Input
-                id='firmPlace'
-                reducerKey='firm'
-                fieldName='place'
-                placeholder="Ort"
-                errorText='Type a place or city'
-                value={fetchedData.inputs.place.value}
-                validators={[VALIDATOR_REQUIRE()]}
-              />
-            </View>
-          </View>
-
-          <Input
-            id='firmPhone'
-            reducerKey='firm'
-            fieldName='phone'
-            placeholder="Telefon"
-            errorText='Type a telephone number'
-            value={fetchedData.inputs.phone.value}
-            validators={[VALIDATOR_REQUIRE()]}
-          />
-
-          <Input
-            id='firmWebsite'
-            reducerKey='firm'
-            fieldName='website'
-            placeholder="Webseite"
-            errorText='Type a website'
-            value={fetchedData.inputs.website.value}
-            validators={[VALIDATOR_REQUIRE()]}
-
-          />
-
-          <View style={styles.btnContainer}>
-            <Button
-              style={!fetchedData.isFormValid ? styles.invalideButton : [styles.createBtn, styles.button]}
-              disabled={!fetchedData.isFormValid}
-              buttonText={styles.createBtnText}
-              onPress={handleSubmit}
-              title={'Speichern'}
+        <View style={styles.streetContainer}>
+          <View style={styles.streetWrapper}>
+            <Input
+              id='firmStreet'
+              reducerKey='firm'
+              fieldName='street'
+              placeholder="Straße"
+              errorText='Type a street'
+              value={fetchedData.inputs.street.value}
+              validators={[VALIDATOR_REQUIRE()]}
             />
           </View>
-        </ScrollView>
-      </View>
-    </>
+
+          <View style={styles.nrWrapper}>
+            <Input
+              id='firmHouseNr'
+              reducerKey='firm'
+              fieldName='houseNr'
+              placeholder="Nr."
+              errorText='Type a house number'
+              value={fetchedData.inputs.houseNr.value}
+              validators={[VALIDATOR_REQUIRE()]}
+            />
+          </View>
+        </View>
+
+        <View style={styles.zipContainer}>
+          <View style={styles.zipWrapper}>
+            <Input
+              id='firmZip'
+              reducerKey='firm'
+              fieldName='zip'
+              placeholder="PLZ"
+              errorText='Type a zip code'
+              value={fetchedData.inputs.zip.value}
+              validators={[VALIDATOR_REQUIRE()]}
+            />
+          </View>
+
+          <View style={styles.placeWrapper}>
+            <Input
+              id='firmPlace'
+              reducerKey='firm'
+              fieldName='place'
+              placeholder="Ort"
+              errorText='Type a place or city'
+              value={fetchedData.inputs.place.value}
+              validators={[VALIDATOR_REQUIRE()]}
+            />
+          </View>
+        </View>
+
+        <Input
+          id='firmPhone'
+          reducerKey='firm'
+          fieldName='phone'
+          placeholder="Telefon"
+          errorText='Type a telephone number'
+          value={fetchedData.inputs.phone.value}
+          validators={[VALIDATOR_REQUIRE()]}
+        />
+
+        <Input
+          id='firmWebsite'
+          reducerKey='firm'
+          fieldName='website'
+          placeholder="Webseite"
+          errorText='Type a website'
+          value={fetchedData.inputs.website.value}
+          validators={[VALIDATOR_REQUIRE()]}
+
+        />
+
+        <View style={styles.btnContainer}>
+          <Button
+            style={[styles.createBtn, styles.button]}
+            // style={!fetchedData.isFormValid ? styles.invalideButton : [styles.createBtn, styles.button]}
+            // disabled={!fetchedData.isFormValid}
+            buttonText={styles.createBtnText}
+            onPress={handleSubmit}
+            title={'Speichern'}
+          />
+        </View>
+      </ScrollView>
+    </View>
   );
 };
 
