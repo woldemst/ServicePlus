@@ -8,7 +8,6 @@ import { useDispatch, useSelector } from "react-redux"
 import { getFirmData } from '../../actions/firmActions'
 import { AuthContext } from "../../context/auth-context"
 
-
 const FirmItem = () => {
     const auth = useContext(AuthContext)
     const navigation = useNavigation()
