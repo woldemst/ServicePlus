@@ -16,10 +16,9 @@ const Login = () => {
     const dispatch = useDispatch()
 
     const [isLoginMode, setIsLoginMode] = useState(true)
-    const fetchedData = useSelector(state => state.input)
-
     const [isLoaded, setIsLoaded] = useState(false)
-
+    
+    const fetchedData = useSelector(state => state.input)
     const initialState = {
         email: {
             value: '',
