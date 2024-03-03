@@ -7,6 +7,8 @@ import { VALIDATOR_REQUIRE, VALIDATOR_EMAIL } from "../../util/validators";
 import { AuthContext } from "../../context/auth-context";
 import { clearCustomerField } from "../../actions/customerActions";
 import Input from "../../shared/UIElements/Input";
+import { setInitialInputData } from "../../actions/inputActions";
+import Button from "../../shared/UIElements/Button";
 
 const CustomerDetails = (props) => {
     const customerId = props.id;
@@ -17,6 +19,52 @@ const CustomerDetails = (props) => {
     const customer = customersArray.find(customer => customer._id == customerId)
     // console.log(customer);
 
+    const [isLoaded, setIsLoaded] = useState(false)
+    const fetchedData = useSelector(state => state.input)
+
+    const initialState = {
+        name: {
+            value: customer.name,
+            isValid: false,
+        },
+        email: {
+            value: customer.email,
+            isValid: false,
+        },
+        street: {
+            value: customer.street,
+            isValid: false,
+        },
+        houseNr: {
+            value: customer.houseNr,
+            isValid: false,
+        },
+        zip: {
+            value: customer.zip,
+            isValid: false,
+        },
+        place: {
+            value: customer.place,
+            isValid: false,
+        },
+        phone: {
+            value: customer.phone,
+            isValid: false,
+        },
+        website: {
+            value: customer.website,
+            isValid: false,
+        },
+        description: {
+            value: customer.description,
+            isValid: false,
+        },
+    };
+
+    useEffect(() => {
+        dispatch(setInitialInputData(initialState))
+        setIsLoaded(true)
+    }, [])
 
     const handleSubmit = async () => {
         try {
@@ -24,17 +72,16 @@ const CustomerDetails = (props) => {
                 `http://localhost:8000/api/customers/${auth.firmId}/update/${customerId}`, {
                 customerId: customerId,
                 firmId: auth.firmId,
-                name: customer.name,
-                email: customer.email,
-                street: customer.street,
-                houseNr: customer.houseNr,
-                zip: customer.zip,
-                place: customer.place,
-                phone: customer.phone,
-                website: customer.website,
-                description: customer.description,
+                name: fetchedData.inputs.name.value,
+                email: fetchedData.inputs.email.value,
+                street: fetchedData.inputs.street.value,
+                houseNr: fetchedData.inputs.houseNr.value,
+                zip: fetchedData.inputs.zip.value,
+                place: fetchedData.inputs.place.value,
+                phone: fetchedData.inputs.phone.value,
+                website: fetchedData.inputs.website.value,
+                description: fetchedData.inputs.description.value,
             });
-            dispatch(clearCustomerField())
 
             props.toggle();
             props.handleRefresh();
@@ -50,122 +97,131 @@ const CustomerDetails = (props) => {
 
     ) : (
         <View style={styles.container}>
-            <Input
-                id="customerName"
-                fieldName="name"
-                objectId={customerId}
-                reducerKey="customer"
-                placeholder="Name des Kunden"
-                errorText="Geben Sie den Namen des Kunden"
-                value={customer.name}
-                validators={[VALIDATOR_REQUIRE()]}
-            />
-
-            <Input
-                id="customerEmail"
-                fieldName="email"
-                objectId={customerId}
-                reducerKey="customer"
-                placeholder="E-Mail des Kunden"
-                errorText="Geben Sie eine E-Mail des Kunden"
-                value={customer.email}
-                validators={[VALIDATOR_EMAIL()]}
-
-            />
-            <View style={styles.streetContainer}>
-                <View style={styles.streetWrapper}>
+            {isLoaded && (
+                <>
                     <Input
-                        id="customerStreet"
+                        id="customerName"
+                        fieldName="name"
                         objectId={customerId}
                         reducerKey="customer"
-                        fieldName="street"
-                        placeholder="Straße des Kunden"
-                        errorText="Geben Sie die Straße des Kunden ein"
-                        value={customer.street}
+                        placeholder="Name des Kunden"
+                        errorText="Geben Sie den Namen des Kunden"
+                        value={fetchedData.inputs.name.value}
                         validators={[VALIDATOR_REQUIRE()]}
                     />
-                </View>
 
-                <View style={styles.nrWrapper}>
                     <Input
-                        id="customerHouseNr"
+                        id="customerEmail"
+                        fieldName="email"
                         objectId={customerId}
                         reducerKey="customer"
-                        fieldName="houseNr"
-                        placeholder="Housnummmer des Kunden"
-                        errorText="Geben Sie die Housnummmer des Kunden ein"
-                        value={customer.houseNr}
-                        validators={[VALIDATOR_REQUIRE()]}
+                        placeholder="E-Mail des Kunden"
+                        errorText="Geben Sie eine E-Mail des Kunden"
+                        value={fetchedData.inputs.email.value}
+                        validators={[VALIDATOR_EMAIL()]}
+
                     />
-                </View>
-            </View>
-            <View style={styles.zipContainer}>
-                <View style={styles.zipWrapper}>
-                    <Input
-                        id="customerZip"
-                        objectId={customerId}
-                        reducerKey="customer"
-                        fieldName="zip"
-                        placeholder="PLZ des Kunden"
-                        errorText="Geben Sie das PLZ des Kunden ein"
-                        value={customer.zip}
-                        validators={[VALIDATOR_REQUIRE()]}
-                    />
-                </View>
+                    <View style={styles.streetContainer}>
+                        <View style={styles.streetWrapper}>
+                            <Input
+                                id="customerStreet"
+                                objectId={customerId}
+                                reducerKey="customer"
+                                fieldName="street"
+                                placeholder="Straße des Kunden"
+                                errorText="Geben Sie die Straße des Kunden ein"
+                                value={fetchedData.inputs.street.value}
+                                validators={[VALIDATOR_REQUIRE()]}
+                            />
+                        </View>
+
+                        <View style={styles.nrWrapper}>
+                            <Input
+                                id="customerHouseNr"
+                                objectId={customerId}
+                                reducerKey="customer"
+                                fieldName="houseNr"
+                                placeholder="Housnummmer des Kunden"
+                                errorText="Geben Sie die Housnummmer des Kunden ein"
+                                value={fetchedData.inputs.houseNr.value}
+                                validators={[VALIDATOR_REQUIRE()]}
+                            />
+                        </View>
+                    </View>
+                    <View style={styles.zipContainer}>
+                        <View style={styles.zipWrapper}>
+                            <Input
+                                id="customerZip"
+                                objectId={customerId}
+                                reducerKey="customer"
+                                fieldName="zip"
+                                placeholder="PLZ des Kunden"
+                                errorText="Geben Sie das PLZ des Kunden ein"
+                                value={fetchedData.inputs.zip.value}
+                                validators={[VALIDATOR_REQUIRE()]}
+                            />
+                        </View>
 
 
-                <View style={styles.placeWrapper}>
+                        <View style={styles.placeWrapper}>
+                            <Input
+                                id="customerPlace"
+                                objectId={customerId}
+                                reducerKey="customer"
+                                fieldName="place"
+                                placeholder="Der Ort des Kunden"
+                                errorText="Geben Sie den Ort des Kunden ein"
+                                value={fetchedData.inputs.place.value}
+                                validators={[VALIDATOR_REQUIRE()]}
+                            />
+                        </View>
+                    </View>
+
+
                     <Input
-                        id="customerPlace"
+                        id="customerPhone"
                         objectId={customerId}
                         reducerKey="customer"
                         fieldName="place"
-                        placeholder="Der Ort des Kunden"
-                        errorText="Geben Sie den Ort des Kunden ein"
-                        value={customer.place}
+                        placeholder="Telefonnumer"
+                        errorText="Geben Sie die Telefonnumer Kunden ein"
+                        value={fetchedData.inputs.phone.value}
                         validators={[VALIDATOR_REQUIRE()]}
                     />
-                </View>
-            </View>
 
+                    <Input
+                        id="customerWebsite"
+                        objectId={customerId}
+                        reducerKey="customer"
+                        fieldName="website"
+                        placeholder="Website"
+                        errorText="Geben Sie die Webseite des Kunden ein"
+                        value={fetchedData.inputs.website.value}
+                        validators={[VALIDATOR_REQUIRE()]}
+                    />
 
-            <Input
-                id="customerPhone"
-                objectId={customerId}
-                reducerKey="customer"
-                fieldName="place"
-                placeholder="Telefonnumer"
-                errorText="Geben Sie die Telefonnumer Kunden ein"
-                value={customer.phone}
-                validators={[VALIDATOR_REQUIRE()]}
-            />
+                    <Input
+                        id="customerDescription"
+                        objectId={customerId}
+                        reducerKey="customer"
+                        fieldName="description"
+                        placeholder="Beschreibung"
+                        errorText="Geben Sie die BEschreibung des Kunden ein"
+                        value={fetchedData.inputs.description.value}
+                        validators={[VALIDATOR_REQUIRE()]}
+                    /></>
+            )}
 
-            <Input
-                id="customerWebsite"
-                objectId={customerId}
-                reducerKey="customer"
-                fieldName="website"
-                placeholder="Website"
-                errorText="Geben Sie die Webseite des Kunden ein"
-                value={customer.website}
-                validators={[VALIDATOR_REQUIRE()]}
-            />
-
-            <Input
-                id="customerDescription"
-                objectId={customerId}
-                reducerKey="customer"
-                fieldName="description"
-                placeholder="Beschreibung"
-                errorText="Geben Sie die BEschreibung des Kunden ein"
-                value={customer.description}
-                validators={[VALIDATOR_REQUIRE()]}
-            />
 
             <View style={styles.btnContainer}>
-                <TouchableOpacity style={[styles.createBtn, styles.button]} onPress={handleSubmit} >
-                    <Text style={styles.createBtnText}>Speichern</Text>
-                </TouchableOpacity>
+                <Button
+                    // style={!fetchedData.isFormValid ? [styles.createBtn, styles.button] : styles.invalideButton}
+                    style={[styles.createBtn, styles.button]}
+                    // disabled={fetchedData.isFormValid}
+                    buttonText={styles.createBtnText}
+                    onPress={handleSubmit}
+                    title={'Speichern'}
+                />
             </View>
         </View>
     )

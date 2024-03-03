@@ -1,5 +1,5 @@
 import { CREATE_CUSTOMER, GET_CUSTOMER_DATA, UPDATE_CUSTOMER, CLEAR_CUSTOMER_FIELD, UPDATE_INPUT } from '../actions/customerActions'
-import { SET_INPUT } from '../actions/inputActions';
+// import { SET_INPUT } from '../actions/inputActions';
 import { validate } from '../util/validators';
 
 const initialState = {
@@ -107,46 +107,46 @@ const customerReducer = (state = initialState, action) => {
         isFormValid: false,
       };
 
-    case SET_INPUT:
-      const { fieldName, value, validators, objectId, reducerKey } = action.payload;
+    // case SET_INPUT:
+    //   const { fieldName, value, validators, objectId, reducerKey } = action.payload;
 
-      // console.log(action.payload);
-      if (reducerKey === 'customer'){
-        const updatedInputField = {
-          ...state.inputs[fieldName],
-          value,
-          isValid: validate(value, validators)
-        };
+    //   // console.log(action.payload);
+    //   if (reducerKey === 'customer'){
+    //     const updatedInputField = {
+    //       ...state.inputs[fieldName],
+    //       value,
+    //       isValid: validate(value, validators)
+    //     };
   
-        const updatedInputs = {
-          ...state.inputs,
-          [fieldName]: updatedInputField,
-        };
+    //     const updatedInputs = {
+    //       ...state.inputs,
+    //       [fieldName]: updatedInputField,
+    //     };
   
-        const updatedWorker = {
-          ...state.customersArray.customers.find(worker => worker._id === objectId),
-          [fieldName]: value
-        };
+    //     const updatedWorker = {
+    //       ...state.customersArray.customers.find(worker => worker._id === objectId),
+    //       [fieldName]: value
+    //     };
   
-        const updatedWorkersArray = state.customersArray.customers.map(worker => {
-          if (worker._id === objectId) {
-            return updatedWorker;
-          }
-          return worker;
-        });
+    //     const updatedWorkersArray = state.customersArray.customers.map(worker => {
+    //       if (worker._id === objectId) {
+    //         return updatedWorker;
+    //       }
+    //       return worker;
+    //     });
   
-        let isFormValid = Object.values(updatedInputs).every((field) => field.isValid);
+    //     let isFormValid = Object.values(updatedInputs).every((field) => field.isValid);
   
-        return {
-          ...state,
-          customersArray: {
-            ...state.customersArray,
-            customers: updatedWorkersArray,
-          },
-          inputs: updatedInputs,
-          isFormValid: isFormValid
-        }
-      }
+    //     return {
+    //       ...state,
+    //       customersArray: {
+    //         ...state.customersArray,
+    //         customers: updatedWorkersArray,
+    //       },
+    //       inputs: updatedInputs,
+    //       isFormValid: isFormValid
+    //     }
+    //   }
      
     default:
       return state;
