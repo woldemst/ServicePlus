@@ -6,7 +6,7 @@ import {
   StyleSheet,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 
@@ -16,30 +16,129 @@ import Input from "../../shared/UIElements/Input";
 import Button from "../../shared/UIElements/Button";
 import Select from "../../shared/UIElements/Select";
 import { updateField, clearOrderData } from "../../actions/orderActions";
+import { setInitialInputData, setInput } from "../../actions/inputActions";
+import { setInitialSelectData, setSelect } from "../../actions/selectActions";
 
 const OrderCreate = (props) => {
   const auth = useContext(AuthContext)
-
   const dispatch = useDispatch()
+
+  const [isLoaded, setIsLoaded] = useState(false)
+
   const fetchedData = useSelector(state => state.order)
-  const contactOptions = fetchedData.selects.contact;
-  const workerOptions = fetchedData.selects.worker;
-  const customerOptions = fetchedData.selects.customer;
+  const fetchedInputData = useSelector(state => state.input)
 
-  // console.log(fetchedData.selectedOptions);
-  // console.log('props', props);
+  const [initialSelectState, setInitialSelectState] = useState({
+    selects: {
+      worker: [],
+      contact: [],
+      customer: []
+    },
+    selectedOptions: {
+      worker: {
+        value: "",
+        isValid: false,
+      },
+      contact: {
+        value: "",
+        isValid: false,
+      },
+      customer: {
+        value: "",
+        isValid: false,
+      },
+    },
+  })
 
+
+  const workerOptions = initialSelectState.selects.worker.map(worker => ({ value: worker.name }));
+  // const customerOptions = initialSelectState.selects.customer.map(customer => ({ value: customer.name }));
+  // const contactOptions = initialSelectState.selects.contact.map(contact => ({ value: contact.name }));
+
+  const getWorkerList = async () => {
+    try {
+      const workerList = await axios.get(`http://localhost:8000/api/orders/worker-options/${auth.firmId}`)
+      setInitialSelectState(prevState => ({
+        ...prevState,
+        selects: {
+          ...prevState.selects,
+          worker: workerList.data.workers,
+        },
+      }))
+      setIsLoaded(true)
+
+    } catch (err) {
+      console.error('Error fetching worker options:', err);
+    }
+  }
+
+
+  const initialInputState = {
+    name: {
+      value: "",
+      isValid: false,
+    },
+    email: {
+      value: "",
+      isValid: false,
+    },
+    street: {
+      value: "",
+      isValid: false,
+    },
+    houseNr: {
+      value: "",
+      isValid: false,
+    },
+    zip: {
+      value: "",
+      isValid: false,
+    },
+    place: {
+      value: "",
+      isValid: false,
+    },
+    phone: {
+      value: "",
+      isValid: false,
+    },
+    website: {
+      value: "",
+      isValid: false,
+    },
+    description: {
+      value: "",
+      isValid: false,
+    },
+  }
+
+  useEffect(() => {
+    dispatch(setInitialInputData(initialInputState))
+
+
+    getWorkerList()
+
+    
+    
+    // setIsLoaded(true);
+    
+  }, [])
+  
+  if (isLoaded){
+    console.log('orderCreate', initialSelectState.selects.worker);
+    dispatch(setInitialSelectData(initialSelectState))
+  }
   const handleSubmit = async () => {
     const URL = `http://localhost:8000/api/orders/${auth.firmId}/new`;
 
     try {
       const response = await axios.post(URL, {
         firmId: auth.firmId,
-        name: fetchedData.inputs.name.value,
+        name: fetchedInputData.inputs.name.value,
         worker: fetchedData.selectedOptions.worker,
         customer: fetchedData.selectedOptions.customer,
         contact: fetchedData.selectedOptions.contact,
-        description: fetchedData.inputs.description.value,
+        description: fetchedInputData.inputs.description.value,
         // status: status,
       });
 
@@ -53,110 +152,90 @@ const OrderCreate = (props) => {
     }
   };
 
-  const handleInputChange = (fieldName, value, validators, objectId) => {
-    dispatch(updateField(fieldName, value, validators, objectId))
-  }
+  return isLoaded && (
+    <View>
+      <Text style={styles.label}>Auftragsname</Text>
 
-  return (
-    <>
-      <View>
-        <Text style={styles.label}>Auftragsname</Text>
+      <Input
+        id='orderName'
+        reducerKey='order'
+        fieldName='name'
+        placeholder="Name des Mitarabeiters"
+        errorText='Geben Sie einen Namen für den Auftrag ein'
+        value={fetchedInputData.inputs.name.value}
+        validators={[VALIDATOR_REQUIRE()]}
+      />
 
-        <Input
-          id='workerName'
-          fieldName='name'
-          placeholder="Name des Mitarabeiters"
-          errorText='Geben Sie einen Namen für den Auftrag ein'
-          value={fetchedData.inputs.name.value}
-          validators={[VALIDATOR_REQUIRE()]}
-          onChange={handleInputChange}
-        />
+      {/* <Text style={styles.label}>Kunde</Text>
 
-        <Text style={styles.label}>Kunde</Text>
+      <Select
+        id='customer'
+        reducerKey='order'
+        search={false}
+        fieldName='customer'
+        placeholder="Auswählen"
+        data={customerOptions}
+        validators={[VALIDATOR_SELECT()]}
+      /> */}
 
-        <Select
-          id='customer'
-          objectId='select'
-          search={false}
-          fieldName='customer'
-          placeholder="Auswählen"
-          style={[styles.select, styles.select.placeholderText]}
-          data={customerOptions}
-          validators={[VALIDATOR_SELECT()]}
-          onChange={handleInputChange}
-        />
+      <Text style={styles.label}>Mitarbeiter</Text>
 
-        <Text style={styles.label}>Mitarbeiter</Text>
+      <Select
+        id='worker'
+        reducerKey='order'
+        search={false}
+        fieldName='worker'
+        placeholder="Auswählen"
+        data={workerOptions}
+        validators={[VALIDATOR_SELECT()]}
+      />
 
-        <Select
-          id='worker'
-          objectId='select'
-          search={false}
-          fieldName='worker'
-          placeholder="Auswählen"
-          style={[styles.select, styles.select.placeholderText]}
-          data={workerOptions}
-          validators={[VALIDATOR_SELECT()]}
-          onChange={handleInputChange}
-        />
+      {/* <Text style={styles.label}>Ansprechspartner</Text>
 
-        <Text style={styles.label}>Ansprechspartner</Text>
-
-        <Select
+      <Select
           id='contact'
-          objectId='select'
+          reducerKey='order'
           search={false}
           fieldName='contact'
           placeholder="Auswählen"
-          style={[styles.select, styles.select.placeholderText]}
           data={contactOptions}
           validators={[VALIDATOR_SELECT()]}
-          onChange={handleInputChange}
-        />
-
-        <Text style={styles.label}>Beschreibung</Text>
-
-        {/* <TextInput
-          style={[styles.textArea, styles.placeholderText]}
-          placeholder="Beschreibung"
-          onChangeText={(text) => setDescription(text)}
-          value={description}
-          multiline={true}
-          numberOfLines={4} // Adjust the number of lines as needed
         /> */}
 
-        <Input
-          id='workerDescr'
-          fieldName='description'
-          // placeholder="Beschreibung"
-          style={[styles.textArea, styles.placeholderText]}
-          errorText='Geben Sie die Beschreibung des Auftrags ein'
-          value={fetchedData.inputs.description.value}
-          validators={[VALIDATOR_REQUIRE()]}
-          onChange={handleInputChange}
-          // multiline={true}
-          numberOfLines={4}
+      <Text style={styles.label}>Beschreibung</Text>
 
+      <Input
+        id='workerDescr'
+        reducerKey='order'
+        fieldName='description'
+        placeholder="Beschreibung"
+        style={[styles.textArea, styles.placeholderText]}
+        errorText='Geben Sie die Beschreibung des Auftrags ein'
+        value={fetchedInputData.inputs.description.value}
+        validators={[VALIDATOR_REQUIRE()]}
+        // multiline={true}
+        numberOfLines={4}
+
+      />
+
+      <View style={styles.btnContainer}>
+        <Button
+          style={[styles.cancelBtn, styles.button]}
+          buttonText={styles.cancelBtnText}
+          onPress={() => props.toggle()}
+          title={'Abbrechen'}
         />
 
-        <View style={styles.btnContainer}>
-          <Button
-            style={[styles.cancelBtn, styles.button]}
-            buttonText={styles.cancelBtnText}
-            onPress={() => props.toggle()}
-            title={'Abbrechen'}
-          />
-
-          <Button
-            style={fetchedData.isFormValid ? [styles.createBtn, styles.button] : styles.invalideButton}
-            // disabled={!fetchedData.isFormValid}
-            buttonText={styles.createBtnText}
-            onPress={handleSubmit}
-            title={'Anlegen'}
-          />
-        </View>
+        <Button
+          style={[styles.createBtn, styles.button]}
+          // style={fetchedData.isFormValid ? [styles.createBtn, styles.button] : styles.invalideButton}
+          // disabled={!fetchedData.isFormValid}
+          buttonText={styles.createBtnText}
+          onPress={handleSubmit}
+          title={'Anlegen'}
+        />
       </View>
-    </>
+    </View>
   );
 };
 
@@ -250,3 +329,4 @@ const styles = StyleSheet.create({
 });
 
 export default OrderCreate;
+

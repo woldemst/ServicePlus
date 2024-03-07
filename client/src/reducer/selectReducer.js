@@ -2,18 +2,21 @@ import { SET_INITIAL_SELECT_DATA, SET_SELECT } from "../actions/selectActions";
 import { validate } from "../util/validators";
 
 const initial = {
-    selects: {},
-    selectedOptions: {},
+    selects: [],
+    selectedOptions: [],
     isFormValid: false,
 };
 
 const selectReducer = (state = initial, action) => {
     switch (action.type) {
         case SET_INITIAL_SELECT_DATA:
+            // console.log('reducer', action.payload);
             return {
                 ...state,
-                selects: { ...action.payload },
+                ...action.payload
             }
+
+
         case SET_SELECT:
             const { fieldName, value, validators } = action.payload;
             // console.log(state);
