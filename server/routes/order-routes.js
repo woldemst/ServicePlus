@@ -9,6 +9,7 @@ router.post('/:firmId/new', orderController.createOrder)
 router.get('/:orderId', orderController.getOrderById)
 
 router.get('/worker-options/:firmId', orderController.getAllWorkersAsOptions)
-router.get('/customer-options/:firmId', orderController.getAllCustomersAsOption)
+router.get('/customer-options/:firmId', orderController.getAllCustomersAsOptions)
+router.get('/contact-options/:firmId', orderController.getAllContactsAsOptions)
 
 module.exports = router;

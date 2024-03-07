@@ -131,7 +131,7 @@ const getAllWorkersAsOptions = async (req, res, next) => {
   }
 }
 
-const getAllCustomersAsOption = async (req, res, next) => {
+const getAllCustomersAsOptions = async (req, res, next) => {
   const firmId = req.params.firmId
 
   try {
@@ -139,7 +139,7 @@ const getAllCustomersAsOption = async (req, res, next) => {
 
     if (!customers || customers.length === 0) {
       const error = new HttpError(
-        'Could not find workers for the provided firm id.',
+        'Could not find customers for the provided firm id.',
         404
       );
       return next(error);
@@ -160,9 +160,39 @@ const getAllCustomersAsOption = async (req, res, next) => {
   }
 }
 
+const getAllContactsAsOptions = async (req, res, next) => {
+  const firmId = req.params.firmId;
+
+  try {
+    const contacts = await Customer.find({firmId: firmId})
+
+    if (!contacts || contacts.length === 0) {
+      const error = new HttpError(
+        'Could not find contacts for the provided firm id.',
+        404
+      );
+      return next(error);
+    }
+
+    const contactList = contacts.map(contact => ({
+      id: contact._id,
+      name: contact.name
+    }))
+
+    res.json({ contacts: contactList })
+  } catch (err) {
+    const error = new HttpError(
+      'Fetching contacts failed, please try again later.',
+      500
+    );
+    return next(error);
+  }
+}
+
 exports.getAllOrdersByFirmId = getAllOrdersByFirmId;
 exports.createOrder = createOrder;
 exports.getOrderById = getOrderById;
 
 exports.getAllWorkersAsOptions = getAllWorkersAsOptions;
-exports.getAllCustomersAsOption = getAllCustomersAsOption;
+exports.getAllCustomersAsOptions = getAllCustomersAsOptions;
+exports.getAllContactsAsOptions = getAllContactsAsOptions;
