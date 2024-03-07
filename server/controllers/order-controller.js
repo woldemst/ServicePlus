@@ -2,6 +2,7 @@ const Order = require("../models/Order");
 const HttpError = require("../models/http-error");
 const Firm = require("../models/Firm");
 const Worker = require('../models/Worker')
+const Customer = require('../models/Customer')
 
 const getAllOrdersByFirmId = async (req, res, next) => {
   const firmId = req.params.firmId;
@@ -112,12 +113,47 @@ const getAllWorkersAsOptions = async (req, res, next) => {
       return next(error);
     }
 
-    res.json({
-      workers: workers.map(worker => worker.toObject({ getters: true })),
-    });
+    const workerList = workers.map(worker => ({
+      id: worker._id,
+      name: worker.name
+    }))
+    // res.json({
+    //   workers: workers.map(worker => worker.toObject({ getters: true })),
+    // });
+
+    res.json({ workers: workerList })
   } catch (err) {
     const error = new HttpError(
       'Fetching workers failed, please try again later.',
+      500
+    );
+    return next(error);
+  }
+}
+
+const getAllCustomersAsOption = async (req, res, next) => {
+  const firmId = req.params.firmId
+
+  try {
+    const customers = await Customer.find({ firmId: firmId });
+
+    if (!customers || customers.length === 0) {
+      const error = new HttpError(
+        'Could not find workers for the provided firm id.',
+        404
+      );
+      return next(error);
+    }
+
+    const customerList = customers.map(customer => ({
+      id: customer._id,
+      name: customer.name
+    }))
+
+    res.json({ customers: customerList })
+  } catch (err) {
+    const error = new HttpError(
+      'Fetching customers failed, please try again later.',
       500
     );
     return next(error);
@@ -128,5 +164,5 @@ exports.getAllOrdersByFirmId = getAllOrdersByFirmId;
 exports.createOrder = createOrder;
 exports.getOrderById = getOrderById;
 
-//
 exports.getAllWorkersAsOptions = getAllWorkersAsOptions;
+exports.getAllCustomersAsOption = getAllCustomersAsOption;
