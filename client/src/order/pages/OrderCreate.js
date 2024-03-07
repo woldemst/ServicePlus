@@ -52,7 +52,7 @@ const OrderCreate = (props) => {
 
 
   const workerOptions = initialSelectState.selects.worker.map(worker => ({ value: worker.name }));
-  // const customerOptions = initialSelectState.selects.customer.map(customer => ({ value: customer.name }));
+  const customerOptions = initialSelectState.selects.customer.map(customer => ({ value: customer.name }));
   // const contactOptions = initialSelectState.selects.contact.map(contact => ({ value: contact.name }));
 
   const getWorkerList = async () => {
@@ -72,6 +72,21 @@ const OrderCreate = (props) => {
     }
   }
 
+  const getCustomerList = async () => {
+    try {
+      const customerList = await axios.get(`http://localhost:8000/api/orders/customer-options/${auth.firmId}`)
+      setInitialSelectState(prevState => ({
+        ...prevState,
+        selects: {
+          ...prevState.selects,
+          customer: customerList.data.customers,
+        },
+      }))
+      setIsLoaded(true)
+    } catch (err) {
+      console.error('Error if fetching customers as options:', err);
+    }
+  }
 
 
   const initialInputState = {
@@ -118,7 +133,7 @@ const OrderCreate = (props) => {
 
 
     getWorkerList()
-
+    getCustomerList()
     
     
     // setIsLoaded(true);
@@ -126,7 +141,7 @@ const OrderCreate = (props) => {
   }, [])
   
   if (isLoaded){
-    console.log('orderCreate', initialSelectState.selects.worker);
+    console.log('orderCreate', initialSelectState.selects.customer);
     dispatch(setInitialSelectData(initialSelectState))
   }
   const handleSubmit = async () => {
@@ -167,7 +182,7 @@ const OrderCreate = (props) => {
         validators={[VALIDATOR_REQUIRE()]}
       />
 
-      {/* <Text style={styles.label}>Kunde</Text>
+      <Text style={styles.label}>Kunde</Text>
 
       <Select
         id='customer'
@@ -177,7 +192,7 @@ const OrderCreate = (props) => {
         placeholder="Auswählen"
         data={customerOptions}
         validators={[VALIDATOR_SELECT()]}
-      /> */}
+      /> 
 
       <Text style={styles.label}>Mitarbeiter</Text>
 
