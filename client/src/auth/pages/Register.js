@@ -61,7 +61,7 @@ const Register = () => {
     const fetchedSelectData = useSelector(state => state.select)
     const options = initialSelectState.selects.role;
 
-    // console.log(fetchedSelectData)
+    console.log('register' ,fetchedSelectData)
     async function handleSubmit() {
         const URL = "http://localhost:8000/api/users/register";
 

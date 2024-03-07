@@ -15,7 +15,8 @@ export const setSelect = (fieldName, value, validators, objectId = null, reducer
   };
 };
 
-export const setInitialSelectData = data => ({
-  type: SET_INITIAL_SELECT_DATA, 
-  payload: data
+export const setInitialSelectData = (data) => ({
+  type: SET_INITIAL_SELECT_DATA,
+  payload: data 
+  // payload: { select, data }
 })
