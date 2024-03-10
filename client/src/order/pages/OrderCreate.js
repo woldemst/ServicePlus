@@ -3,21 +3,22 @@ import {
   Text,
   TextInput,
   TouchableOpacity,
+  ActivityIndicator,
   StyleSheet,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { AuthContext } from "../../context/auth-context";
 import axios from "axios";
 
 import { VALIDATOR_REQUIRE, VALIDATOR_SELECT } from "../../util/validators";
-import { AuthContext } from "../../context/auth-context";
-import Input from "../../shared/UIElements/Input";
-import Button from "../../shared/UIElements/Button";
-import Select from "../../shared/UIElements/Select";
 import { updateField, clearOrderData } from "../../actions/orderActions";
 import { setInitialInputData, setInput } from "../../actions/inputActions";
 import { setInitialSelectData, setSelect } from "../../actions/selectActions";
+import Input from "../../shared/UIElements/Input";
+import Button from "../../shared/UIElements/Button";
+import Select from "../../shared/UIElements/Select";
 
 const OrderCreate = (props) => {
   const auth = useContext(AuthContext)
@@ -25,7 +26,7 @@ const OrderCreate = (props) => {
 
   const [isLoaded, setIsLoaded] = useState(false)
 
-  const fetchedData = useSelector(state => state.order)
+  const fetchedSelectData = useSelector(state => state.select)
   const fetchedInputData = useSelector(state => state.input)
 
   const [initialSelectState, setInitialSelectState] = useState({
@@ -34,60 +35,7 @@ const OrderCreate = (props) => {
       contact: [],
       customer: []
     },
-    selectedOptions: {
-      worker: {
-        value: "",
-        isValid: false,
-      },
-      contact: {
-        value: "",
-        isValid: false,
-      },
-      customer: {
-        value: "",
-        isValid: false,
-      },
-    },
   })
-
-
-  const workerOptions = initialSelectState.selects.worker.map(worker => ({ value: worker.name }));
-  const customerOptions = initialSelectState.selects.customer.map(customer => ({ value: customer.name }));
-  // const contactOptions = initialSelectState.selects.contact.map(contact => ({ value: contact.name }));
-
-  const getWorkerList = async () => {
-    try {
-      const workerList = await axios.get(`http://localhost:8000/api/orders/worker-options/${auth.firmId}`)
-      setInitialSelectState(prevState => ({
-        ...prevState,
-        selects: {
-          ...prevState.selects,
-          worker: workerList.data.workers,
-        },
-      }))
-      setIsLoaded(true)
-
-    } catch (err) {
-      console.error('Error fetching worker options:', err);
-    }
-  }
-
-  const getCustomerList = async () => {
-    try {
-      const customerList = await axios.get(`http://localhost:8000/api/orders/customer-options/${auth.firmId}`)
-      setInitialSelectState(prevState => ({
-        ...prevState,
-        selects: {
-          ...prevState.selects,
-          customer: customerList.data.customers,
-        },
-      }))
-      setIsLoaded(true)
-    } catch (err) {
-      console.error('Error if fetching customers as options:', err);
-    }
-  }
-
 
   const initialInputState = {
     name: {
@@ -129,21 +77,53 @@ const OrderCreate = (props) => {
   }
 
   useEffect(() => {
-    dispatch(setInitialInputData(initialInputState))
+    const fetchedData = async () => {
+      try {
+        const workerList = await axios.get(`http://localhost:8000/api/orders/worker-options/${auth.firmId}`)
+        const customerList = await axios.get(`http://localhost:8000/api/orders/customer-options/${auth.firmId}`)
+        const contactList = await axios.get(`http://localhost:8000/api/orders/contact-options/${auth.firmId}`)
 
+        setInitialSelectState(prevState => ({
+          ...prevState,
+          selects: {
+            ...prevState.selects,
+            worker: workerList.data.workers,
+            customer: customerList.data.customers,
+            contact: contactList.data.contacts,
+          },
+        }))
 
-    getWorkerList()
-    getCustomerList()
-    
-    
-    // setIsLoaded(true);
-    
+      } catch (err) {
+        console.error('Error fetching options:', err);
+      }
+    }
+
+    fetchedData()
   }, [])
-  
-  if (isLoaded){
-    console.log('orderCreate', initialSelectState.selects.customer);
-    dispatch(setInitialSelectData(initialSelectState))
+
+  useEffect(() => {
+    if (initialSelectState.selects.contact.length > 0) {
+      setIsLoaded(true)
+      dispatch(setInitialInputData(initialInputState));
+      dispatch(setInitialSelectData(initialSelectState));
+      console.log(initialSelectState);
+    }
+  }, [initialSelectState.selects.contact])
+
+
+
+  let workerOptions;
+  let customerOptions;
+  let contactOptions;
+
+
+  if (isLoaded) {
+    workerOptions = fetchedSelectData.selects.worker ? fetchedSelectData.selects.worker.map(worker => ({ value: worker.name })) : [];
+    customerOptions = fetchedSelectData.selects.customer ? fetchedSelectData.selects.customer.map(customer => ({ value: customer.name })) : [];
+    contactOptions = fetchedSelectData.selects.contact ? fetchedSelectData.selects.contact.map(contact => ({ value: contact.name })) : [];
+    console.log("in options", fetchedSelectData);
   }
+
   const handleSubmit = async () => {
     const URL = `http://localhost:8000/api/orders/${auth.firmId}/new`;
 
@@ -151,9 +131,9 @@ const OrderCreate = (props) => {
       const response = await axios.post(URL, {
         firmId: auth.firmId,
         name: fetchedInputData.inputs.name.value,
-        worker: fetchedData.selectedOptions.worker,
-        customer: fetchedData.selectedOptions.customer,
-        contact: fetchedData.selectedOptions.contact,
+        worker: fetchedSelectData.selectedOptions.worker,
+        customer: fetchedSelectData.selectedOptions.customer,
+        contact: fetchedSelectData.selectedOptions.contact,
         description: fetchedInputData.inputs.description.value,
         // status: status,
       });
@@ -168,10 +148,9 @@ const OrderCreate = (props) => {
     }
   };
 
-  return isLoaded && (
+  return isLoaded ? (
     <View>
       <Text style={styles.label}>Auftragsname</Text>
-
       <Input
         id='orderName'
         reducerKey='order'
@@ -192,7 +171,7 @@ const OrderCreate = (props) => {
         placeholder="Auswählen"
         data={customerOptions}
         validators={[VALIDATOR_SELECT()]}
-      /> 
+      />
 
       <Text style={styles.label}>Mitarbeiter</Text>
 
@@ -206,17 +185,17 @@ const OrderCreate = (props) => {
         validators={[VALIDATOR_SELECT()]}
       />
 
-      {/* <Text style={styles.label}>Ansprechspartner</Text>
+      <Text style={styles.label}>Ansprechspartner</Text>
 
       <Select
-          id='contact'
-          reducerKey='order'
-          search={false}
-          fieldName='contact'
-          placeholder="Auswählen"
-          data={contactOptions}
-          validators={[VALIDATOR_SELECT()]}
-        /> */}
+        id='contact'
+        reducerKey='order'
+        search={false}
+        fieldName='contact'
+        placeholder="Auswählen"
+        data={contactOptions}
+        validators={[VALIDATOR_SELECT()]}
+      />
 
       <Text style={styles.label}>Beschreibung</Text>
 
@@ -252,7 +231,9 @@ const OrderCreate = (props) => {
         />
       </View>
     </View>
-  );
+  ) : (
+    <ActivityIndicator style={styles.loader} size="large" color="#7A9B76" />
+  )
 };
 
 const styles = StyleSheet.create({
@@ -341,6 +322,9 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "center",
     alignItems: 'center'
+  },
+  loader: {
+    flex: 1,
   },
 });
 

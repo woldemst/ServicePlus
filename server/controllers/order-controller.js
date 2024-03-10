@@ -176,7 +176,7 @@ const getAllContactsAsOptions = async (req, res, next) => {
 
     const contactList = contacts.map(contact => ({
       id: contact._id,
-      name: contact.name
+      name: contact.contact
     }))
 
     res.json({ contacts: contactList })
