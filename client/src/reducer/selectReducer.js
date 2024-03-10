@@ -4,7 +4,7 @@ import { validate } from "../util/validators";
 const initial = {
     selects: [],
     selectedOptions: [],
-    isFormValid: false,
+    // isFormValid: false,
 };
 
 const selectReducer = (state = initial, action) => {
@@ -19,13 +19,17 @@ const selectReducer = (state = initial, action) => {
 
         case SET_SELECT:
             const { fieldName, value, validators } = action.payload;
-            // console.log(state);
+
+
             const updatedSelects = {
+                ...state.selects,
                 ...state.selects[fieldName],
                 value,
                 isValid: validate(value, validators)
             };
 
+
+            // Update only the specific field in selectedOptions
             const updatedSelectedOptions = {
                 ...state.selectedOptions,
                 [fieldName]: {
