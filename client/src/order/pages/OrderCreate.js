@@ -106,10 +106,9 @@ const OrderCreate = (props) => {
       setIsLoaded(true)
       dispatch(setInitialInputData(initialInputState));
       dispatch(setInitialSelectData(initialSelectState));
-      console.log(initialSelectState);
+      // console.log(initialSelectState);
     }
   }, [initialSelectState.selects.contact])
-
 
 
   let workerOptions;
@@ -121,7 +120,7 @@ const OrderCreate = (props) => {
     workerOptions = fetchedSelectData.selects.worker ? fetchedSelectData.selects.worker.map(worker => ({ value: worker.name })) : [];
     customerOptions = fetchedSelectData.selects.customer ? fetchedSelectData.selects.customer.map(customer => ({ value: customer.name })) : [];
     contactOptions = fetchedSelectData.selects.contact ? fetchedSelectData.selects.contact.map(contact => ({ value: contact.name })) : [];
-    console.log("in options", fetchedSelectData);
+    // console.log("in options", fetchedSelectData);
   }
 
   const handleSubmit = async () => {
@@ -131,9 +130,9 @@ const OrderCreate = (props) => {
       const response = await axios.post(URL, {
         firmId: auth.firmId,
         name: fetchedInputData.inputs.name.value,
-        worker: fetchedSelectData.selectedOptions.worker,
-        customer: fetchedSelectData.selectedOptions.customer,
-        contact: fetchedSelectData.selectedOptions.contact,
+        worker: fetchedSelectData.selectedOptions.worker.value,
+        customer: fetchedSelectData.selectedOptions.customer.value,
+        contact: fetchedSelectData.selectedOptions.contact.value,
         description: fetchedInputData.inputs.description.value,
         // status: status,
       });

@@ -37,6 +37,12 @@ const selectReducer = (state = initial, action) => {
                     isValid: validate(value, validators)
                 }
             };
+            // const updatedSelectedOptions = {
+            //     ...state.selectedOptions,
+            //     ...state.selectedOptions[fieldName],
+            //     value: value,
+            //     isValid: validate(value, validators)
+            // };
 
             // let isFormValid = Object.values(updatedSelects).every((field) => field.isValid);
 
