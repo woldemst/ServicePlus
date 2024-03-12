@@ -34,6 +34,7 @@ const CustomerList = () => {
         }
         fetchCustomers()
     }, [refresh])
+    
     if (isLoaded || fetchedData.customers.length === 0) {
 
         // if (fetchedData.customers.length === 0) {
@@ -81,9 +82,7 @@ const CustomerList = () => {
                 </View>
 
                 <View style={styles.customerList}>
-                    {isLoaded ? (
-                        <ActivityIndicator style={styles.loader} size="large" color="#7A9B76" />
-                    ) : (
+                    {!isLoaded ? (
                         fetchedData.customers.map(customer => (
                             <CustomerItem
                                 id={customer._id}
@@ -103,6 +102,8 @@ const CustomerList = () => {
                                 handleRefresh={handleRefresh}
                             />
                         ))
+                    ) : (
+                        <ActivityIndicator style={styles.loader} size="large" color="#7A9B76" />
                     )}
 
                 </View>
