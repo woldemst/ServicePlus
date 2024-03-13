@@ -5,21 +5,18 @@ import {
   StyleSheet,
 } from "react-native";
 import { useState } from "react";
+import { useNavigation } from "@react-navigation/native"
 
 import ModalComponent from "../../shared/UIElements/Modal";
 import OrderInfo from "../pages/OrderInfo";
 
-
 const OrderItem = (props) => {
-  const [isModalVisible, setModalVisible] = useState(false);
-
-  const toggleModal = () => {
-    setModalVisible(!isModalVisible);
-  };
+  const navigation = useNavigation()
 
   return (
     <>
-      <TouchableOpacity style={styles.container} onPress={toggleModal}>
+      <TouchableOpacity style={styles.container} 
+        onPress={() => {navigation.navigate('orderMain', {name: props.name})}} >
         <View style={styles.indicator}></View>
 
         <View style={styles.mainContent}>
@@ -39,31 +36,6 @@ const OrderItem = (props) => {
             <Image style={styles.filePlusImg} source={require('../../../assets/file_plus.png')} />
         </View> */}
       </TouchableOpacity>
-
-      <ModalComponent
-        isVisible={isModalVisible}
-        animationIn="slideInUp" // Specify the slide-up animation
-        animationOut="slideOutDown" // Specify the slide-down animation
-        onBackdropPress={toggleModal}
-        onBackButtonPress={toggleModal}
-        header={<Text style={styles.modalHeadline}>Auftrag</Text>}
-        modalHeight="50%"
-      >
-        <OrderInfo
-          id={props.id}
-          toggle={toggleModal}
-          name={props.name}
-          customer={props.customer}
-          address={props.address}
-          owner={props.owner}
-          creator={props.creator}
-          worker={props.worker}
-          date={props.date}
-          status={props.status}
-          contact={props.contact}
-          description={props.description}
-        />
-      </ModalComponent>
     </>
   );
 };
@@ -131,3 +103,20 @@ const styles = StyleSheet.create({
 });
 
 export default OrderItem;
+
+
+
+// <OrderInfo
+//   id={props.id}
+//   toggle={toggleModal}
+//   name={props.name}
+//   customer={props.customer}
+//   address={props.address}
+//   owner={props.owner}
+//   creator={props.creator}
+//   worker={props.worker}
+//   date={props.date}
+//   status={props.status}
+//   contact={props.contact}
+//   description={props.description}
+// />
