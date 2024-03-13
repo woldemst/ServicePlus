@@ -1,8 +1,6 @@
 import {
   View,
   Text,
-  TextInput,
-  TouchableOpacity,
   StyleSheet,
 } from "react-native";
 
@@ -43,27 +41,27 @@ const OrderInfo = (props) => {
 
 const styles = StyleSheet.create({
   profileList: {
-    marginTop: 20,
+    // marginTop: 20,
   },
   listItem: {
-    flexDirection: "row",
-    justifyContent: "space-between",
+    // flexDirection: "row",
+    // justifyContent: "space-between",
   },
   label: {
-    fontSize: 18,
-    fontWeight: "700",
-    lineHeight: 28,
-    width: "35%",
+    // fontSize: 18,
+    // fontWeight: "700",
+    // lineHeight: 28,
+    // width: "35%",
   },
   wrapper: {
-    justifyContent: "flex-start",
-    width: "65%",
+    // justifyContent: "flex-start",
+    // width: "65%",
     // borderColor: 'red',
     // borderWidth: 2
   },
   infoText: {
-    fontSize: 18,
-    lineHeight: 28,
+    // fontSize: 18,
+    // lineHeight: 28,
   },
 });
 

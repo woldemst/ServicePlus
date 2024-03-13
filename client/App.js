@@ -19,6 +19,9 @@ import Register from "./src/auth/pages/Register";
 import Login from './src/auth/pages/Login';
 import store from './store';
 import OverviewNavigator from './src/overview/pages/OverviewNavigator';
+import OrderMain from './src/order/pages/OrderMain';
+import OrderInfo from './src/order/pages/OrderInfo';
+import OrderAppointments from './src/order/pages/OrderAppointments';
 
 
 export default function App() {
@@ -110,6 +113,8 @@ export default function App() {
           {/* orders */}
           <Stack.Screen name='orderView' component={OrderView} />
           <Stack.Screen name='orderCreate' component={OrderCreate} options={{ title: 'Create order' }} />
+          <Stack.Screen name='orderMain' component={OrderMain} options={{ headerShown: false }} />
+
 
           {/* firm */}
           <Stack.Screen name='updateProfile' component={UpdateProfile} options={{ title: 'Edit Profile' }} />
