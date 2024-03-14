@@ -11,7 +11,7 @@ import { useNavigation, useRoute } from "@react-navigation/native";
 import { useContext, useEffect, useMemo, useState } from "react";
 import axios from "axios";
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
-
+import { Ionicons } from '@expo/vector-icons';
 
 import OrderInfo from "./OrderInfo"
 import OrderAppointments from "./OrderAppointments";
@@ -20,15 +20,25 @@ import OrderFiles from "./OrderFiles";
 
 const OrderMain = () => {
     const route = useRoute()
+    const navigation = useNavigation()
     const Tab = createMaterialTopTabNavigator()
     const [activeTab, setActiveTab] = useState('Info');
+
+
+    const goBack = () => {
+        navigation.goBack();
+    };
 
     return <>
         <View style={styles.header} >
             <View style={styles.headerContent}>
-                <View>
-                    <Text style={styles.headerHeadline}>{route.params.name}</Text>
-                </View>
+                <TouchableOpacity onPress={goBack}>
+                    <Ionicons name="arrow-back" size={24} color="green" />
+                </TouchableOpacity>
+                <Text style={styles.headerHeadline}>{route.params.name}</Text>
+                <TouchableOpacity>
+                    <Image source={require('../../../assets/order/edit.png')} />
+                </TouchableOpacity>
             </View>
         </View >
         <Tab.Navigator
@@ -37,7 +47,7 @@ const OrderMain = () => {
                 activeTintColor: '#222', // Color of the active tab
                 inactiveTintColor: '#222', // Color of the inactive tab
                 labelStyle: { fontSize: 14, textTransform: 'none' }, // Style for the tab labels
-                indicatorStyle: { backgroundColor: '#222' }, // Style of the indicator below the active tab
+                // indicatorStyle: { backgroundColor: '#222' }, // Style of the indicator below the active tab
                 // tabBarStyle: styles.tabNavigator, // Background color of the tab bar
                 tabBarStyle: { paddingTop: 0, paddingBottom: 0, paddingHorizontal: 0 }, // Adjust padding here
 
@@ -105,8 +115,7 @@ const styles = StyleSheet.create({
     },
     headerContent: {
         flexDirection: 'row',
-        // justifyContent: 'space-between',
-        justifyContent: 'center',
+        justifyContent: 'space-between',
     },
     headerHeadline: {
         fontSize: 18,
