@@ -164,7 +164,7 @@ const getAllContactsAsOptions = async (req, res, next) => {
   const firmId = req.params.firmId;
 
   try {
-    const contacts = await Customer.find({firmId: firmId})
+    const contacts = await Customer.find({ firmId: firmId })
 
     if (!contacts || contacts.length === 0) {
       const error = new HttpError(
@@ -189,6 +189,50 @@ const getAllContactsAsOptions = async (req, res, next) => {
   }
 }
 
+const updateOrderById = async (req, res, next) => {
+  const orderId = req.params.orderId
+
+  const {
+    name,
+    email,
+    contact,
+    worker,
+    // nextAppointment, 
+    description
+  } = req.body
+
+  let updateOrder;
+
+  try {
+    updateOrder = await Order.findById(orderId)
+
+    if (!updateOrder) {
+      const error = new HttpError('Could not find an order for the provided Id.', 404);
+      return next(error);
+    }
+
+    updateOrder.name = name,
+    updateOrder.email = email,
+    // updateOrder.nextAppointment = nextAppointment,
+    updateOrder.contact = contact,
+    updateOrder.worker = worker,
+    updateOrder.description = description,
+
+    await updateOrder.save();
+
+    res
+      .status(200)
+      .json({ order: updateOrder.toObject({ getters: true }) });
+
+  } catch (err) {
+    const error = new HttpError(
+      "Something went wrong, could not update profile.",
+      500
+    );
+    return next(error);
+  }
+}
+
 exports.getAllOrdersByFirmId = getAllOrdersByFirmId;
 exports.createOrder = createOrder;
 exports.getOrderById = getOrderById;
@@ -196,3 +240,5 @@ exports.getOrderById = getOrderById;
 exports.getAllWorkersAsOptions = getAllWorkersAsOptions;
 exports.getAllCustomersAsOptions = getAllCustomersAsOptions;
 exports.getAllContactsAsOptions = getAllContactsAsOptions;
+
+exports.updateOrderById = updateOrderById;
