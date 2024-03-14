@@ -24,7 +24,6 @@ const OrderMain = () => {
     const Tab = createMaterialTopTabNavigator()
     const [activeTab, setActiveTab] = useState('Info');
 
-
     const goBack = () => {
         navigation.goBack();
     };
@@ -44,13 +43,9 @@ const OrderMain = () => {
         <Tab.Navigator
             initialRouteName={activeTab}
             screenOptions={{
-                activeTintColor: '#222', // Color of the active tab
-                inactiveTintColor: '#222', // Color of the inactive tab
                 labelStyle: { fontSize: 14, textTransform: 'none' }, // Style for the tab labels
-                // indicatorStyle: { backgroundColor: '#222' }, // Style of the indicator below the active tab
-                // tabBarStyle: styles.tabNavigator, // Background color of the tab bar
                 tabBarStyle: { paddingTop: 0, paddingBottom: 0, paddingHorizontal: 0 }, // Adjust padding here
-
+                tabBarIndicatorStyle: { backgroundColor: '#222' }, // Change the color of the indicator
             }}
 
             onTabPress={({ route }) => {
@@ -94,18 +89,12 @@ const OrderMain = () => {
 
 
 const styles = StyleSheet.create({
-    tabNavigator: {
-        paddingTop: 0,
-        paddingBottom: 0,
-        backgroundColor: '#000'
-    },
     header: {
-        marginTop: 50,
         paddingLeft: 24,
         paddingRight: 24,
         backgroundColor: '#fff',
         width: '100%',
-        paddingTop: 16,
+        paddingTop: 66,
         paddingBottom: 16,
         position: 'fixed',
         top: 0,
