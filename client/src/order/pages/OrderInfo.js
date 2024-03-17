@@ -29,13 +29,13 @@ const OrderInfo = (props) => {
   const route = useRoute()
   const orderId = route.params.id
   const [isLoaded, setIsLoaded] = useState(false)
-  // const edit = route.params.edit
   const fetchedSelectData = useSelector(state => state.select)
   const fetchedInputData = useSelector(state => state.input)
   const fetchedArray = useSelector((state) => state.order.ordersArray.orders);
   const order = fetchedArray.find(order => order._id == orderId)
-  // const [edit, setEdit] = useState(true)
 
+  const edit = useSelector(state => state.order.edit)
+  console.log(edit);
   const [initialSelectState, setInitialSelectState] = useState({
     selects: {
       worker: [],
@@ -151,7 +151,7 @@ const OrderInfo = (props) => {
           data={customerOptions}
           validators={[VALIDATOR_SELECT()]}
           initialSelectedValue={order.customer}
-          disable={edit}
+          disable={!edit}
         />
 
         <Text style={styles.label}>Mitarbeiter</Text>
@@ -164,7 +164,7 @@ const OrderInfo = (props) => {
           data={workerOptions}
           validators={[VALIDATOR_SELECT()]}
           initialSelectedValue={order.worker}
-          disable={edit}
+          disable={!edit}
         />
 
         <Text style={styles.label}>Ansprechspartner</Text>
@@ -177,7 +177,7 @@ const OrderInfo = (props) => {
           data={contactOptions}
           validators={[VALIDATOR_SELECT()]}
           initialSelectedValue={order.contact}
-          disable={edit}
+          disable={!edit}
         />
 
         <Text style={styles.label}>Beschreibung</Text>
@@ -192,7 +192,7 @@ const OrderInfo = (props) => {
           value={fetchedInputData.inputs.description.value}
           validators={[VALIDATOR_REQUIRE()]}
           numberOfLines={4}
-          disabled={edit}
+          disabled={!edit}
         />
 
         <View style={styles.btnContainer}>
@@ -202,7 +202,7 @@ const OrderInfo = (props) => {
           onPress={() => props.toggle()}
           title={'Abbrechen'}
         /> */}
-          {!edit && (
+          {edit && (
             <Button
               style={[styles.editButton, styles.button]}
               buttonText={styles.editButtonText}
