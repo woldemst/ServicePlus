@@ -12,7 +12,6 @@ const Select = props => {
   const [isValid, setIsValid] = useState(true)
   const fetchedData = useSelector((state) => state[props.reducerKey]);
 
-
   // useEffect(() => {
   //   if (touched) {
   //     setIsValid(validate(props.value, props.validators))
@@ -37,6 +36,9 @@ const Select = props => {
       boxStyles={!isValid ? styles.selectInvalid : styles.select}
       inputStyles={!isValid ? styles.placeholderTextInvalid : styles.placeholderText}
       dropdownStyles={styles.dropdown}
+      defaultOption={props.defaultOption}
+      dropdownShown={false}
+      disabledItemStyles={!props.disabled ? styles.selectInvalid : styles.select}
     />
 
   </>

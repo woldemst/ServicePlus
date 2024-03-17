@@ -7,16 +7,23 @@ import {
 import { useState } from "react";
 import { useNavigation } from "@react-navigation/native"
 
-import ModalComponent from "../../shared/UIElements/Modal";
-import OrderInfo from "../pages/OrderInfo";
-
 const OrderItem = (props) => {
   const navigation = useNavigation()
 
   return (
     <>
-      <TouchableOpacity style={styles.container} 
-        onPress={() => {navigation.navigate('orderMain', {name: props.name})}} >
+      <TouchableOpacity style={styles.container}
+        onPress={() => {
+          navigation.navigate('orderMain', {
+            id: props.id,
+            name: props.name,
+            description: props.description,
+            worker: props.worker,
+            customer: props.customer,
+            contact: props.contact,
+            // 
+          })
+        }} >
         <View style={styles.indicator}></View>
 
         <View style={styles.mainContent}>
@@ -104,19 +111,3 @@ const styles = StyleSheet.create({
 
 export default OrderItem;
 
-
-
-// <OrderInfo
-//   id={props.id}
-//   toggle={toggleModal}
-//   name={props.name}
-//   customer={props.customer}
-//   address={props.address}
-//   owner={props.owner}
-//   creator={props.creator}
-//   worker={props.worker}
-//   date={props.date}
-//   status={props.status}
-//   contact={props.contact}
-//   description={props.description}
-// />

@@ -11,7 +11,7 @@ const Input = props => {
     const [isValid, setIsValid] = useState(true)
     // const fetchedData = useSelector((state) => state[props.reducerKey]);
     // console.log(fetchedData);
-    
+
     const handleChange = (val) => {
         setInputValue(val)
         setIsValid(validate(val, props.validators))
@@ -23,13 +23,14 @@ const Input = props => {
             id={props.id}
             value={inputValue}
             placeholder={props.placeholder}
-            style={!isValid ? styles.inputInvalid : styles.input}
+            style={[props.disabled && styles.disabled, !isValid ? styles.inputInvalid : styles.input]}
             onChangeText={(text) => handleChange(text)}
             autoCapitalize="none"
             multiline={props.multiline}
             numberOfLines={props.numberOfLines}
-        // onFocus={() => setTouched(true)}
-        // onBlur={onBlurHandler}
+            // onFocus={() => setTouched(true)}
+            // onBlur={onBlurHandler}
+            editable={!props.disabled}
         />
 
         {!isValid && <Text style={styles.errorText}>{props.errorText}</Text>}
@@ -57,6 +58,9 @@ const styles = StyleSheet.create({
     },
     errorText: {
         color: 'red'
+    },
+    disabled: {
+        backgroundColor: '#eee'
     }
 })
 
