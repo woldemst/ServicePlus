@@ -16,52 +16,49 @@ import { Ionicons } from '@expo/vector-icons';
 import OrderInfo from "./OrderInfo"
 import OrderAppointments from "./OrderAppointments";
 import OrderFiles from "./OrderFiles";
+import { useDispatch } from "react-redux";
+import { toggleEdit } from "../../actions/orderActions";
 
 
 const OrderMain = () => {
+    const dispatch = useDispatch()
     const route = useRoute()
     const navigation = useNavigation()
     const Tab = createMaterialTopTabNavigator()
-    const [activeTab, setActiveTab] = useState('Info');
+    const [edit, setEdit] = useState(false)
 
-    const goBack = () => {
-        navigation.goBack();
-    };
-
+    const handleEditToggle = () => {
+        setEdit(!edit)
+        dispatch(toggleEdit(edit))
+    }
     return <>
         <View style={styles.header} >
             <View style={styles.headerContent}>
-                <TouchableOpacity onPress={goBack}>
+                <TouchableOpacity onPress={() => navigation.goBack()}>
                     <Ionicons name="arrow-back" size={24} color="green" />
                 </TouchableOpacity>
                 <Text style={styles.headerHeadline}>{route.params.name}</Text>
-                <TouchableOpacity>
+                <TouchableOpacity onPress={() => handleEditToggle()}>
                     <Image source={require('../../../assets/order/edit.png')} />
                 </TouchableOpacity>
             </View>
         </View >
-        <Tab.Navigator
-            initialRouteName={activeTab}
-            screenOptions={{
-                labelStyle: { fontSize: 14, textTransform: 'none' }, // Style for the tab labels
-                tabBarStyle: { paddingTop: 0, paddingBottom: 0, paddingHorizontal: 0 }, // Adjust padding here
-                tabBarIndicatorStyle: { backgroundColor: '#222' }, // Change the color of the indicator
-            }}
-
-            onTabPress={({ route }) => {
-                const routeIndex = route.state?.index; // Get the index of the current route
-
-                if (routeIndex !== undefined && routeIndex !== activeTab) {
-                    setActiveTab(route.name);
-                }
-            }}
-
+        <Tab.Navigator screenOptions={{
+            labelStyle: { fontSize: 14, textTransform: 'none' }, // Style for the tab labels
+            tabBarStyle: { paddingTop: 0, paddingBottom: 0, paddingHorizontal: 0 }, // Adjust padding here
+            tabBarIndicatorStyle: { backgroundColor: '#222' }, // Change the color of the indicator
+        }}
         >
             <Tab.Screen
                 name="Info"
                 component={OrderInfo}
+                initialParams={{
+                    id: route.params.id,
+                    edit: edit
+
+                }}
                 options={{
-                    headerShown: false
+                    headerShown: false,
                 }}
             />
             <Tab.Screen
