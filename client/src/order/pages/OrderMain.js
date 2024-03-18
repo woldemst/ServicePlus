@@ -17,7 +17,7 @@ import OrderInfo from "./OrderInfo"
 import OrderAppointments from "./OrderAppointments";
 import OrderFiles from "./OrderFiles";
 import { useDispatch, useSelector } from "react-redux";
-import { toggleToTrueEditOrder } from "../../actions/orderActions";
+import { toggleToFalseEditOrder, toggleToTrueEditOrder } from "../../actions/orderActions";
 
 
 const OrderMain = () => {
@@ -25,13 +25,15 @@ const OrderMain = () => {
     const route = useRoute()
     const navigation = useNavigation()
     const Tab = createMaterialTopTabNavigator()
-    // const [edit, setEdit] = useState(false)
-    const edit = useSelector(state => state.order.edit)
 
+    const goingBack = () => {
+        navigation.goBack()
+        dispatch(toggleToFalseEditOrder())
+    }
     return <>
         <View style={styles.header} >
             <View style={styles.headerContent}>
-                <TouchableOpacity onPress={() => navigation.goBack()}>
+                <TouchableOpacity onPress={() => goingBack()}>
                     <Ionicons name="arrow-back" size={24} color="green" />
                 </TouchableOpacity>
                 <Text style={styles.headerHeadline}>{route.params.name}</Text>
@@ -51,7 +53,6 @@ const OrderMain = () => {
                 component={OrderInfo}
                 initialParams={{
                     id: route.params.id,
-                    edit: edit
 
                 }}
                 options={{
