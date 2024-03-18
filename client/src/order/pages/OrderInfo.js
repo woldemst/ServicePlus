@@ -7,20 +7,21 @@ import {
   StyleSheet,
   ScrollView
 } from "react-native";
+import { useNavigation, useRoute } from "@react-navigation/native";
 import { useContext, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { AuthContext } from "../../context/auth-context";
 import axios from "axios";
 
 import { VALIDATOR_REQUIRE, VALIDATOR_SELECT } from "../../util/validators";
-import { updateField, clearOrderData } from "../../actions/orderActions";
-import { setInitialInputData, setInput } from "../../actions/inputActions";
 import { setInitialSelectData, setSelect } from "../../actions/selectActions";
-import { useNavigation, useRoute } from "@react-navigation/native";
+import { setInitialInputData, setInput } from "../../actions/inputActions";
+import SelectDropdown from "../../shared/UIElements/SelectDropdown";
 import Button from "../../shared/UIElements/Button";
 import Select from "../../shared/UIElements/Select";
 import Input from "../../shared/UIElements/Input";
-import SelectDropdown from "../../shared/UIElements/SelectDropdown";
+import { refershData } from "../../actions/utilActions";
+import { toggleToFalseEditOrder } from "../../actions/orderActions";
 
 const OrderInfo = (props) => {
   const navigation = useNavigation()
@@ -35,7 +36,8 @@ const OrderInfo = (props) => {
   const order = fetchedArray.find(order => order._id == orderId)
 
   const edit = useSelector(state => state.order.edit)
-  console.log(edit);
+
+  // console.log(edit);
   const [initialSelectState, setInitialSelectState] = useState({
     selects: {
       worker: [],
@@ -111,24 +113,26 @@ const OrderInfo = (props) => {
   const handleSubmit = async () => {
 
     console.log('before API',
-      auth.firmId,
-      fetchedSelectData.selectedOptions.worker.value,
-      fetchedSelectData.selectedOptions.customer.value,
-      fetchedSelectData.selectedOptions.contact.value,
-      fetchedInputData.inputs.description.value,
+      fetchedSelectData.selectedOptions.customer.value.value,
+      // fetchedSelectData.selectedOptions.worker.value.value,
+      // fetchedSelectData.selectedOptions.customer.value.value,
+      // fetchedSelectData.selectedOptions.contact.value.value,
+      // fetchedInputData.inputs.description.value,
     );
-    const URL = `http://localhost:8000/api/orders/update/${orderId}`;
 
+    const URL = `http://localhost:8000/api/orders/update/${orderId}`;
     try {
       const response = await axios.patch(URL, {
         firmId: auth.firmId,
         // name: fetchedInputData.inputs.name.value,
-        worker: fetchedSelectData.selectedOptions.worker.value,
-        customer: fetchedSelectData.selectedOptions.customer.value,
-        contact: fetchedSelectData.selectedOptions.contact.value,
+        worker: fetchedSelectData.selectedOptions.worker.value.value,
+        customer: fetchedSelectData.selectedOptions.customer.value.value,
+        contact: fetchedSelectData.selectedOptions.contact.value.value,
         description: fetchedInputData.inputs.description.value,
         // status: status,
       });
+      dispatch(refershData())
+      dispatch(toggleToFalseEditOrder())
       alert('Order updated successfuly')
       navigation.goBack()
       // props.handleRefresh();
@@ -141,7 +145,7 @@ const OrderInfo = (props) => {
   return isLoaded && (
 
     <View style={styles.container}>
-      <ScrollView>
+      <ScrollView showsVerticalScrollIndicator={false} >
         <Text style={styles.label}>Kunde</Text>
         <SelectDropdown
           id='customer'

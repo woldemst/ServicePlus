@@ -16,8 +16,8 @@ import { Ionicons } from '@expo/vector-icons';
 import OrderInfo from "./OrderInfo"
 import OrderAppointments from "./OrderAppointments";
 import OrderFiles from "./OrderFiles";
-import { useDispatch } from "react-redux";
-import { toggleEdit } from "../../actions/orderActions";
+import { useDispatch, useSelector } from "react-redux";
+import { toggleToTrueEditOrder } from "../../actions/orderActions";
 
 
 const OrderMain = () => {
@@ -25,12 +25,9 @@ const OrderMain = () => {
     const route = useRoute()
     const navigation = useNavigation()
     const Tab = createMaterialTopTabNavigator()
-    const [edit, setEdit] = useState(false)
+    // const [edit, setEdit] = useState(false)
+    const edit = useSelector(state => state.order.edit)
 
-    const handleEditToggle = () => {
-        setEdit(!edit)
-        dispatch(toggleEdit(edit))
-    }
     return <>
         <View style={styles.header} >
             <View style={styles.headerContent}>
@@ -38,7 +35,7 @@ const OrderMain = () => {
                     <Ionicons name="arrow-back" size={24} color="green" />
                 </TouchableOpacity>
                 <Text style={styles.headerHeadline}>{route.params.name}</Text>
-                <TouchableOpacity onPress={() => handleEditToggle()}>
+                <TouchableOpacity onPress={() => dispatch(toggleToTrueEditOrder())}>
                     <Image source={require('../../../assets/order/edit.png')} />
                 </TouchableOpacity>
             </View>
