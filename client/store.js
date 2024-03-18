@@ -8,7 +8,7 @@ import workerReducer from './src/reducer/workerReducer';
 import orderReducer from './src/reducer/orderReducer';
 import inputReducer from './src/reducer/inputReducer';
 import selectReducer from './src/reducer/selectReducer';
-
+import utilReducer from './src/reducer/utilReducer'
 const store = configureStore({
   reducer: {
     user: userReducer,
@@ -19,7 +19,8 @@ const store = configureStore({
     customer: customerReducer,
     order: orderReducer,
     input: inputReducer,
-    select: selectReducer
+    select: selectReducer,
+    util: utilReducer,
   },
 });
 

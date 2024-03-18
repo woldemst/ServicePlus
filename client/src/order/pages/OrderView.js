@@ -20,11 +20,13 @@ const OrderView = () => {
     const auth = useContext(AuthContext)
     const fetchedData = useSelector((state) => state.order.ordersArray);
 
-    console.log(fetchedData.orders);
+    // console.log(fetchedData.orders);
     const [isModalVisible, setModalVisible] = useState(false);
-    const [refresh, setRefresh] = useState(false)
-    const handleRefresh = () => setRefresh(!refresh);
+    const [refreshd, setRefresh] = useState(false)
+    const handleRefresh = () => setRefresh();
     const [isLoaded, setIsLoaded] = useState(false)
+    const refresh = useSelector(state => state.util.refresh)
+    console.log('refresh is', refresh);
 
     useEffect(() => {
         const fetchOrders = async () => {
