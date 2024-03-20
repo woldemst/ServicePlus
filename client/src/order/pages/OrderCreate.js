@@ -19,6 +19,8 @@ import { setInitialSelectData, setSelect } from "../../actions/selectActions";
 import Input from "../../shared/UIElements/Input";
 import Button from "../../shared/UIElements/Button";
 import Select from "../../shared/UIElements/Select";
+import { refershData } from "../../actions/utilActions";
+import SelectDropdown from "../../shared/UIElements/SelectDropdown";
 
 const OrderCreate = (props) => {
   const auth = useContext(AuthContext)
@@ -39,34 +41,6 @@ const OrderCreate = (props) => {
 
   const initialInputState = {
     name: {
-      value: "",
-      isValid: false,
-    },
-    email: {
-      value: "",
-      isValid: false,
-    },
-    street: {
-      value: "",
-      isValid: false,
-    },
-    houseNr: {
-      value: "",
-      isValid: false,
-    },
-    zip: {
-      value: "",
-      isValid: false,
-    },
-    place: {
-      value: "",
-      isValid: false,
-    },
-    phone: {
-      value: "",
-      isValid: false,
-    },
-    website: {
       value: "",
       isValid: false,
     },
@@ -115,12 +89,20 @@ const OrderCreate = (props) => {
   let customerOptions;
   let contactOptions;
 
-
   if (isLoaded) {
-    workerOptions = fetchedSelectData.selects.worker ? fetchedSelectData.selects.worker.map(worker => ({ value: worker.name })) : [];
-    customerOptions = fetchedSelectData.selects.customer ? fetchedSelectData.selects.customer.map(customer => ({ value: customer.name })) : [];
-    contactOptions = fetchedSelectData.selects.contact ? fetchedSelectData.selects.contact.map(contact => ({ value: contact.name })) : [];
-    // console.log("in options", fetchedSelectData);
+    customerOptions = fetchedSelectData.selects.customer.map(customer => ({
+      label: customer.name,
+      value: customer.name
+    }));
+    workerOptions = fetchedSelectData.selects.worker.map(worker => ({
+      label: worker.name,
+      value: worker.name
+    }));
+    contactOptions = fetchedSelectData.selects.contact.map(contact => ({
+      label: contact.name,
+      value: contact.name
+    }));
+    // console.log("in options", fetchedSelectData.selects);
   }
 
   const handleSubmit = async () => {
@@ -138,9 +120,7 @@ const OrderCreate = (props) => {
       });
 
       props.toggle();
-      props.handleRefresh();
-      // dispatch(clearOrderData())
-
+      dispatch(refershData())
       alert("Order created successfully!");
     } catch (err) {
       alert("An error occurred while creating the order.");
@@ -162,38 +142,43 @@ const OrderCreate = (props) => {
 
       <Text style={styles.label}>Kunde</Text>
 
-      <Select
+      <SelectDropdown
         id='customer'
         reducerKey='order'
         search={false}
         fieldName='customer'
-        placeholder="Auswählen"
         data={customerOptions}
         validators={[VALIDATOR_SELECT()]}
+        placeholder='Auswählen'
+
       />
+
 
       <Text style={styles.label}>Mitarbeiter</Text>
 
-      <Select
+
+      <SelectDropdown
         id='worker'
         reducerKey='order'
         search={false}
         fieldName='worker'
-        placeholder="Auswählen"
         data={workerOptions}
         validators={[VALIDATOR_SELECT()]}
+        placeholder='Auswählen'
       />
 
       <Text style={styles.label}>Ansprechspartner</Text>
 
-      <Select
+
+      <SelectDropdown
         id='contact'
         reducerKey='order'
         search={false}
         fieldName='contact'
-        placeholder="Auswählen"
         data={contactOptions}
         validators={[VALIDATOR_SELECT()]}
+        placeholder='Auswählen'
+
       />
 
       <Text style={styles.label}>Beschreibung</Text>
