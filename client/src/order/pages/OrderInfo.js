@@ -37,10 +37,6 @@ const OrderInfo = (props) => {
   const order = fetchedArray.find(order => order._id == orderId)
   const edit = useSelector(state => state.order.edit);
 
-  // console.log('edit:', edit);
-  // console.log('not', fetchedSelectData.selects);
-
-  // console.log('worker:', order.worker);
   const [initialSelectState, setInitialSelectState] = useState({
     selects: {
       customer: [],
@@ -115,20 +111,9 @@ const OrderInfo = (props) => {
     // console.log("in options", fetchedSelectData.selects);
   }
 
-  // console.log('selectedOptions: ', fetchedSelectData.selectedOptions.worker);
-  // console.log('inputs: ', fetchedInputData);
-
-  // console.log('selects: ', fetchedSelectData.selects);
-
   const handleSubmit = async () => {
 
-    console.log('before API',
-      fetchedSelectData.selectedOptions,
-      // fetchedSelectData.selectedOptions.worker,
-      // fetchedSelectData.selectedOptions.customer.value.value,
-      // fetchedSelectData.selectedOptions.contact.value.value,
-      // fetchedInputData.inputs.description.value,
-    );
+    // console.log('before API', fetchedSelectData.selectedOptions );
 
     const URL = `http://localhost:8000/api/orders/update/${orderId}`;
     try {
