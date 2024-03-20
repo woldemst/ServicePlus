@@ -195,8 +195,9 @@ const updateOrderById = async (req, res, next) => {
   const {
     // name,
     email,
-    contact,
+    customer,
     worker,
+    contact,
     // nextAppointment, 
     description
   } = req.body
@@ -214,8 +215,9 @@ const updateOrderById = async (req, res, next) => {
     // updateOrder.name = name,
     updateOrder.email = email,
     // updateOrder.nextAppointment = nextAppointment,
-    updateOrder.contact = contact,
+    updateOrder.customer = customer,
     updateOrder.worker = worker,
+    updateOrder.contact = contact,
     updateOrder.description = description,
 
     await updateOrder.save();

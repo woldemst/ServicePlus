@@ -26,7 +26,7 @@ const OrderView = () => {
     const handleRefresh = () => setRefresh();
     const [isLoaded, setIsLoaded] = useState(false)
     const refresh = useSelector(state => state.util.refresh)
-    console.log('refresh is', refresh);
+    // console.log('refresh is', refresh);
 
     useEffect(() => {
         const fetchOrders = async () => {

@@ -24,69 +24,75 @@ import { refershData } from "../../actions/utilActions";
 import { toggleToFalseEditOrder } from "../../actions/orderActions";
 
 const OrderInfo = (props) => {
+  const [isLoaded, setIsLoaded] = useState(false)
   const navigation = useNavigation()
   const auth = useContext(AuthContext)
   const dispatch = useDispatch()
   const route = useRoute()
-  const orderId = route.params.id
-  const [isLoaded, setIsLoaded] = useState(false)
+
   const fetchedSelectData = useSelector(state => state.select)
   const fetchedInputData = useSelector(state => state.input)
   const fetchedArray = useSelector((state) => state.order.ordersArray.orders);
+  const orderId = route.params.id
   const order = fetchedArray.find(order => order._id == orderId)
+  const edit = useSelector(state => state.order.edit);
 
-  const edit = useSelector(state => state.order.edit)
+  // console.log('edit:', edit);
+  // console.log('not', fetchedSelectData.selects);
 
-  // console.log(edit);
+  // console.log('worker:', order.worker);
   const [initialSelectState, setInitialSelectState] = useState({
     selects: {
-      worker: [],
       customer: [],
+      worker: [],
       contact: [],
     },
+    selectedOptions: {
+      customer: { value: order.customer },
+      worker: { value: order.worker },
+      contact: { value: order.contact },
+    }
   })
 
   const initialInputState = {
     description: {
-      value: order.description,
-      isValid: false,
+      value: order.description
     },
   }
+
 
   useEffect(() => {
     const fetchedData = async () => {
       try {
-        const workerList = await axios.get(`http://localhost:8000/api/orders/worker-options/${auth.firmId}`)
         const customerList = await axios.get(`http://localhost:8000/api/orders/customer-options/${auth.firmId}`)
+        const workerList = await axios.get(`http://localhost:8000/api/orders/worker-options/${auth.firmId}`)
         const contactList = await axios.get(`http://localhost:8000/api/orders/contact-options/${auth.firmId}`)
 
         setInitialSelectState(prevState => ({
           ...prevState,
           selects: {
             ...prevState.selects,
-            worker: workerList.data.workers,
             customer: customerList.data.customers,
+            worker: workerList.data.workers,
             contact: contactList.data.contacts,
           },
         }))
 
+        // console.log(customerList.data.customers);
       } catch (err) {
         console.error('Error fetching options:', err);
       }
     }
-
     fetchedData()
-  }, [])
+
+  }, [edit])
 
 
   useEffect(() => {
-    if (initialSelectState.selects.contact.length > 0) {
-      setIsLoaded(true)
-      dispatch(setInitialInputData(initialInputState));
-      dispatch(setInitialSelectData(initialSelectState));
-      // console.log(initialSelectState);
-    }
-  }, [initialSelectState.selects.contact])
+    dispatch(setInitialInputData(initialInputState));
+    dispatch(setInitialSelectData(initialSelectState));
+    setIsLoaded(true)
+  }, [edit])
 
 
   let workerOptions;
@@ -94,27 +100,31 @@ const OrderInfo = (props) => {
   let contactOptions;
 
   if (isLoaded) {
-    workerOptions = fetchedSelectData.selects.worker.map(worker => ({
-      label: worker.name,
-      value: worker.name
-    }));
     customerOptions = fetchedSelectData.selects.customer.map(customer => ({
       label: customer.name,
       value: customer.name
+    }));
+    workerOptions = fetchedSelectData.selects.worker.map(worker => ({
+      label: worker.name,
+      value: worker.name
     }));
     contactOptions = fetchedSelectData.selects.contact.map(contact => ({
       label: contact.name,
       value: contact.name
     }));
-    // console.log("in options", workerOptions);
+    // console.log("in options", fetchedSelectData.selects);
   }
 
-  // console.log('initial input data', initialInputState);
+  // console.log('selectedOptions: ', fetchedSelectData.selectedOptions.worker);
+  // console.log('inputs: ', fetchedInputData);
+
+  // console.log('selects: ', fetchedSelectData.selects);
+
   const handleSubmit = async () => {
 
     console.log('before API',
-      fetchedSelectData.selectedOptions.customer.value.value,
-      // fetchedSelectData.selectedOptions.worker.value.value,
+      fetchedSelectData.selectedOptions,
+      // fetchedSelectData.selectedOptions.worker,
       // fetchedSelectData.selectedOptions.customer.value.value,
       // fetchedSelectData.selectedOptions.contact.value.value,
       // fetchedInputData.inputs.description.value,
@@ -125,17 +135,16 @@ const OrderInfo = (props) => {
       const response = await axios.patch(URL, {
         firmId: auth.firmId,
         // name: fetchedInputData.inputs.name.value,
-        worker: fetchedSelectData.selectedOptions.worker.value.value,
-        customer: fetchedSelectData.selectedOptions.customer.value.value,
-        contact: fetchedSelectData.selectedOptions.contact.value.value,
+        worker: fetchedSelectData.selectedOptions.worker.value,
+        customer: fetchedSelectData.selectedOptions.customer.value,
+        contact: fetchedSelectData.selectedOptions.contact.value,
         description: fetchedInputData.inputs.description.value,
         // status: status,
       });
       dispatch(refershData())
       dispatch(toggleToFalseEditOrder())
       alert('Order updated successfuly')
-      navigation.goBack()
-      // props.handleRefresh();
+      // navigation.goBack()
     } catch (err) {
       alert("An error occurred while editing the order.");
     }
