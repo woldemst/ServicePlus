@@ -2,8 +2,8 @@ import { SET_INITIAL_SELECT_DATA, SET_SELECT } from "../actions/selectActions";
 import { validate } from "../util/validators";
 
 const initial = {
-    selects: [],
-    selectedOptions: [],
+    selects: {},
+    selectedOptions: {}
     // isFormValid: false,
 };
 
@@ -25,24 +25,18 @@ const selectReducer = (state = initial, action) => {
                 ...state.selects,
                 ...state.selects[fieldName],
                 value,
-                isValid: validate(value, validators)
-            };
-
+                // isValid: validate(value, validators)
+            }
 
             // Update only the specific field in selectedOptions
             const updatedSelectedOptions = {
                 ...state.selectedOptions,
-                [fieldName]: {
-                    value: value,
-                    isValid: validate(value, validators)
-                }
+                [fieldName]: value,
+                // isValid: validate(value, validators)
+
             };
-            // const updatedSelectedOptions = {
-            //     ...state.selectedOptions,
-            //     ...state.selectedOptions[fieldName],
-            //     value: value,
-            //     isValid: validate(value, validators)
-            // };
+
+            // console.log('from reducer:', updatedSelectedOptions);
 
             // let isFormValid = Object.values(updatedSelects).every((field) => field.isValid);
 

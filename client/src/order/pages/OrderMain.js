@@ -53,7 +53,6 @@ const OrderMain = () => {
                 component={OrderInfo}
                 initialParams={{
                     id: route.params.id,
-
                 }}
                 options={{
                     headerShown: false,
