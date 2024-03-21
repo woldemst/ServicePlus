@@ -19,9 +19,12 @@ const OverviewNavigator = () => {
             <Tab.Navigator
                 initialRouteName={activeTab}
                 tabBarPosition="bottom"
+
                 screenOptions={{
                     tabBarIndicator: () => null,
                     tabBarLabelStyle: { fontSize: 10 },
+                    tabBarStyle: { borderTopColor: '#eee', borderTopWidth: 1 },
+
                 }}
 
                 onTabPress={({ route }) => {
