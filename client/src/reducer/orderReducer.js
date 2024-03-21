@@ -1,10 +1,11 @@
-import { GET_ORDERS, UPDATE_ORDER_DATA, CLEAR_ORDER_DATA, TOGGLE_EDIT, TOGGLE_TO_TRUE_EDIT_ORDER, TOGGLE_TO_FALSE_EDIT_ORDER } from '../actions/orderActions';
+import { GET_ORDERS, UPDATE_ORDER_DATA, CLEAR_ORDER_DATA, TOGGLE_EDIT, TOGGLE_TO_TRUE_EDIT_ORDER, TOGGLE_TO_FALSE_EDIT_ORDER, UPDATE_ORDER_NAME } from '../actions/orderActions';
 
 const initialState = {
   ordersArray: {
     orders: []
   },
-  edit: false
+  edit: false,
+  orderName: ''
 };
 
 const orderReducer = (state = initialState, action) => {
@@ -58,11 +59,11 @@ const orderReducer = (state = initialState, action) => {
         ...state,
         edit: false
       }
-
-    case CLEAR_ORDER_DATA:
+    case UPDATE_ORDER_NAME:
       return {
-        ...state
-      };
+        ...state,
+        orderName: action.payload
+      }
     default:
       return state;
   }

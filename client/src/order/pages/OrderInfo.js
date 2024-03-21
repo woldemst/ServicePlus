@@ -16,12 +16,11 @@ import axios from "axios";
 import { VALIDATOR_REQUIRE, VALIDATOR_SELECT } from "../../util/validators";
 import { setInitialSelectData, setSelect } from "../../actions/selectActions";
 import { setInitialInputData, setInput } from "../../actions/inputActions";
+import { toggleToFalseEditOrder } from "../../actions/orderActions";
+import { refershData } from "../../actions/utilActions";
 import SelectDropdown from "../../shared/UIElements/SelectDropdown";
 import Button from "../../shared/UIElements/Button";
-import Select from "../../shared/UIElements/Select";
 import Input from "../../shared/UIElements/Input";
-import { refershData } from "../../actions/utilActions";
-import { toggleToFalseEditOrder } from "../../actions/orderActions";
 
 const OrderInfo = (props) => {
   const [isLoaded, setIsLoaded] = useState(false)
@@ -37,6 +36,7 @@ const OrderInfo = (props) => {
   const order = fetchedArray.find(order => order._id == orderId)
   const edit = useSelector(state => state.order.edit);
 
+
   const [initialSelectState, setInitialSelectState] = useState({
     selects: {
       customer: [],
@@ -51,6 +51,9 @@ const OrderInfo = (props) => {
   })
 
   const initialInputState = {
+    name: {
+      value: order.name
+    },
     description: {
       value: order.description
     },
@@ -111,15 +114,17 @@ const OrderInfo = (props) => {
     // console.log("in options", fetchedSelectData.selects);
   }
 
+  
   const handleSubmit = async () => {
-
+    
+    // console.log('before api', fetchedInputData);
     // console.log('before API', fetchedSelectData.selectedOptions );
 
     const URL = `http://localhost:8000/api/orders/update/${orderId}`;
     try {
       const response = await axios.patch(URL, {
         firmId: auth.firmId,
-        // name: fetchedInputData.inputs.name.value,
+        name: fetchedInputData.inputs.name.value,
         worker: fetchedSelectData.selectedOptions.worker.value,
         customer: fetchedSelectData.selectedOptions.customer.value,
         contact: fetchedSelectData.selectedOptions.contact.value,
@@ -195,11 +200,11 @@ const OrderInfo = (props) => {
 
         <View style={styles.btnContainer}>
           {/* <Button
-          style={[styles.cancelBtn, styles.button]}
-          buttonText={styles.cancelBtnText}
-          onPress={() => props.toggle()}
-          title={'Abbrechen'}
-        /> */}
+            style={[styles.cancelBtn, styles.button]}
+            buttonText={styles.cancelBtnText}
+            onPress={() => props.toggle()}
+            title={'Abbrechen'}
+          /> */}
           {edit && (
             <Button
               style={[styles.editButton, styles.button]}

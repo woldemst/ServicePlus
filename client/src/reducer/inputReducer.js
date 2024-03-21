@@ -1,4 +1,4 @@
-import { SET_INPUT, SET_INITIAL_INPUT_DATA } from "../actions/inputActions";
+import { SET_INPUT, SET_INITIAL_INPUT_DATA, ADD_TO_INITIAL_DATA } from "../actions/inputActions";
 import { validate } from "../util/validators";
 
 const initial = {
@@ -12,6 +12,14 @@ const inputReducer = (state = initial, action) => {
       return {
         ...state,
         inputs: { ...action.payload },
+      }
+    case ADD_TO_INITIAL_DATA:
+      return {
+        ...state,
+        inputs: {
+          ...state.inputs,
+          ...action.payload
+        }
       }
     case SET_INPUT:
       const { fieldName, value, validators } = action.payload;

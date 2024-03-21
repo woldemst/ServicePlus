@@ -23,7 +23,7 @@ const Input = props => {
             id={props.id}
             value={inputValue}
             placeholder={props.placeholder}
-            style={[props.disabled && styles.disabled, !isValid ? styles.inputInvalid : styles.input]}
+            style={props.style ? props.style : [props.disabled && styles.disabled, !isValid ? styles.inputInvalid : styles.input]}
             onChangeText={(text) => handleChange(text)}
             autoCapitalize="none"
             multiline={props.multiline}
