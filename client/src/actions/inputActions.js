@@ -1,6 +1,8 @@
 export const SET_TOUCHED = 'SET_TOUCHED'
 export const SET_INPUT = 'SET_INPUT'
 export const SET_INITIAL_INPUT_DATA = 'SET_INITIAL_INPUT_DATA'
+export const ADD_TO_INITIAL_DATA = 'ADD_TO_INITIAL_DATA'
+
 
 export const setInput = (fieldName, value, validators, objectId = null, reducerKey = null) => {
   return {
@@ -20,4 +22,7 @@ export const setInitialInputData = data => ({
   payload: data
 })
 
-
+export const addToInitialData = data => ({
+  type: ADD_TO_INITIAL_DATA,
+  payload: data
+})

@@ -193,7 +193,7 @@ const updateOrderById = async (req, res, next) => {
   const orderId = req.params.orderId
 
   const {
-    // name,
+    name,
     email,
     customer,
     worker,
@@ -212,7 +212,7 @@ const updateOrderById = async (req, res, next) => {
       return next(error);
     }
 
-    // updateOrder.name = name,
+    updateOrder.name = name,
     updateOrder.email = email,
     // updateOrder.nextAppointment = nextAppointment,
     updateOrder.customer = customer,
