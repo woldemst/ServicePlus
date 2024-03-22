@@ -1,7 +1,16 @@
 import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native"
+import { useState } from "react";
 import AppointmentList from '../components/AppointmentList'
 
 const AppointmentView = () => {
+
+    const [isModalVisible, setModalVisible] = useState(false);
+
+
+    const toggleModal = () => {
+        setModalVisible(!isModalVisible)
+    }
+
     return (
         <View style={styles.appontmentContainer}>
             <View style={styles.header} >
@@ -11,7 +20,7 @@ const AppointmentView = () => {
                     </View>
 
                     <View style={styles.headerIconContainer} >
-                        <TouchableOpacity style={styles.headerButton} >
+                        <TouchableOpacity onPress={toggleModal} style={styles.headerButton} >
                             <Image style={styles.headerIcon} source={require('../../../assets/add_new.png')} />
                         </TouchableOpacity>
 
@@ -22,7 +31,7 @@ const AppointmentView = () => {
                 </View>
             </View>
             <View style={styles.content}>
-                <AppointmentList />
+                <AppointmentList toggle={isModalVisible} toggleModal={toggleModal} />
             </View>
         </View>
     )

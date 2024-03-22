@@ -20,7 +20,7 @@ const Input = props => {
 
 
     return <>
-        <View style={styles.inputContainer}>
+        <View style={props.thin && styles.inputContainer}>
             <TextInput
                 id={props.id}
                 value={inputValue}
