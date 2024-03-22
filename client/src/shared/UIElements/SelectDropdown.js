@@ -55,7 +55,7 @@ const SelectDropdown = props => {
 const styles = StyleSheet.create({
     select: {
         height: 50,
-        borderColor: 'gray',
+        borderColor: "#e0e0e0",
         borderWidth: 1,
         marginTop: 8,
         alignItems: 'center',
