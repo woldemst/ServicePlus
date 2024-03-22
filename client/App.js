@@ -22,6 +22,7 @@ import OverviewNavigator from './src/overview/pages/OverviewNavigator';
 import OrderMain from './src/order/pages/OrderMain';
 import OrderInfo from './src/order/pages/OrderInfo';
 import OrderAppointments from './src/order/pages/OrderAppointments';
+import AppointmentMain from './src/appointment/pages/AppointmentMain';
 
 
 export default function App() {
@@ -114,6 +115,11 @@ export default function App() {
           <Stack.Screen name='orderView' component={OrderView} />
           <Stack.Screen name='orderCreate' component={OrderCreate} options={{ title: 'Create order' }} />
           <Stack.Screen name='orderMain' component={OrderMain} options={{ headerShown: false }} />
+
+
+          {/* appointemts */}
+          <Stack.Screen name='appointmentMain' component={AppointmentMain} options={{ headerShown: false }} />
+
 
 
           {/* firm */}

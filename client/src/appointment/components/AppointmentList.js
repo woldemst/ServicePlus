@@ -1,11 +1,13 @@
 import { useEffect, useState } from 'react';
-import { View, StyleSheet, Image } from 'react-native';
+import { View, Text, StyleSheet, Image } from 'react-native';
 import axios from 'axios';
 
+import ModalComponent from '../../shared/UIElements/Modal';
 import AppointmentItem from './AppointmentItem';
 
-const AppointmentList = () => {
+const AppointmentList = props => {
     const [fetchedAppointments, setFetchedAppointments] = useState([])
+
 
     useEffect(() => {
         const fetchOrders = async () => {
@@ -32,9 +34,32 @@ const AppointmentList = () => {
 
         <>
             {fetchedAppointments.map(appointment => (
-                <AppointmentItem key={appointment._id} appointment={appointment} />
+                <AppointmentItem
+                    key={appointment._id}
+                    name={appointment.name}
+                    // customer={appointment.customer}
+                    creator={appointment.creator}
+                    worker={appointment.worker}
+                    date={appointment.date}
+                    status={appointment.status}
+                    contact={appointment.contact}
+                    description={appointment.description}
+                />
 
             ))}
+
+            <ModalComponent
+                isVisible={props.toggle}
+                animationIn="slideInUp" // Specify the slide-up animation
+                animationOut="slideOutDown" // Specify the slide-down animation
+                onBackdropPress={props.toggleModal}
+                onBackButtonPress={props.toggleModal}
+
+                header={<Text style={styles.modalHeadline}>Termin hinzufügen</Text>}
+            >
+                {/* <OrderCreate handleRefresh={handleRefresh} toggle={toggleModal} /> */}
+            </ModalComponent>
+
 
         </>
 

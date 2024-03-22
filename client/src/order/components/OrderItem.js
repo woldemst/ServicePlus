@@ -43,6 +43,8 @@ const OrderItem = (props) => {
             <Image style={styles.filePlusImg} source={require('../../../assets/file_plus.png')} />
         </View> */}
       </TouchableOpacity>
+
+      
     </>
   );
 };
