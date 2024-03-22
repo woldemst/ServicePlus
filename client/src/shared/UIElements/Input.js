@@ -1,4 +1,4 @@
-import { TextInput, StyleSheet, Text } from "react-native";
+import { TextInput, StyleSheet, Text, View } from "react-native";
 import { validate } from "../../util/validators";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -18,30 +18,37 @@ const Input = props => {
         dispatch(setInput(props.fieldName, val, props.validators, props.objectId, props.reducerKey));
     }
 
-    return <>
-        <TextInput
-            id={props.id}
-            value={inputValue}
-            placeholder={props.placeholder}
-            style={props.style ? props.style : [props.disabled && styles.disabled, !isValid ? styles.inputInvalid : styles.input]}
-            onChangeText={(text) => handleChange(text)}
-            autoCapitalize="none"
-            multiline={props.multiline}
-            numberOfLines={props.numberOfLines}
-            // onFocus={() => setTouched(true)}
-            // onBlur={onBlurHandler}
-            editable={!props.disabled}
-        />
 
-        {!isValid && <Text style={styles.errorText}>{props.errorText}</Text>}
+    return <>
+        <View style={styles.inputContainer}>
+            <TextInput
+                id={props.id}
+                value={inputValue}
+                placeholder={props.placeholder}
+                style={props.style ? props.style : [props.disabled && styles.disabled, !isValid ? styles.inputInvalid : styles.input, props.textArea && styles.textArea]}
+                onChangeText={(text) => handleChange(text)}
+                autoCapitalize="none"
+                multiline={props.multiline}
+                numberOfLines={props.numberOfLines}
+                // onFocus={() => setTouched(true)}
+                // onBlur={onBlurHandler}
+                editable={!props.disabled}
+            />
+
+            {!isValid && <Text style={props.thin ? styles.thin : styles.errorText}>{props.errorText}</Text>}
+        </View>
     </>
 }
 
 const styles = StyleSheet.create({
+    inputContainer: {
+        flex: 1
+
+    },
     input: {
         width: '100%',
         height: 50,
-        borderColor: 'gray',
+        borderColor: '#e0e0e0',
         borderWidth: 1,
         borderRadius: 4,
         marginTop: 14,
@@ -56,11 +63,37 @@ const styles = StyleSheet.create({
         marginTop: 14,
         padding: 7,
     },
+    textArea: {
+        height: 130, // Adjust the height as needed
+        borderColor: "#e0e0e0",
+        borderWidth: 1,
+        marginBottom: 30,
+        paddingTop: 7,
+        paddingBottom: 7,
+        paddingLeft: 7,
+        paddingRight: 7,
+        fontSize: 18,
+        borderRadius: 6,
+    },
+    placeholderText: {
+        // color: "#e0e0e0",
+        fontSize: 18, // Set the font size of the placeholder text
+    },
     errorText: {
         color: 'red'
     },
+    thin: {
+        color: 'red',
+        // position: 'absolute',
+        // flex: 1,
+        // width: '100%',
+        // bottom: 0,
+
+
+    },
     disabled: {
-        backgroundColor: '#eee'
+        backgroundColor: '#eee',
+
     }
 })
 

@@ -23,7 +23,7 @@ const OverviewNavigator = () => {
                 screenOptions={{
                     tabBarIndicator: () => null,
                     tabBarLabelStyle: { fontSize: 10 },
-                    tabBarStyle: { borderTopColor: '#eee', borderTopWidth: 1 },
+                    tabBarStyle: { borderTopColor: '#e0e0e0', borderTopWidth: 1 },
 
                 }}
 

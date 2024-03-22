@@ -114,9 +114,9 @@ const OrderInfo = (props) => {
     // console.log("in options", fetchedSelectData.selects);
   }
 
-  
+
   const handleSubmit = async () => {
-    
+
     // console.log('before api', fetchedInputData);
     // console.log('before API', fetchedSelectData.selectedOptions );
 
@@ -190,10 +190,11 @@ const OrderInfo = (props) => {
           reducerKey='order'
           fieldName='description'
           placeholder="Beschreibung"
-          style={[styles.textArea, styles.placeholderText]}
+          textArea={true}
           errorText='Geben Sie die Beschreibung des Auftrags ein'
           value={fetchedInputData.inputs.description.value}
           validators={[VALIDATOR_REQUIRE()]}
+          multiline={true}
           numberOfLines={4}
           disabled={!edit}
         />
@@ -225,38 +226,6 @@ const styles = StyleSheet.create({
     padding: 16,
     backgroundColor: '#fff',
     flex: 1
-  },
-  input: {
-    width: "100%",
-    height: 50,
-    borderColor: "gray",
-    borderWidth: 1,
-    marginBottom: 16,
-    padding: 7,
-    borderRadius: 6,
-    fontSize: 18,
-  },
-  select: {
-    margin: 15,
-    fontSize: 18,
-    borderRadius: 6,
-  },
-  textArea: {
-    width: "100%",
-    height: 130, // Adjust the height as needed
-    borderColor: "#e0e0e0",
-    borderWidth: 1,
-    marginBottom: 30,
-    paddingTop: 7,
-    paddingBottom: 7,
-    paddingLeft: 7,
-    paddingRight: 7,
-    fontSize: 18,
-    borderRadius: 6,
-  },
-  placeholderText: {
-    color: "gray",
-    fontSize: 18, // Set the font size of the placeholder text
   },
   label: {
     marginTop: 12,

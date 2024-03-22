@@ -55,18 +55,19 @@ const OrderMain = () => {
                     <TouchableOpacity onPress={() => goingBack()}>
                         <Ionicons name="arrow-back" size={24} color="green" />
                     </TouchableOpacity>
-                    {/* <Text style={styles.headerHeadline}> */}
-                    <Input
-                        id='orderName'
-                        reducerKey='order'
-                        fieldName='name'
-                        style={styles.inputName}
-                        errorText='Geben Sie den Namen des Auftrags ein'
-                        value={fetchedInputData.inputs.name.value}
-                        validators={[VALIDATOR_REQUIRE()]}
-                        disabled={!edit}
-                    />
-                    {/* </Text> */}
+                    <View style={styles.headerHeadline}>
+                        <Input
+                            id='orderName'
+                            reducerKey='order'
+                            fieldName='name'
+                            thin={true}
+                            style={styles.inputName}
+                            errorText='Geben Sie den Namen ein'
+                            value={fetchedInputData.inputs.name.value}
+                            validators={[VALIDATOR_REQUIRE()]}
+                            disabled={!edit}
+                        />
+                    </View>
                     <TouchableOpacity onPress={() => dispatch(toggleToTrueEditOrder())}>
                         <Image source={require('../../../assets/order/edit.png')} />
                     </TouchableOpacity>
@@ -76,7 +77,7 @@ const OrderMain = () => {
             <Tab.Navigator screenOptions={{
                 labelStyle: { fontSize: 14, textTransform: 'none' }, // Style for the tab labels
                 tabBarStyle: { paddingTop: 0, paddingBottom: 0, paddingHorizontal: 0 }, // Adjust padding here
-                tabBarIndicatorStyle: { backgroundColor: '#222' }, // Change the color of the indicator
+                tabBarIndicatorStyle: { backgroundColor: '#e0e0e0' }, // Change the color of the indicator
             }}
             >
                 <Tab.Screen
@@ -110,7 +111,6 @@ const OrderMain = () => {
         </>
     )
 }
-
 
 
 const styles = StyleSheet.create({
@@ -160,7 +160,8 @@ const styles = StyleSheet.create({
         backgroundColor: '#fff'
     },
     inputName: {
-
+        fontSize: 18,
+        flex: 1
     },
 })
 
