@@ -1,24 +1,24 @@
-import { useNavigation } from "@react-navigation/native";
 import { View, StyleSheet, Image, Text, TouchableOpacity } from "react-native";
+import { useNavigation } from "@react-navigation/native";
+import { useState } from "react";
+
+import ModalComponent from "../../shared/UIElements/Modal";
+import AppointmentInfo from "../pages/AppointmenrInfo";
+
 
 const AppointmentItem = (props) => {
-    const navigation = useNavigation()
+
+    const [isModalVisible, setModalVisible] = useState(false);
+
+
+    const toggleModal = () => {
+        setModalVisible(!isModalVisible)
+    }
+
+
     return (
         <>
-            <TouchableOpacity style={styles.container}
-                onPress={() => {
-                    navigation.navigate('appointmentMain', {
-                        id: props.id,
-                        name: props.name,
-                        description: props.description,
-                        worker: props.worker,
-                        customer: props.customer,
-                        contact: props.contact,
-                    })
-                }}
-            >
-
-
+            <TouchableOpacity style={styles.container} onPress={toggleModal} >
                 <View style={styles.indicator}></View>
 
                 <View style={styles.mainContent}>
@@ -37,6 +37,19 @@ const AppointmentItem = (props) => {
             </TouchableOpacity>
 
 
+            <ModalComponent
+                isVisible={isModalVisible}
+                animationIn="slideInUp" // Specify the slide-up animation
+                animationOut="slideOutDown" // Specify the slide-down animation
+                onBackdropPress={toggleModal}
+                onBackButtonPress={toggleModal}
+
+                header={<Text style={styles.modalHeadline}>Termin</Text>}
+            >
+
+                {/* <OrderCreate handleRefresh={handleRefresh} toggle={toggleModal} /> */}
+                <AppointmentInfo />
+            </ModalComponent>
         </>
     )
 }
@@ -96,4 +109,11 @@ const styles = StyleSheet.create({
 
 
 
-export default AppointmentItem; 
+export default AppointmentItem;
+
+// id: props.id,
+// name: props.name,
+// description: props.description,
+// worker: props.worker,
+// customer: props.customer,
+// contact: props.contact,
