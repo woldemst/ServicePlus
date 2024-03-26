@@ -43,7 +43,7 @@ const AppointmentItem = (props) => {
                 animationOut="slideOutDown" // Specify the slide-down animation
                 onBackdropPress={toggleModal}
                 onBackButtonPress={toggleModal}
-
+                modalHeight="60%"
                 header={<Text style={styles.modalHeadline}>Termin</Text>}
             >
 
@@ -102,6 +102,11 @@ const styles = StyleSheet.create({
         // borderWidth: 2
         // width: 24, 
         // height: 24,
+    },
+    modalHeadline: {
+        fontSize: 21,
+        color: "#7a9b76",
+        fontWeight: "700",
     },
 
 })

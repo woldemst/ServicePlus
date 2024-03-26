@@ -90,6 +90,11 @@ const styles = StyleSheet.create({
         marginTop: 0,
         marginBottom: 0
     },
+    modalHeadline: {
+        fontSize: 21,
+        color: "#7a9b76",
+        fontWeight: "700",
+    },
 })
 
 
