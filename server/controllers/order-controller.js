@@ -64,7 +64,7 @@ const createOrder = async (req, res, next) => {
     await createdOrder.save();
   } catch (err) {
     const error = new HttpError(
-      "Something went wrong, could not create order.",
+      "Something went wrong, could not create an order.",
       500
     );
     return next(error);
@@ -213,14 +213,14 @@ const updateOrderById = async (req, res, next) => {
     }
 
     updateOrder.name = name,
-    updateOrder.email = email,
-    // updateOrder.nextAppointment = nextAppointment,
-    updateOrder.customer = customer,
-    updateOrder.worker = worker,
-    updateOrder.contact = contact,
-    updateOrder.description = description,
+      updateOrder.email = email,
+      // updateOrder.nextAppointment = nextAppointment,
+      updateOrder.customer = customer,
+      updateOrder.worker = worker,
+      updateOrder.contact = contact,
+      updateOrder.description = description,
 
-    await updateOrder.save();
+      await updateOrder.save();
 
     res
       .status(200)
