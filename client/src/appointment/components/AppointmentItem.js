@@ -22,8 +22,11 @@ const AppointmentItem = (props) => {
                 <View style={styles.indicator}></View>
 
                 <View style={styles.mainContent}>
-                    <Text style={styles.date}>{props.date}</Text>
-                    <Text style={styles.date}>{props.startTime} - {props.finishTime}</Text>
+                    <View style={styles.dateTimeContainer}>
+                        <Text style={styles.date}>{props.date}</Text>
+                        <Text> / </Text>
+                        <Text style={styles.date}>{props.startTime} - {props.finishTime}</Text>
+                    </View>
 
                     <Text style={styles.workersName}>{props.worker}</Text>
 
@@ -107,6 +110,9 @@ const styles = StyleSheet.create({
         fontSize: 21,
         color: "#7a9b76",
         fontWeight: "700",
+    },
+    dateTimeContainer: {
+        flexDirection: 'row', 
     },
 
 })
