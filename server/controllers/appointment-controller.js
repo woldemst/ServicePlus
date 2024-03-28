@@ -1,5 +1,6 @@
 const HttpError = require("../models/http-error")
 const Appointment = require("../models/Appointment")
+const Customer = require('../models/Customer')
 
 const getAllAppointments = async (req, res, next) => {
     try {
@@ -58,6 +59,36 @@ const createAppointment = async (req, res, next) => {
     }
 }
 
+const getAllContactsAsOptionsByFirmId = async (req, res, next) => {
+    const firmId = req.params.firmId;
+    
+    try {
+      const contacts = await Customer.find({ firmId: firmId })
+  
+      if (!contacts || contacts.length === 0) {
+        const error = new HttpError(
+          'Could not find contacts for the provided firm id.',
+          404
+        );
+        return next(error);
+      }
+  
+      const contactList = contacts.map(contact => ({
+        id: contact._id,
+        name: contact.contact
+      }))
+  
+      res.json({ contacts: contactList })
+    } catch (err) {
+      const error = new HttpError(
+        'Fetching contacts failed, please try again later.',
+        500
+      );
+      return next(error);
+    }
+  }
+
 
 exports.getAllAppointments = getAllAppointments;
 exports.createAppointment = createAppointment;
+exports.getAllContactsAsOptionsByFirmId = getAllContactsAsOptionsByFirmId;
