@@ -18,6 +18,8 @@ import { setInitialSelectData } from "../../actions/selectActions";
 import SelectDropdown from "../../shared/UIElements/SelectDropdown";
 import { VALIDATOR_SELECT, VALIDATOR_REQUIRE } from "../../util/validators";
 import Input from "../../shared/UIElements/Input";
+import Button from "../../shared/UIElements/Button";
+import { refershData } from "../../actions/utilActions";
 
 const AppointmentCreate = props => {
     const dispatch = useDispatch()
@@ -36,10 +38,6 @@ const AppointmentCreate = props => {
     })
 
     const initialInputState = {
-        name: {
-            value: "",
-            isValid: false,
-        },
         description: {
             value: "",
             isValid: false,
@@ -74,7 +72,6 @@ const AppointmentCreate = props => {
 
     }, [])
 
-
     useEffect(() => {
         if (initialSelectState.selects.contact.length > 0) {
 
@@ -83,7 +80,6 @@ const AppointmentCreate = props => {
             setIsLoaded(true)
         }
     }, [initialSelectState.selects.contact])
-
 
     let workerOptions;
     let customerOptions;
@@ -105,85 +101,100 @@ const AppointmentCreate = props => {
         // console.log("in options", fetchedSelectData.selects);
     }
 
-    //   const handleSubmit = async () => {
+    const handleSubmit = async () => {
 
-    //     // console.log('before api', fetchedInputData);
-    //     // console.log('before API', fetchedSelectData.selectedOptions );
+        // console.log('before api', fetchedInputData);
+        // console.log('before API', fetchedSelectData.selectedOptions );
 
-    //     const URL = `http://localhost:8000/api/appointments/new`;
-    //     try {
-    //       const response = await axios.patch(URL, {
-    //         firmId: auth.firmId,
-    //         name: fetchedInputData.inputs.name.value,
-    //         worker: fetchedSelectData.selectedOptions.worker.value,
-    //         customer: fetchedSelectData.selectedOptions.customer.value,
-    //         contact: fetchedSelectData.selectedOptions.contact.value,
-    //         description: fetchedInputData.inputs.description.value,
-    //         // status: status,
-    //       });
-    //       dispatch(refershData())
-    //       dispatch(toggleToFalseEditOrder())
-    //       alert('Order updated successfuly')
-    //       // navigation.goBack()
-    //     } catch (err) {
-    //       alert("An error occurred while editing the order.");
-    //     }
-    //   };
+
+        const URL = `http://localhost:8000/api/appointments/new`;
+        try {
+            const response = await axios.post(URL, {
+                firmId: auth.firmId,
+                worker: fetchedSelectData.selectedOptions.worker.value,
+                customer: fetchedSelectData.selectedOptions.customer.value,
+                contact: fetchedSelectData.selectedOptions.contact.value,
+                description: fetchedInputData.inputs.description.value,
+                // status: status,
+            });
+            dispatch(refershData())
+            alert('Order updated successfuly')
+            // navigation.goBack()
+        } catch (err) {
+            alert("An error occurred while editing the order.");
+        }
+    };
 
 
     return isLoaded && (
         <View style={styles.container}>
-            <ScrollView showsVerticalScrollIndicator={false} >
-                <Text style={styles.label}>Kunde</Text>
-                <SelectDropdown
-                    id='appointmentCustomer'
-                    reducerKey='appointment'
-                    search={false}
-                    fieldName='customer'
-                    data={customerOptions}
-                    validators={[VALIDATOR_SELECT()]}
-                // initialSelectedValue={order.customer}
-                // disable={!edit}
+            <Text style={styles.label}>Kunde</Text>
+            <SelectDropdown
+                id='appointmentCustomer'
+                reducerKey='appointment'
+                search={false}
+                fieldName='customer'
+                data={customerOptions}
+                validators={[VALIDATOR_SELECT()]}
+            // initialSelectedValue={order.customer}
+            // disable={!edit}
+            />
+
+            <Text style={styles.label}>Mitarbeiter</Text>
+
+            <SelectDropdown
+                id='appointmentWorker'
+                reducerKey='appointment'
+                search={false}
+                fieldName='worker'
+                data={workerOptions}
+                validators={[VALIDATOR_SELECT()]}
+            />
+
+            <Text style={styles.label}>Ansprechspartner</Text>
+
+            <SelectDropdown
+                id='cappointmentCntact'
+                reducerKey='appointment'
+                search={false}
+                fieldName='contact'
+                data={contactOptions}
+                validators={[VALIDATOR_SELECT()]}
+            />
+
+            <Text style={styles.label}>Beschreibung</Text>
+
+            <Input
+                id='appointmentrDescr'
+                reducerKey='appointment'
+                fieldName='description'
+                placeholder="Beschreibung"
+                textArea={true}
+                errorText='Geben Sie die Beschreibung des Termins ein'
+                value={fetchedInputData.inputs.description.value}
+                validators={[VALIDATOR_REQUIRE()]}
+                multiline={true}
+                numberOfLines={4}
+            />
+
+
+            <View style={styles.btnContainer}>
+                <Button
+                    style={[styles.cancelBtn, styles.button]}
+                    buttonText={styles.cancelBtnText}
+                    onPress={() => props.toggleModal()}
+                    title={'Abbrechen'}
                 />
 
-                <Text style={styles.label}>Mitarbeiter</Text>
-
-                <SelectDropdown
-                    id='appointmentWorker'
-                    reducerKey='appointment'
-                    search={false}
-                    fieldName='worker'
-                    data={workerOptions}
-                    validators={[VALIDATOR_SELECT()]}
+                <Button
+                    style={[styles.createBtn, styles.button]}
+                    // style={fetchedData.isFormValid ? [styles.createBtn, styles.button] : styles.invalideButton}
+                    // disabled={!fetchedData.isFormValid}
+                    buttonText={styles.createBtnText}
+                    onPress={handleSubmit}
+                    title={'Anlegen'}
                 />
-
-                <Text style={styles.label}>Ansprechspartner</Text>
-
-                <SelectDropdown
-                    id='cappointmentCntact'
-                    reducerKey='appointment'
-                    search={false}
-                    fieldName='contact'
-                    data={contactOptions}
-                    validators={[VALIDATOR_SELECT()]}
-                />
-
-                <Text style={styles.label}>Beschreibung</Text>
-
-                <Input
-                    id='appointmentrDescr'
-                    reducerKey='appointment'
-                    fieldName='description'
-                    placeholder="Beschreibung"
-                    textArea={true}
-                    errorText='Geben Sie die Beschreibung des Termins ein'
-                    value={fetchedInputData.inputs.description.value}
-                    validators={[VALIDATOR_REQUIRE()]}
-                    multiline={true}
-                    numberOfLines={4}
-                />
-
-            </ScrollView>
+            </View>
         </View>
     )
 }
@@ -209,7 +220,7 @@ const styles = StyleSheet.create({
     button: {
         // height: 53,
         padding: 16,
-        width: '100%',
+        width: '45%',
         borderRadius: 5,
         justifyContent: "center",
         flexDirection: "row",
@@ -223,6 +234,14 @@ const styles = StyleSheet.create({
     cancelBtnText: {
         fontSize: 18,
         color: "#7A9B76",
+        fontWeight: "700",
+    },
+    createBtn: {
+        backgroundColor: "#7A9B76",
+    },
+    createBtnText: {
+        fontSize: 18,
+        color: "#fff",
         fontWeight: "700",
     },
     editButton: {
