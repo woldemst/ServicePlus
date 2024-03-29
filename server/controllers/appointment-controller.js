@@ -1,6 +1,7 @@
 const HttpError = require("../models/http-error")
 const Appointment = require("../models/Appointment")
 const Customer = require('../models/Customer')
+const Worker = require("../models/Worker")
 
 const getAllAppointments = async (req, res, next) => {
   try {
@@ -117,9 +118,40 @@ const getAllCustomersAsOptionsBiFirmId = async (req, res, next) => {
   }
 }
 
+const getAllWorkersAsOptionsByFirmId = async (req, res, next) => {
+  const firmId = req.params.firmId
+  try {
+    const workers = await Worker.find({ firmId: firmId });
+
+    if (!workers || workers.length === 0) {
+      const error = new HttpError(
+        'Could not find workers for the provided firm id.',
+        404
+      );
+      return next(error);
+    }
+
+    const workerList = workers.map(worker => ({
+      id: worker._id,
+      name: worker.name
+    }))
+    // res.json({
+    //   workers: workers.map(worker => worker.toObject({ getters: true })),
+    // });
+
+    res.json({ workers: workerList })
+  } catch (err) {
+    const error = new HttpError(
+      'Fetching workers failed, please try again later.',
+      500
+    );
+    return next(error);
+  }
+}
 
 
 exports.getAllAppointments = getAllAppointments;
 exports.createAppointment = createAppointment;
 exports.getAllContactsAsOptionsByFirmId = getAllContactsAsOptionsByFirmId;
 exports.getAllCustomersAsOptionsBiFirmId = getAllCustomersAsOptionsBiFirmId; 
+exports.getAllWorkersAsOptionsByFirmId = getAllWorkersAsOptionsByFirmId;
