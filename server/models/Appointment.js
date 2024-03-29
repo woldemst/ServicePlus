@@ -7,7 +7,7 @@ const appointmentSchema = new mongoose.Schema({
   order: { type: String },
   worker: { type: String },
   customer: { type: String },
-  name: { type: String },
+  // name: { type: String },
   // status: { type: String },
   date: { type: String },
   startTime: { type: String },
