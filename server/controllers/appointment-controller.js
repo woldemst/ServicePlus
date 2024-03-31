@@ -2,6 +2,7 @@ const HttpError = require("../models/http-error")
 const Appointment = require("../models/Appointment")
 const Customer = require('../models/Customer')
 const Worker = require("../models/Worker")
+const Order = require('../models/Order')
 
 const getAllAppointments = async (req, res, next) => {
   try {
@@ -23,7 +24,7 @@ const createAppointment = async (req, res, next) => {
     // creator,
     // status,
 
-    order,
+    orderId,
     worker,
     customer,
     name,
@@ -32,13 +33,14 @@ const createAppointment = async (req, res, next) => {
     finishTime,
     description,
   } = req.body;
+  
 
 
   const createdAppointment = new Appointment({
     // firmId: firmId,
     // creator: creator, // auth.userId in frontend 
     // status: status,
-    order: order,
+    orderId: orderId,
     worker: worker,
     customer: customer,
     name: name,
@@ -47,6 +49,14 @@ const createAppointment = async (req, res, next) => {
     finishTime: finishTime,
     description: description,
   });
+
+
+  await Order.updateOne(
+    { _id: orderId },
+    { $push: { appointments: createdAppointment._id } },
+  )
+
+  
   try {
     await createdAppointment.save()
     res.status(201).json({ appointment: createdAppointment.toObject({ getters: true }) }); // Send a response indicating success
@@ -148,10 +158,40 @@ const getAllWorkersAsOptionsByFirmId = async (req, res, next) => {
     return next(error);
   }
 }
+const getAllOrdersAsOptionsByFirmId = async (req, res, next) => {
+  const firmId = req.params.firmId
+  try {
+    const orders = await Order.find({ firmId: firmId });
 
+    if (!orders || orders.length === 0) {
+      const error = new HttpError(
+        'Could not find orders for the provided firm id.',
+        404
+      );
+      return next(error);
+    }
+
+    const orderList = orders.map(order => ({
+      id: order._id,
+      name: order.name
+    }))
+    // res.json({
+    //   workers: workers.map(worker => worker.toObject({ getters: true })),
+    // });
+
+    res.json({ orders: orderList })
+  } catch (err) {
+    const error = new HttpError(
+      'Fetching orders failed, please try again later.',
+      500
+    );
+    return next(error);
+  }
+}
 
 exports.getAllAppointments = getAllAppointments;
 exports.createAppointment = createAppointment;
 exports.getAllContactsAsOptionsByFirmId = getAllContactsAsOptionsByFirmId;
 exports.getAllCustomersAsOptionsBiFirmId = getAllCustomersAsOptionsBiFirmId; 
 exports.getAllWorkersAsOptionsByFirmId = getAllWorkersAsOptionsByFirmId;
+exports.getAllOrdersAsOptionsByFirmId = getAllOrdersAsOptionsByFirmId; 
