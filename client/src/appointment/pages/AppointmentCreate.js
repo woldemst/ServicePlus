@@ -34,7 +34,7 @@ const AppointmentCreate = props => {
             worker: [],
             contact: [],
             customer: [],
-            orders: []
+            order: []
         },
     })
 
@@ -51,6 +51,7 @@ const AppointmentCreate = props => {
                 const customerList = await axios.get(`http://localhost:8000/api/appointments/customer-options/${auth.firmId}`)
                 const workerList = await axios.get(`http://localhost:8000/api/appointments/worker-options/${auth.firmId}`)
                 const contactList = await axios.get(`http://localhost:8000/api/appointments/contact-options/${auth.firmId}`)
+                const orderList = await axios.get(`http://localhost:8000/api/appointments/order-options/${auth.firmId}`)
 
                 // console.log(contactList.data.contacts);
                 // console.log(customerList.data.customers);
@@ -62,6 +63,7 @@ const AppointmentCreate = props => {
                         customer: customerList.data.customers,
                         worker: workerList.data.workers,
                         contact: contactList.data.contacts,
+                        order: orderList.data.orders,
                     },
                 }))
 
@@ -85,6 +87,7 @@ const AppointmentCreate = props => {
     let workerOptions;
     let customerOptions;
     let contactOptions;
+    let orderOptions;
 
     if (isLoaded) {
         customerOptions = fetchedSelectData.selects.customer.map(customer => ({
@@ -99,21 +102,25 @@ const AppointmentCreate = props => {
             label: contact.name,
             value: contact.name
         }));
+        orderOptions = fetchedSelectData.selects.order.map(order => ({
+            id: order.id,
+            label: order.name,
+            value: order.name
+        }));
     }
 
     const handleSubmit = async () => {
 
         // console.log('before api', fetchedInputData);
-        // console.log('before API', fetchedSelectData.selectedOptions );
+        // console.log('before API', fetchedSelectData.selectedOptions.order.id );
 
 
         const URL = `http://localhost:8000/api/appointments/new`;
         try {
             const response = await axios.post(URL, {
                 firmId: auth.firmId,
+                orderId: fetchedSelectData.selectedOptions.order.id,
                 worker: fetchedSelectData.selectedOptions.worker.value,
-                customer: fetchedSelectData.selectedOptions.customer.value,
-                contact: fetchedSelectData.selectedOptions.contact.value,
                 description: fetchedInputData.inputs.description.value,
                 // status: status,
             });
@@ -128,16 +135,14 @@ const AppointmentCreate = props => {
 
     return isLoaded && (
         <View style={styles.container}>
-            <Text style={styles.label}>Kunde</Text>
+            <Text style={styles.label}>Order</Text>
             <SelectDropdown
-                id='appointmentCustomer'
+                id='appointmentOrder'
                 reducerKey='appointment'
                 search={false}
-                fieldName='customer'
-                data={customerOptions}
+                fieldName='order'
+                data={orderOptions}
                 validators={[VALIDATOR_SELECT()]}
-            // initialSelectedValue={order.customer}
-            // disable={!edit}
             />
 
             <Text style={styles.label}>Mitarbeiter</Text>
@@ -148,17 +153,6 @@ const AppointmentCreate = props => {
                 search={false}
                 fieldName='worker'
                 data={workerOptions}
-                validators={[VALIDATOR_SELECT()]}
-            />
-
-            <Text style={styles.label}>Ansprechspartner</Text>
-
-            <SelectDropdown
-                id='cappointmentCntact'
-                reducerKey='appointment'
-                search={false}
-                fieldName='contact'
-                data={contactOptions}
                 validators={[VALIDATOR_SELECT()]}
             />
 
@@ -176,7 +170,6 @@ const AppointmentCreate = props => {
                 multiline={true}
                 numberOfLines={4}
             />
-
 
             <View style={styles.btnContainer}>
                 <Button
