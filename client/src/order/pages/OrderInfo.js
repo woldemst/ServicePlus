@@ -218,7 +218,7 @@ const OrderInfo = (props) => {
       </ScrollView>
     </View>
 
-  );
+  )
 };
 
 const styles = StyleSheet.create({

@@ -33,7 +33,8 @@ const AppointmentCreate = props => {
         selects: {
             worker: [],
             contact: [],
-            customer: []
+            customer: [],
+            orders: []
         },
     })
 
@@ -98,7 +99,6 @@ const AppointmentCreate = props => {
             label: contact.name,
             value: contact.name
         }));
-        // console.log("in options", fetchedSelectData.selects);
     }
 
     const handleSubmit = async () => {

@@ -4,10 +4,12 @@ import axios from 'axios';
 
 import ModalComponent from '../../shared/UIElements/Modal';
 import AppointmentItem from './AppointmentItem';
+import AppointmentCreate from '../pages/AppointmentCreate';
+import { useSelector } from 'react-redux';
 
 const AppointmentList = props => {
     const [fetchedAppointments, setFetchedAppointments] = useState([])
-
+    const refresh = useSelector(state => state.util.refresh)
 
     useEffect(() => {
         const fetchOrders = async () => {
@@ -20,7 +22,7 @@ const AppointmentList = props => {
             }
         }
         fetchOrders()
-    }, [])
+    }, [refresh])
 
     if (fetchedAppointments.length === 0) {
         return (
@@ -41,6 +43,8 @@ const AppointmentList = props => {
                     creator={appointment.creator}
                     worker={appointment.worker}
                     date={appointment.date}
+                    startTime={appointment.startTime}
+                    finishTime={appointment.finishTime}
                     status={appointment.status}
                     contact={appointment.contact}
                     description={appointment.description}
@@ -57,6 +61,7 @@ const AppointmentList = props => {
 
                 header={<Text style={styles.modalHeadline}>Termin hinzufügen</Text>}
             >
+                <AppointmentCreate toggleModal={props.toggleModal} />
                 {/* <OrderCreate handleRefresh={handleRefresh} toggle={toggleModal} /> */}
             </ModalComponent>
 
