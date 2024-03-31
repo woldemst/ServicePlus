@@ -34,7 +34,7 @@ const createAppointment = async (req, res, next) => {
     description,
   } = req.body;
   
-
+  console.log(req.body);
 
   const createdAppointment = new Appointment({
     // firmId: firmId,
@@ -50,12 +50,10 @@ const createAppointment = async (req, res, next) => {
     description: description,
   });
 
-
   await Order.updateOne(
     { _id: orderId },
     { $push: { appointments: createdAppointment._id } },
   )
-
   
   try {
     await createdAppointment.save()
@@ -158,6 +156,7 @@ const getAllWorkersAsOptionsByFirmId = async (req, res, next) => {
     return next(error);
   }
 }
+
 const getAllOrdersAsOptionsByFirmId = async (req, res, next) => {
   const firmId = req.params.firmId
   try {
