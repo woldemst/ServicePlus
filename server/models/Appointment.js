@@ -1,10 +1,10 @@
 const mongoose = require("mongoose");
 
 const appointmentSchema = new mongoose.Schema({
-  // order: { type: mongoose.Types.ObjectId, required: false, ref: 'Order' }, //ref: establish connection between two schemas
+  orderId: { type: mongoose.Types.ObjectId, required: false, ref: 'Order' }, //ref: establish connection between two schemas
   // worker: { type: mongoose.Types.ObjectId, required: false, ref: 'Worker' }, //ref: establish connection between two schemas
   // customer: { type: mongoose.Types.ObjectId, required: false, ref: 'Customer' }, //ref: establish connection between two schemas
-  order: { type: String },
+  // order: { type: String },
   worker: { type: String },
   customer: { type: String },
   // name: { type: String },
