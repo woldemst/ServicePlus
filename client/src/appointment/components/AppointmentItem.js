@@ -3,7 +3,7 @@ import { useNavigation } from "@react-navigation/native";
 import { useState } from "react";
 
 import ModalComponent from "../../shared/UIElements/Modal";
-import AppointmentInfo from "../pages/AppointmenrInfo";
+import AppointmentInfo from "../pages/AppointmentInfo";
 
 
 const AppointmentItem = (props) => {
@@ -30,7 +30,11 @@ const AppointmentItem = (props) => {
 
                     <Text style={styles.workersName}>{props.worker}</Text>
 
-                    <Text style={styles.order}>{props.name}</Text>
+                    <View style={styles.orderDetails}>
+                        <Text style={styles.order}>1{props.orderName}</Text>
+                        <Text> / </Text>
+                        <Text style={styles.order}>1{props.orderAddress}</Text>
+                    </View>
 
                 </View>
 
@@ -112,8 +116,12 @@ const styles = StyleSheet.create({
         fontWeight: "700",
     },
     dateTimeContainer: {
-        flexDirection: 'row', 
+        flexDirection: 'row',
     },
+    orderDetails: {
+        flexDirection: 'row',
+
+    }
 
 })
 

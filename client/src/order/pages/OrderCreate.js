@@ -9,9 +9,9 @@ import {
 import { useNavigation } from "@react-navigation/native";
 import { useContext, useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { AuthContext } from "../../context/auth-context";
 import axios from "axios";
 
+import { AuthContext } from "../../context/auth-context";
 import { VALIDATOR_REQUIRE, VALIDATOR_SELECT } from "../../util/validators";
 import { updateField, clearOrderData } from "../../actions/orderActions";
 import { setInitialInputData, setInput } from "../../actions/inputActions";
