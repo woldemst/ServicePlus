@@ -73,7 +73,7 @@ const OrderCreate = (props) => {
     }
 
     fetchedData()
-  }, [])
+  }, [])  
 
   useEffect(() => {
     if (initialSelectState.selects.contact.length > 0) {
@@ -91,6 +91,7 @@ const OrderCreate = (props) => {
 
   if (isLoaded) {
     customerOptions = fetchedSelectData.selects.customer.map(customer => ({
+      id: customer.id,
       label: customer.name,
       value: customer.name
     }));
@@ -102,18 +103,19 @@ const OrderCreate = (props) => {
       label: contact.name,
       value: contact.name
     }));
-    // console.log("in options", fetchedSelectData.selects);
+    // console.log("in options", customerOptions);
   }
 
   const handleSubmit = async () => {
     const URL = `http://localhost:8000/api/orders/${auth.firmId}/new`;
 
+    // console.log('before api', fetchedSelectData.selectedOptions.customer.id);
     try {
       const response = await axios.post(URL, {
         firmId: auth.firmId,
         name: fetchedInputData.inputs.name.value,
         worker: fetchedSelectData.selectedOptions.worker.value,
-        customer: fetchedSelectData.selectedOptions.customer.value,
+        customerId: fetchedSelectData.selectedOptions.customer.id,
         contact: fetchedSelectData.selectedOptions.contact.value,
         description: fetchedInputData.inputs.description.value,
         // status: status,

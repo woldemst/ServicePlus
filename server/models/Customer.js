@@ -2,6 +2,7 @@ const mongoose = require("mongoose");
 
 const customerSchema = new mongoose.Schema({
   firmId: { type: mongoose.Types.ObjectId, ref: 'Firm'}, //ref: establish connection between two schemas
+  orders: [{type: mongoose.Types.ObjectId, required: false, ref: 'Order'}],
   name: { type: String, required: true },
   email: { type: String, required: true },
   // customerNr: { type: String, required: false },
@@ -16,7 +17,7 @@ const customerSchema = new mongoose.Schema({
   nextAppointment: { type: String, required: false },
   website: { type: String, required: false },
   description: { type: String, required: false },
-  // orders: { type: Array, required: false },
+
 
   // creator: { type: mongoose.Types.ObjectId, required: true, ref: 'Customer'}, //ref: establish connection between two schemas
   

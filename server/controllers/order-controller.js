@@ -36,7 +36,7 @@ const createOrder = async (req, res, next) => {
     creator,
     worker,
     date,
-    customer,
+    customerId,
     status,
     contact,
     description,
@@ -50,7 +50,7 @@ const createOrder = async (req, res, next) => {
     // date: date,
     // status: status,
     worker: worker,
-    customer: customer,
+    customerId: customerId,
     contact: contact,
     description: description,
   });
@@ -60,6 +60,11 @@ const createOrder = async (req, res, next) => {
     { $push: { orders: createdOrder._id } },
   )
 
+  await Customer.updateOne(
+    { _id: customerId},
+    { $push: { orders: createdOrder._id } },
+
+  )
   try {
     await createdOrder.save();
   } catch (err) {
