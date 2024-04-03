@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, Image } from 'react-native';
+import { View, Text, StyleSheet, Image, ScrollView} from 'react-native';
 import axios from 'axios';
 
 import ModalComponent from '../../shared/UIElements/Modal';
@@ -35,25 +35,33 @@ const AppointmentList = props => {
     return (
 
         <>
-            {fetchedAppointments.map(appointment => (
-                <AppointmentItem
-                    key={appointment._id}
-                    name={appointment.name}
-                    // customer={appointment.customer}
-                    creator={appointment.creator}
-                    worker={appointment.worker}
-                    date={appointment.date}
-                    startTime={appointment.startTime}
-                    finishTime={appointment.finishTime}
-                    status={appointment.status}
-                    contact={appointment.contact}
-                    description={appointment.description}
-                />
+            <ScrollView showsVerticalScrollIndicator={false}>
+                {fetchedAppointments.map(appointment => (
+                    <AppointmentItem
+                        key={appointment._id}
+                        name={appointment.name}
+                        // customer={appointment.customer}
+                        creator={appointment.creator}
+                        worker={appointment.worker}
+                        date={appointment.date}
+                        startTime={appointment.startTime}
+                        finishTime={appointment.finishTime}
+                        status={appointment.status}
+                        contact={appointment.contact}
+                        description={appointment.description}
+                        // orderData={appointment.orderData}
+                        c_street={appointment.c_street}
+                        c_houseNr={appointment.c_houseNr}
+                        c_zip={appointment.c_zip}
+                        c_place={appointment.c_place}
+                        o_name={appointment.o_name}
+                    />
+                ))}
+            </ScrollView>
 
-            ))}
 
             <ModalComponent
-                isVisible={props.toggle}
+                isVisible={props.isModalVisible}
                 animationIn="slideInUp" // Specify the slide-up animation
                 animationOut="slideOutDown" // Specify the slide-down animation
                 onBackdropPress={props.toggleModal}
