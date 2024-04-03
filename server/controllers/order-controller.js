@@ -38,7 +38,6 @@ const createOrder = async (req, res, next) => {
     date,
     customerId,
     status,
-    contact,
     description,
   } = req.body;
 
@@ -50,18 +49,16 @@ const createOrder = async (req, res, next) => {
   const createdOrder = new Order({
     firmId: firmId,
     name: name,
+    worker: worker,
     // creator: creator, // auth.userId in frontend 
-    // worker: worker,
     // date: date,
     // status: status,
-    worker: worker,
     customerId: customerId,
     c_street: customerItem.street, 
     c_houseNr: customerItem.houseNr, 
     c_zip: customerItem.zip, 
     c_place: customerItem.place, 
     c_name: customerItem.name,
-    contact: contact,
     description: description,
   });
 

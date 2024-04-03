@@ -7,6 +7,7 @@ const Order = require('../models/Order')
 const getAllAppointments = async (req, res, next) => {
   try {
     const appointments = await Appointment.find()
+
     res.json(appointments)
   } catch (err) {
     const error = new HttpError(
@@ -18,46 +19,63 @@ const getAllAppointments = async (req, res, next) => {
 }
 
 const createAppointment = async (req, res, next) => {
-
-  const {
-    // firmId,
-    // creator,
-    // status,
-
-    orderId,
-    worker,
-    customer,
-    name,
-    date,
-    startTime,
-    finishTime,
-    description,
-  } = req.body;
-  
-  console.log(req.body);
-
-  const createdAppointment = new Appointment({
-    // firmId: firmId,
-    // creator: creator, // auth.userId in frontend 
-    // status: status,
-    orderId: orderId,
-    worker: worker,
-    customer: customer,
-    name: name,
-    date: date,
-    startTime: startTime,
-    finishTime: finishTime,
-    description: description,
-  });
-
-  await Order.updateOne(
-    { _id: orderId },
-    { $push: { appointments: createdAppointment._id } },
-  )
-  
   try {
+    const {
+      // firmId,
+      // creator,
+      // status,
+
+      orderId,
+      worker,
+      customer,
+      name,
+      date,
+      startTime,
+      finishTime,
+      description,
+    } = req.body;
+
+    const customerItem = await Customer.findOne({ orders: { $in: [orderId] } });
+    const orderItem = await Order.findOne({ _id: orderId });
+
+
+
+
+    // const customerData = customerItem[0]
+
+    // console.log('order item ', orderItem);
+    console.log('customer item ', customerItem);
+
+    const createdAppointment = new Appointment({
+      // firmId: firmId,
+      // creator: creator, // auth.userId in frontend 
+      // status: status,    
+      c_street: customerItem.street, 
+      c_houseNr: customerItem.houseNr,
+      c_zip: customerItem.zip,
+      c_place: customerItem.place,
+      o_name: orderItem.name,
+
+      orderId: orderId,
+      worker: worker,
+      customer: customer,
+      name: name,
+      date: date,
+      startTime: startTime,
+      finishTime: finishTime,
+      description: description,
+    });
+
     await createdAppointment.save()
-    res.status(201).json({ appointment: createdAppointment.toObject({ getters: true }) }); // Send a response indicating success
+
+    await Order.updateOne(
+      { _id: orderId },
+      { $push: { appointments: createdAppointment._id } },
+    )
+
+    res.status(201).json({
+      appointment: createdAppointment.toObject({ getters: true }),
+    });
 
   } catch (err) {
     const error = new HttpError(
@@ -191,6 +209,6 @@ const getAllOrdersAsOptionsByFirmId = async (req, res, next) => {
 exports.getAllAppointments = getAllAppointments;
 exports.createAppointment = createAppointment;
 exports.getAllContactsAsOptionsByFirmId = getAllContactsAsOptionsByFirmId;
-exports.getAllCustomersAsOptionsBiFirmId = getAllCustomersAsOptionsBiFirmId; 
+exports.getAllCustomersAsOptionsBiFirmId = getAllCustomersAsOptionsBiFirmId;
 exports.getAllWorkersAsOptionsByFirmId = getAllWorkersAsOptionsByFirmId;
 exports.getAllOrdersAsOptionsByFirmId = getAllOrdersAsOptionsByFirmId; 
