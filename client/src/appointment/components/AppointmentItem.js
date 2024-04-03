@@ -31,10 +31,19 @@ const AppointmentItem = (props) => {
                     <Text style={styles.workersName}>{props.worker}</Text>
 
                     <View style={styles.orderDetails}>
-                        <Text style={styles.order}>1{props.orderName}</Text>
-                        <Text> / </Text>
-                        <Text style={styles.order}>1{props.orderAddress}</Text>
+                        <Text style={styles.orderName}>{props.o_name}</Text>
+                        <Text> - </Text>
+                        <View style={styles.adressContainer}>
+                        <Text style={styles.adressItem}>{props.c_street}</Text>
+                        <Text style={styles.adressItem}>{props.c_houseNr}</Text>
+                        <Text style={styles.adressItem}>{props.c_zip}</Text>
+                        <Text style={styles.adressItem}>{props.c_place}</Text>
+
                     </View>
+                    </View>
+
+                
+
 
                 </View>
 
@@ -121,7 +130,16 @@ const styles = StyleSheet.create({
     orderDetails: {
         flexDirection: 'row',
 
-    }
+    },
+    adressContainer: {
+        flexDirection: "row",
+    },
+    adressItem: {
+        marginRight: 5
+    },
+    orderName: {
+        marginRight: 5
+    },
 
 })
 
