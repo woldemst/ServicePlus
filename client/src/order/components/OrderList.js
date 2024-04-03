@@ -16,21 +16,23 @@ const OrderList = (props) => {
 
     const fetchedData = useSelector((state) => state.order.ordersArray);
     // console.log(isLoaded);
-    // console.log(fetchedData.orders.length);
+    console.log(fetchedData.orders);
     return (
         <View style={styles.orderList}>
             {!isLoaded ? (
                 <ActivityIndicator style={styles.loader} size="large" color="#7A9B76" />
             ) : (
                 <ScrollView style={styles.scroll} showsVerticalScrollIndicator={false}>
-
                     {fetchedData.orders.map((order) => (
                         <OrderItem
                             id={order._id}
                             key={order._id}
                             name={order.name}
-                            customer={order.customer}
-                            address={order.address}
+                            c_street={order.c_street}
+                            c_houseNr={order.c_houseNr}
+                            c_zip={order.c_zip}
+                            c_place={order.c_place}
+                            c_name={order.c_name}
                             creator={order.creator}
                             worker={order.worker}
                             date={order.date}

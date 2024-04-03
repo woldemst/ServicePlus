@@ -42,6 +42,11 @@ const createOrder = async (req, res, next) => {
     description,
   } = req.body;
 
+
+  const customerItem = await Customer.findOne({ _id: customerId});
+
+  // console.log('customer item', customerItem);
+
   const createdOrder = new Order({
     firmId: firmId,
     name: name,
@@ -51,9 +56,15 @@ const createOrder = async (req, res, next) => {
     // status: status,
     worker: worker,
     customerId: customerId,
+    c_street: customerItem.street, 
+    c_houseNr: customerItem.houseNr, 
+    c_zip: customerItem.zip, 
+    c_place: customerItem.place, 
+    c_name: customerItem.name,
     contact: contact,
     description: description,
   });
+
 
   await Firm.updateOne(
     { _id: firmId },
