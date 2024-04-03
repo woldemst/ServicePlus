@@ -2,8 +2,8 @@ const mongoose = require("mongoose");
 
 const customerSchema = new mongoose.Schema({
   firmId: { type: mongoose.Types.ObjectId, ref: 'Firm'}, //ref: establish connection between two schemas
-  orders: [{type: mongoose.Types.ObjectId, required: false, ref: 'Order'}],
   name: { type: String, required: true },
+  orders: [{type: mongoose.Types.ObjectId, required: false, ref: 'Order'}],
   email: { type: String, required: true },
   // customerNr: { type: String, required: false },
   organisation: { type: String, required: false },

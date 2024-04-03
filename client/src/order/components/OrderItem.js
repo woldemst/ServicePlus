@@ -33,10 +33,14 @@ const OrderItem = (props) => {
           </View>
 
           <View style={styles.adressContainer}>
-            <Text style={styles.workersName}>{props.address}</Text>
+            <Text style={styles.adressItem}>{props.c_street}</Text>
+            <Text style={styles.adressItem}>{props.c_houseNr}</Text>
+            <Text style={styles.adressItem}>{props.c_zip}</Text>
+            <Text style={styles.adressItem}>{props.c_place}</Text>
+
           </View>
 
-          <Text style={styles.workersName}>{props.customer}</Text>
+          <Text style={styles.customerName}>{props.c_name}</Text>
         </View>
 
         {/* <View style={styles.iconContainer}>
@@ -84,12 +88,15 @@ const styles = StyleSheet.create({
   adressContainer: {
     flexDirection: "row",
   },
+  adressItem: {
+    marginRight: 5
+  },
   date: {
     fontSize: 14,
     color: "#171717",
     fontWeight: "700",
   },
-  workersName: {
+  customerName: {
     fontSize: 14,
     marginTop: 6,
   },
