@@ -30,8 +30,7 @@ const createAppointment = async (req, res, next) => {
       customer,
       name,
       date,
-      startTime,
-      finishTime,
+      time,
       description,
     } = req.body;
 
@@ -61,8 +60,7 @@ const createAppointment = async (req, res, next) => {
       customer: customer,
       name: name,
       date: date,
-      startTime: startTime,
-      finishTime: finishTime,
+      time: time,
       description: description,
     });
 

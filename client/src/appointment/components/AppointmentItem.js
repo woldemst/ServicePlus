@@ -2,6 +2,7 @@ import { View, StyleSheet, Image, Text, TouchableOpacity } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { useState } from "react";
 
+
 import ModalComponent from "../../shared/UIElements/Modal";
 import AppointmentInfo from "../pages/AppointmentInfo";
 
@@ -16,6 +17,7 @@ const AppointmentItem = (props) => {
     }
 
 
+
     return (
         <>
             <TouchableOpacity style={styles.container} onPress={toggleModal} >
@@ -25,7 +27,7 @@ const AppointmentItem = (props) => {
                     <View style={styles.dateTimeContainer}>
                         <Text style={styles.date}>{props.date}</Text>
                         <Text> / </Text>
-                        <Text style={styles.date}>{props.startTime} - {props.finishTime}</Text>
+                        <Text style={styles.date}>{props.time}</Text>
                     </View>
 
                     <Text style={styles.workersName}>{props.worker}</Text>
@@ -34,15 +36,15 @@ const AppointmentItem = (props) => {
                         <Text style={styles.orderName}>{props.o_name}</Text>
                         <Text> - </Text>
                         <View style={styles.adressContainer}>
-                        <Text style={styles.adressItem}>{props.c_street}</Text>
-                        <Text style={styles.adressItem}>{props.c_houseNr}</Text>
-                        <Text style={styles.adressItem}>{props.c_zip}</Text>
-                        <Text style={styles.adressItem}>{props.c_place}</Text>
+                            <Text style={styles.adressItem}>{props.c_street}</Text>
+                            <Text style={styles.adressItem}>{props.c_houseNr}</Text>
+                            <Text style={styles.adressItem}>{props.c_zip}</Text>
+                            <Text style={styles.adressItem}>{props.c_place}</Text>
 
-                    </View>
+                        </View>
                     </View>
 
-                
+
 
 
                 </View>
