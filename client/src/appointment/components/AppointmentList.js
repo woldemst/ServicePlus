@@ -44,8 +44,7 @@ const AppointmentList = props => {
                         creator={appointment.creator}
                         worker={appointment.worker}
                         date={appointment.date}
-                        startTime={appointment.startTime}
-                        finishTime={appointment.finishTime}
+                        time={appointment.time}
                         status={appointment.status}
                         contact={appointment.contact}
                         description={appointment.description}

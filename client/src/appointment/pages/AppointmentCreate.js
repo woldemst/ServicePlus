@@ -11,6 +11,8 @@ import { useNavigation } from "@react-navigation/native";
 import { useContext, useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
+import DateTimePicker from '@react-native-community/datetimepicker';
+import DatePicker from 'react-native-date-picker'
 
 import { AuthContext } from "../../context/auth-context";
 import { setInitialInputData } from "../../actions/inputActions";
@@ -28,6 +30,25 @@ const AppointmentCreate = props => {
 
     const fetchedSelectData = useSelector(state => state.select)
     const fetchedInputData = useSelector(state => state.input)
+
+    const [date, setDate] = useState(new Date());
+    const [selectedDateOnly, setSelectedDateOnly] = useState('');
+    const [selectedTimeOnly, setSelectedTimeOnly] = useState('');
+
+    const onChange = (event, selectedDate) => {
+        const currentDate = selectedDate || date;
+        setDate(currentDate);
+
+
+        // Extract date and time components
+        const selectedDateTime = new Date(currentDate);
+        const dateOnly = selectedDateTime.toISOString().split('T')[0];
+        const timeOnly = selectedDateTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    
+        setSelectedDateOnly(dateOnly);
+        setSelectedTimeOnly(timeOnly);
+    
+    };
 
     const [initialSelectState, setInitialSelectState] = useState({
         selects: {
@@ -90,10 +111,11 @@ const AppointmentCreate = props => {
     let orderOptions;
 
     if (isLoaded) {
-        customerOptions = fetchedSelectData.selects.customer.map(customer => ({
-            label: customer.name,
-            value: customer.name
-        }));
+        // customerOptions = fetchedSelectData.selects.customer.map(customer => ({
+        //     id: customer.id,
+        //     label: customer.name,
+        //     value: customer.name
+        // }));
         workerOptions = fetchedSelectData.selects.worker.map(worker => ({
             label: worker.name,
             value: worker.name
@@ -122,9 +144,14 @@ const AppointmentCreate = props => {
                 orderId: fetchedSelectData.selectedOptions.order.id,
                 worker: fetchedSelectData.selectedOptions.worker.value,
                 description: fetchedInputData.inputs.description.value,
+                date: selectedDateOnly,
+                time: selectedTimeOnly
                 // status: status,
+
             });
             dispatch(refershData())
+            props.toggleModal()
+
             alert('Order updated successfuly')
             // navigation.goBack()
         } catch (err) {
@@ -135,6 +162,22 @@ const AppointmentCreate = props => {
 
     return isLoaded && (
         <View style={styles.container}>
+
+            <Text style={styles.label}>Datum und Uhrzeit</Text>
+
+            <View style={styles.dataTimeContainer}>
+                <DateTimePicker
+                    testID="dateTimePicker"
+                    value={date}
+                    mode="datetime"
+                    is24Hour={true}
+                    display="default"
+                    onChange={onChange}
+                // style={styles.picker}
+                />
+
+            </View>
+
             <Text style={styles.label}>Order</Text>
             <SelectDropdown
                 id='appointmentOrder'
@@ -257,6 +300,20 @@ const styles = StyleSheet.create({
     },
     loader: {
         flex: 1,
+    },
+    dataTimeContainer: {
+        // borderWidth: 2,
+        // borderColor: '#eee',
+        borderRadius: 5,
+        flexDirection: "row",
+        justifyContent: "flex-start",
+        // paddingTop: 4,
+        // paddingBottom: 4
+    },
+    picker: {
+        borderColor: "red",
+        borderWidth: 2,
+
     },
 });
 

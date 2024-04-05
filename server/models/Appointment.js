@@ -15,8 +15,7 @@ const appointmentSchema = new mongoose.Schema({
   c_place: { type: String },
   o_name: { type: String },
   date: { type: String },
-  startTime: { type: String },
-  finishTime: { type: String },
+  time: { type: String },
   description: { type: String },
 
 });
