@@ -52,12 +52,7 @@ const styles = StyleSheet.create({
     scroll: {
         // flex: 1,
     },
-    orderList: {
-        // paddingTop: 32,
-        // paddingBottom: 32,
-        // paddingLeft: 16,
-        // paddingRight: 16
-    },
+
     loader: {
         flex: 1,
     },
