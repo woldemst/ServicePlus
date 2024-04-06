@@ -5,10 +5,20 @@ const Worker = require("../models/Worker")
 const Order = require('../models/Order')
 
 const getAllAppointments = async (req, res, next) => {
-  try {
-    const appointments = await Appointment.find()
+  const firmId = req.params.firmId;
 
-    res.json(appointments)
+  try {
+    const appointments = await Appointment.find({ firmId: firmId });
+
+    if (!appointments || appointments.length === 0) {
+      const error = new HttpError(
+        'Could not find appointments for the provided firm id.',
+        404
+      );
+      return next(error);
+    }
+    res.json({ appointments: appointments.map(appointment => appointment.toObject({ getters: true })) })
+
   } catch (err) {
     const error = new HttpError(
       "Fetch the appointments failed, please try again later.",
@@ -24,7 +34,7 @@ const createAppointment = async (req, res, next) => {
       // firmId,
       // creator,
       // status,
-
+      firmId,
       orderId,
       worker,
       customer,
@@ -38,23 +48,16 @@ const createAppointment = async (req, res, next) => {
     const orderItem = await Order.findOne({ _id: orderId });
 
 
-
-
     // const customerData = customerItem[0]
 
     // console.log('order item ', orderItem);
-    console.log('customer item ', customerItem);
+    // console.log('customer item ', customerItem);
 
     const createdAppointment = new Appointment({
-      // firmId: firmId,
       // creator: creator, // auth.userId in frontend 
       // status: status,    
-      c_street: customerItem.street, 
-      c_houseNr: customerItem.houseNr,
-      c_zip: customerItem.zip,
-      c_place: customerItem.place,
-      o_name: orderItem.name,
 
+      firmId: firmId,
       orderId: orderId,
       worker: worker,
       customer: customer,
@@ -62,6 +65,14 @@ const createAppointment = async (req, res, next) => {
       date: date,
       time: time,
       description: description,
+      
+      c_street: customerItem.street, 
+      c_houseNr: customerItem.houseNr,
+      c_zip: customerItem.zip,
+      c_place: customerItem.place,
+      o_name: orderItem.name,
+
+
     });
 
     await createdAppointment.save()

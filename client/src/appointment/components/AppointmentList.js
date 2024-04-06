@@ -1,30 +1,44 @@
-import { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, Image, ScrollView} from 'react-native';
+import { useContext, useEffect, useState } from 'react';
+import { View, Text, StyleSheet, Image, ScrollView, ActivityIndicator } from 'react-native';
 import axios from 'axios';
 
 import ModalComponent from '../../shared/UIElements/Modal';
 import AppointmentItem from './AppointmentItem';
 import AppointmentCreate from '../pages/AppointmentCreate';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { getAppointments } from '../../actions/appointmentActions';
+import { AuthContext } from '../../context/auth-context';
 
 const AppointmentList = props => {
-    const [fetchedAppointments, setFetchedAppointments] = useState([])
+    const dispatch = useDispatch()
+    const fetchedData = useSelector(state => state.appointment.appointmentsArray)
+
+    const [isLoaded, setIsLoaded] = useState(false)
     const refresh = useSelector(state => state.util.refresh)
+
+
+    // const appointmentArr = useSelector(state => state.appointment.appointmentsArray.appointments)
+    // const appointment = appointmentArr.find(appointment => appointment._id == appointmentId)
+
+
+    const auth = useContext(AuthContext)
 
     useEffect(() => {
         const fetchOrders = async () => {
             try {
-                const response = await axios.get('http://localhost:8000/api/appointments/all')
-                setFetchedAppointments(response.data)
+                const response = await axios.get(`http://localhost:8000/api/appointments/${auth.firmId}/all`)
+                dispatch(getAppointments(response.data))
+                setIsLoaded(true)
 
             } catch (err) {
+                setIsLoaded(true)
                 console.log("Error fetching appointments", err);
             }
         }
         fetchOrders()
     }, [refresh])
 
-    if (fetchedAppointments.length === 0) {
+    if (fetchedData.appointments.length === 0) {
         return (
             <View style={styles.imgContainer}>
                 <Image style={styles.bannerImg} source={require('../../../assets/empty_folder.png')} />
@@ -32,11 +46,12 @@ const AppointmentList = props => {
         )
     }
 
-    return (
-
+    return !isLoaded ? (
+        <ActivityIndicator style={styles.loader} size="large" color="#7A9B76" />
+    ) : (
         <>
             <ScrollView showsVerticalScrollIndicator={false}>
-                {fetchedAppointments.map(appointment => (
+                {fetchedData.appointments.map(appointment => (
                     <AppointmentItem
                         key={appointment._id}
                         name={appointment.name}
@@ -58,8 +73,7 @@ const AppointmentList = props => {
                 ))}
             </ScrollView>
 
-
-            <ModalComponent
+            < ModalComponent
                 isVisible={props.isModalVisible}
                 animationIn="slideInUp" // Specify the slide-up animation
                 animationOut="slideOutDown" // Specify the slide-down animation
@@ -70,7 +84,7 @@ const AppointmentList = props => {
             >
                 <AppointmentCreate toggleModal={props.toggleModal} />
                 {/* <OrderCreate handleRefresh={handleRefresh} toggle={toggleModal} /> */}
-            </ModalComponent>
+            </ModalComponent >
 
 
         </>

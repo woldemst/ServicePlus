@@ -15,6 +15,7 @@ const firmSchema = new mongoose.Schema({
   customers: [{type: mongoose.Types.ObjectId, required: false, ref: 'Customer'}],
   workers: [{type: mongoose.Types.ObjectId, required: false, ref: 'Worker'}],
   orders: [{type: mongoose.Types.ObjectId, required: false, ref: 'Order'}],
+  appointments: [{type: mongoose.Types.ObjectId, required: false, ref: 'Appointment'}],
 });
 
 module.exports = mongoose.model("Firm", firmSchema);
