@@ -116,7 +116,7 @@ const OrderCreate = (props) => {
         name: fetchedInputData.inputs.name.value,
         worker: fetchedSelectData.selectedOptions.worker.value,
         customerId: fetchedSelectData.selectedOptions.customer.id,
-        contact: fetchedSelectData.selectedOptions.contact.value,
+        // contact: fetchedSelectData.selectedOptions.contact.value,
         description: fetchedInputData.inputs.description.value,
         // status: status,
       });
@@ -168,7 +168,7 @@ const OrderCreate = (props) => {
         validators={[VALIDATOR_SELECT()]}
         placeholder='Auswählen'
       />
-
+{/* 
       <Text style={styles.label}>Ansprechspartner</Text>
 
 
@@ -181,7 +181,7 @@ const OrderCreate = (props) => {
         validators={[VALIDATOR_SELECT()]}
         placeholder='Auswählen'
 
-      />
+      /> */}
 
       <Text style={styles.label}>Beschreibung</Text>
 
@@ -194,7 +194,7 @@ const OrderCreate = (props) => {
         errorText='Geben Sie die Beschreibung des Auftrags ein'
         value={fetchedInputData.inputs.description.value}
         validators={[VALIDATOR_REQUIRE()]}
-        // multiline={true}
+        multiline={true}
         numberOfLines={4}
 
       />
