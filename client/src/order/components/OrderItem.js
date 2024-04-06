@@ -102,6 +102,7 @@ const styles = StyleSheet.create({
   },
   order: {
     fontSize: 14,
+    fontWeight: '600'
     // marginTop: 7
   },
   iconContainer: {
