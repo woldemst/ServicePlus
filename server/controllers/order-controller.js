@@ -28,7 +28,6 @@ const getAllOrdersByFirmId = async (req, res, next) => {
 };
 
 const createOrder = async (req, res, next) => {
-  // const firmId = req.params.firmId;
 
   const {
     firmId,
@@ -42,7 +41,7 @@ const createOrder = async (req, res, next) => {
   } = req.body;
 
 
-  const customerItem = await Customer.findOne({ _id: customerId});
+  const customerItem = await Customer.findOne({ _id: customerId });
 
   // console.log('customer item', customerItem);
 
@@ -53,13 +52,14 @@ const createOrder = async (req, res, next) => {
     // creator: creator, // auth.userId in frontend 
     // date: date,
     // status: status,
-    customerId: customerId,
-    c_street: customerItem.street, 
-    c_houseNr: customerItem.houseNr, 
-    c_zip: customerItem.zip, 
-    c_place: customerItem.place, 
-    c_name: customerItem.name,
     description: description,
+
+    customerId: customerId,
+    c_street: customerItem.street,
+    c_houseNr: customerItem.houseNr,
+    c_zip: customerItem.zip,
+    c_place: customerItem.place,
+    c_name: customerItem.name,
   });
 
 
@@ -69,7 +69,7 @@ const createOrder = async (req, res, next) => {
   )
 
   await Customer.updateOne(
-    { _id: customerId},
+    { _id: customerId },
     { $push: { orders: createdOrder._id } },
 
   )
@@ -228,7 +228,7 @@ const updateOrderById = async (req, res, next) => {
     updateOrder.name = name,
       updateOrder.email = email,
       // updateOrder.nextAppointment = nextAppointment,
-      updateOrder.customer = customer,
+      updateOrder.c_name = customer,
       updateOrder.worker = worker,
       updateOrder.contact = contact,
       updateOrder.description = description,
