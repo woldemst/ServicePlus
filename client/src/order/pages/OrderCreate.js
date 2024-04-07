@@ -155,7 +155,7 @@ const OrderCreate = (props) => {
         id='orderName'
         reducerKey='order'
         fieldName='name'
-        placeholder="Name des Mitarabeiters"
+        placeholder="Name"
         errorText='Geben Sie einen Namen für den Auftrag ein'
         value={fetchedInputData.inputs.name.value}
         validators={[VALIDATOR_REQUIRE()]}

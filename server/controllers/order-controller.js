@@ -216,7 +216,10 @@ const updateOrderById = async (req, res, next) => {
     customer,
     worker,
     contact,
-    // nextAppointment, 
+    street, 
+    houseNr, 
+    zip, 
+    place,
     description
   } = req.body
 
@@ -230,12 +233,15 @@ const updateOrderById = async (req, res, next) => {
       return next(error);
     }
 
-    updateOrder.name = name,
+      updateOrder.name = name,
       updateOrder.email = email,
-      // updateOrder.nextAppointment = nextAppointment,
       updateOrder.c_name = customer,
       updateOrder.worker = worker,
       updateOrder.contact = contact,
+      updateOrder.street = street,
+      updateOrder.houseNr = houseNr,
+      updateOrder.zip = zip,
+      updateOrder.place = place,
       updateOrder.description = description,
 
       await updateOrder.save();
