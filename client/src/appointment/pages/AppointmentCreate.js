@@ -145,7 +145,7 @@ const AppointmentCreate = props => {
                 worker: fetchedSelectData.selectedOptions.worker.value,
                 description: fetchedInputData.inputs.description.value,
                 date: selectedDateOnly,
-                time: selectedTimeOnly
+                time: selectedTimeOnly,
                 // status: status,
 
             });
@@ -178,7 +178,7 @@ const AppointmentCreate = props => {
 
             </View>
 
-            <Text style={styles.label}>Order</Text>
+            <Text style={styles.label}>Auftrag</Text>
             <SelectDropdown
                 id='appointmentOrder'
                 reducerKey='appointment'
