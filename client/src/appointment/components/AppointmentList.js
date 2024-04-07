@@ -64,10 +64,10 @@ const AppointmentList = props => {
                         contact={appointment.contact}
                         description={appointment.description}
                         // orderData={appointment.orderData}
-                        c_street={appointment.c_street}
-                        c_houseNr={appointment.c_houseNr}
-                        c_zip={appointment.c_zip}
-                        c_place={appointment.c_place}
+                        o_street={appointment.o_street}
+                        o_houseNr={appointment.o_houseNr}
+                        o_zip={appointment.o_zip}
+                        o_place={appointment.o_place}
                         o_name={appointment.o_name}
                     />
                 ))}

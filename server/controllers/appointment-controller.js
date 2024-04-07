@@ -44,13 +44,12 @@ const createAppointment = async (req, res, next) => {
       description,
     } = req.body;
 
-    const customerItem = await Customer.findOne({ orders: { $in: [orderId] } });
+    // const customerItem = await Customer.findOne({ orders: { $in: [orderId] } });
     const orderItem = await Order.findOne({ _id: orderId });
 
 
-    // const customerData = customerItem[0]
 
-    // console.log('order item ', orderItem);
+    console.log('order item ', orderItem);
     // console.log('customer item ', customerItem);
 
     const createdAppointment = new Appointment({
@@ -60,16 +59,15 @@ const createAppointment = async (req, res, next) => {
       firmId: firmId,
       orderId: orderId,
       worker: worker,
-      customer: customer,
       name: name,
       date: date,
       time: time,
       description: description,
       
-      c_street: customerItem.street, 
-      c_houseNr: customerItem.houseNr,
-      c_zip: customerItem.zip,
-      c_place: customerItem.place,
+      o_street: orderItem.street, 
+      o_houseNr: orderItem.houseNr,
+      o_zip: orderItem.zip,
+      o_place: orderItem.place,
       o_name: orderItem.name,
 
 

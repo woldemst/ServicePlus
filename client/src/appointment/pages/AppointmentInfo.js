@@ -1,16 +1,18 @@
 import { View, StyleSheet, Image, Text, TouchableOpacity } from "react-native";
 
 const AppointmentInfo = props => {
+
+    console.log(props);
     return <>
         <View style={styles.container}>
             <View style={styles.table}>
                 <View style={styles.row}>
                     <Text style={[styles.boldCell, styles.cell]}>Datum:</Text>
-                    <Text style={[styles.thinCell, styles.cell]}>20.09.2012</Text>
+                    <Text style={[styles.thinCell, styles.cell]}>{props.date}</Text>
                 </View>
                 <View style={styles.row}>
                     <Text style={[styles.boldCell, styles.cell]}>Zeit:</Text>
-                    <Text style={[styles.thinCell, styles.cell]}>16Uhr - 17Uhr</Text>
+                    <Text style={[styles.thinCell, styles.cell]}>{props.time}</Text>
                 </View>
                 <View style={styles.row}>
                     <Text style={[styles.boldCell, styles.cell]}>Auftrag:</Text>
@@ -23,6 +25,10 @@ const AppointmentInfo = props => {
                 <View style={styles.row}>
                     <Text style={[styles.boldCell, styles.cell]}>Kunde:</Text>
                     <Text style={[styles.thinCell, styles.cell]}>Herr Musterman</Text>
+                </View>
+                <View style={styles.row}>
+                    <Text style={[styles.boldCell, styles.cell]}>Adresse:</Text>
+                    <Text style={[styles.thinCell, styles.cell]}>{props.o_street} {props.o_houseNr} {props.o_zip} {props.o_place}</Text>
                 </View>
             </View>
         </View>

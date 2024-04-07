@@ -25,9 +25,9 @@ const AppointmentItem = (props) => {
 
                 <View style={styles.mainContent}>
                     <View style={styles.dateTimeContainer}>
-                        <Text style={styles.date}>{props.date}</Text>
+                        <Text style={styles.date}>am {props.date}</Text>
                         <Text> / </Text>
-                        <Text style={styles.date}>{props.time}</Text>
+                        <Text style={styles.date}>um {props.time}</Text>
                     </View>
 
                     <Text style={styles.workersName}>{props.worker}</Text>
@@ -36,10 +36,10 @@ const AppointmentItem = (props) => {
                         <Text style={styles.orderName}>{props.o_name}</Text>
                         <Text> - </Text>
                         <View style={styles.adressContainer}>
-                            <Text style={styles.adressItem}>{props.c_street}</Text>
-                            <Text style={styles.adressItem}>{props.c_houseNr}</Text>
-                            <Text style={styles.adressItem}>{props.c_zip}</Text>
-                            <Text style={styles.adressItem}>{props.c_place}</Text>
+                            <Text style={styles.adressItem}>{props.o_street}</Text>
+                            <Text style={styles.adressItem}>{props.o_houseNr}</Text>
+                            <Text style={styles.adressItem}>{props.o_zip}</Text>
+                            <Text style={styles.adressItem}>{props.o_place}</Text>
 
                         </View>
                     </View>
@@ -61,12 +61,27 @@ const AppointmentItem = (props) => {
                 animationOut="slideOutDown" // Specify the slide-down animation
                 onBackdropPress={toggleModal}
                 onBackButtonPress={toggleModal}
-                modalHeight="60%"
+                modalHeight="50%"
                 header={<Text style={styles.modalHeadline}>Termin</Text>}
             >
 
-                {/* <OrderCreate handleRefresh={handleRefresh} toggle={toggleModal} /> */}
-                <AppointmentInfo />
+                <AppointmentInfo
+                    key={props._id}
+                    creator={props.creator}
+
+                    name={props.name}
+                    worker={props.worker}
+                    date={props.date}
+                    time={props.time}
+                    status={props.status}
+                    contact={props.contact}
+                    description={props.description}
+                    o_street={props.o_street}
+                    o_houseNr={props.o_houseNr}
+                    o_zip={props.o_zip}
+                    o_place={props.o_place}
+                    o_name={props.o_name}
+                />
             </ModalComponent>
         </>
     )
@@ -149,10 +164,3 @@ const styles = StyleSheet.create({
 
 
 export default AppointmentItem;
-
-// id: props.id,
-// name: props.name,
-// description: props.description,
-// worker: props.worker,
-// customer: props.customer,
-// contact: props.contact,
