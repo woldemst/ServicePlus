@@ -33,10 +33,10 @@ const OrderItem = (props) => {
           </View>
 
           <View style={styles.adressContainer}>
-            <Text style={styles.adressItem}>{props.c_street}</Text>
-            <Text style={styles.adressItem}>{props.c_houseNr}</Text>
-            <Text style={styles.adressItem}>{props.c_zip}</Text>
-            <Text style={styles.adressItem}>{props.c_place}</Text>
+            <Text style={styles.adressItem}>{props.street}</Text>
+            <Text style={styles.adressItem}>{props.houseNr}</Text>
+            <Text style={styles.adressItem}>{props.zip}</Text>
+            <Text style={styles.adressItem}>{props.place}</Text>
 
           </View>
 
