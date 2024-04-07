@@ -28,10 +28,10 @@ const OrderList = (props) => {
                             id={order._id}
                             key={order._id}
                             name={order.name}
-                            c_street={order.c_street}
-                            c_houseNr={order.c_houseNr}
-                            c_zip={order.c_zip}
-                            c_place={order.c_place}
+                            street={order.street}
+                            houseNr={order.houseNr}
+                            zip={order.zip}
+                            place={order.place}
                             c_name={order.c_name}
                             creator={order.creator}
                             worker={order.worker}
