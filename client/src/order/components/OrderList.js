@@ -16,7 +16,7 @@ const OrderList = (props) => {
 
     const fetchedData = useSelector((state) => state.order.ordersArray);
     // console.log(isLoaded);
-    console.log(fetchedData.orders);
+    // console.log(fetchedData.orders);
     return (
         <View style={styles.orderList}>
             {!isLoaded ? (

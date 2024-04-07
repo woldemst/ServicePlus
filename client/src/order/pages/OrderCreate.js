@@ -43,6 +43,22 @@ const OrderCreate = (props) => {
       value: "",
       isValid: false,
     },
+    street: {
+      value: "",
+      isValid: false,
+    },
+    houseNr: {
+      value: "",
+      isValid: false,
+    },
+    zip: {
+      value: "",
+      isValid: false,
+    },
+    place: {
+      value: "",
+      isValid: false,
+    },
     description: {
       value: "",
       isValid: false,
@@ -72,7 +88,7 @@ const OrderCreate = (props) => {
     }
 
     fetchedData()
-  }, [])  
+  }, [])
 
   useEffect(() => {
     if (initialSelectState.selects.contact.length > 0) {
@@ -116,6 +132,10 @@ const OrderCreate = (props) => {
         worker: fetchedSelectData.selectedOptions.worker.value,
         customerId: fetchedSelectData.selectedOptions.customer.id,
         // contact: fetchedSelectData.selectedOptions.contact.value,
+        street: fetchedInputData.inputs.street.value,
+        houseNr: fetchedInputData.inputs.houseNr.value,
+        zip: fetchedInputData.inputs.zip.value,
+        place: fetchedInputData.inputs.place.value,
         description: fetchedInputData.inputs.description.value,
         // status: status,
       });
@@ -154,8 +174,7 @@ const OrderCreate = (props) => {
 
       />
 
-
-      <Text style={styles.label}>Mitarbeiter</Text>
+      {/* <Text style={styles.label}>Mitarbeiter</Text>
 
 
       <SelectDropdown
@@ -166,9 +185,9 @@ const OrderCreate = (props) => {
         data={workerOptions}
         validators={[VALIDATOR_SELECT()]}
         placeholder='Auswählen'
-      />
-{/* 
-      <Text style={styles.label}>Ansprechspartner</Text>
+      /> */}
+
+      {/* <Text style={styles.label}>Ansprechspartner</Text>
 
 
       <SelectDropdown
@@ -181,6 +200,58 @@ const OrderCreate = (props) => {
         placeholder='Auswählen'
 
       /> */}
+
+      <Text style={styles.label}>Auftragsadresse</Text>
+
+      <View style={styles.rowContainer}>
+        <View style={styles.streetWrapper}>
+          <Input
+            id='orderStreet'
+            reducerKey='order'
+            fieldName='street'
+            placeholder="Straße"
+            errorText='Geben Sie eine Straße für den Auftrag ein'
+            value={fetchedInputData.inputs.street.value}
+            validators={[VALIDATOR_REQUIRE()]}
+          />
+        </View>
+        <View style={styles.nrWrapper}>
+          <Input
+            id='orderHouseNr'
+            reducerKey='order'
+            fieldName='houseNr'
+            placeholder="Nr."
+            errorText='Housenummer'
+            value={fetchedInputData.inputs.street.value}
+            validators={[VALIDATOR_REQUIRE()]}
+          />
+        </View>
+      </View>
+
+      <View style={styles.rowContainer}>
+        <View style={styles.zipWrapper}>
+          <Input
+            id='orderZip'
+            reducerKey='order'
+            fieldName='zip'
+            placeholder="PLZ"
+            errorText='Geben Sie eine PLZ für den Auftrag ein'
+            value={fetchedInputData.inputs.zip.value}
+            validators={[VALIDATOR_REQUIRE()]}
+          />
+        </View>
+        <View style={styles.placeWrapper}>
+          <Input
+            id='orderPlace'
+            reducerKey='order'
+            fieldName='place'
+            placeholder="Ort"
+            errorText='Geben Sie den Ort für den Auftrag ein'
+            value={fetchedInputData.inputs.place.value}
+            validators={[VALIDATOR_REQUIRE()]}
+          />
+        </View>
+      </View>
 
       <Text style={styles.label}>Beschreibung</Text>
 
@@ -310,6 +381,22 @@ const styles = StyleSheet.create({
   },
   loader: {
     flex: 1,
+  },
+  rowContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between'
+  },
+  streetWrapper: {
+    width: '75%'
+  },
+  nrWrapper: {
+    width: '20%'
+  },
+  zipWrapper: {
+    width: '35%'
+  },
+  placeWrapper: {
+    width: '60%'
   },
 });
 
