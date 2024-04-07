@@ -1,7 +1,6 @@
 import {
   View,
   Text,
-  TextInput,
   TouchableOpacity,
   ActivityIndicator,
   StyleSheet,
@@ -44,15 +43,28 @@ const OrderInfo = (props) => {
       contact: [],
     },
     selectedOptions: {
-      customer: { value: order.customer },
+      customer: { value: order.c_name },
       worker: { value: order.worker },
       contact: { value: order.contact },
     }
   })
 
+
   const initialInputState = {
     name: {
       value: order.name
+    },
+    street: {
+      value: order.street
+    },
+    houseNr: {
+      value: order.houseNr
+    },
+    zip: {
+      value: order.zip
+    },
+    place: {
+      value: order.place
     },
     description: {
       value: order.description
@@ -94,6 +106,8 @@ const OrderInfo = (props) => {
   }, [edit])
 
 
+
+
   let workerOptions;
   let customerOptions;
   let contactOptions;
@@ -127,7 +141,11 @@ const OrderInfo = (props) => {
         name: fetchedInputData.inputs.name.value,
         worker: fetchedSelectData.selectedOptions.worker.value,
         customer: fetchedSelectData.selectedOptions.customer.value,
-        contact: fetchedSelectData.selectedOptions.contact.value,
+        // contact: fetchedSelectData.selectedOptions.contact.value,
+        street: fetchedInputData.inputs.street.value,
+        houseNr: fetchedInputData.inputs.houseNr.value,
+        zip: fetchedInputData.inputs.zip.value,
+        place: fetchedInputData.inputs.place.value,
         description: fetchedInputData.inputs.description.value,
         // status: status,
       });
@@ -153,7 +171,7 @@ const OrderInfo = (props) => {
           fieldName='customer'
           data={customerOptions}
           validators={[VALIDATOR_SELECT()]}
-          initialSelectedValue={order.customer}
+          initialSelectedValue={order.c_name}
           disable={!edit}
         />
 
@@ -170,18 +188,65 @@ const OrderInfo = (props) => {
           disable={!edit}
         />
 
-        <Text style={styles.label}>Ansprechspartner</Text>
+        <Text style={styles.label}>Auftragsadresse</Text>
 
-        <SelectDropdown
-          id='contact'
-          reducerKey='order'
-          search={false}
-          fieldName='contact'
-          data={contactOptions}
-          validators={[VALIDATOR_SELECT()]}
-          initialSelectedValue={order.contact}
-          disable={!edit}
-        />
+        <View style={styles.rowContainer}>
+          <View style={styles.streetWrapper}>
+            <Input
+              id='orderStreet'
+              reducerKey='order'
+              fieldName='street'
+              placeholder="Straße"
+              errorText='Geben Sie eine Straße für den Auftrag ein'
+              value={fetchedInputData.inputs.street.value}
+              validators={[VALIDATOR_REQUIRE()]}
+              disabled={!edit}
+
+            />
+          </View>
+          <View style={styles.nrWrapper}>
+            <Input
+              id='orderHouseNr'
+              reducerKey='order'
+              fieldName='houseNr'
+              placeholder="Nr."
+              errorText='Housenummer'
+              value={fetchedInputData.inputs.houseNr.value}
+              validators={[VALIDATOR_REQUIRE()]}
+              disabled={!edit}
+
+            />
+          </View>
+        </View>
+
+        <View style={styles.rowContainer}>
+          <View style={styles.zipWrapper}>
+            <Input
+              id='orderZip'
+              reducerKey='order'
+              fieldName='zip'
+              placeholder="PLZ"
+              errorText='Geben Sie eine PLZ für den Auftrag ein'
+              value={fetchedInputData.inputs.zip.value}
+              validators={[VALIDATOR_REQUIRE()]}
+              disabled={!edit}
+
+            />
+          </View>
+          <View style={styles.placeWrapper}>
+            <Input
+              id='orderPlace'
+              reducerKey='order'
+              fieldName='place'
+              placeholder="Ort"
+              errorText='Geben Sie den Ort für den Auftrag ein'
+              value={fetchedInputData.inputs.place.value}
+              validators={[VALIDATOR_REQUIRE()]}
+              disabled={!edit}
+
+            />
+          </View>
+        </View>
 
         <Text style={styles.label}>Beschreibung</Text>
 
@@ -228,8 +293,8 @@ const styles = StyleSheet.create({
     flex: 1
   },
   label: {
-    marginTop: 12,
-    marginBottom: 6,
+    marginTop: 18,
+
     fontSize: 18,
   },
 
@@ -278,6 +343,22 @@ const styles = StyleSheet.create({
   },
   loader: {
     flex: 1,
+  },
+  rowContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between'
+  },
+  streetWrapper: {
+    width: '75%'
+  },
+  nrWrapper: {
+    width: '22%'
+  },
+  zipWrapper: {
+    width: '37%'
+  },
+  placeWrapper: {
+    width: '60%'
   },
 });
 
