@@ -6,7 +6,6 @@ const Customer = require('../models/Customer')
 
 const getAllOrdersByFirmId = async (req, res, next) => {
   const firmId = req.params.firmId;
-
   try {
     const orders = await Order.find({ firmId: firmId });
 
@@ -37,6 +36,11 @@ const createOrder = async (req, res, next) => {
     date,
     customerId,
     status,
+
+    street, 
+    houseNr, 
+    zip, 
+    place,
     description,
   } = req.body;
 
@@ -46,19 +50,20 @@ const createOrder = async (req, res, next) => {
   // console.log('customer item', customerItem);
 
   const createdOrder = new Order({
-    firmId: firmId,
-    name: name,
-    worker: worker,
     // creator: creator, // auth.userId in frontend 
     // date: date,
     // status: status,
+    
+    firmId: firmId,
+    name: name,
+    worker: worker,
     description: description,
 
     customerId: customerId,
-    c_street: customerItem.street,
-    c_houseNr: customerItem.houseNr,
-    c_zip: customerItem.zip,
-    c_place: customerItem.place,
+    street: street,
+    houseNr: houseNr,
+    zip: zip,
+    place: place,
     c_name: customerItem.name,
   });
 
