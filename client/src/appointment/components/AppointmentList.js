@@ -10,6 +10,7 @@ import { getAppointments } from '../../actions/appointmentActions';
 import { AuthContext } from '../../context/auth-context';
 
 const AppointmentList = props => {
+    const id = props.id
     const dispatch = useDispatch()
     const fetchedData = useSelector(state => state.appointment.appointmentsArray)
 
@@ -38,45 +39,21 @@ const AppointmentList = props => {
         fetchOrders()
     }, [refresh])
 
-    if (fetchedData.appointments.length === 0) {
-        return (
-            <View style={styles.imgContainer}>
-                <Image style={styles.bannerImg} source={require('../../../assets/empty_folder.png')} />
-            </View>
-        )
-    }
+    const renderAppointments = () => {
+        if (fetchedData.appointments.length === 0) {
+            return (
+                <View style={styles.imgContainer}>
+                    <Image style={styles.bannerImg} source={require('../../../assets/empty_folder.png')} />
+                </View>
+            )
+        }
 
-    return !isLoaded ? (
-        <ActivityIndicator style={styles.loader} size="large" color="#7A9B76" />
-    ) : (
-        <>
+
+        return (
             <ScrollView showsVerticalScrollIndicator={false}>
-                {props.id ? (
-                    fetchedData.appointments
-                        .filter(appointment => appointment.orderId == props.id)
-                        .map(appointment => (
-                            <AppointmentItem
-                                key={appointment._id}
-                                name={appointment.name}
-                                // customer={appointment.customer}
-                                creator={appointment.creator}
-                                worker={appointment.worker}
-                                date={appointment.date}
-                                time={appointment.time}
-                                status={appointment.status}
-                                contact={appointment.contact}
-                                description={appointment.description}
-                                // orderData={appointment.orderData}
-                                o_street={appointment.o_street}
-                                o_houseNr={appointment.o_houseNr}
-                                o_zip={appointment.o_zip}
-                                o_place={appointment.o_place}
-                                o_name={appointment.o_name}
-                            />
-                        )
-                        )
-                ) : (
-                    fetchedData.appointments.map(appointment => (
+                {fetchedData.appointments
+                    .filter(appointment => !id || appointment.orderId === id)
+                    .map(appointment => (
                         <AppointmentItem
                             key={appointment._id}
                             name={appointment.name}
@@ -94,28 +71,39 @@ const AppointmentList = props => {
                             o_zip={appointment.o_zip}
                             o_place={appointment.o_place}
                             o_name={appointment.o_name}
+
                         />
-                    ))
-                )}
+                    ))}
             </ScrollView>
-
-            < ModalComponent
-                isVisible={props.isModalVisible}
-                animationIn="slideInUp" // Specify the slide-up animation
-                animationOut="slideOutDown" // Specify the slide-down animation
-                onBackdropPress={props.toggleModal}
-                onBackButtonPress={props.toggleModal}
-
-                header={<Text style={styles.modalHeadline}>Termin hinzufügen</Text>}
-            >
-                <AppointmentCreate toggleModal={props.toggleModal} />
-                {/* <OrderCreate handleRefresh={handleRefresh} toggle={toggleModal} /> */}
-            </ModalComponent >
+        );
+    }
 
 
-        </>
 
-    )
+
+    return <>
+        {!isLoaded ? (
+            <ActivityIndicator style={styles.loader} size="large" color="#7A9B76" />
+        ) : renderAppointments()}
+
+        <ModalComponent
+            isVisible={props.isModalVisible}
+            animationIn="slideInUp" // Specify the slide-up animation
+            animationOut="slideOutDown" // Specify the slide-down animation
+            onBackdropPress={props.toggleModal}
+            onBackButtonPress={props.toggleModal}
+
+            header={<Text style={styles.modalHeadline}>Termin hinzufügen</Text>}
+        >
+            <AppointmentCreate toggleModal={props.toggleModal} />
+            {/* <OrderCreate handleRefresh={handleRefresh} toggle={toggleModal} /> */}
+        </ModalComponent >
+
+
+
+
+    </>
+
 }
 
 

@@ -8,15 +8,11 @@ import AppointmentInfo from "../pages/AppointmentInfo";
 
 
 const AppointmentItem = (props) => {
-
     const [isModalVisible, setModalVisible] = useState(false);
-
 
     const toggleModal = () => {
         setModalVisible(!isModalVisible)
     }
-
-
 
     return (
         <>
@@ -34,13 +30,12 @@ const AppointmentItem = (props) => {
 
                     <View style={styles.orderDetails}>
                         <Text style={styles.orderName}>{props.o_name}</Text>
-                        <Text> - </Text>
+                        {/* <Text> - </Text> */}
                         <View style={styles.adressContainer}>
                             <Text style={styles.adressItem}>{props.o_street}</Text>
                             <Text style={styles.adressItem}>{props.o_houseNr}</Text>
                             <Text style={styles.adressItem}>{props.o_zip}</Text>
                             <Text style={styles.adressItem}>{props.o_place}</Text>
-
                         </View>
                     </View>
 
@@ -68,7 +63,6 @@ const AppointmentItem = (props) => {
                 <AppointmentInfo
                     key={props._id}
                     creator={props.creator}
-
                     name={props.name}
                     worker={props.worker}
                     date={props.date}
@@ -145,11 +139,16 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
     },
     orderDetails: {
-        flexDirection: 'row',
+        // flexDirection: 'row',
 
     },
     adressContainer: {
         flexDirection: "row",
+        // flexWrap: 'wrap',
+        // maxWidth: '50%',
+
+        // borderColor: 'red', 
+        // borderWidth: 2
     },
     adressItem: {
         marginRight: 5
