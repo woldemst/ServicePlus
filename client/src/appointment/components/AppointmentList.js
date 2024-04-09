@@ -16,10 +16,10 @@ const AppointmentList = props => {
     const [isLoaded, setIsLoaded] = useState(false)
     const refresh = useSelector(state => state.util.refresh)
 
-
     // const appointmentArr = useSelector(state => state.appointment.appointmentsArray.appointments)
-    // const appointment = appointmentArr.find(appointment => appointment._id == appointmentId)
+    // const byOrderId = appointmentArr.find(appointment => appointment.orderId == '660d6bd14f47ff40447d52cf')
 
+    console.log('orderId', props.id);
 
     const auth = useContext(AuthContext)
 
@@ -51,26 +51,52 @@ const AppointmentList = props => {
     ) : (
         <>
             <ScrollView showsVerticalScrollIndicator={false}>
-                {fetchedData.appointments.map(appointment => (
-                    <AppointmentItem
-                        key={appointment._id}
-                        name={appointment.name}
-                        // customer={appointment.customer}
-                        creator={appointment.creator}
-                        worker={appointment.worker}
-                        date={appointment.date}
-                        time={appointment.time}
-                        status={appointment.status}
-                        contact={appointment.contact}
-                        description={appointment.description}
-                        // orderData={appointment.orderData}
-                        o_street={appointment.o_street}
-                        o_houseNr={appointment.o_houseNr}
-                        o_zip={appointment.o_zip}
-                        o_place={appointment.o_place}
-                        o_name={appointment.o_name}
-                    />
-                ))}
+                {props.id ? (
+                    fetchedData.appointments
+                        .filter(appointment => appointment.orderId == props.id)
+                        .map(appointment => (
+                            <AppointmentItem
+                                key={appointment._id}
+                                name={appointment.name}
+                                // customer={appointment.customer}
+                                creator={appointment.creator}
+                                worker={appointment.worker}
+                                date={appointment.date}
+                                time={appointment.time}
+                                status={appointment.status}
+                                contact={appointment.contact}
+                                description={appointment.description}
+                                // orderData={appointment.orderData}
+                                o_street={appointment.o_street}
+                                o_houseNr={appointment.o_houseNr}
+                                o_zip={appointment.o_zip}
+                                o_place={appointment.o_place}
+                                o_name={appointment.o_name}
+                            />
+                        )
+                        )
+                ) : (
+                    fetchedData.appointments.map(appointment => (
+                        <AppointmentItem
+                            key={appointment._id}
+                            name={appointment.name}
+                            // customer={appointment.customer}
+                            creator={appointment.creator}
+                            worker={appointment.worker}
+                            date={appointment.date}
+                            time={appointment.time}
+                            status={appointment.status}
+                            contact={appointment.contact}
+                            description={appointment.description}
+                            // orderData={appointment.orderData}
+                            o_street={appointment.o_street}
+                            o_houseNr={appointment.o_houseNr}
+                            o_zip={appointment.o_zip}
+                            o_place={appointment.o_place}
+                            o_name={appointment.o_name}
+                        />
+                    ))
+                )}
             </ScrollView>
 
             < ModalComponent

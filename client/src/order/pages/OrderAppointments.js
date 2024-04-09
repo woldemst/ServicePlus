@@ -1,12 +1,15 @@
 import { View, StyleSheet } from "react-native";
-import OrderList from "../components/OrderList"
 import AppointmentList from "../../appointment/components/AppointmentList";
+import { useState } from "react";
+import { useNavigation, useRoute } from "@react-navigation/native";
 
 
-const OrderAppointments = () => {
+const OrderAppointments = props => {
+    const route = useRoute()
+
     return <>
         <View style={styles.appointmentListing} >
-            <AppointmentList />
+            <AppointmentList id={route.params.id} />
         </View>
     </>
 }
