@@ -93,6 +93,9 @@ const OrderMain = () => {
                 <Tab.Screen
                     name="Termine"
                     component={OrderAppointments}
+                    initialParams={{
+                        id: route.params.id,
+                    }}
                     options={{
                         headerShown: false
 
