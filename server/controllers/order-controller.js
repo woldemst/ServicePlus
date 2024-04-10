@@ -2,7 +2,8 @@ const Order = require("../models/Order");
 const HttpError = require("../models/http-error");
 const Firm = require("../models/Firm");
 const Worker = require('../models/Worker')
-const Customer = require('../models/Customer')
+const Customer = require('../models/Customer');
+const Appointment = require("../models/Appointment");
 
 const getAllOrdersByFirmId = async (req, res, next) => {
   const firmId = req.params.firmId;
@@ -37,9 +38,9 @@ const createOrder = async (req, res, next) => {
     customerId,
     status,
 
-    street, 
-    houseNr, 
-    zip, 
+    street,
+    houseNr,
+    zip,
     place,
     description,
   } = req.body;
@@ -53,7 +54,7 @@ const createOrder = async (req, res, next) => {
     // creator: creator, // auth.userId in frontend 
     // date: date,
     // status: status,
-    
+
     firmId: firmId,
     name: name,
     worker: worker,
@@ -216,9 +217,9 @@ const updateOrderById = async (req, res, next) => {
     customer,
     worker,
     contact,
-    street, 
-    houseNr, 
-    zip, 
+    street,
+    houseNr,
+    zip,
     place,
     description
   } = req.body
@@ -226,6 +227,7 @@ const updateOrderById = async (req, res, next) => {
   let updateOrder;
 
   try {
+
     updateOrder = await Order.findById(orderId)
 
     if (!updateOrder) {
@@ -233,7 +235,7 @@ const updateOrderById = async (req, res, next) => {
       return next(error);
     }
 
-      updateOrder.name = name,
+    updateOrder.name = name,
       updateOrder.email = email,
       updateOrder.c_name = customer,
       updateOrder.worker = worker,
@@ -245,6 +247,9 @@ const updateOrderById = async (req, res, next) => {
       updateOrder.description = description,
 
       await updateOrder.save();
+
+      await Appointment.findOneAndUpdate({ orderId: orderId }, { o_name: name });
+
 
     res
       .status(200)
