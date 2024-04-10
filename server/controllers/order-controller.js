@@ -248,7 +248,18 @@ const updateOrderById = async (req, res, next) => {
 
       await updateOrder.save();
 
-      await Appointment.findOneAndUpdate({ orderId: orderId }, { o_name: name });
+    // Update related appointments
+    const appointments = await Appointment.find({ orderId: orderId });
+
+    for (const appointment of appointments) {
+      appointment.o_name = name;
+      appointment.o_street = street;
+      appointment.o_houseNr = houseNr;
+      appointment.o_zip = zip;
+      appointment.o_place = place;
+
+      await appointment.save();
+    }
 
 
     res
