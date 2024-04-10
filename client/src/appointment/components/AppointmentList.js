@@ -20,7 +20,7 @@ const AppointmentList = props => {
     // const appointmentArr = useSelector(state => state.appointment.appointmentsArray.appointments)
     // const byOrderId = appointmentArr.find(appointment => appointment.orderId == '660d6bd14f47ff40447d52cf')
 
-    console.log('orderId', props.id);
+    // console.log('orderId', props.id);
 
     const auth = useContext(AuthContext)
 
@@ -71,6 +71,7 @@ const AppointmentList = props => {
                             o_zip={appointment.o_zip}
                             o_place={appointment.o_place}
                             o_name={appointment.o_name}
+                            c_name={appointment.c_name}
 
                         />
                     ))}

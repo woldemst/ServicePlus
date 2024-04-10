@@ -37,19 +37,18 @@ const createAppointment = async (req, res, next) => {
       firmId,
       orderId,
       worker,
-      customer,
       name,
       date,
       time,
       description,
     } = req.body;
-
-    // const customerItem = await Customer.findOne({ orders: { $in: [orderId] } });
+    console.log(req.body);
+    const customerItem = await Customer.findOne({ orders: { $in: [orderId] } });
     const orderItem = await Order.findOne({ _id: orderId });
 
 
 
-    console.log('order item ', orderItem);
+    // console.log('order item ', orderItem);
     // console.log('customer item ', customerItem);
 
     const createdAppointment = new Appointment({
@@ -69,6 +68,8 @@ const createAppointment = async (req, res, next) => {
       o_zip: orderItem.zip,
       o_place: orderItem.place,
       o_name: orderItem.name,
+
+      c_name: customerItem.name
 
 
     });

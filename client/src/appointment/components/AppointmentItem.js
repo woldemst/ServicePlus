@@ -62,19 +62,21 @@ const AppointmentItem = (props) => {
 
                 <AppointmentInfo
                     key={props._id}
-                    creator={props.creator}
+                    // creator={props.creator}
                     name={props.name}
                     worker={props.worker}
                     date={props.date}
                     time={props.time}
                     status={props.status}
-                    contact={props.contact}
+                    // contact={props.contact}
                     description={props.description}
                     o_street={props.o_street}
                     o_houseNr={props.o_houseNr}
                     o_zip={props.o_zip}
                     o_place={props.o_place}
                     o_name={props.o_name}
+                    
+                    c_name={props.c_name}
                 />
             </ModalComponent>
         </>
