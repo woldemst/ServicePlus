@@ -1,11 +1,10 @@
 import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native"
 import { useState } from "react";
 import AppointmentList from '../components/AppointmentList'
+import { useSelector } from "react-redux";
 
 const AppointmentView = () => {
-
     const [isModalVisible, setModalVisible] = useState(false);
-
 
     const toggleModal = () => {
         setModalVisible(!isModalVisible)
@@ -31,7 +30,7 @@ const AppointmentView = () => {
                 </View>
             </View>
             <View style={styles.content}>
-                <AppointmentList toggle={isModalVisible} toggleModal={toggleModal} />
+                <AppointmentList isModalVisible={isModalVisible} toggleModal={toggleModal} />
             </View>
         </View>
     )
