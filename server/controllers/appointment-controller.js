@@ -44,8 +44,8 @@ const createAppointment = async (req, res, next) => {
     } = req.body;
     console.log(req.body);
     const customerItem = await Customer.findOne({ orders: { $in: [orderId] } });
-    const orderItem = await Order.findOne({ _id: orderId });
 
+    const orderItem = await Order.findOne({ _id: orderId });
 
 
     // console.log('order item ', orderItem);
@@ -62,16 +62,14 @@ const createAppointment = async (req, res, next) => {
       date: date,
       time: time,
       description: description,
-      
-      o_street: orderItem.street, 
+
+      o_street: orderItem.street,
       o_houseNr: orderItem.houseNr,
       o_zip: orderItem.zip,
       o_place: orderItem.place,
       o_name: orderItem.name,
 
       c_name: customerItem.name
-
-
     });
 
     await createdAppointment.save()
@@ -88,6 +86,20 @@ const createAppointment = async (req, res, next) => {
   } catch (err) {
     const error = new HttpError(
       "Something went wrong, could not create an appointment.",
+      500
+    );
+    return next(error);
+  }
+}
+
+const deleteAppointmentById = async (req, res, next) => {
+  const appointmentId = req.params.appointmentId
+  try {
+    await Appointment.findByIdAndDelete(appointmentId)
+    res.status(200).json({ message: 'Appointment was deleted successfully' });
+  } catch (err) {
+    const error = new HttpError(
+      "Something went wrong, could not delete this appointment.",
       500
     );
     return next(error);
@@ -214,9 +226,12 @@ const getAllOrdersAsOptionsByFirmId = async (req, res, next) => {
   }
 }
 
+
 exports.getAllAppointments = getAllAppointments;
 exports.createAppointment = createAppointment;
 exports.getAllContactsAsOptionsByFirmId = getAllContactsAsOptionsByFirmId;
+exports.deleteAppointmentById = deleteAppointmentById;
+
 exports.getAllCustomersAsOptionsBiFirmId = getAllCustomersAsOptionsBiFirmId;
 exports.getAllWorkersAsOptionsByFirmId = getAllWorkersAsOptionsByFirmId;
 exports.getAllOrdersAsOptionsByFirmId = getAllOrdersAsOptionsByFirmId; 
