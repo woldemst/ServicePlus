@@ -94,8 +94,21 @@ const createAppointment = async (req, res, next) => {
 
 const deleteAppointmentById = async (req, res, next) => {
   const appointmentId = req.params.appointmentId
+
   try {
-    await Appointment.findByIdAndDelete(appointmentId)
+    // Delete the appointment
+    const deletedAppointment = await Appointment.deleteOne({ _id: appointmentId });
+
+    // Check if the appointment exists
+    if (!deletedAppointment) {
+      return res.status(404).json({ message: 'Appointment not found' });
+    }
+
+    await Order.findOneAndUpdate(
+      { appointments: appointmentId },
+      { $pull: { appointments: appointmentId } }
+    );
+
     res.status(200).json({ message: 'Appointment was deleted successfully' });
   } catch (err) {
     const error = new HttpError(
