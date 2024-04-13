@@ -56,6 +56,7 @@ const AppointmentList = props => {
                 keyExtractor={item => item._id}
                 renderItem={({ item }) => (
                     <AppointmentItem
+                        id={item._id}
                         name={item.name}
                         orderId={item.orderId}
                         worker={item.worker}

@@ -1,7 +1,8 @@
-import { REFRESH } from "../actions/utilActions";
+import { REFRESH, MODAL_SWITCH} from "../actions/utilActions";
 
 const initialData = {
     refresh: false,
+    modalSwitch: false
 }
 
 const utilReducer = (state = initialData, action) => {
@@ -10,6 +11,11 @@ const utilReducer = (state = initialData, action) => {
             return {
                 ...state,
                 refresh: !state.refresh
+            }
+        case MODAL_SWITCH:
+            return {
+                ...state,
+                modalSwitch: !state.modalSwitch
             }
         default:
             return state;
