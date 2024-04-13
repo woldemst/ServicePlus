@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState } from 'react';
-import { View, Text, StyleSheet, Image, ScrollView, ActivityIndicator } from 'react-native';
+import { View, Text, StyleSheet, Image, ScrollView, ActivityIndicator, FlatList } from 'react-native';
 import axios from 'axios';
 
 import ModalComponent from '../../shared/UIElements/Modal';
@@ -50,32 +50,30 @@ const AppointmentList = props => {
 
 
         return (
-            <ScrollView showsVerticalScrollIndicator={false}>
-                {fetchedData.appointments
-                    .filter(appointment => !id || appointment.orderId === id)
-                    .map(appointment => (
-                        <AppointmentItem
-                            key={appointment._id}
-                            name={appointment.name}
-                            // customer={appointment.customer}
-                            creator={appointment.creator}
-                            worker={appointment.worker}
-                            date={appointment.date}
-                            time={appointment.time}
-                            status={appointment.status}
-                            contact={appointment.contact}
-                            description={appointment.description}
-                            // orderData={appointment.orderData}
-                            o_street={appointment.o_street}
-                            o_houseNr={appointment.o_houseNr}
-                            o_zip={appointment.o_zip}
-                            o_place={appointment.o_place}
-                            o_name={appointment.o_name}
-                            c_name={appointment.c_name}
-
-                        />
-                    ))}
-            </ScrollView>
+            <FlatList
+                showsVerticalScrollIndicator={false}
+                data={fetchedData.appointments}
+                keyExtractor={item => item._id}
+                renderItem={({ item }) => (
+                    <AppointmentItem
+                        name={item.name}
+                        orderId={item.orderId}
+                        worker={item.worker}
+                        date={item.date}
+                        time={item.time}
+                        status={item.status}
+                        contact={item.contact}
+                        description={item.description}
+                        o_street={item.o_street}
+                        o_houseNr={item.o_houseNr}
+                        o_zip={item.o_zip}
+                        o_place={item.o_place}
+                        o_name={item.o_name}
+                        c_name={item.c_name}
+                    />
+                )}
+            >
+            </FlatList>
         );
     }
 
