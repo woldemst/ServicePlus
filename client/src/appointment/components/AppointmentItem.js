@@ -1,11 +1,12 @@
 import { View, StyleSheet, Image, Text, TouchableOpacity } from "react-native";
-import { useNavigation } from "@react-navigation/native";
+import { SwipeListView } from 'react-native-swipe-list-view';
+
 import { useState } from "react";
 
 
 import ModalComponent from "../../shared/UIElements/Modal";
 import AppointmentInfo from "../pages/AppointmentInfo";
-
+import Button from "../../shared/UIElements/Button";
 
 const AppointmentItem = (props) => {
     const [isModalVisible, setModalVisible] = useState(false);
@@ -14,8 +15,9 @@ const AppointmentItem = (props) => {
         setModalVisible(!isModalVisible)
     }
 
-    return (
-        <>
+
+    const renderItem = (data) => (
+        <View style={styles.rowFront}>
             <TouchableOpacity style={styles.container} onPress={toggleModal} >
                 <View style={styles.indicator}></View>
 
@@ -38,17 +40,61 @@ const AppointmentItem = (props) => {
                             <Text style={styles.adressItem}>{props.o_place}</Text>
                         </View>
                     </View>
-
-
-
-
                 </View>
 
                 {/* <View style={styles.iconContainer}>
                     <Image style={styles.filePlusImg} source={require('../../../assets/file_plus.png')} />
                 </View> */}
             </TouchableOpacity>
+        </View>
+    )
 
+    const handleDelete = () => {
+        console.log('delete');
+    }
+
+
+    return (
+        <>
+            <SwipeListView
+
+                data={[
+                    {
+                        id: '1', // unique identifier for the item
+                        date: props.date,
+                        time: props.time,
+                        worker: props.worker,
+                        o_name: props.o_name,
+                        o_street: props.o_street,
+                        o_houseNr: props.o_houseNr,
+                        o_zip: props.o_zip,
+                        o_place: props.o_place,
+                        // other properties as needed
+                    },
+                ]} // pass your data array here
+                renderItem={renderItem}
+                renderHiddenItem={(data, rowMap) => (
+                    <View style={styles.rowBack}>
+                        <TouchableOpacity
+                            style={{
+                                alignItems: 'flex-end',
+                                justifyContent: 'center',
+                                backgroundColor: 'red',
+                                paddingRight: 20,
+                                height: '100%',
+
+                            }}
+                            onPress={handleDelete}
+                        >
+                            <Text style={{ color: 'white' }}>Löschen</Text>
+                        </TouchableOpacity>
+
+                    </View>
+                )}
+                // leftOpenValue={75}
+                rightOpenValue={-100}
+                disableRightSwipe={true}
+            />
 
             <ModalComponent
                 isVisible={isModalVisible}
@@ -75,7 +121,7 @@ const AppointmentItem = (props) => {
                     o_zip={props.o_zip}
                     o_place={props.o_place}
                     o_name={props.o_name}
-                    
+
                     c_name={props.c_name}
                 />
             </ModalComponent>
@@ -86,12 +132,8 @@ const AppointmentItem = (props) => {
 
 const styles = StyleSheet.create({
     container: {
-        borderWidth: 1,
-        borderRadius: 10,
-        justifyContent: 'space-between',
         flexDirection: 'row',
-        borderColor: '#757575',
-        marginBottom: 16,
+        flex: 1,
     },
     indicator: {
         width: '3%',
@@ -140,17 +182,10 @@ const styles = StyleSheet.create({
     dateTimeContainer: {
         flexDirection: 'row',
     },
-    orderDetails: {
-        // flexDirection: 'row',
 
-    },
     adressContainer: {
         flexDirection: "row",
-        // flexWrap: 'wrap',
-        // maxWidth: '50%',
 
-        // borderColor: 'red', 
-        // borderWidth: 2
     },
     adressItem: {
         marginRight: 5
@@ -158,6 +193,32 @@ const styles = StyleSheet.create({
     orderName: {
         marginRight: 5
     },
+    // swipeable styles
+    itemContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+    },
+    rowFront: {
+        flex: 1,
+        flexDirection: 'row',
+        alignItems: 'center',
+        backgroundColor: '#fff',
+        marginRight: 24,
+        marginLeft: 24,
+        marginBottom: 16,
+        borderWidth: 1,
+        borderColor: '#757575',
+        borderRadius: 10,
+    },
+    rowBack: {
+        backgroundColor: 'red',
+        borderWidth: 3,
+        borderColor: 'red',
+        borderRadius: 10,
+        marginRight: 24,
+        marginLeft: 24,
+        marginBottom: 16,
+    }
 
 })
 
