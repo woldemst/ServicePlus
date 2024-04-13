@@ -1,4 +1,4 @@
-import { GET_APPOINTMENTS, UPDATE_APPOINTMENT_DATA } from '../actions/appointmentActions';
+import { GET_APPOINTMENTS, DELETE_APPOINTMENT, UPDATE_APPOINTMENT_DATA } from '../actions/appointmentActions';
 
 const initialState = {
   appointmentsArray: {
@@ -6,40 +6,26 @@ const initialState = {
   },
 };
 
-const orderReducer = (state = initialState, action) => {
+const appointmentReducer = (state = initialState, action) => {
   switch (action.type) {
-    // case UPDATE_ORDER_DATA:
-    //   const { field, val, objectId } = action.payload;
-
-    //   const updatedOrder = {
-    //     ...state.ordersArray.orders.find(order => order._id === objectId),
-    //     [field]: val
-    //   };
-
-    //   const updatedOrdersArray = state.ordersArray.orders.map(order => {
-    //     if (order._id === objectId) {
-    //       return updatedOrder;
-    //     }
-    //     return order;
-    //   });
-
-    //   return {
-    //     ...state,
-    //     ordersArray: {
-    //       ...state.ordersArray,
-    //       orders: updatedOrdersArray,
-    //     },
-    //   };
-
     case GET_APPOINTMENTS:
       return {
         ...state,
         appointmentsArray: action.payload,
       };
 
+      case DELETE_APPOINTMENT:
+        const filteredAppointments = state.appointmentsArray.appointments.filter(appointment => appointment._id !== action.payload);
+        return {
+          ...state,
+          appointmentsArray: {
+            ...state.appointmentsArray,
+            appointments: filteredAppointments
+          }
+        };
     default:
       return state;
   }
 };
 
-export default orderReducer;
+export default appointmentReducer;

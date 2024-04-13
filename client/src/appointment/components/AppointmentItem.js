@@ -1,20 +1,23 @@
 import { View, StyleSheet, Image, Text, TouchableOpacity } from "react-native";
 import { SwipeListView } from 'react-native-swipe-list-view';
-
-import { useState } from "react";
-
+import { useState, useRef, useEffect } from "react";
+import axios from "axios";
+import { useDispatch, useSelector } from "react-redux";
 
 import ModalComponent from "../../shared/UIElements/Modal";
 import AppointmentInfo from "../pages/AppointmentInfo";
 import Button from "../../shared/UIElements/Button";
+import { refreshData } from '../../actions/utilActions'
+import { deleteAppointment } from '../../actions/appointmentActions'
 
 const AppointmentItem = (props) => {
+    const dispatch = useDispatch()
+    const appointmentId = props.id
     const [isModalVisible, setModalVisible] = useState(false);
 
     const toggleModal = () => {
         setModalVisible(!isModalVisible)
     }
-
 
     const renderItem = (data) => (
         <View style={styles.rowFront}>
@@ -49,15 +52,22 @@ const AppointmentItem = (props) => {
         </View>
     )
 
-    const handleDelete = () => {
-        console.log('delete');
+    const deleteHandler = async () => {
+        try {
+            await axios.delete(`http://localhost:8000/api/appointments/${appointmentId}/delete`)
+            dispatch(deleteAppointment(appointmentId))
+
+        } catch (err) {
+            console.log("Error while deleting appointments", err);
+        }
+
     }
+
 
 
     return (
         <>
             <SwipeListView
-
                 data={[
                     {
                         id: '1', // unique identifier for the item
@@ -79,20 +89,20 @@ const AppointmentItem = (props) => {
                             style={{
                                 alignItems: 'flex-end',
                                 justifyContent: 'center',
-                                backgroundColor: 'red',
                                 paddingRight: 20,
                                 height: '100%',
 
                             }}
-                            onPress={handleDelete}
+                            onPress={deleteHandler}
                         >
-                            <Text style={{ color: 'white' }}>Löschen</Text>
+                            {/* <Text style={{ color: 'white' }}>Löschen</Text> */}
+                            <Image style={styles.deleteImage} source={require('../../../assets/buttons/delete.png')} />
                         </TouchableOpacity>
 
                     </View>
                 )}
                 // leftOpenValue={75}
-                rightOpenValue={-100}
+                rightOpenValue={-75}
                 disableRightSwipe={true}
             />
 
@@ -211,14 +221,19 @@ const styles = StyleSheet.create({
         borderRadius: 10,
     },
     rowBack: {
-        backgroundColor: 'red',
+        backgroundColor: '#C70000',
         borderWidth: 3,
-        borderColor: 'red',
+        borderColor: '#C70000',
         borderRadius: 10,
         marginRight: 24,
         marginLeft: 24,
         marginBottom: 16,
-    }
+    },
+    deleteImage: {
+        width: 30,
+        height: 30
+
+    },
 
 })
 
