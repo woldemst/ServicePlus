@@ -81,7 +81,7 @@ const styles = StyleSheet.create({
         height: 24
     },
     content: {
-        padding: 24,
+        paddingTop: 24,
         flex: 1,
         backgroundColor: '#fff'
     },
