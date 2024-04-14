@@ -92,33 +92,6 @@ const createAppointment = async (req, res, next) => {
   }
 }
 
-const deleteAppointmentById = async (req, res, next) => {
-  const appointmentId = req.params.appointmentId
-
-  try {
-    // Delete the appointment
-    const deletedAppointment = await Appointment.deleteOne({ _id: appointmentId });
-
-    // Check if the appointment exists
-    if (!deletedAppointment) {
-      return res.status(404).json({ message: 'Appointment not found' });
-    }
-
-    await Order.findOneAndUpdate(
-      { appointments: appointmentId },
-      { $pull: { appointments: appointmentId } }
-    );
-
-    res.status(200).json({ message: 'Appointment was deleted successfully' });
-  } catch (err) {
-    const error = new HttpError(
-      "Something went wrong, could not delete this appointment.",
-      500
-    );
-    return next(error);
-  }
-}
-
 const getAllContactsAsOptionsByFirmId = async (req, res, next) => {
   const firmId = req.params.firmId;
 
@@ -233,6 +206,34 @@ const getAllOrdersAsOptionsByFirmId = async (req, res, next) => {
   } catch (err) {
     const error = new HttpError(
       'Fetching orders failed, please try again later.',
+      500
+    );
+    return next(error);
+  }
+}
+
+// delete functionality 
+const deleteAppointmentById = async (req, res, next) => {
+  const appointmentId = req.params.appointmentId
+
+  try {
+    // Delete the appointment
+    const deletedAppointment = await Appointment.deleteOne({ _id: appointmentId });
+
+    // Check if the appointment exists
+    if (!deletedAppointment) {
+      return res.status(404).json({ message: 'Appointment not found' });
+    }
+
+    await Order.findOneAndUpdate(
+      { appointments: appointmentId },
+      { $pull: { appointments: appointmentId } }
+    );
+
+    res.status(200).json({ message: 'Appointment was deleted successfully' });
+  } catch (err) {
+    const error = new HttpError(
+      "Something went wrong, could not delete this appointment.",
       500
     );
     return next(error);
