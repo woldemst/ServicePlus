@@ -1,4 +1,4 @@
-import { GET_ORDERS, UPDATE_ORDER_DATA, CLEAR_ORDER_DATA, TOGGLE_EDIT, TOGGLE_TO_TRUE_EDIT_ORDER, TOGGLE_TO_FALSE_EDIT_ORDER, UPDATE_ORDER_NAME } from '../actions/orderActions';
+import { GET_ORDERS, UPDATE_ORDER_DATA, CLEAR_ORDER_DATA, TOGGLE_EDIT, TOGGLE_TO_TRUE_EDIT_ORDER, TOGGLE_TO_FALSE_EDIT_ORDER, UPDATE_ORDER_NAME, DELETE_ORDER } from '../actions/orderActions';
 
 const initialState = {
   ordersArray: {
@@ -64,6 +64,16 @@ const orderReducer = (state = initialState, action) => {
         ...state,
         orderName: action.payload
       }
+
+      case DELETE_ORDER:
+        const filteredOrders = state.ordersArray.orders.filter(order => order._id !== action.payload);
+        return {
+          ...state,
+          ordersArray: {
+            ...state.ordersArray,
+            orders: filteredOrders
+          }
+        };
     default:
       return state;
   }

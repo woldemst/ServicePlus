@@ -5,6 +5,7 @@ export const CLEAR_ORDER_DATA = 'CLEAR_ORDER_DATA'
 export const TOGGLE_TO_TRUE_EDIT_ORDER = 'TOGGLE_TO_TRUE_EDIT_ORDER'
 export const TOGGLE_TO_FALSE_EDIT_ORDER = 'TOGGLE_TO_FALSE_EDIT_ORDER'
 export const UPDATE_ORDER_NAME = 'UPDATE_ORDER_NAME'
+export const DELETE_ORDER = 'DELETE_ORDER'
 
 
 export const updateOrderName = (name) => {
@@ -18,6 +19,7 @@ export const toggleToTrueEditOrder = (data) => ({
   type: TOGGLE_TO_TRUE_EDIT_ORDER,
   payload: data
 })
+
 export const toggleToFalseEditOrder = (data) => ({
   type: TOGGLE_TO_FALSE_EDIT_ORDER,
   payload: data
@@ -50,3 +52,7 @@ export const clearOrderData = data => ({
   payload: data
 })
 
+export const deleteOrder = (data) => ({
+  type: DELETE_ORDER,
+  payload: data
+})

@@ -6,8 +6,6 @@ import { useDispatch, useSelector } from "react-redux";
 
 import ModalComponent from "../../shared/UIElements/Modal";
 import AppointmentInfo from "../pages/AppointmentInfo";
-import Button from "../../shared/UIElements/Button";
-import { refreshData } from '../../actions/utilActions'
 import { deleteAppointment } from '../../actions/appointmentActions'
 
 const AppointmentItem = (props) => {
@@ -63,14 +61,17 @@ const AppointmentItem = (props) => {
 
     }
 
-
-
     return (
         <>
             <SwipeListView
+                // swipeGestureBeganHandler={(e) => e.isRightSwipe && e.isSingleTap}
+                renderItem={renderItem}
+                rightOpenValue={-75}
+                // leftOpenValue={75}
+                disableRightSwipe={true}
                 data={[
                     {
-                        id: '1', // unique identifier for the item
+                        id: props.id,
                         date: props.date,
                         time: props.time,
                         worker: props.worker,
@@ -79,13 +80,12 @@ const AppointmentItem = (props) => {
                         o_houseNr: props.o_houseNr,
                         o_zip: props.o_zip,
                         o_place: props.o_place,
-                        // other properties as needed
                     },
-                ]} // pass your data array here
-                renderItem={renderItem}
+                ]}
                 renderHiddenItem={(data, rowMap) => (
                     <View style={styles.rowBack}>
                         <TouchableOpacity
+                            onPress={deleteHandler}
                             style={{
                                 alignItems: 'flex-end',
                                 justifyContent: 'center',
@@ -93,17 +93,13 @@ const AppointmentItem = (props) => {
                                 height: '100%',
 
                             }}
-                            onPress={deleteHandler}
                         >
-                            {/* <Text style={{ color: 'white' }}>Löschen</Text> */}
                             <Image style={styles.deleteImage} source={require('../../../assets/buttons/delete.png')} />
                         </TouchableOpacity>
 
                     </View>
                 )}
-                // leftOpenValue={75}
-                rightOpenValue={-75}
-                disableRightSwipe={true}
+
             />
 
             <ModalComponent
@@ -159,6 +155,24 @@ const styles = StyleSheet.create({
         paddingLeft: 16,
         textAlign: 'left',
     },
+    modalHeadline: {
+        fontSize: 21,
+        color: "#7a9b76",
+        fontWeight: "700",
+    },
+    iconContainer: {
+        // width: '8%',
+        paddingRight: 13,
+        alignItems: 'center',
+        justifyContent: 'center'
+    },
+    adressContainer: {
+        flexDirection: "row",
+
+    },
+    adressItem: {
+        marginRight: 5
+    },
     date: {
         fontSize: 14,
         color: '#171717',
@@ -172,42 +186,24 @@ const styles = StyleSheet.create({
         fontSize: 14,
         marginTop: 7
     },
-    iconContainer: {
-        // width: '8%',
-        paddingRight: 13,
-        alignItems: 'center',
-        justifyContent: 'center'
-    },
+
     filePlusImg: {
         // borderColor: 'red', 
         // borderWidth: 2
         // width: 24, 
         // height: 24,
     },
-    modalHeadline: {
-        fontSize: 21,
-        color: "#7a9b76",
-        fontWeight: "700",
-    },
+
     dateTimeContainer: {
         flexDirection: 'row',
     },
 
-    adressContainer: {
-        flexDirection: "row",
 
-    },
-    adressItem: {
-        marginRight: 5
-    },
+
     orderName: {
         marginRight: 5
     },
-    // swipeable styles
-    itemContainer: {
-        flexDirection: 'row',
-        alignItems: 'center',
-    },
+
     rowFront: {
         flex: 1,
         flexDirection: 'row',
