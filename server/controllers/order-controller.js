@@ -280,6 +280,20 @@ const deleteOrderById = async (req, res, next) => {
   const orderId = req.params.orderId
 
   try {
+
+    // delete each appointment of the order
+    // Find the order to get appointment IDs
+    const order = await Order.findById(orderId);
+
+    if (!order) {
+      return res.status(404).json({ message: 'Order not found' });
+    }
+
+    // Delete each appointment associated with the order
+    for (const appointmentId of order.appointments) {
+      await Appointment.deleteOne({ _id: appointmentId });
+    }
+
     // Delete the appointment
     const deletedOrder = await Order.deleteOne({ _id: orderId });
 
@@ -292,7 +306,6 @@ const deleteOrderById = async (req, res, next) => {
       { orders: orderId },
       { $pull: { orders: orderId } }
     );
-
 
     res.status(200).json({ message: 'Order was deleted successfully' });
   } catch (err) {
