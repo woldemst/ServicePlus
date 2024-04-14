@@ -78,6 +78,8 @@ const OrderMain = () => {
                 labelStyle: { fontSize: 14, textTransform: 'none' }, // Style for the tab labels
                 tabBarStyle: { paddingTop: 0, paddingBottom: 0, paddingHorizontal: 0 }, // Adjust padding here
                 tabBarIndicatorStyle: { backgroundColor: '#e0e0e0' }, // Change the color of the indicator
+                swipeEnabled: false,
+                
             }}
             >
                 <Tab.Screen
