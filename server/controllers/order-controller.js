@@ -307,6 +307,13 @@ const deleteOrderById = async (req, res, next) => {
       { $pull: { orders: orderId } }
     );
 
+    await Customer.findOneAndUpdate(
+      { orders: orderId },
+      { $pull: { orders: orderId } }
+    );
+
+
+
     res.status(200).json({ message: 'Order was deleted successfully' });
   } catch (err) {
     const error = new HttpError(
