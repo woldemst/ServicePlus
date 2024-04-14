@@ -275,6 +275,35 @@ const updateOrderById = async (req, res, next) => {
   }
 }
 
+// delete functionality 
+const deleteOrderById = async (req, res, next) => {
+  const orderId = req.params.orderId
+
+  try {
+    // Delete the appointment
+    const deletedOrder = await Order.deleteOne({ _id: orderId });
+
+    // Check if the appointment exists
+    if (!deletedOrder) {
+      return res.status(404).json({ message: 'Order not found' });
+    }
+
+    await Firm.findOneAndUpdate(
+      { orders: orderId },
+      { $pull: { orders: orderId } }
+    );
+
+
+    res.status(200).json({ message: 'Order was deleted successfully' });
+  } catch (err) {
+    const error = new HttpError(
+      "Something went wrong, could not delete this order.",
+      500
+    );
+    return next(error);
+  }
+}
+
 exports.getAllOrdersByFirmId = getAllOrdersByFirmId;
 exports.createOrder = createOrder;
 exports.getOrderById = getOrderById;
@@ -284,3 +313,4 @@ exports.getAllCustomersAsOptions = getAllCustomersAsOptions;
 exports.getAllContactsAsOptions = getAllContactsAsOptions;
 
 exports.updateOrderById = updateOrderById;
+exports.deleteOrderById = deleteOrderById;
