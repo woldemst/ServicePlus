@@ -4,6 +4,7 @@ import {
     StyleSheet,
     ScrollView,
     ActivityIndicator,
+    FlatList
 } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import OrderItem from "./OrderItem";
@@ -22,26 +23,31 @@ const OrderList = (props) => {
             {!isLoaded ? (
                 <ActivityIndicator style={styles.loader} size="large" color="#7A9B76" />
             ) : (
-                <ScrollView style={styles.scroll} showsVerticalScrollIndicator={false}>
-                    {fetchedData.orders.map((order) => (
+                <FlatList
+                    showsVerticalScrollIndicator={false}
+                    style={styles.scroll}
+                    data={fetchedData.orders}
+                    keyExtractor={item => item._id}
+                    renderItem={({ item }) => (
                         <OrderItem
-                            id={order._id}
-                            key={order._id}
-                            name={order.name}
-                            street={order.street}
-                            houseNr={order.houseNr}
-                            zip={order.zip}
-                            place={order.place}
-                            c_name={order.c_name}
-                            creator={order.creator}
-                            worker={order.worker}
-                            date={order.date}
-                            status={order.status}
-                            contact={order.contact}
-                            description={order.description}
+                            id={item._id}
+                            key={item._id}
+                            name={item.name}
+                            street={item.street}
+                            houseNr={item.houseNr}
+                            zip={item.zip}
+                            place={item.place}
+                            c_name={item.c_name}
+                            creator={item.creator}
+                            worker={item.worker}
+                            date={item.date}
+                            status={item.status}
+                            contact={item.contact}
+                            description={item.description}
                         />
-                    ))}
-                </ScrollView>
+                    )}
+                >
+                </FlatList>
             )}
 
         </View>
@@ -52,7 +58,9 @@ const styles = StyleSheet.create({
     scroll: {
         // flex: 1,
     },
-
+    orderList: {
+        flex: 1
+    },
     loader: {
         flex: 1,
     },

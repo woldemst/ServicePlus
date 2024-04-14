@@ -1,4 +1,4 @@
-import { GET_APPOINTMENTS, DELETE_APPOINTMENT, UPDATE_APPOINTMENT_DATA } from '../actions/appointmentActions';
+import { GET_APPOINTMENTS, DELETE_APPOINTMENT, DELETE_APPOINTMENTS_BY_ORDER, UPDATE_APPOINTMENT_DATA } from '../actions/appointmentActions';
 
 const initialState = {
   appointmentsArray: {
@@ -14,15 +14,25 @@ const appointmentReducer = (state = initialState, action) => {
         appointmentsArray: action.payload,
       };
 
-      case DELETE_APPOINTMENT:
-        const filteredAppointments = state.appointmentsArray.appointments.filter(appointment => appointment._id !== action.payload);
-        return {
-          ...state,
-          appointmentsArray: {
-            ...state.appointmentsArray,
-            appointments: filteredAppointments
-          }
-        };
+    case DELETE_APPOINTMENT:
+      const filteredAppointments = state.appointmentsArray.appointments.filter(appointment => appointment._id !== action.payload);
+      return {
+        ...state,
+        appointmentsArray: {
+          ...state.appointmentsArray,
+          appointments: filteredAppointments
+        }
+      };
+
+    case DELETE_APPOINTMENTS_BY_ORDER:
+      const filteredAppointmentsByOrder = state.appointmentsArray.appointments.filter(appointment => appointment.orderId !== action.payload);
+      return {
+        ...state,
+        appointmentsArray: {
+          ...state.appointmentsArray,
+          appointments: filteredAppointmentsByOrder
+        }
+      };
     default:
       return state;
   }

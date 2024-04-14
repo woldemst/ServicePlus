@@ -22,8 +22,6 @@ const OrderView = () => {
 
     // console.log(fetchedData.orders);
     const [isModalVisible, setModalVisible] = useState(false);
-    const [refreshd, setRefresh] = useState(false)
-    const handleRefresh = () => setRefresh();
     const [isLoaded, setIsLoaded] = useState(false)
     const refresh = useSelector(state => state.util.refresh)
 
@@ -82,7 +80,7 @@ const OrderView = () => {
 
                 header={<Text style={styles.modalHeadline}>Auftrag hinzufügen</Text>}
             >
-                <OrderCreate handleRefresh={handleRefresh} toggle={toggleModal} />
+                <OrderCreate toggle={toggleModal} />
             </ModalComponent>
         </>
     ) : (
@@ -120,7 +118,7 @@ const OrderView = () => {
 
                     header={<Text style={styles.modalHeadline}>Auftrag hinzufügen</Text>}
                 >
-                    <OrderCreate handleRefresh={handleRefresh} toggle={toggleModal} />
+                    <OrderCreate toggle={toggleModal} />
                 </ModalComponent>
             </View>
         </>
@@ -169,7 +167,7 @@ const styles = StyleSheet.create({
         height: 24
     },
     content: {
-        padding: 24,
+        paddingTop: 24,
         flex: 1,
         backgroundColor: '#fff'
     },

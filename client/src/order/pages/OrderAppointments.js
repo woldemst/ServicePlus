@@ -19,8 +19,8 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: '#fff',
         paddingVertical: 32,
-        paddingHorizontal: 16
+        // paddingHorizontal: 16
     }
 })
 
-export default OrderAppointments; 
+export default OrderAppointments;  
