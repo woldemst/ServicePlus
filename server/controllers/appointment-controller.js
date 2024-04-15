@@ -240,6 +240,37 @@ const deleteAppointmentById = async (req, res, next) => {
   }
 }
 
+const statusChange = async (req, res, next) => {
+  const appointmentId = req.params.appointmentId
+  try {
+    const appointment = await Appointment.findById(appointmentId);
+    if (!appointment) {
+      // If appointment is not found, return an error
+      const error = new HttpError("Appointment not found", 404);
+      return next(error);
+    }
+
+    // Get the new status from request body
+    const { newStatus } = req.body;
+
+    // Update the status of the appointment
+    appointment.status = newStatus;
+
+    // Save the updated appointment
+    await appointment.save();
+
+    // Respond with success message
+    res.status(200).json({ message: "Appointment status updated successfully" });
+
+
+  } catch (err) {
+    const error = new HttpError(
+      "Something went wrong, could not change a status of this appointment.",
+      500
+    );
+    return next(error);
+  }
+}
 
 exports.getAllAppointments = getAllAppointments;
 exports.createAppointment = createAppointment;
@@ -248,4 +279,6 @@ exports.deleteAppointmentById = deleteAppointmentById;
 
 exports.getAllCustomersAsOptionsBiFirmId = getAllCustomersAsOptionsBiFirmId;
 exports.getAllWorkersAsOptionsByFirmId = getAllWorkersAsOptionsByFirmId;
-exports.getAllOrdersAsOptionsByFirmId = getAllOrdersAsOptionsByFirmId; 
+exports.getAllOrdersAsOptionsByFirmId = getAllOrdersAsOptionsByFirmId;
+
+exports.statusChange = statusChange;

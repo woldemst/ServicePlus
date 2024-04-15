@@ -14,5 +14,6 @@ router.get('/worker-options/:firmId', appointmentController.getAllWorkersAsOptio
 router.get('/order-options/:firmId', appointmentController.getAllOrdersAsOptionsByFirmId)
 
 router.delete('/:appointmentId/delete', appointmentController.deleteAppointmentById)
+router.post('/:appointmentId/statuschange', appointmentController.statusChange)
 
 module.exports = router;
