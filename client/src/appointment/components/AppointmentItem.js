@@ -3,6 +3,7 @@ import { SwipeListView } from 'react-native-swipe-list-view';
 import { useState, useRef, useEffect } from "react";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
+import { Alert } from "react-native";
 
 import ModalComponent from "../../shared/UIElements/Modal";
 import AppointmentInfo from "../pages/AppointmentInfo";
@@ -51,13 +52,30 @@ const AppointmentItem = (props) => {
     )
 
     const deleteHandler = async () => {
-        try {
-            await axios.delete(`http://localhost:8000/api/appointments/${appointmentId}/delete`)
-            dispatch(deleteAppointment(appointmentId))
+        Alert.alert(
+            'Delete Confirmation',
+            'Are you sure you want to delete this appointment?',
+            [
+                {
+                    text: 'Cancel',
+                    style: 'cancel',
+                },
+                {
+                    text: "Delete",
+                    onPress: async () => {
+                        try {
+                            await axios.delete(`http://localhost:8000/api/appointments/${appointmentId}/delete`)
+                            dispatch(deleteAppointment(appointmentId))
 
-        } catch (err) {
-            console.log("Error while deleting appointments", err);
-        }
+                        } catch (err) {
+                            console.log("Error while deleting appointments", err);
+                        }
+                    }
+                }
+            ],
+            { cancelable: false }
+        )
+
 
     }
 
