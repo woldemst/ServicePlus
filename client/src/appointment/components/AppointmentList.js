@@ -48,11 +48,26 @@ const AppointmentList = props => {
             )
         }
 
+        let appointmentsToRender = fetchedData.appointments;
+
+        if (props.id) {
+            appointmentsToRender = appointmentsToRender.filter(appointment => appointment.orderId === props.id);
+        }
+
+        if (appointmentsToRender.length === 0) {
+            return (
+                <View style={styles.imgContainer}>
+                    <Image style={styles.bannerImg} source={require('../../../assets/empty_folder.png')} />
+                    <Text>No appointments found for this order ID.</Text>
+                </View>
+            );
+        }
+
 
         return (
             <FlatList
                 showsVerticalScrollIndicator={false}
-                data={fetchedData.appointments}
+                data={appointmentsToRender}
                 keyExtractor={item => item._id}
                 renderItem={({ item }) => (
                     <AppointmentItem
