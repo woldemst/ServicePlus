@@ -61,6 +61,7 @@ const createAppointment = async (req, res, next) => {
       name: name,
       date: date,
       time: time,
+      status: 'new',
       description: description,
 
       o_street: orderItem.street,
