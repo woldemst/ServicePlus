@@ -14,6 +14,9 @@ const AppointmentItem = (props) => {
     const appointmentId = props.id
     const [isModalVisible, setModalVisible] = useState(false);
 
+    const appointments = useSelector(state => state.appointment.appointmentsArray.appointments)
+    const appointmentItem = appointments.find(appointment => appointment._id == appointmentId)
+
     const toggleModal = () => {
         setModalVisible(!isModalVisible)
     }
@@ -79,6 +82,9 @@ const AppointmentItem = (props) => {
 
     }
 
+
+
+
     return (
         <>
             <SwipeListView
@@ -126,8 +132,14 @@ const AppointmentItem = (props) => {
                 animationOut="slideOutDown" // Specify the slide-down animation
                 onBackdropPress={toggleModal}
                 onBackButtonPress={toggleModal}
-                modalHeight="50%"
-                header={<Text style={styles.modalHeadline}>Termin</Text>}
+                modalHeight="45%"
+                header={<>
+                    <View style={styles.headlineContainer}>
+                        <Text style={styles.modalHeadline}>Termin</Text>
+                    </View>
+
+                </>}
+
             >
 
                 <AppointmentInfo
@@ -173,11 +185,6 @@ const styles = StyleSheet.create({
         paddingLeft: 16,
         textAlign: 'left',
     },
-    modalHeadline: {
-        fontSize: 21,
-        color: "#7a9b76",
-        fontWeight: "700",
-    },
     iconContainer: {
         // width: '8%',
         paddingRight: 13,
@@ -216,8 +223,6 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
     },
 
-
-
     orderName: {
         marginRight: 5
     },
@@ -247,6 +252,16 @@ const styles = StyleSheet.create({
         width: 30,
         height: 30
 
+    },
+    headlineContainer: {
+        flexDirection: 'row',
+        marginBottom: 6
+    },
+    modalHeadline: {
+        fontSize: 21,
+        color: "#7a9b76",
+        fontWeight: "700",
+        width: '40%'
     },
 
 })
