@@ -3,6 +3,8 @@ import { useState } from "react";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { refershData } from "../../actions/utilActions";
+import { Alert } from "react-native";
+
 
 const AppointmentInfo = props => {
     const dispatch = useDispatch()
@@ -19,17 +21,32 @@ const AppointmentInfo = props => {
 
     const handleStatusChange = async newStatus => {
         setStatus(newStatus);
-        setShowOptions(false);
 
-        const URL = `http://localhost:8000/api/appointments/${props.id}/statuschange`
+        Alert.alert(
+            'Changing Confirmation',
+            'Are you sure you want to change a status of this appointment?',
+            [
+                {
+                    text: 'Cancel',
+                    style: 'cancel',
+                },
+                {
+                    text: "Delete",
+                    onPress: async () => {
+                        try {
+                            const response = await axios.post(`http://localhost:8000/api/appointments/${props.id}/statuschange`, { newStatus: newStatus })
+                            dispatch(refershData())
+                            setShowOptions(false);
 
-        try {
-            const response = await axios.post(URL, { newStatus: newStatus })
-            dispatch(refershData())
+                        } catch (err) {
+                            console.log("Error if changing a status of an appointments", err);
+                        }
+                    }
+                }
+            ],
+            { cancelable: false }
+        )
 
-        } catch (err) {
-            console.log("Error if changing a status of an appointments", err);
-        }
     };
 
     const toggleOptions = () => {
