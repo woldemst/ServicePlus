@@ -1,8 +1,11 @@
 import { View, StyleSheet, Image, Text, TouchableOpacity } from "react-native";
 import { useState } from "react";
+import axios from "axios";
+import { useDispatch, useSelector } from "react-redux";
+import { refershData } from "../../actions/utilActions";
 
 const AppointmentInfo = props => {
-
+    const dispatch = useDispatch()
     const [status, setStatus] = useState(props.status || 1);
     const [showOptions, setShowOptions] = useState(false);
 
@@ -14,10 +17,19 @@ const AppointmentInfo = props => {
         4: "canceled"
     };
 
-
-    const handleStatusChange = newStatus => {
+    const handleStatusChange = async newStatus => {
         setStatus(newStatus);
         setShowOptions(false);
+
+        const URL = `http://localhost:8000/api/appointments/${props.id}/statuschange`
+
+        try {
+            const response = await axios.post(URL, { newStatus: newStatus })
+            dispatch(refershData())
+
+        } catch (err) {
+            console.log("Error if changing a status of an appointments", err);
+        }
     };
 
     const toggleOptions = () => {
