@@ -143,7 +143,8 @@ const AppointmentItem = (props) => {
             >
 
                 <AppointmentInfo
-                    key={props._id}
+                    key={props.id}
+                    id={props.id}
                     // creator={props.creator}
                     name={props.name}
                     worker={props.worker}
