@@ -28,6 +28,7 @@ const getAllAppointments = async (req, res, next) => {
   }
 }
 
+// create an appointment
 const createAppointment = async (req, res, next) => {
   try {
     const {
@@ -61,7 +62,7 @@ const createAppointment = async (req, res, next) => {
       name: name,
       date: date,
       time: time,
-      status: 'new',
+      status: 1,
       description: description,
 
       o_street: orderItem.street,
@@ -240,7 +241,7 @@ const deleteAppointmentById = async (req, res, next) => {
     return next(error);
   }
 }
-
+// changing a status 
 const statusChange = async (req, res, next) => {
   const appointmentId = req.params.appointmentId
   try {
