@@ -17,6 +17,7 @@ const AppointmentItem = (props) => {
     const appointments = useSelector(state => state.appointment.appointmentsArray.appointments)
     const appointmentItem = appointments.find(appointment => appointment._id == appointmentId)
 
+
     const toggleModal = () => {
         setModalVisible(!isModalVisible)
     }
@@ -24,7 +25,13 @@ const AppointmentItem = (props) => {
     const renderItem = (data) => (
         <View style={styles.rowFront}>
             <TouchableOpacity style={styles.container} onPress={toggleModal} >
-                <View style={styles.indicator}></View>
+                <View style={[
+                    styles.indicator,
+                    appointmentItem.status == 1 ? styles.notStarted : null,
+                    appointmentItem.status == 2 ? styles.inProgress : null,
+                    appointmentItem.status == 3 ? styles.completed : null,
+                    appointmentItem.status == 4 ? styles.canceled : null,
+                ]}></View>
 
                 <View style={styles.mainContent}>
                     <View style={styles.dateTimeContainer}>
@@ -78,8 +85,6 @@ const AppointmentItem = (props) => {
             ],
             { cancelable: false }
         )
-
-
     }
 
 
@@ -263,6 +268,20 @@ const styles = StyleSheet.create({
         color: "#7a9b76",
         fontWeight: "700",
         width: '40%'
+    },
+
+    // status indicator 
+    notStarted: {
+        backgroundColor: '#808080',
+    },
+    inProgress: {
+        backgroundColor: '#1769FF',
+    },
+    completed: {
+        backgroundColor: '#7A9B76',
+    },
+    canceled: {
+        backgroundColor: '#DB504A',
     },
 
 })

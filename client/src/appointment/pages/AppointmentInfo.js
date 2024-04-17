@@ -213,7 +213,7 @@ const styles = StyleSheet.create({
         borderRadius: 50
     },
     notStarted: {
-        backgroundColor: '#eee',
+        backgroundColor: '#808080',
         color: 'white'
     },
     inProgress: {
