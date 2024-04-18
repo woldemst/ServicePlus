@@ -14,5 +14,7 @@ router.get('/contact-options/:firmId', orderController.getAllContactsAsOptions)
 
 router.patch('/update/:orderId', orderController.updateOrderById)
 router.delete('/:orderId/delete', orderController.deleteOrderById)
+router.post('/:orderId/statuschange', orderController.statusChange)
+
 
 module.exports = router;
