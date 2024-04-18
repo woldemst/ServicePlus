@@ -4,13 +4,15 @@ import {
   TouchableOpacity,
   ActivityIndicator,
   StyleSheet,
-  ScrollView
+  ScrollView,
+  Image
 } from "react-native";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { useContext, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { AuthContext } from "../../context/auth-context";
 import axios from "axios";
+import { Alert } from "react-native";
 
 import { VALIDATOR_REQUIRE, VALIDATOR_SELECT } from "../../util/validators";
 import { setInitialSelectData, setSelect } from "../../actions/selectActions";
@@ -35,6 +37,45 @@ const OrderInfo = (props) => {
   const order = fetchedArray.find(order => order._id == orderId)
   const edit = useSelector(state => state.order.edit);
 
+  const [status, setStatus] = useState(props.status || 1);
+  const [showOptions, setShowOptions] = useState(false);
+
+  const statusStrings = {
+    1: "new",
+    2: "in progress",
+    3: "completed",
+    4: "canceled"
+  };
+
+
+  const handleStatusChange = async newStatus => {
+    setStatus(newStatus);
+
+    Alert.alert(
+      'Changing Confirmation',
+      'Are you sure you want to change a status of this order?',
+      [
+        {
+          text: 'Cancel',
+          style: 'cancel',
+        },
+        {
+          text: "Change",
+          onPress: async () => {
+            try {
+              const response = await axios.post(`http://localhost:8000/api/orders/${orderId}/statuschange`, { newStatus: newStatus })
+              dispatch(refershData())
+
+            } catch (err) {
+              console.log("Error if changing a status of an order", err);
+            }
+          }
+        }
+      ],
+      { cancelable: false }
+    )
+
+  };
 
   const [initialSelectState, setInitialSelectState] = useState({
     selects: {
@@ -264,13 +305,20 @@ const OrderInfo = (props) => {
           disabled={!edit}
         />
 
+        <View style={[styles.statusContainer]}>
+          <TouchableOpacity style={[styles.statusButton, styles.inProgress, !edit && styles.disabledButton]} onPress={() => handleStatusChange("2")} disabled={!edit}>
+            <Text style={styles.statusButtonText}>In Progress</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={[styles.statusButton, styles.completed, !edit && styles.disabledButton]} onPress={() => handleStatusChange("3")} disabled={!edit}>
+            <Text style={styles.statusButtonText}>Completed</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={[styles.statusButton, styles.canceled, !edit && styles.disabledButton]} onPress={() => handleStatusChange("4")} disabled={!edit}>
+            <Text style={styles.statusButtonText}>Canceled</Text>
+          </TouchableOpacity>
+
+        </View>
+
         <View style={styles.btnContainer}>
-          {/* <Button
-            style={[styles.cancelBtn, styles.button]}
-            buttonText={styles.cancelBtnText}
-            onPress={() => props.toggle()}
-            title={'Abbrechen'}
-          /> */}
           {edit && (
             <Button
               style={[styles.editButton, styles.button]}
@@ -360,6 +408,48 @@ const styles = StyleSheet.create({
   placeWrapper: {
     width: '60%'
   },
+
+  // status 
+  statusContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: 16
+    // borderWidth: 2,
+    // borderColor: 'red'
+  },
+  statusButton: {
+    flex: 1,
+    paddingVertical: 8,
+    paddingHorizontal: 20,
+    alignItems: 'center',
+  },
+  statusButtonText: {
+    fontWeight: 'bold',
+    color: 'white',
+  
+  },
+  disabledButton: {
+    backgroundColor: 'grey',
+    color: 'white',
+    opacity: 0.7, // Adjust opacity to visually indicate the button is disabled
+  },
+  notStarted: {
+    backgroundColor: '#808080',
+    color: 'white'
+  },
+  inProgress: {
+    backgroundColor: '#1769FF',
+    color: 'white'
+  },
+  completed: {
+    backgroundColor: '#7A9B76',
+    color: 'white'
+  },
+  canceled: {
+    backgroundColor: '#DB504A',
+    color: 'white'
+  },
+
 });
 
 

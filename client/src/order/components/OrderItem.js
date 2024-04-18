@@ -8,21 +8,23 @@ import {
 import { useState } from "react";
 import { useNavigation } from "@react-navigation/native"
 import { SwipeListView } from "react-native-swipe-list-view";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Alert } from 'react-native';
 import axios from "axios";
-
 
 import { deleteOrder } from "../../actions/orderActions";
 import { deleteAppointmentsByOrder } from "../../actions/appointmentActions";
 
 
-
 const OrderItem = (props) => {
   const navigation = useNavigation()
   const dispatch = useDispatch()
-
   const orderId = props.id
+
+  const orders = useSelector(state => state.order.ordersArray.orders)
+  const orderItem = orders.find(order => order._id == orderId)
+
+
 
   const deleteHandler = async () => {
     Alert.alert(
@@ -64,7 +66,13 @@ const OrderItem = (props) => {
             // 
           })
         }} >
-        <View style={styles.indicator}></View>
+        <View style={[
+          styles.indicator,
+          orderItem.status == 1 ? styles.notStarted : null,
+          orderItem.status == 2 ? styles.inProgress : null,
+          orderItem.status == 3 ? styles.completed : null,
+          orderItem.status == 4 ? styles.canceled : null,
+        ]}></View>
 
         <View style={styles.mainContent}>
           <View style={styles.nameContainer}>
@@ -96,6 +104,7 @@ const OrderItem = (props) => {
       rightOpenValue={-75}
       // leftOpenValue={75}
       disableRightSwipe={true}
+      closeOnRowOpen={true}
       data={[
         {
           id: props.id,
@@ -215,8 +224,21 @@ const styles = StyleSheet.create({
   deleteImage: {
     width: 30,
     height: 30
-
   },
+  // status indicator 
+  notStarted: {
+    backgroundColor: '#808080',
+  },
+  inProgress: {
+    backgroundColor: '#1769FF',
+  },
+  completed: {
+    backgroundColor: '#7A9B76',
+  },
+  canceled: {
+    backgroundColor: '#DB504A',
+  },
+
 });
 
 export default OrderItem;
