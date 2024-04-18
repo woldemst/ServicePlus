@@ -15,7 +15,7 @@ const orderSchema = new mongoose.Schema({
   worker: { type: String },
   // date: { type: String}, 
   // customer: { type: String },
-  // status: { type: String},
+  status: { type: String},
   contact: { type: String },
   description: { type: String },
 

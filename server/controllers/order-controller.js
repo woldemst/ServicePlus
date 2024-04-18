@@ -27,8 +27,8 @@ const getAllOrdersByFirmId = async (req, res, next) => {
   }
 };
 
+// create order
 const createOrder = async (req, res, next) => {
-
   const {
     firmId,
     name,
@@ -324,6 +324,39 @@ const deleteOrderById = async (req, res, next) => {
   }
 }
 
+// changing a status 
+const statusChange = async (req, res, next) => {
+  const orderId = req.params.orderId
+  try {
+    const order = await Order.findById(orderId);
+    if (!order) {
+      // If appointment is not found, return an error
+      const error = new HttpError("Order not found", 404);
+      return next(error);
+    }
+
+    // Get the new status from request body
+    const { newStatus } = req.body;
+
+    // Update the status of the appointment
+    order.status = newStatus;
+
+    // Save the updated appointment
+    await order.save();
+
+    // Respond with success message
+    res.status(200).json({ message: "Order status updated successfully" });
+
+
+  } catch (err) {
+    const error = new HttpError(
+      "Something went wrong, could not change a status of this order.",
+      500
+    );
+    return next(error);
+  }
+}
+
 exports.getAllOrdersByFirmId = getAllOrdersByFirmId;
 exports.createOrder = createOrder;
 exports.getOrderById = getOrderById;
@@ -334,3 +367,4 @@ exports.getAllContactsAsOptions = getAllContactsAsOptions;
 
 exports.updateOrderById = updateOrderById;
 exports.deleteOrderById = deleteOrderById;
+exports.statusChange = statusChange;
