@@ -37,9 +37,6 @@ const OrderInfo = (props) => {
   const order = fetchedArray.find(order => order._id == orderId)
   const edit = useSelector(state => state.order.edit);
 
-  const [status, setStatus] = useState(props.status || 1);
-  const [showOptions, setShowOptions] = useState(false);
-
   const statusStrings = {
     1: "new",
     2: "in progress",
@@ -47,13 +44,15 @@ const OrderInfo = (props) => {
     4: "canceled"
   };
 
+  const [activeStatus, setActiveStatus] = useState(1);
+  const status = route.params.status
 
-  const handleStatusChange = async newStatus => {
-    setStatus(newStatus);
+
+  const handleChange = async newStatus => {
 
     Alert.alert(
       'Changing Confirmation',
-      'Are you sure you want to change a status of this order?',
+      'Are you sure you want to change the information of this order?',
       [
         {
           text: 'Cancel',
@@ -61,15 +60,7 @@ const OrderInfo = (props) => {
         },
         {
           text: "Change",
-          onPress: async () => {
-            try {
-              const response = await axios.post(`http://localhost:8000/api/orders/${orderId}/statuschange`, { newStatus: newStatus })
-              dispatch(refershData())
-
-            } catch (err) {
-              console.log("Error if changing a status of an order", err);
-            }
-          }
+          onPress: handleSubmit
         }
       ],
       { cancelable: false }
@@ -188,7 +179,7 @@ const OrderInfo = (props) => {
         zip: fetchedInputData.inputs.zip.value,
         place: fetchedInputData.inputs.place.value,
         description: fetchedInputData.inputs.description.value,
-        // status: status,
+        status: activeStatus,
       });
       dispatch(refershData())
       dispatch(toggleToFalseEditOrder())
@@ -306,13 +297,36 @@ const OrderInfo = (props) => {
         />
 
         <View style={[styles.statusContainer]}>
-          <TouchableOpacity style={[styles.statusButton, styles.inProgress, !edit && styles.disabledButton]} onPress={() => handleStatusChange("2")} disabled={!edit}>
+          <TouchableOpacity
+            style={[
+              styles.statusButton,
+              edit ? [status == 2 ? styles.inProgress : styles.disabledButton] : [status == 2 ? styles.currentOfflineStatus : styles.disabledButton],
+              // edit ? styles.inProgress : [styles.disabledButton, (status == 2 && activeStatus == 2) && styles.currentOfflineStatus ],
+            ]}
+            onPress={() => setActiveStatus(2)}
+            disabled={!edit}
+          >
             <Text style={styles.statusButtonText}>In Progress</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={[styles.statusButton, styles.completed, !edit && styles.disabledButton]} onPress={() => handleStatusChange("3")} disabled={!edit}>
+
+          <TouchableOpacity
+            style={[
+              styles.statusButton,
+              edit ? [status == 3 ? styles.completed : styles.disabledButton] : [status == 3 ? styles.currentOfflineStatus : styles.disabledButton],
+            ]}
+            onPress={() => setActiveStatus(3)}
+            disabled={!edit}
+          >
             <Text style={styles.statusButtonText}>Completed</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={[styles.statusButton, styles.canceled, !edit && styles.disabledButton]} onPress={() => handleStatusChange("4")} disabled={!edit}>
+
+          <TouchableOpacity
+            style={[
+              styles.statusButton,
+              edit ? [status == 4 ? styles.canceled : styles.disabledButton] : [status == 4 ? styles.currentOfflineStatus : styles.disabledButton],
+            ]}
+            onPress={() => setActiveStatus(4)}
+            disabled={!edit}>
             <Text style={styles.statusButtonText}>Canceled</Text>
           </TouchableOpacity>
 
@@ -323,7 +337,7 @@ const OrderInfo = (props) => {
             <Button
               style={[styles.editButton, styles.button]}
               buttonText={styles.editButtonText}
-              onPress={handleSubmit}
+              onPress={handleChange}
               title={'Speichern'}
             />
           )}
@@ -353,7 +367,7 @@ const styles = StyleSheet.create({
   },
 
   button: {
-    // height: 53,
+    // height: 53,    
     padding: 16,
     width: '100%',
     borderRadius: 5,
@@ -426,30 +440,48 @@ const styles = StyleSheet.create({
   statusButtonText: {
     fontWeight: 'bold',
     color: 'white',
-  
+    borderColor: 'red'
+
   },
   disabledButton: {
     backgroundColor: 'grey',
     color: 'white',
-    opacity: 0.7, // Adjust opacity to visually indicate the button is disabled
+    opacity: 0.7,
+    borderColor: '#222',
+    borderWidth: 1
+
   },
   notStarted: {
-    backgroundColor: '#808080',
-    color: 'white'
+    backgroundColor: '#eee',
+    color: 'white',
+    borderWidth: 1,
   },
   inProgress: {
     backgroundColor: '#1769FF',
-    color: 'white'
+    color: 'white',
+    borderColor: '#1769FF',
+    borderWidth: 1,
   },
   completed: {
     backgroundColor: '#7A9B76',
-    color: 'white'
+    color: 'white',
+    borderWidth: 2,
+    borderColor: '#7A9B76',
+    borderRightWidth: 0,
+    borderLeftWidth: 0
   },
   canceled: {
     backgroundColor: '#DB504A',
-    color: 'white'
+    color: 'white',
+    borderWidth: 1,
+    borderColor: '#DB504A',
   },
-
+  currentOfflineStatus: {
+    backgroundColor: '#222',
+    borderWidth: 1,
+    borderColor: '#222',
+    opacity: 0.7,
+  },
 });
 
 
