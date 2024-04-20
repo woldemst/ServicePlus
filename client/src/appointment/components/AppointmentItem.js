@@ -8,10 +8,12 @@ import { Alert } from "react-native";
 import ModalComponent from "../../shared/UIElements/Modal";
 import AppointmentInfo from "../pages/AppointmentInfo";
 import { deleteAppointment } from '../../actions/appointmentActions'
+import { useNavigation } from "@react-navigation/native";
 
 const AppointmentItem = (props) => {
     const dispatch = useDispatch()
     const appointmentId = props.id
+    const navigation = useNavigation()
     const [isModalVisible, setModalVisible] = useState(false);
 
     const appointments = useSelector(state => state.appointment.appointmentsArray.appointments)
@@ -137,7 +139,7 @@ const AppointmentItem = (props) => {
                 animationOut="slideOutDown" // Specify the slide-down animation
                 onBackdropPress={toggleModal}
                 onBackButtonPress={toggleModal}
-                modalHeight="45%"
+                modalHeight="50%"
                 header={<>
                     <View style={styles.headlineContainer}>
                         <Text style={styles.modalHeadline}>Termin</Text>

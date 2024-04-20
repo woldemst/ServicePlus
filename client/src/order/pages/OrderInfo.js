@@ -298,6 +298,10 @@ const OrderInfo = (props) => {
         <View style={[styles.statusContainer]}>
           <TouchableOpacity
             style={[
+              {
+                borderTopLeftRadius: 4,
+                borderBottomLeftRadius: 4
+              },
               styles.statusButton,
               edit ? [activeStatus == 2 ? styles.inProgress : styles.disabledButton] : [activeStatus == 2 ? styles.currentOfflineStatus : styles.disabledButton],
             ]}
@@ -320,6 +324,10 @@ const OrderInfo = (props) => {
 
           <TouchableOpacity
             style={[
+              {
+                borderTopRightRadius: 4,
+                borderBottomRightRadius: 4
+              },
               styles.statusButton,
               edit ? [activeStatus == 4 ? styles.canceled : styles.disabledButton] : [activeStatus == 4 ? styles.currentOfflineStatus : styles.disabledButton],
             ]}
