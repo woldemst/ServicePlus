@@ -53,8 +53,7 @@ const createOrder = async (req, res, next) => {
   const createdOrder = new Order({
     // creator: creator, // auth.userId in frontend 
     // date: date,
-    // status: status,
-
+    status: 1,
     firmId: firmId,
     name: name,
     worker: worker,
@@ -221,7 +220,8 @@ const updateOrderById = async (req, res, next) => {
     houseNr,
     zip,
     place,
-    description
+    description,
+    status
   } = req.body
 
   let updateOrder;
@@ -245,6 +245,7 @@ const updateOrderById = async (req, res, next) => {
       updateOrder.zip = zip,
       updateOrder.place = place,
       updateOrder.description = description,
+      updateOrder.status = status,
 
       await updateOrder.save();
 
