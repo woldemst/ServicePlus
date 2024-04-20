@@ -12,8 +12,8 @@ import { useNavigation, useRoute } from "@react-navigation/native";
 import { useContext, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { AuthContext } from "../../context/auth-context";
-import axios from "axios";
 import { Alert } from "react-native";
+import axios from "axios";
 
 import { VALIDATOR_REQUIRE, VALIDATOR_SELECT } from "../../util/validators";
 import { setInitialSelectData, setSelect } from "../../actions/selectActions";
@@ -26,6 +26,8 @@ import Input from "../../shared/UIElements/Input";
 
 const OrderInfo = (props) => {
   const [isLoaded, setIsLoaded] = useState(false)
+  const [activeStatus, setActiveStatus] = useState(1);
+
   const navigation = useNavigation()
   const auth = useContext(AuthContext)
   const dispatch = useDispatch()
@@ -34,19 +36,12 @@ const OrderInfo = (props) => {
   const fetchedSelectData = useSelector(state => state.select)
   const fetchedInputData = useSelector(state => state.input)
   const fetchedArray = useSelector((state) => state.order.ordersArray.orders);
+
   const orderId = route.params.id
   const order = fetchedArray.find(order => order._id == orderId)
   const edit = useSelector(state => state.order.edit);
 
-  const statusStrings = {
-    1: "new",
-    2: "in progress",
-    3: "completed",
-    4: "canceled"
-  };
 
-  const [activeStatus, setActiveStatus] = useState(1);
-  const status = route.params.status
 
 
   const handleChange = async newStatus => {
@@ -81,7 +76,6 @@ const OrderInfo = (props) => {
       contact: { value: order.contact },
     }
   })
-
 
   const initialInputState = {
     name: {
@@ -136,37 +130,41 @@ const OrderInfo = (props) => {
     dispatch(setInitialInputData(initialInputState));
     dispatch(setInitialSelectData(initialSelectState));
     setIsLoaded(true)
+
+    setActiveStatus(route.params.status)
+
+
   }, [edit])
 
+  useEffect(() => {
+    if (activeStatus !== route.params.status) {
+      navigation.setParams({ status: activeStatus });
+    }
+  }, [activeStatus])
 
 
-
-  let workerOptions;
-  let customerOptions;
-  let contactOptions;
-
-  if (isLoaded) {
-    customerOptions = fetchedSelectData.selects.customer.map(customer => ({
+  // Other variables
+  const customerOptions = isLoaded
+    ? fetchedSelectData.selects.customer.map((customer) => ({
       label: customer.name,
-      value: customer.name
-    }));
-    workerOptions = fetchedSelectData.selects.worker.map(worker => ({
+      value: customer.name,
+    }))
+    : [];
+  const workerOptions = isLoaded
+    ? fetchedSelectData.selects.worker.map((worker) => ({
       label: worker.name,
-      value: worker.name
-    }));
-    contactOptions = fetchedSelectData.selects.contact.map(contact => ({
+      value: worker.name,
+    }))
+    : [];
+  const contactOptions = isLoaded
+    ? fetchedSelectData.selects.contact.map((contact) => ({
       label: contact.name,
-      value: contact.name
-    }));
-    // console.log("in options", fetchedSelectData.selects);
-  }
+      value: contact.name,
+    }))
+    : [];
 
 
   const handleSubmit = async () => {
-
-    // console.log('before api', fetchedInputData);
-    // console.log('before API', fetchedSelectData.selectedOptions );
-
     const URL = `http://localhost:8000/api/orders/update/${orderId}`;
     try {
       const response = await axios.patch(URL, {
@@ -301,8 +299,7 @@ const OrderInfo = (props) => {
           <TouchableOpacity
             style={[
               styles.statusButton,
-              edit ? [status == 2 ? styles.inProgress : styles.disabledButton] : [status == 2 ? styles.currentOfflineStatus : styles.disabledButton],
-              // edit ? styles.inProgress : [styles.disabledButton, (status == 2 && activeStatus == 2) && styles.currentOfflineStatus ],
+              edit ? [activeStatus == 2 ? styles.inProgress : styles.disabledButton] : [activeStatus == 2 ? styles.currentOfflineStatus : styles.disabledButton],
             ]}
             onPress={() => setActiveStatus(2)}
             disabled={!edit}
@@ -313,7 +310,7 @@ const OrderInfo = (props) => {
           <TouchableOpacity
             style={[
               styles.statusButton,
-              edit ? [status == 3 ? styles.completed : styles.disabledButton] : [status == 3 ? styles.currentOfflineStatus : styles.disabledButton],
+              edit ? [activeStatus == 3 ? styles.completed : styles.disabledButton] : [activeStatus == 3 ? styles.currentOfflineStatus : styles.disabledButton],
             ]}
             onPress={() => setActiveStatus(3)}
             disabled={!edit}
@@ -324,7 +321,7 @@ const OrderInfo = (props) => {
           <TouchableOpacity
             style={[
               styles.statusButton,
-              edit ? [status == 4 ? styles.canceled : styles.disabledButton] : [status == 4 ? styles.currentOfflineStatus : styles.disabledButton],
+              edit ? [activeStatus == 4 ? styles.canceled : styles.disabledButton] : [activeStatus == 4 ? styles.currentOfflineStatus : styles.disabledButton],
             ]}
             onPress={() => setActiveStatus(4)}
             disabled={!edit}>
@@ -357,7 +354,6 @@ const styles = StyleSheet.create({
   },
   label: {
     marginTop: 18,
-
     fontSize: 18,
   },
 

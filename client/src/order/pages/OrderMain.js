@@ -87,6 +87,7 @@ const OrderMain = () => {
                     component={OrderInfo}
                     initialParams={{
                         id: route.params.id,
+                        status: route.params.status
                     }}
                     options={{
                         headerShown: false,

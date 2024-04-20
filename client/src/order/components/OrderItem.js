@@ -63,6 +63,7 @@ const OrderItem = (props) => {
             worker: props.worker,
             customer: props.customer,
             contact: props.contact,
+            status: props.status
             // 
           })
         }} >
