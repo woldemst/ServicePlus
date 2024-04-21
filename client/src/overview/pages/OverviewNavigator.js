@@ -1,10 +1,11 @@
-import { useState, useEffect } from "react"
+import { useState, useEffect, useContext } from "react"
 import { View, Image } from "react-native"
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs'
 
 import OrderView from "../../order/pages/OrderView"
 import AppointmentView from "../../appointment/pages/AppointmentView"
 import FirmView from "../../firm/pages/FirmView"
+import { AuthContext } from "../../context/auth-context"
 
 const Tab = createMaterialTopTabNavigator()
 
@@ -12,7 +13,7 @@ const Tab = createMaterialTopTabNavigator()
 const OverviewNavigator = () => {
     const [activeTab, setActiveTab] = useState('OrderView');
 
-
+    const auth = useContext(AuthContext)
 
     return (
         <View style={{ flex: 1 }}>
@@ -38,30 +39,32 @@ const OverviewNavigator = () => {
                 }}
             >
 
-                <Tab.Screen
-                    name="AppointmentView"
-                    component={AppointmentView}
-                    options={{
-                        headerShown: false,
-                        tabBarLabel: 'Termine',
-                        tabBarIcon: () => (<Image source={require("../../../assets/tabler.png")} />),
-                        tabBarActiveTintColor: "#000"
-                    }}
+                {!!auth.firmId && (
+                    <>
+                        <Tab.Screen
+                            name="AppointmentView"
+                            component={AppointmentView}
+                            options={{
+                                headerShown: false,
+                                tabBarLabel: 'Termine',
+                                tabBarIcon: () => (<Image source={require("../../../assets/tabler.png")} />),
+                                tabBarActiveTintColor: "#000",
+                            }}
+                        />
 
+                        <Tab.Screen
+                            name="OrderView"
+                            component={OrderView}
+                            options={{
+                                headerShown: false,
+                                tabBarLabel: 'Aufträge',
+                                tabBarIcon: () => (<Image source={require("../../../assets/settings.png")} />),
+                                tabBarActiveTintColor: "#000",
+                            }}
+                        />
+                    </>
+                )}
 
-                />
-                <Tab.Screen
-                    name="OrderView"
-                    component={OrderView}
-                    options={{
-                        headerShown: false,
-                        tabBarLabel: 'Aufträge',
-                        tabBarIcon: () => (<Image source={require("../../../assets/settings.png")} />),
-                        tabBarActiveTintColor: "#000"
-
-                    }}
-
-                />
                 <Tab.Screen
                     name="FirmView"
                     component={FirmView}
