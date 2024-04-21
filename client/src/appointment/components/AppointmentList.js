@@ -1,5 +1,5 @@
-import { useContext, useEffect, useState } from 'react';
-import { View, Text, StyleSheet, Image, ScrollView, ActivityIndicator, FlatList } from 'react-native';
+import { useContext, useEffect, useState, useCallback} from 'react';
+import { View, Text, StyleSheet, Image, ScrollView, ActivityIndicator, FlatList, RefreshControl } from 'react-native';
 import axios from 'axios';
 
 import ModalComponent from '../../shared/UIElements/Modal';
@@ -10,19 +10,27 @@ import { getAppointments } from '../../actions/appointmentActions';
 import { AuthContext } from '../../context/auth-context';
 
 const AppointmentList = props => {
-    const id = props.id
     const dispatch = useDispatch()
     const fetchedData = useSelector(state => state.appointment.appointmentsArray)
+    const refresh = useSelector(state => state.util.refresh)
+    const auth = useContext(AuthContext)
+    const id = props.id
 
     const [isLoaded, setIsLoaded] = useState(false)
-    const refresh = useSelector(state => state.util.refresh)
+    const [refreshing, setRefreshing] = useState(false);
+
 
     // const appointmentArr = useSelector(state => state.appointment.appointmentsArray.appointments)
     // const byOrderId = appointmentArr.find(appointment => appointment.orderId == '660d6bd14f47ff40447d52cf')
 
     // console.log('orderId', props.id);
 
-    const auth = useContext(AuthContext)
+    const onRefresh = useCallback(() => {
+        setRefreshing(true);
+        setTimeout(() => {
+          setRefreshing(false);
+        }, 1000);
+      }, []);
 
     useEffect(() => {
         const fetchOrders = async () => {
@@ -37,7 +45,7 @@ const AppointmentList = props => {
             }
         }
         fetchOrders()
-    }, [refresh])
+    }, [refresh, refreshing])
 
     const renderAppointments = () => {
         if (fetchedData.appointments.length === 0) {
@@ -67,6 +75,9 @@ const AppointmentList = props => {
         return (
             <FlatList
                 showsVerticalScrollIndicator={false}
+                refreshControl={
+                    <RefreshControl refreshing={refreshing} onRefresh={onRefresh}/>
+                }
                 data={appointmentsToRender}
                 keyExtractor={item => item._id}
                 renderItem={({ item }) => (
