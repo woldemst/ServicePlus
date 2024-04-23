@@ -12,11 +12,11 @@ const FirmItem = () => {
     const auth = useContext(AuthContext)
     const navigation = useNavigation()
     const dispatch = useDispatch()
-    const fetchedData = useSelector(state => state.firm.inputs)
+    const fetchedData = useSelector(state => state.firm.firmsArray)
     const [refresh, setRefresh] = useState(false)
     const handleRefresh = () => setRefresh(prevData => !prevData);
 
-    // console.log('Stored as Profile:',fetchedData);
+    console.log('Stored as Profile:',fetchedData);
 
     useEffect(() => {
         const fetcheFirm = async () => {
@@ -54,8 +54,8 @@ const FirmItem = () => {
 
             <View style={styles.nameContainer} >
                 <View>
-                    <Text style={styles.firmName}>{fetchedData.name.value}</Text>
-                    <Text style={styles.ownerName}>{fetchedData.ownerName.value}</Text>
+                    <Text style={styles.firmName}>{fetchedData.name}</Text>
+                    <Text style={styles.ownerName}>{fetchedData.ownerName}</Text>
                 </View>
             </View>
 

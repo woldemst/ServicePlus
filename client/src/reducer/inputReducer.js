@@ -1,4 +1,4 @@
-import { SET_INPUT, SET_INITIAL_INPUT_DATA, ADD_TO_INITIAL_DATA } from "../actions/inputActions";
+import { SET_INPUT, SET_INITIAL_INPUT_DATA, ADD_TO_INITIAL_DATA, ERASE_INPUT_DATA } from "../actions/inputActions";
 import { validate } from "../util/validators";
 
 const initial = {
@@ -42,6 +42,13 @@ const inputReducer = (state = initial, action) => {
         inputs: updatedInputs,
         isFormValid: isFormValid
       }
+
+      case ERASE_INPUT_DATA:
+        return {
+          ...state,
+          inputs: { ...initial.inputs },
+          isFormValid: false,
+        };
 
     default:
       return state;
