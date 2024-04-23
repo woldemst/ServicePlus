@@ -1,4 +1,4 @@
-import { View, Text, TextInput, TouchableOpacity, StyleSheet } from "react-native";
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert } from "react-native";
 import { useState, useContext, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigation } from "@react-navigation/native";
@@ -13,48 +13,50 @@ import Input from "../../shared/UIElements/Input";
 const Login = () => {
     const auth = useContext(AuthContext)
     const navigation = useNavigation()
-    const dispatch = useDispatch()
 
     const [isLoginMode, setIsLoginMode] = useState(true)
-    const [isLoaded, setIsLoaded] = useState(false)
-    
-    const fetchedData = useSelector(state => state.input)
-    const initialState = {
-        email: {
-            value: '',
-            isValid: false,
-        },
-        password: {
-            value: '',
-            isValid: false,
-        },
-    };
+    const [loading, setLoading] = useState(false);
 
-    useEffect(() => {
-        setIsLoaded(true)
-        dispatch(setInitialInputData(initialState))
-    }, [])
-
-
-    // console.log(fetchedData);
+    const [formData, setFormData] = useState({
+        email: '',
+        password: '',
+    })
 
     const handleSignIn = async () => {
-        // console.log('for the api', fetchedData);
+        setLoading(true);
+        // console.log(formData);
         const apiUrl = "http://localhost:8000/api/users/login";
 
-        const response = await axios.post(apiUrl, {
-            email: fetchedData.inputs.email.value,
-            password: fetchedData.inputs.password.value,
-        })
+        try {
+            const response = await axios.post(apiUrl, {
+                email: formData.email,
+                password: formData.password,
+            });
 
-        // console.log('response', response.data);
-        auth.login(response.data.userId, response.data.token, response.data.role, response.data.firmId)
-        navigation.navigate('overviewNavigator')
+            // console.log('response', response.data);
+            auth.login(response.data.userId, response.data.token, response.data.role, response.data.firmId)
 
-        navigation.reset({
-            index: 0,
-            routes: [{ name: 'overviewNavigator' }]
-        })
+            if (!auth.firmId) {
+                navigation.navigate('overviewNavigator', {
+                    screen: 'FirmView',
+                });
+            } else {
+                navigation.navigate('overviewNavigator')
+            }
+
+            navigation.reset({
+                index: 0,
+                routes: [{ name: 'overviewNavigator' }]
+            })
+        } catch (err) {
+            // Handle login failure
+            Alert.alert("Login Failed", "Invalid email")
+        } finally {
+            setLoading(false);
+        }
+
+
+
 
         setIsLoginMode(prev => !prev)
     }
@@ -68,50 +70,39 @@ const Login = () => {
 
             {/* {error && <Text style={styles.error}>{error}</Text>} */}
 
-            {isLoaded && (
-                <>
-                    <Input
-                        id='email'
-                        reducer='login'
-                        reducerKey='login'
-                        fieldName='email'
-                        placeholder="Email"
-                        errorText='Choose another email'
-                        value={fetchedData.inputs.email.value}
-                        validators={[VALIDATOR_EMAIL()]}
-                    />
 
-                    <Input
-                        id='password'
-                        reducer='login'
-                        reducerKey='login'
-                        fieldName='password'
-                        placeholder='Password'
-                        errorText='Type a password'
-                        value={fetchedData.inputs.password.value}
-                        validators={[VALIDATOR_MINLENGTH(6)]}
-                    />
+            <Input
+                placeholder="Email"
+                errorText="Please enter a valid email"
+                value={formData.email}
+                onChangeText={(text) => setFormData({ ...formData, email: text })}
+                validators={[VALIDATOR_EMAIL()]}
+            />
 
-                </>
-            )}
+            <Input
+                placeholder="Password"
+                value={formData.password}
+                onChangeText={(text) => setFormData({ ...formData, password: text })}
+                validators={[VALIDATOR_MINLENGTH(6)]}
+                errorText="Password must be at least 6 characters long"
+            // secureTextEntry
+            />
 
-            <Text style={styles.notice} >Passwort vergessen?</Text>
+            {/* <TouchableOpacity onPress={() => navigation.navigate('forgotPassword')}> */}
+                <Text style={styles.notice}>Forgot your password?</Text>
+            {/* </TouchableOpacity> */}
 
             <Button
                 style={styles.button}
-                // style={fetchedData.isFormValid ? styles.button : styles.invalideButton}
-                // disabled={!fetchedData.isFormValid}
-                buttonText={styles.buttonText}
                 onPress={handleSignIn}
-                title={'Sign in'}
-
+                title={loading ? "Signing in..." : "Sign in"}
+                disabled={loading}
             />
 
             <View style={styles.inviteContainer}>
-                <Text style={styles.inviteText} >Haben Sie noch keinen Account? </Text>
-
-                <TouchableOpacity onPress={() => { navigation.navigate('register', { name: '​Registrierung' }) }}>
-                    <Text style={styles.registerBtn} >Registrieren</Text>
+                <Text style={styles.inviteText}>Don't have an account?</Text>
+                <TouchableOpacity onPress={() => navigation.navigate('register')}>
+                    <Text style={styles.registerBtn}>Register</Text>
                 </TouchableOpacity>
             </View>
         </View>
@@ -204,7 +195,9 @@ const styles = StyleSheet.create({
         color: 'red',
         marginBottom: 12,
     },
-
 })
 
+
 export default Login;
+
+

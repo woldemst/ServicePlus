@@ -1,38 +1,30 @@
 import { TextInput, StyleSheet, Text, View } from "react-native";
 import { validate } from "../../util/validators";
 import { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { setInput } from "../../actions/inputActions";
 
 const Input = props => {
-    const dispatch = useDispatch()
-    const [touched, setTouched] = useState(false)
-    const [inputValue, setInputValue] = useState(props.value)
+    // const [touched, setTouched] = useState(false)
     const [isValid, setIsValid] = useState(true)
-    // const fetchedData = useSelector((state) => state[props.reducerKey]);
-    // console.log(fetchedData);
 
     const handleChange = (val) => {
-        setInputValue(val)
-        setIsValid(validate(val, props.validators))
-        dispatch(setInput(props.fieldName, val, props.validators, props.objectId, props.reducerKey));
-    }
-
+      props.onChangeText(val);
+      setIsValid(validate(val, props.validators));
+    };
 
     return <>
         <View style={props.thin && styles.inputContainer}>
-            <TextInput
+            <TextInput  
                 id={props.id}
-                value={inputValue}
+                value={props.value}
                 placeholder={props.placeholder}
                 style={props.style ? props.style : [props.disabled && styles.disabled, !isValid ? styles.inputInvalid : styles.input, props.textArea && styles.textArea]}
-                onChangeText={(text) => handleChange(text)}
+                onChangeText={handleChange}
                 autoCapitalize="none"
                 multiline={props.multiline}
                 numberOfLines={props.numberOfLines}
+                editable={!props.disabled}
                 // onFocus={() => setTouched(true)}
                 // onBlur={onBlurHandler}
-                editable={!props.disabled}
             />
 
             {!isValid && <Text style={props.thin ? styles.thin : styles.errorText}>{props.errorText}</Text>}
@@ -43,7 +35,6 @@ const Input = props => {
 const styles = StyleSheet.create({
     inputContainer: {
         flex: 1
-
     },
     input: {
         width: '100%',
@@ -88,7 +79,6 @@ const styles = StyleSheet.create({
         // flex: 1,
         // width: '100%',
         // bottom: 0,
-
 
     },
     disabled: {

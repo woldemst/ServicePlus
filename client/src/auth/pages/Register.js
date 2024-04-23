@@ -1,88 +1,59 @@
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import { useContext, useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
 import { useNavigation } from "@react-navigation/native";
-import axios from "axios";
 
+import axios from "axios";
 
 import { VALIDATOR_EMAIL, VALIDATOR_MINLENGTH, VALIDATOR_REQUIRE, VALIDATOR_SELECT } from "../../util/validators";
 import { AuthContext } from "../../context/auth-context";
 import Button from "../../shared/UIElements/Button";
 import Select from "../../shared/UIElements/Select";
 import Input from "../../shared/UIElements/Input";
-import { setInitialSelectData } from "../../actions/selectActions";
-import { setInitialInputData } from "../../actions/inputActions";
+
 
 
 const Register = () => {
     const auth = useContext(AuthContext)
     const navigation = useNavigation()
-    const dispatch = useDispatch()
+
 
     const [isLoaded, setIsLoaded] = useState(false)
 
-    const initialInputState = {
-        name: {
-            value: "",
-            isValid: false,
-        },
-        email: {
-            value: "",
-            isValid: false,
-        },
-        password: {
-            value: "",
-            isValid: false,
-        },
-    }
-
-    const initialSelectState = {
-        selects: {
-            role: [
-                { key: "1", value: "Owner" },
-                { key: "2", value: "Worker" },
-            ],
-        },
-        selectedOptions: {
-            role: {
-                value: "",
-                isValid: false,
-            }
-        },
-    };
+    const [formData, setFormData] = useState({
+        name: '',
+        email: '',
+        password: '',
+        role: '',
+    })
 
     useEffect(() => {
-        setIsLoaded(true)
-        dispatch(setInitialInputData(initialInputState))
-        dispatch(setInitialSelectData(initialSelectState))
-    }, [])
+        setIsLoaded(true);
+    }, []);
 
-    const fetchedInputData = useSelector(state => state.input)
-    const fetchedSelectData = useSelector(state => state.select)
-    const options = initialSelectState.selects.role;
 
-    console.log('register' ,fetchedSelectData)
     async function handleSubmit() {
         const URL = "http://localhost:8000/api/users/register";
 
-        console.log('before api', fetchedSelectData);
+        console.log(formData);
         try {
             const response = await axios.post(URL, {
-                name: fetchedInputData.inputs.name.value,
-                email: fetchedInputData.inputs.email.value,
-                password: fetchedInputData.inputs.password.value,
-                role: fetchedSelectData.selectedOptions.role.value
+                name: formData.name,
+                email: formData.email,
+                password: formData.password,
+                role: formData.role
             });
-
 
 
             if (response.status === 201) {
                 auth.login(response.data.userId, response.data.token, response.data.role, response.data.firmId)
-                navigation.navigate('overviewNavigator');
+                navigation.navigate('overviewNavigator', {
+                    screen: 'FirmView',
+                });
                 // alert('User created');
             } else {
                 alert('User already exists, please log in instead');
             }
+
         } catch (error) {
             console.error(error);
         }
@@ -96,60 +67,51 @@ const Register = () => {
 
             {isLoaded && (
                 <>
-
                     <Input
-                        id='name'
-                        reducerKey='register'
-                        fieldName='name'
                         placeholder="Name"
-                        errorText='Type a name'
-                        value={fetchedInputData.inputs.name.value}
+                        value={formData.name}
+                        onChangeText={(text) => setFormData({...formData, name: text})}
                         validators={[VALIDATOR_REQUIRE()]}
-
+                        errorText="Please enter your name"
                     />
 
                     <Input
-                        id='email'
-                        reducerKey='register'
-                        fieldName='email'
                         placeholder="Email"
-                        errorText='Choose another email'
-                        value={fetchedInputData.inputs.email.value}
+                        value={formData.email}
+                        onChangeText={(text) => setFormData({...formData, email: text})}
                         validators={[VALIDATOR_EMAIL()]}
-
+                        errorText="Please enter a valid email"
                     />
 
                     <Input
-                        id='password'
-                        reducerKey='register'
-                        fieldName='password'
                         placeholder="Password"
-                        errorText='Type a password'
-                        value={fetchedInputData.inputs.password.value}
+                        value={formData.password}
+                        onChangeText={(text) => setFormData({...formData, password: text})}
+
                         validators={[VALIDATOR_MINLENGTH(6)]}
+                        errorText="Password must be at least 6 characters long"
+                        secureTextEntry
                     />
 
                     <Select
-                        id='role'
-                        reducerKey='register'
-                        search={false}
-                        fieldName='role'
                         placeholder="Role"
-                        data={options}
+                        value={formData.role}
+                        onValueChange={(text) => setFormData({...formData, role: text})}
+                        data={[
+                            { key: "1", value: "Owner" },
+                            { key: "2", value: "Worker" },
+                        ]}
                         validators={[VALIDATOR_SELECT()]}
-
+                        errorText="Please select a role"
                     />
                 </>
             )}
-
 
 
             <Text style={styles.notice}>Passwort vergessen?</Text>
 
             <Button
                 style={styles.button}
-                // style={fetchedData.isFormValid ? styles.button : styles.invalideButton}
-                // disabled={!fetchedData.isFormValid}
                 buttonText={styles.buttonText}
                 onPress={handleSubmit}
                 title={'Sign up'}
@@ -159,11 +121,9 @@ const Register = () => {
 
             <View style={styles.inviteContainer}>
                 <Text style={styles.inviteText}>Sie haben schon einen Account?</Text>
-
                 <TouchableOpacity onPress={() => { navigation.navigate('login') }}>
                     <Text style={styles.registerBtn}>Zurück zum Login</Text>
                 </TouchableOpacity>
-
             </View>
         </View>
     )
@@ -270,3 +230,6 @@ const styles = StyleSheet.create({
 })
 
 export default Register;
+
+
+
