@@ -34,6 +34,7 @@ const CreateSuggest = props => {
                 <Image style={styles.image} source={require('../../../assets/firm/add.png')} />
             </TouchableOpacity>
         </View>
+        
         <ModalComponent
             isVisible={isModalVisible}
             animationIn="slideInUp" // Specify the slide-up animation

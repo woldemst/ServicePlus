@@ -8,86 +8,55 @@ import { useDispatch, useSelector } from "react-redux";
 import { AuthContext } from "../../context/auth-context";
 import Input from "../../shared/UIElements/Input";
 import Button from "../../shared/UIElements/Button";
-import { setInitialInputData } from "../../actions/inputActions";
 import { getFirmData } from "../../actions/firmActions";
 
 const CreateFirm = props => {
   const auth = useContext(AuthContext)
   const navigation = useNavigation();
-
   const dispatch = useDispatch()
-  // const fetchedData = useSelector((state) => state.firm);
-  const fetchedData = useSelector((state) => state.input);
   const [isLoaded, setIsLoaded] = useState(false)
 
-  const initialState = {
-    ownerName: {
-      value: "",
-      isValid: false,
-    },
-    name: {
-      value: "",
-      isValid: false,
-    },
-    email: {
-      value: "",
-      isValid: false,
-    },
-    street: {
-      value: "",
-      isValid: false,
-    },
-    houseNr: {
-      value: "",
-      isValid: false,
-    },
-    zip: {
-      value: "",
-      isValid: false,
-    },
-    place: {
-      value: "",
-      isValid: false,
-    },
-    phone: {
-      value: "",
-      isValid: false,
-    },
-    website: {
-      value: "",
-      isValid: false,
-    },
-  };
+  const [formData, setFormData] = useState({
+    ownerName: "",
+    name: "",
+    email: "",
+    street: "",
+    houseNr: "",
+    zip: "",
+    place: "",
+    phone: "",
+    website: "",
+  })
 
-  useEffect(() => {
-    setIsLoaded(true)
-    dispatch(setInitialInputData(initialState))
-  }, [])
 
   const handleSubmit = async () => {
     // console.log('fetched data before api', fetchedData);
     const URL = "http://localhost:8000/api/firm/register";
 
     try {
-      const updatedData = {
+      const firmData = {
         role: auth.role,
         userId: auth.userId,
-        ownerName: fetchedData.inputs.ownerName.value,
-        name: fetchedData.inputs.name.value,
-        email: fetchedData.inputs.email.value,
-        street: fetchedData.inputs.street.value,
-        houseNr: fetchedData.inputs.houseNr.value,
-        zip: fetchedData.inputs.zip.value,
-        place: fetchedData.inputs.place.value,
-        phone: fetchedData.inputs.phone.value,
-        website: fetchedData.inputs.website.value,
+        ownerName: formData.ownerName,
+        name: formData.name,
+        email: formData.email,
+        street: formData.street,
+        houseNr: formData.houseNr,
+        zip: formData.zip,
+        place: formData.place,
+        phone: formData.phone,
+        website: formData.website,
       }
+      const response = await axios.post(URL, firmData)
 
       dispatch(getFirmData(response.data))
-      const response = await axios.post(URL, updatedData)
       auth.updateId(response.data.firmId)
+
       props.toggle()
-      navigation.navigate('overviewNavigator')
+
+      navigation.navigate('overviewNavigator', {
+        screen: 'FirmView',
+      });
 
       console.log("Firm created!", response.data);
     } catch (err) {
@@ -97,117 +66,129 @@ const CreateFirm = props => {
 
   }
 
-  return isLoaded && (
-    <View style={styles.container}>
-      <Input
-        id='firmName'
-        reducerKey='firm'
-        fieldName='name'
-        placeholder="Name des Betriebs"
-        errorText='Type a name of firm'
-        value={fetchedData.inputs.name.value}
-        validators={[VALIDATOR_REQUIRE()]}
-      />
+  return <View style={styles.container}>
+    <Input
+      id='firmName'
+      reducerKey='firm'
+      fieldName='name'
+      placeholder="Name des Betriebs"
+      errorText='Type a name of firm'
+      value={formData.name}
+      validators={[VALIDATOR_REQUIRE()]}
+      onChangeText={(text) => setFormData({ ...formData, name: text })}
+    />
 
-      <Input
-        id='ownerName'
-        reducerKey='firm'
-        fieldName='ownerName'
-        placeholder="Name des Inhabers"
-        value={fetchedData.inputs.ownerName.value}
-        validators={[VALIDATOR_MINLENGTH(6)]}
-      />
+    <Input
+      id='ownerName'
+      reducerKey='firm'
+      fieldName='ownerName'
+      placeholder="Name des Inhabers"
+      value={formData.ownerName}
+      validators={[VALIDATOR_MINLENGTH(6)]}
+      onChangeText={(text) => setFormData({ ...formData, ownerName: text })}
+    />
 
-      <Input
-        id='firmEmail'
-        reducerKey='firm'
-        fieldName='email'
-        placeholder="Email"
-        value={fetchedData.inputs.email.value}
-        validators={[VALIDATOR_EMAIL()]}
-      />
+    <Input
+      id='firmEmail'
+      reducerKey='firm'
+      fieldName='email'
+      placeholder="Email"
+      value={formData.email}
+      validators={[VALIDATOR_EMAIL()]}
+      onChangeText={(text) => setFormData({ ...formData, email: text })}
 
-      <View style={styles.streetContainer}>
-        <View style={styles.streetWrapper}>
-          <Input
-            id='firmStreet'
-            reducerKey='firm'
-            fieldName='street'
-            placeholder="Straße"
-            value={fetchedData.inputs.street.value}
-            validators={[VALIDATOR_REQUIRE()]}
-          />
-        </View>
+    />
 
-        <View style={styles.nrWrapper}>
-          <Input
-            fieldName='houseNr'
-            reducerKey='firm'
-            placeholder="Nr."
-            errorText='Number'
-            value={fetchedData.inputs.houseNr.value}
-            validators={[VALIDATOR_REQUIRE()]}
-          />
-        </View>
+    <View style={styles.streetContainer}>
+      <View style={styles.streetWrapper}>
+        <Input
+          id='firmStreet'
+          reducerKey='firm'
+          fieldName='street'
+          placeholder="Straße"
+          value={formData.street}
+          validators={[VALIDATOR_REQUIRE()]}
+          onChangeText={(text) => setFormData({ ...formData, street: text })}
+
+        />
       </View>
 
-      <View style={styles.zipContainer}>
-        <View style={styles.zipWrapper}>
-          <Input
-            id='firmZip'
-            fieldName='zip'
-            reducerKey='firm'
-            placeholder="PLZ"
-            errorText='Type a ZIP code'
-            value={fetchedData.inputs.zip.value}
-            validators={[VALIDATOR_REQUIRE()]}
-          />
-        </View>
+      <View style={styles.nrWrapper}>
+        <Input
+          fieldName='houseNr'
+          reducerKey='firm'
+          placeholder="Nr."
+          errorText='Number'
+          value={formData.houseNr}
+          validators={[VALIDATOR_REQUIRE()]}
+          onChangeText={(text) => setFormData({ ...formData, houseNr: text })}
 
-        <View style={styles.placeWrapper}>
-          <Input
-            id='firmPlace'
-            reducerKey='firm'
-            fieldName='place'
-            placeholder="Ort"
-            errorText='Type a place'
-            value={fetchedData.inputs.place.value}
-            validators={[VALIDATOR_REQUIRE()]}
-          />
-        </View>
-      </View>
-
-      <Input
-        id='firmPhone'
-        fieldName='phone'
-        reducerKey='firm'
-        placeholder="Telefon"
-        errorText='Type a phone'
-        value={fetchedData.inputs.phone.value}
-        validators={[VALIDATOR_REQUIRE()]}
-      />
-
-      <Input
-        id='firmWebsite'
-        reducerKey='firm'
-        fieldName='website'
-        placeholder="Webseite"
-        errorText='Type a website'
-        value={fetchedData.inputs.website.value}
-        validators={[VALIDATOR_REQUIRE()]}
-      />
-
-      <View style={styles.btnContainer}>
-        <Button
-          style={!fetchedData.isFormValid ? styles.invalideButton : [styles.createBtn, styles.button]}
-          disabled={!fetchedData.isFormValid}
-          buttonText={styles.createBtnText}
-          onPress={handleSubmit}
-          title={'Speichern'}
         />
       </View>
     </View>
-  )
+
+    <View style={styles.zipContainer}>
+      <View style={styles.zipWrapper}>
+        <Input
+          id='firmZip'
+          fieldName='zip'
+          reducerKey='firm'
+          placeholder="PLZ"
+          errorText='Type a ZIP code'
+          value={formData.zip}
+          validators={[VALIDATOR_REQUIRE()]}
+          onChangeText={(text) => setFormData({ ...formData, zip: text })}
+        />
+      </View>
+
+      <View style={styles.placeWrapper}>
+        <Input
+          id='firmPlace'
+          reducerKey='firm'
+          fieldName='place'
+          placeholder="Ort"
+          errorText='Type a place'
+          value={formData.place}
+          validators={[VALIDATOR_REQUIRE()]}
+          onChangeText={(text) => setFormData({ ...formData, place: text })}
+        />
+      </View>
+    </View>
+
+    <Input
+      id='firmPhone'
+      fieldName='phone'
+      reducerKey='firm'
+      placeholder="Telefon"
+      errorText='Type a phone'
+      value={formData.phone}
+      validators={[VALIDATOR_REQUIRE()]}
+      onChangeText={(text) => setFormData({ ...formData, phone: text })}
+
+    />
+
+    <Input
+      id='firmWebsite'
+      reducerKey='firm'
+      fieldName='website'
+      placeholder="Webseite"
+      errorText='Type a website'
+      value={formData.website}
+      validators={[VALIDATOR_REQUIRE()]}
+      onChangeText={(text) => setFormData({ ...formData, website: text })}
+
+    />
+
+    <View style={styles.btnContainer}>
+      <Button
+        style={[styles.createBtn, styles.button]}
+        // disabled={!fetchedData.isFormValid}
+        buttonText={styles.createBtnText}
+        onPress={handleSubmit}
+        title={'Speichern'}
+      />
+    </View>
+  </View>
 }
 
 const styles = StyleSheet.create({
