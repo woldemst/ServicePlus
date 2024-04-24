@@ -18,7 +18,7 @@ const FirmItem = () => {
     const fetchedData = useSelector(state => state.firm.firmsArray)
     const handleRefresh = () => setRefresh(prevData => !prevData);
 
-    console.log('Stored as Profile:', fetchedData);
+    // console.log('Stored as Profile:', fetchedData);
 
     useEffect(() => {
         const fetcheFirm = async () => {

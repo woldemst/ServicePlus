@@ -6,60 +6,29 @@ import { AuthContext } from "../../context/auth-context";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import Input from "../../shared/UIElements/Input";
-import { VALIDATOR_REQUIRE } from "../../util/validators";
+import { VALIDATOR_EMAIL, VALIDATOR_REQUIRE } from "../../util/validators";
 import { setInitialInputData } from "../../actions/inputActions";
 
 const CreateCustomer = (props) => {
+  const [isLoaded, setIsLoaded] = useState(false)
+
   const auth = useContext(AuthContext)
   const dispatch = useDispatch()
   const navigation = useNavigation()
 
-  const [isLoaded, setIsLoaded] = useState(false)
-
-  const fetchedData = useSelector(state => state.input)
-  // console.log(fetchedData);
-
-  const initialState = {
-    name: {
-      value: "",
-      isValid: false,
-    },
-    email: {
-      value: "",
-      isValid: false,
-    },
-    street: {
-      value: "",
-      isValid: false,
-    },
-    houseNr: {
-      value: "",
-      isValid: false,
-    },
-    zip: {
-      value: "",
-      isValid: false,
-    },
-    place: {
-      value: "",
-      isValid: false,
-    },
-    phone: {
-      value: "",
-      isValid: false,
-    },
-    website: {
-      value: "",
-      isValid: false,
-    },
-    description: {
-      value: "",
-      isValid: false,
-    },
-  };
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    street: '',
+    houseNr: '',
+    zip: '',
+    place: '',
+    phone: '',
+    website: '',
+    description: '',
+  })
 
   useEffect(() => {
-    dispatch(setInitialInputData(initialState))
     setIsLoaded(true)
   }, [])
 
@@ -68,19 +37,19 @@ const CreateCustomer = (props) => {
       const URL = `http://localhost:8000/api/customers/${auth.firmId}/new`
       const response = await axios.post(URL, {
         firmId: auth.firmId,
-        name: fetchedData.inputs.name.value,
-        email: fetchedData.inputs.email.value,
-        street: fetchedData.inputs.street.value,
-        houseNr: fetchedData.inputs.houseNr.value,
-        zip: fetchedData.inputs.zip.value,
-        place: fetchedData.inputs.place.value,
-        phone: fetchedData.inputs.phone.value,
-        website: fetchedData.inputs.website.value,
-        description: fetchedData.inputs.description.value,
+        name: formData.name,
+        email: formData.email,
+        street: formData.street,
+        houseNr: formData.houseNr,
+        zip: formData.zip,
+        place: formData.place,
+        phone: formData.phone,
+        website: formData.website,
+        description: formData.description,
       })
 
-      // dispatch(createCustomer(response.data.customer))
       alert("Customer created successfully!");
+      auth.setCustomer(response.data.customer._id)
       props.route.params.handleRefresh();
       navigation.goBack()
       dispatch(clearCustomerField())
@@ -94,47 +63,41 @@ const CreateCustomer = (props) => {
     <View style={styles.container}>
       <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
         <Input
-          id='customerName'
-          reducerKey='customer'
-          fieldName='name'
           placeholder="Name"
-          errorText='Geben Sie einen Namen für den Kunde ein'
-          value={fetchedData.inputs.name.value}
+          value={formData.name}
           validators={[VALIDATOR_REQUIRE()]}
+          errorText='Geben Sie einen Namen für den Kunde ein'
+          onChangeText={(text) => setFormData({ ...formData, name: text })}
         />
 
         <Input
-          id='customerEmail'
-          reducerKey='customer'
-          fieldName='email'
           placeholder="E-Mail"
+          value={formData.email}
+          validators={[VALIDATOR_EMAIL()]}
           errorText='Geben Sie eine E-Mail Adresse des Kunden ein'
-          value={fetchedData.inputs.email.value}
-          validators={[VALIDATOR_REQUIRE()]}
+          onChangeText={(text) => setFormData({ ...formData, email: text })}
         />
 
         <View style={styles.streetContainer}>
           <View style={styles.streetWrapper}>
             <Input
-              id='customerStreet'
-              reducerKey='customer'
-              fieldName='street'
               placeholder="Straße"
-              errorText='Geben Sie die Straße des Kunden ein'
-              value={fetchedData.inputs.street.value}
+              value={formData.street}
               validators={[VALIDATOR_REQUIRE()]}
+              errorText='Geben Sie die Straße des Kunden ein'
+              onChangeText={(text) => setFormData({ ...formData, street: text })}
+
             />
           </View>
 
           <View style={styles.nrWrapper}>
             <Input
-              id='customerHouseNr'
-              reducerKey='customer'
-              fieldName='houseNr'
               placeholder="Housenummer"
-              errorText='Geben Sie die Housenummer des Kunden ein'
-              value={fetchedData.inputs.houseNr.value}
+              value={formData.houseNr}
               validators={[VALIDATOR_REQUIRE()]}
+              errorText='Geben Sie die Housenummer des Kunden ein'
+              onChangeText={(text) => setFormData({ ...formData, houseNr: text })}
+
             />
           </View>
         </View>
@@ -142,58 +105,50 @@ const CreateCustomer = (props) => {
         <View style={styles.zipContainer}>
           <View style={styles.zipWrapper}>
             <Input
-              id='customerZip'
-              reducerKey='customer'
-              fieldName='zip'
               placeholder="PLZ"
-              errorText='Geben Sie PLZ des Kunden ein'
-              value={fetchedData.inputs.zip.value}
+              value={formData.zip}
               validators={[VALIDATOR_REQUIRE()]}
+              errorText='Geben Sie PLZ des Kunden ein'
+              onChangeText={(text) => setFormData({ ...formData, zip: text })}
+
             />
           </View>
 
           <View style={styles.placeWrapper}>
             <Input
-              id='customerPlace'
-              reducerKey='customer'
-              fieldName='place'
               placeholder="Ort"
-              errorText='Geben Sie den Ort des Kunden ein'
-              value={fetchedData.inputs.place.value}
+              value={formData.place}
               validators={[VALIDATOR_REQUIRE()]}
+              errorText='Geben Sie den Ort des Kunden ein'
+              onChangeText={(text) => setFormData({ ...formData, place: text })}
             />
           </View>
         </View>
 
         <Input
-          id='customerPhone'
-          reducerKey='customer'
-          fieldName='phone'
           placeholder="Telefonnummer"
+          value={formData.phone}
+          validators={[VALIDATOR_REQUIRE()]}
           errorText='Telefonnummer des Kunden ein'
-          value={fetchedData.inputs.phone.value}
-          validators={[VALIDATOR_REQUIRE()]}
+          onChangeText={(text) => setFormData({ ...formData, phone: text })}
+
         />
 
         <Input
-          id='customerWebsite'
-          reducerKey='customer'
-          fieldName='website'
           placeholder="Website"
-          errorText='Geben Sie Website des Kunden ein'
-          value={fetchedData.inputs.website.value}
+          value={formData.website}
           validators={[VALIDATOR_REQUIRE()]}
+          errorText='Geben Sie Website des Kunden ein'
+          onChangeText={(text) => setFormData({ ...formData, website: text })}
         />
 
 
         <Input
-          id='customerDescription'
-          reducerKey='customer'
-          fieldName='description'
           placeholder="Beschreibung"
-          errorText='Geben Sie die Beschreibung des Kunden ein'
-          value={fetchedData.inputs.description.value}
+          value={formData.description}
           validators={[VALIDATOR_REQUIRE()]}
+          errorText='Geben Sie die Beschreibung des Kunden ein'
+          onChangeText={(text) => setFormData({ ...formData, description: text })}
         />
 
         <View style={styles.btnContainer}>

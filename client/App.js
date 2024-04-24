@@ -26,14 +26,15 @@ import AppointmentMain from './src/appointment/pages/AppointmentMain';
 
 
 export default function App() {
-  const Stack = createNativeStackNavigator()
-  const auth = useContext(AuthContext)
   const [userToken, setUserToken] = useState(false)
   const [userId, setUserId] = useState(false)
   const [userRole, setUserRole] = useState(null)
   const [firmId, setFirmId] = useState(null)
   const [refresh, setRefresh] = useState(false)
-
+  const [customers, setCustomers] = useState([])
+  
+  const Stack = createNativeStackNavigator()
+  const auth = useContext(AuthContext)
 
   const handleRefresh = () => setRefresh(prevData => !prevData);
 
@@ -90,7 +91,10 @@ export default function App() {
 
   const updateId = id => {
     setFirmId(id)
+  }
 
+  const handleSetCustomer = (id) => {
+    setCustomers([...customers, id])
   }
 
   let routes;
@@ -171,7 +175,10 @@ export default function App() {
           firmId: firmId,
           role: userRole,
           refresh: refresh,
-          handleRefresh: handleRefresh
+          handleRefresh: handleRefresh,
+
+          customers: customers,
+          setCustomer: handleSetCustomer,
 
         }}>
         <React.Fragment>{routes}</React.Fragment>
