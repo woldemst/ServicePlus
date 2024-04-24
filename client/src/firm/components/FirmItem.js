@@ -9,14 +9,16 @@ import { getFirmData } from '../../actions/firmActions'
 import { AuthContext } from "../../context/auth-context"
 
 const FirmItem = () => {
+    const [refresh, setRefresh] = useState(false)
+    const [isLoaded, setIsLoaded] = useState(false)
+
     const auth = useContext(AuthContext)
     const navigation = useNavigation()
     const dispatch = useDispatch()
     const fetchedData = useSelector(state => state.firm.firmsArray)
-    const [refresh, setRefresh] = useState(false)
     const handleRefresh = () => setRefresh(prevData => !prevData);
 
-    console.log('Stored as Profile:',fetchedData);
+    console.log('Stored as Profile:', fetchedData);
 
     useEffect(() => {
         const fetcheFirm = async () => {
@@ -24,6 +26,7 @@ const FirmItem = () => {
                 const response = await axios.get(`http://localhost:8000/api/firm/profile/${auth.userId}`)
                 dispatch(getFirmData(response.data));
                 // console.log('Goten:',response.data); 
+                setIsLoaded(true)
 
             } catch (err) {
                 console.log("Error if fetching firm profile", err);
@@ -53,10 +56,12 @@ const FirmItem = () => {
             </View>
 
             <View style={styles.nameContainer} >
-                <View>
-                    <Text style={styles.firmName}>{fetchedData.name}</Text>
-                    <Text style={styles.ownerName}>{fetchedData.ownerName}</Text>
-                </View>
+                {isLoaded && (
+                    <>
+                        <Text style={styles.firmName}>{fetchedData.name}</Text>
+                        <Text style={styles.ownerName}>{fetchedData.ownerName}</Text>
+                    </>
+                )}
             </View>
 
         </TouchableOpacity>
