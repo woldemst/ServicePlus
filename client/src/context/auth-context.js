@@ -8,7 +8,10 @@ export const AuthContext = createContext({
     role: null,
     login: () => { },
     logout: () => { },
-    updateId: (id) => { },
+    updateId: () => { },
     refresh: false, // Add a refresh flag
     handleRefresh: () => { }, // Add a function to handle refresh
+
+    customers: [],
+    setCustomer: () => { },
 })
