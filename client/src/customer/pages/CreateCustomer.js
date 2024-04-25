@@ -7,7 +7,7 @@ import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import Input from "../../shared/UIElements/Input";
 import { VALIDATOR_EMAIL, VALIDATOR_REQUIRE } from "../../util/validators";
-import { setInitialInputData } from "../../actions/inputActions";
+
 
 const CreateCustomer = (props) => {
   const [isLoaded, setIsLoaded] = useState(false)
@@ -49,10 +49,10 @@ const CreateCustomer = (props) => {
       })
 
       alert("Customer created successfully!");
-      auth.setCustomer(response.data.customer._id)
+      // auth.setCustomer(response.data.customer._id)
       props.route.params.handleRefresh();
       navigation.goBack()
-      dispatch(clearCustomerField())
+      // dispatch(clearCustomerField())
     } catch (err) {
       console.log("Error if creating customer", err);
 
@@ -86,7 +86,6 @@ const CreateCustomer = (props) => {
               validators={[VALIDATOR_REQUIRE()]}
               errorText='Geben Sie die Straße des Kunden ein'
               onChangeText={(text) => setFormData({ ...formData, street: text })}
-
             />
           </View>
 
@@ -97,7 +96,6 @@ const CreateCustomer = (props) => {
               validators={[VALIDATOR_REQUIRE()]}
               errorText='Geben Sie die Housenummer des Kunden ein'
               onChangeText={(text) => setFormData({ ...formData, houseNr: text })}
-
             />
           </View>
         </View>
@@ -110,7 +108,6 @@ const CreateCustomer = (props) => {
               validators={[VALIDATOR_REQUIRE()]}
               errorText='Geben Sie PLZ des Kunden ein'
               onChangeText={(text) => setFormData({ ...formData, zip: text })}
-
             />
           </View>
 
@@ -131,7 +128,6 @@ const CreateCustomer = (props) => {
           validators={[VALIDATOR_REQUIRE()]}
           errorText='Telefonnummer des Kunden ein'
           onChangeText={(text) => setFormData({ ...formData, phone: text })}
-
         />
 
         <Input
