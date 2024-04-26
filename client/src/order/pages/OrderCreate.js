@@ -10,77 +10,65 @@ import { useContext, useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 
-import { AuthContext } from "../../context/auth-context";
 import { VALIDATOR_REQUIRE, VALIDATOR_SELECT } from "../../util/validators";
-import { updateField, clearOrderData } from "../../actions/orderActions";
-import { setInitialInputData, setInput } from "../../actions/inputActions";
-import { setInitialSelectData, setSelect } from "../../actions/selectActions";
+import { AuthContext } from "../../context/auth-context";
+import { refershData } from "../../actions/utilActions";
 import Input from "../../shared/UIElements/Input";
 import Button from "../../shared/UIElements/Button";
 import Select from "../../shared/UIElements/Select";
-import { refershData } from "../../actions/utilActions";
-import SelectDropdown from "../../shared/UIElements/SelectDropdown";
 
 const OrderCreate = (props) => {
-  const auth = useContext(AuthContext)
-  const dispatch = useDispatch()
-
   const [isLoaded, setIsLoaded] = useState(false)
-
-  const fetchedSelectData = useSelector(state => state.select)
-  const fetchedInputData = useSelector(state => state.input)
-
-  const [initialSelectState, setInitialSelectState] = useState({
-    selects: {
-      worker: [],
-      contact: [],
-      customer: []
-    },
+  const [formData, setFormData] = useState({
+    name: '',
+    street: '',
+    houseNr: '',
+    zip: '',
+    place: '',
+    customerOptions: [],
+    workerOptions: [],
+    contactOptions: [],
+    selectedCustomer: "",
+    selectedWorker: "",
+    selectedContact: "",
+    description: '',
   })
 
-  const initialInputState = {
-    name: {
-      value: "",
-      isValid: false,
-    },
-    street: {
-      value: "",
-      isValid: false,
-    },
-    houseNr: {
-      value: "",
-      isValid: false,
-    },
-    zip: {
-      value: "",
-      isValid: false,
-    },
-    place: {
-      value: "",
-      isValid: false,
-    },
-    description: {
-      value: "",
-      isValid: false,
-    },
-  }
+  const auth = useContext(AuthContext)
+  const dispatch = useDispatch()
 
   useEffect(() => {
     const fetchedData = async () => {
       try {
-        const workerList = await axios.get(`http://localhost:8000/api/orders/worker-options/${auth.firmId}`)
-        const customerList = await axios.get(`http://localhost:8000/api/orders/customer-options/${auth.firmId}`)
-        const contactList = await axios.get(`http://localhost:8000/api/orders/contact-options/${auth.firmId}`)
+        const [
+          workerResponse,
+          customerResponse,
+          // contactResponse
+        ] = await Promise.all([
+          axios.get(`http://localhost:8000/api/orders/worker-options/${auth.firmId}`),
+          axios.get(`http://localhost:8000/api/orders/customer-options/${auth.firmId}`),
+          // axios.get(`http://localhost:8000/api/orders/contact-options/${auth.firmId}`),
+        ])
 
-        setInitialSelectState(prevState => ({
-          ...prevState,
-          selects: {
-            ...prevState.selects,
-            worker: workerList.data.workers,
-            customer: customerList.data.customers,
-            contact: contactList.data.contacts,
-          },
-        }))
+        setFormData((prevFormData) => ({
+          ...prevFormData,
+          workerOptions: workerResponse.data.workers.map((worker) => ({
+            id: worker.id,
+            key: worker.id,
+            value: worker.name,
+          })),
+          customerOptions: customerResponse.data.customers.map((customer) => ({
+            id: customer.id,
+            key: customer.id,
+            value: customer.name,
+          })),
+          // contactOptions: contactResponse.data.contacts.map((contact) => ({
+          //   key: contact.id,
+          //   value: contact.name,
+          // })),
+        }));
+
+        setIsLoaded(true)
 
       } catch (err) {
         console.error('Error fetching options:', err);
@@ -90,54 +78,23 @@ const OrderCreate = (props) => {
     fetchedData()
   }, [])
 
-  useEffect(() => {
-    if (initialSelectState.selects.contact.length > 0) {
-      setIsLoaded(true)
-      dispatch(setInitialInputData(initialInputState));
-      dispatch(setInitialSelectData(initialSelectState));
-      // console.log(initialSelectState);
-    }
-  }, [initialSelectState.selects.contact])
-
-
-  let workerOptions;
-  let customerOptions;
-  let contactOptions;
-
-  if (isLoaded) {
-    customerOptions = fetchedSelectData.selects.customer.map(customer => ({
-      id: customer.id,
-      label: customer.name,
-      value: customer.name
-    }));
-    workerOptions = fetchedSelectData.selects.worker.map(worker => ({
-      label: worker.name,
-      value: worker.name
-    }));
-    contactOptions = fetchedSelectData.selects.contact.map(contact => ({
-      label: contact.name,
-      value: contact.name
-    }));
-    // console.log("in options", customerOptions);
-  }
 
   const handleSubmit = async () => {
     const URL = `http://localhost:8000/api/orders/${auth.firmId}/new`;
 
-    // console.log('before api', fetchedSelectData.selectedOptions.customer.id);
+    // console.log('before api selected customer', formData.selectedCustomer);
     try {
       const response = await axios.post(URL, {
         firmId: auth.firmId,
-        name: fetchedInputData.inputs.name.value,
-        worker: fetchedSelectData.selectedOptions.worker.value,
-        customerId: fetchedSelectData.selectedOptions.customer.id,
-        // contact: fetchedSelectData.selectedOptions.contact.value,
-        street: fetchedInputData.inputs.street.value,
-        houseNr: fetchedInputData.inputs.houseNr.value,
-        zip: fetchedInputData.inputs.zip.value,
-        place: fetchedInputData.inputs.place.value,
-        description: fetchedInputData.inputs.description.value,
-        // status: status,
+        name: formData.name,
+        worker: formData.selectedWorker,
+        customerId: formData.selectedCustomer,
+        // contact: formData.selectedContact,
+        street: formData.street,
+        houseNr: formData.houseNr,
+        zip: formData.zip,
+        place: formData.place,
+        description: formData.description,
       });
 
       props.toggle();
@@ -148,82 +105,78 @@ const OrderCreate = (props) => {
     }
   };
 
-  return isLoaded ? (
+  return !isLoaded ? (
+    <ActivityIndicator style={styles.loader} size="large" color="#7A9B76" />
+  ) : (
     <View>
       <Text style={styles.label}>Auftragsname</Text>
+
       <Input
-        id='orderName'
-        reducerKey='order'
-        fieldName='name'
         placeholder="Name"
-        errorText='Geben Sie einen Namen für den Auftrag ein'
-        value={fetchedInputData.inputs.name.value}
+        value={formData.name}
         validators={[VALIDATOR_REQUIRE()]}
+        errorText='Geben Sie einen Namen für den Auftrag ein'
+        onChangeText={(text) => setFormData({ ...formData, name: text })}
       />
 
       <Text style={styles.label}>Kunde</Text>
 
-      <SelectDropdown
-        id='customer'
-        reducerKey='order'
+      <Select
         search={false}
-        fieldName='customer'
-        data={customerOptions}
-        validators={[VALIDATOR_SELECT()]}
+        data={formData.customerOptions}
+        value={formData.selectedCustomer}
         placeholder='Auswählen'
-
+        errorText="Please select a customer"
+        validators={[VALIDATOR_SELECT()]}
+        onValueChange={(option) => setFormData({ ...formData, selectedCustomer: option.id })}
       />
 
-      {/* <Text style={styles.label}>Mitarbeiter</Text>
+      <Text style={styles.label}>Mitarbeiter</Text>
 
-
-      <SelectDropdown
-        id='worker'
-        reducerKey='order'
+      <Select
         search={false}
-        fieldName='worker'
-        data={workerOptions}
-        validators={[VALIDATOR_SELECT()]}
         placeholder='Auswählen'
-      /> */}
+        data={formData.workerOptions}
+        value={formData.selectedWorker}
+        errorText="Please select a worker"
+        validators={[VALIDATOR_SELECT()]}
+        onValueChange={(option) => setFormData({ ...formData, selectedWorker: option.id })}
+      />
 
       {/* <Text style={styles.label}>Ansprechspartner</Text>
 
-
-      <SelectDropdown
-        id='contact'
-        reducerKey='order'
+      <Select
         search={false}
-        fieldName='contact'
-        data={contactOptions}
-        validators={[VALIDATOR_SELECT()]}
         placeholder='Auswählen'
-
+        data={formData.contactOptions}
+        value={formData.selectedContact}
+        errorText="Please select a contact"
+        validators={[VALIDATOR_SELECT()]}
+        onValueChange={(text) => setFormData({ ...formData, selectedContact: text })}
       /> */}
+
 
       <Text style={styles.label}>Auftragsadresse</Text>
 
       <View style={styles.rowContainer}>
         <View style={styles.streetWrapper}>
           <Input
-            id='orderStreet'
-            reducerKey='order'
-            fieldName='street'
             placeholder="Straße"
-            errorText='Geben Sie eine Straße für den Auftrag ein'
-            value={fetchedInputData.inputs.street.value}
+            value={formData.street}
             validators={[VALIDATOR_REQUIRE()]}
+            errorText='Geben Sie eine Straße für den Auftrag ein'
+            onChangeText={(text) => setFormData({ ...formData, street: text })}
           />
+
         </View>
         <View style={styles.nrWrapper}>
           <Input
-            id='orderHouseNr'
-            reducerKey='order'
-            fieldName='houseNr'
             placeholder="Nr."
             errorText='Housenummer'
-            value={fetchedInputData.inputs.street.value}
+            value={formData.houseNr}
             validators={[VALIDATOR_REQUIRE()]}
+            onChangeText={(text) => setFormData({ ...formData, houseNr: text })}
+
           />
         </View>
       </View>
@@ -231,24 +184,20 @@ const OrderCreate = (props) => {
       <View style={styles.rowContainer}>
         <View style={styles.zipWrapper}>
           <Input
-            id='orderZip'
-            reducerKey='order'
-            fieldName='zip'
             placeholder="PLZ"
-            errorText='Geben Sie eine PLZ für den Auftrag ein'
-            value={fetchedInputData.inputs.zip.value}
+            value={formData.zip}
             validators={[VALIDATOR_REQUIRE()]}
+            errorText='Geben Sie eine PLZ für den Auftrag ein'
+            onChangeText={(text) => setFormData({ ...formData, zip: text })}
           />
         </View>
         <View style={styles.placeWrapper}>
           <Input
-            id='orderPlace'
-            reducerKey='order'
-            fieldName='place'
             placeholder="Ort"
-            errorText='Geben Sie den Ort für den Auftrag ein'
-            value={fetchedInputData.inputs.place.value}
+            value={formData.place}
             validators={[VALIDATOR_REQUIRE()]}
+            errorText='Geben Sie den Ort für den Auftrag ein'
+            onChangeText={(text) => setFormData({ ...formData, place: text })}
           />
         </View>
       </View>
@@ -256,17 +205,14 @@ const OrderCreate = (props) => {
       <Text style={styles.label}>Beschreibung</Text>
 
       <Input
-        id='workerDescr'
-        reducerKey='order'
-        fieldName='description'
-        placeholder="Beschreibung"
-        style={[styles.textArea, styles.placeholderText]}
-        errorText='Geben Sie die Beschreibung des Auftrags ein'
-        value={fetchedInputData.inputs.description.value}
-        validators={[VALIDATOR_REQUIRE()]}
         multiline={true}
         numberOfLines={4}
-
+        placeholder="Beschreibung"
+        value={formData.description}
+        validators={[VALIDATOR_REQUIRE()]}
+        style={[styles.textArea, styles.placeholderText]}
+        errorText='Geben Sie die Beschreibung des Auftrags ein'
+        onChangeText={(text) => setFormData({ ...formData, description: text })}
       />
 
       <View style={styles.btnContainer}>
@@ -287,8 +233,6 @@ const OrderCreate = (props) => {
         />
       </View>
     </View>
-  ) : (
-    <ActivityIndicator style={styles.loader} size="large" color="#7A9B76" />
   )
 };
 

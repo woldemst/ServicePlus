@@ -8,24 +8,15 @@ import { validate } from "../../util/validators";
 
 
 const SelectDropdown = props => {
-    const dispatch = useDispatch()
     const [touched, setTouched] = useState(false)
     const [isValid, setIsValid] = useState(true)
     const [isValue, setIsValue] = useState('')
     const [selectedValue, setSelectedValue] = useState(props.initialSelectedValue || ''); // Set initial selected value
-    const fetchedData = useSelector((state) => state[props.reducerKey]);
-
-    // useEffect(() => {
-    //   if (touched) {
-    //     setIsValid(validate(props.value, props.validators))
-    //   }
-    // }, [touched])
 
     const handleChange = val => {
-        setIsValid(validate(val, props.validators))
-        dispatch(setSelect(props.fieldName, val, props.validators, props.objectId, props.reducerKey))
-        setIsValue(val)
-    }
+        props.onValueChange(val);
+        setIsValid(validate(val, props.validators));
+      }
 
     return <>
         <Dropdown
