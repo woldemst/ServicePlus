@@ -10,7 +10,8 @@ const Select = props => {
 
 
   const handleChange = val => {
-    props.onValueChange(val);
+    const selectedOption = props.data.find(option => option.value === val);
+    props.onValueChange(selectedOption); 
     setIsValid(validate(val, props.validators));
   }
 
