@@ -53,14 +53,12 @@ const OrderCreate = (props) => {
         setFormData((prevFormData) => ({
           ...prevFormData,
           workerOptions: workerResponse.data.workers.map((worker) => ({
-            id: worker.id,
-            key: worker.id,
-            value: worker.name,
+            label: worker.name,
+            value: worker.id,
           })),
           customerOptions: customerResponse.data.customers.map((customer) => ({
-            id: customer.id,
-            key: customer.id,
-            value: customer.name,
+            label: customer.name,
+            value: customer.id,
           })),
           // contactOptions: contactResponse.data.contacts.map((contact) => ({
           //   key: contact.id,
@@ -87,7 +85,7 @@ const OrderCreate = (props) => {
       const response = await axios.post(URL, {
         firmId: auth.firmId,
         name: formData.name,
-        worker: formData.selectedWorker,
+        workerId: formData.selectedWorker,
         customerId: formData.selectedCustomer,
         // contact: formData.selectedContact,
         street: formData.street,
@@ -124,23 +122,20 @@ const OrderCreate = (props) => {
       <Select
         search={false}
         data={formData.customerOptions}
-        value={formData.selectedCustomer}
         placeholder='Auswählen'
         errorText="Please select a customer"
         validators={[VALIDATOR_SELECT()]}
-        onValueChange={(option) => setFormData({ ...formData, selectedCustomer: option.id })}
+        onValueChange={(option) => setFormData({ ...formData, selectedCustomer: option })}
       />
 
       <Text style={styles.label}>Mitarbeiter</Text>
 
       <Select
         search={false}
-        placeholder='Auswählen'
         data={formData.workerOptions}
-        value={formData.selectedWorker}
         errorText="Please select a worker"
         validators={[VALIDATOR_SELECT()]}
-        onValueChange={(option) => setFormData({ ...formData, selectedWorker: option.id })}
+        onValueChange={(option) => setFormData({ ...formData, selectedWorker: option })}
       />
 
       {/* <Text style={styles.label}>Ansprechspartner</Text>

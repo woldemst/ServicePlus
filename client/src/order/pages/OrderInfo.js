@@ -16,13 +16,11 @@ import { Alert } from "react-native";
 import axios from "axios";
 
 import { VALIDATOR_REQUIRE, VALIDATOR_SELECT } from "../../util/validators";
-import { setInitialSelectData, setSelect } from "../../actions/selectActions";
-import { setInitialInputData, setInput } from "../../actions/inputActions";
 import { toggleToFalseEditOrder } from "../../actions/orderActions";
 import { refershData } from "../../actions/utilActions";
-import SelectDropdown from "../../shared/UIElements/SelectDropdown";
 import Button from "../../shared/UIElements/Button";
 import Input from "../../shared/UIElements/Input";
+import Select from "../../shared/UIElements/Select";
 
 const OrderInfo = (props) => {
   const [isLoaded, setIsLoaded] = useState(false)
@@ -33,8 +31,6 @@ const OrderInfo = (props) => {
   const dispatch = useDispatch()
   const route = useRoute()
 
-  const fetchedSelectData = useSelector(state => state.select)
-  const fetchedInputData = useSelector(state => state.input)
   const fetchedArray = useSelector((state) => state.order.ordersArray.orders);
 
   const orderId = route.params.id
@@ -42,7 +38,22 @@ const OrderInfo = (props) => {
   const edit = useSelector(state => state.order.edit);
 
 
+  const [formData, setFormData] = useState({
+    name: order.name,
+    street: order.street,
+    houseNr: order.houseNr,
+    zip: order.zip,
+    place: order.place,
+    description: order.description,
 
+
+    // contactOption: {value: order.contact},
+    customerOptions: [],
+    workerOptions: [],
+    selectedCustomer: '',
+    selectedWorker: '',
+
+  })
 
   const handleChange = async newStatus => {
 
@@ -64,59 +75,38 @@ const OrderInfo = (props) => {
 
   };
 
-  const [initialSelectState, setInitialSelectState] = useState({
-    selects: {
-      customer: [],
-      worker: [],
-      contact: [],
-    },
-    selectedOptions: {
-      customer: { value: order.c_name },
-      worker: { value: order.worker },
-      contact: { value: order.contact },
-    }
-  })
-
-  const initialInputState = {
-    name: {
-      value: order.name
-    },
-    street: {
-      value: order.street
-    },
-    houseNr: {
-      value: order.houseNr
-    },
-    zip: {
-      value: order.zip
-    },
-    place: {
-      value: order.place
-    },
-    description: {
-      value: order.description
-    },
-  }
 
 
   useEffect(() => {
     const fetchedData = async () => {
       try {
-        const customerList = await axios.get(`http://localhost:8000/api/orders/customer-options/${auth.firmId}`)
-        const workerList = await axios.get(`http://localhost:8000/api/orders/worker-options/${auth.firmId}`)
-        const contactList = await axios.get(`http://localhost:8000/api/orders/contact-options/${auth.firmId}`)
+        const [
+          customerResponse,
+          workerResponse,
+          // contactResponse
+        ] = await Promise.all([
+          axios.get(`http://localhost:8000/api/orders/customer-options/${auth.firmId}`),
+          axios.get(`http://localhost:8000/api/orders/worker-options/${auth.firmId}`),
+          // axios.get(`http://localhost:8000/api/orders/contact-options/${auth.firmId}`),
+        ])
 
-        setInitialSelectState(prevState => ({
-          ...prevState,
-          selects: {
-            ...prevState.selects,
-            customer: customerList.data.customers,
-            worker: workerList.data.workers,
-            contact: contactList.data.contacts,
-          },
-        }))
+        setFormData((prevFormData) => ({
+          ...prevFormData,
+          customerOptions: customerResponse.data.customers.map((customer) => ({
+            label: customer.name,
+            value: customer.id,
+          })),
+          workerOptions: workerResponse.data.workers.map((worker) => ({
+            label: worker.name,
+            value: worker.id,
+          })),
+          // contactOptions: contactResponse.data.contacts.map((contact) => ({
+          //   key: contact.id,
+          //   value: contact.name,
+          // })),
+        }));
+        setIsLoaded(true)
 
-        // console.log(customerList.data.customers);
       } catch (err) {
         console.error('Error fetching options:', err);
       }
@@ -127,13 +117,7 @@ const OrderInfo = (props) => {
 
 
   useEffect(() => {
-    dispatch(setInitialInputData(initialInputState));
-    dispatch(setInitialSelectData(initialSelectState));
-    setIsLoaded(true)
-
     setActiveStatus(route.params.status)
-
-
   }, [edit])
 
   useEffect(() => {
@@ -143,41 +127,21 @@ const OrderInfo = (props) => {
   }, [activeStatus])
 
 
-  // Other variables
-  const customerOptions = isLoaded
-    ? fetchedSelectData.selects.customer.map((customer) => ({
-      label: customer.name,
-      value: customer.name,
-    }))
-    : [];
-  const workerOptions = isLoaded
-    ? fetchedSelectData.selects.worker.map((worker) => ({
-      label: worker.name,
-      value: worker.name,
-    }))
-    : [];
-  const contactOptions = isLoaded
-    ? fetchedSelectData.selects.contact.map((contact) => ({
-      label: contact.name,
-      value: contact.name,
-    }))
-    : [];
-
 
   const handleSubmit = async () => {
     const URL = `http://localhost:8000/api/orders/update/${orderId}`;
     try {
       const response = await axios.patch(URL, {
         firmId: auth.firmId,
-        name: fetchedInputData.inputs.name.value,
-        worker: fetchedSelectData.selectedOptions.worker.value,
-        customer: fetchedSelectData.selectedOptions.customer.value,
-        // contact: fetchedSelectData.selectedOptions.contact.value,
-        street: fetchedInputData.inputs.street.value,
-        houseNr: fetchedInputData.inputs.houseNr.value,
-        zip: fetchedInputData.inputs.zip.value,
-        place: fetchedInputData.inputs.place.value,
-        description: fetchedInputData.inputs.description.value,
+        name: formData.name,
+        worker: formData.selectedWorker,
+        customer: formData.selectedCustomer,
+        // contact: formData.contact,
+        street: formData.street,
+        houseNr: formData.houseNr,
+        zip: formData.zip,
+        place: formData.place,
+        description: formData.description,
         status: activeStatus,
       });
       dispatch(refershData())
@@ -195,27 +159,24 @@ const OrderInfo = (props) => {
     <View style={styles.container}>
       <ScrollView showsVerticalScrollIndicator={false} >
         <Text style={styles.label}>Kunde</Text>
-        <SelectDropdown
-          id='customer'
-          reducerKey='order'
+
+        <Select
           search={false}
-          fieldName='customer'
-          data={customerOptions}
+          data={formData.customerOptions}
           validators={[VALIDATOR_SELECT()]}
           initialSelectedValue={order.c_name}
+          onValueChange={(option) => setFormData({ ...formData, selectedCustomer: option })}
           disable={!edit}
         />
 
         <Text style={styles.label}>Mitarbeiter</Text>
 
-        <SelectDropdown
-          id='worker'
-          reducerKey='order'
+        <Select
           search={false}
-          fieldName='worker'
-          data={workerOptions}
+          data={formData.workerOptions}
           validators={[VALIDATOR_SELECT()]}
-          initialSelectedValue={order.worker}
+          initialSelectedValue={order.w_name}
+          onValueChange={(option) => setFormData({ ...formData, selectedWorker: option })}
           disable={!edit}
         />
 
@@ -224,27 +185,23 @@ const OrderInfo = (props) => {
         <View style={styles.rowContainer}>
           <View style={styles.streetWrapper}>
             <Input
-              id='orderStreet'
-              reducerKey='order'
-              fieldName='street'
-              placeholder="Straße"
-              errorText='Geben Sie eine Straße für den Auftrag ein'
-              value={fetchedInputData.inputs.street.value}
-              validators={[VALIDATOR_REQUIRE()]}
               disabled={!edit}
+              placeholder="Straße"
+              value={formData.street}
+              validators={[VALIDATOR_REQUIRE()]}
+              errorText='Geben Sie eine Straße für den Auftrag ein'
+              onChangeText={(text) => setFormData({ ...formData, street: text })}
 
             />
           </View>
           <View style={styles.nrWrapper}>
             <Input
-              id='orderHouseNr'
-              reducerKey='order'
-              fieldName='houseNr'
               placeholder="Nr."
-              errorText='Housenummer'
-              value={fetchedInputData.inputs.houseNr.value}
-              validators={[VALIDATOR_REQUIRE()]}
               disabled={!edit}
+              errorText='Housenummer'
+              value={formData.houseNr}
+              validators={[VALIDATOR_REQUIRE()]}
+              onChangeText={(text) => setFormData({ ...formData, houseNr: text })}
 
             />
           </View>
@@ -253,27 +210,22 @@ const OrderInfo = (props) => {
         <View style={styles.rowContainer}>
           <View style={styles.zipWrapper}>
             <Input
-              id='orderZip'
-              reducerKey='order'
-              fieldName='zip'
-              placeholder="PLZ"
-              errorText='Geben Sie eine PLZ für den Auftrag ein'
-              value={fetchedInputData.inputs.zip.value}
-              validators={[VALIDATOR_REQUIRE()]}
               disabled={!edit}
-
+              placeholder="PLZ"
+              value={formData.zip}
+              validators={[VALIDATOR_REQUIRE()]}
+              errorText='Geben Sie eine PLZ für den Auftrag ein'
+              onChangeText={(text) => setFormData({ ...formData, zip: text })}
             />
           </View>
           <View style={styles.placeWrapper}>
             <Input
-              id='orderPlace'
-              reducerKey='order'
-              fieldName='place'
-              placeholder="Ort"
-              errorText='Geben Sie den Ort für den Auftrag ein'
-              value={fetchedInputData.inputs.place.value}
-              validators={[VALIDATOR_REQUIRE()]}
               disabled={!edit}
+              placeholder="Ort"
+              value={formData.place}
+              validators={[VALIDATOR_REQUIRE()]}
+              errorText='Geben Sie den Ort für den Auftrag ein'
+              onChangeText={(text) => setFormData({ ...formData, place: text })}
 
             />
           </View>
@@ -282,17 +234,15 @@ const OrderInfo = (props) => {
         <Text style={styles.label}>Beschreibung</Text>
 
         <Input
-          id='workerDescr'
-          reducerKey='order'
-          fieldName='description'
-          placeholder="Beschreibung"
           textArea={true}
-          errorText='Geben Sie die Beschreibung des Auftrags ein'
-          value={fetchedInputData.inputs.description.value}
-          validators={[VALIDATOR_REQUIRE()]}
+          disabled={!edit}
           multiline={true}
           numberOfLines={4}
-          disabled={!edit}
+          placeholder="Beschreibung"
+          value={formData.description}
+          validators={[VALIDATOR_REQUIRE()]}
+          errorText='Geben Sie die Beschreibung des Auftrags ein'
+          onChangeText={(text) => setFormData({ ...formData, description: text })}
         />
 
         <View style={[styles.statusContainer]}>

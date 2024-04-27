@@ -7,7 +7,8 @@ import {
     TouchableOpacity,
     ActivityIndicator,
     FlatList,
-    RefreshControl
+    RefreshControl,
+    Alert
 } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import OrderItem from "./OrderItem";
@@ -21,20 +22,19 @@ import { getOrders } from "../../actions/orderActions";
 
 const OrderList = (props) => {
     const [isLoaded, setIsLoaded] = useState(false)
+    const [fetchedCustomers, setFetchedCustomers] = useState([])
+    const [fetchedWorkers, setFetchedWorkers] = useState([])
+    const [refreshing, setRefreshing] = useState(false);
+    const [isModalVisible, setModalVisible] = useState(false);
+
+
     const dispatch = useDispatch()
     const auth = useContext(AuthContext)
-
 
     const fetchedData = useSelector((state) => state.order.ordersArray);
     const refresh = useSelector(state => state.util.refresh)
 
-    const [refreshing, setRefreshing] = useState(false);
-    const [isModalVisible, setModalVisible] = useState(false);
 
-    console.log('auth.customers ', auth.customers);
-    const toggleModal = () => {
-        setModalVisible(!isModalVisible)
-    }
 
     useEffect(() => {
         const fetchOrders = async () => {
@@ -54,6 +54,45 @@ const OrderList = (props) => {
         fetchOrders();
     }, [refresh]);
 
+
+    useEffect(() => {
+        const fetcheCustomers = async () => {
+            try {
+                // const workerResponse = await axios.get(`http://localhost:8000/api/workers/${auth.firmId}/all`)
+                // setFetchedWorkers(workerResponse.data.workers)
+                const response = await axios.get(`http://localhost:8000/api/customers/${auth.firmId}/all`)
+                setFetchedCustomers(response.data.customers)
+            } catch (err) {
+                console.log('Error while fetching', err);
+
+            }
+        }
+        fetcheCustomers()
+    }, [refresh])
+
+    useEffect(() => {
+        const fetchWorkers = async () => {
+            try {
+                const response = await axios.get(`http://localhost:8000/api/workers/${auth.firmId}/all`)
+                setFetchedWorkers(response.data.workers)
+
+            } catch (err) {
+                console.log('Error while fetching', err);
+
+            }
+        }
+        fetchWorkers()
+    }, [refresh])
+
+
+    const toggleModal = () => {
+        if (fetchedCustomers.length <= 0 || fetchedWorkers.length <= 0) {
+            Alert.alert('To create a new order, you need at least one worker and one customer.')
+        } else {
+            setModalVisible(!isModalVisible)
+        }
+    }
+
     const onRefresh = useCallback(() => {
         setRefreshing(true);
         setTimeout(() => {
@@ -62,6 +101,7 @@ const OrderList = (props) => {
     }, []);
 
 
+    // console.log(fetchedCustomers.length, fetchedWorkers.length);
     return fetchedData.orders.length === 0 ? (
         <>
             <View style={styles.orderContainer}>

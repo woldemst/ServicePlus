@@ -13,116 +13,54 @@ import OrderList from '../components/OrderList'
 import ModalComponent from "../../shared/UIElements/Modal";
 import OrderCreate from "./OrderCreate";
 import { AuthContext } from "../../context/auth-context";
-import { getOrders } from "../../actions/orderActions";
+
 
 const OrderView = () => {
-    const dispatch = useDispatch()
-    const auth = useContext(AuthContext)
-    const fetchedData = useSelector((state) => state.order.ordersArray);
-
-    // console.log(fetchedData.orders);
     const [isModalVisible, setModalVisible] = useState(false);
-    const [isLoaded, setIsLoaded] = useState(false)
-    const refresh = useSelector(state => state.util.refresh)
 
-    useEffect(() => {
-        const fetchOrders = async () => {
-            try {
-                const response = await axios.get(
-                    `http://localhost:8000/api/orders/${auth.firmId}/all`
-                );
-                dispatch(getOrders(response.data));
-                // console.log('response', response.data);
-                setIsLoaded(true)
-            } catch (err) {
-                console.log("Error if fetching orders", err);
-                setIsLoaded(true)
-
-            }
-        };
-        fetchOrders();
-    }, [refresh]);
-
+    const fetchedData = useSelector((state) => state.order.ordersArray);
+    
     const toggleModal = () => {
         setModalVisible(!isModalVisible)
     }
 
-    return fetchedData.orders.length === 0 ? (
-        <>
-            <View style={styles.orderContainer}>
-                <View style={styles.suggestHeader} >
-                    <View style={styles.headerContent} >
+    return <View style={styles.orderContainer}>
+        <View style={styles.header} >
+            <View style={styles.headerContent}>
 
-                        <View style={styles.textContainer} >
-                            <Text style={styles.addText}>Noch kein Auftrag</Text>
-                        </View>
-                    </View>
-                </View>
-                <View style={styles.suggestContainer}>
-                    <View style={styles.centeredImageContainer}>
-                        <TouchableOpacity onPress={toggleModal}>
-                            <Image
-                                style={styles.addImg}
-                                source={require("../../../assets/firm/add.png")}
-                            />
-                        </TouchableOpacity>
-                    </View>
+                <View style={styles.textContainer} >
+                    <Text style={styles.headerText}>{fetchedData.orders.length === 0 ? 'Noch keinen Auftrag?' : 'Aufträge'}</Text>
                 </View>
 
+                <View style={styles.headerIconContainer} >
+                    <TouchableOpacity style={styles.headerButton} onPress={toggleModal} >
+                        <Image style={styles.headerIcon} source={require('../../../assets/add_new.png')} />
+                    </TouchableOpacity>
+
+                    <TouchableOpacity style={styles.headerButton} >
+                        <Image style={styles.headerIcon} source={require('../../../assets/filter.png')} />
+                    </TouchableOpacity>
+                </View>
             </View>
+        </View>
 
-            <ModalComponent
-                isVisible={isModalVisible}
-                animationIn="slideInUp" // Specify the slide-up animation
-                animationOut="slideOutDown" // Specify the slide-down animation
-                onBackdropPress={toggleModal}
-                onBackButtonPress={toggleModal}
+        <View style={styles.content} >
+            <OrderList />
+        </View>
 
-                header={<Text style={styles.modalHeadline}>Auftrag hinzufügen</Text>}
-            >
-                <OrderCreate toggle={toggleModal} />
-            </ModalComponent>
-        </>
-    ) : (
-        <>
-            <View style={styles.orderContainer}>
-                <View style={styles.header} >
-                    <View style={styles.headerContent}>
+        <ModalComponent
+            isVisible={isModalVisible}
+            animationIn="slideInUp" // Specify the slide-up animation
+            animationOut="slideOutDown" // Specify the slide-down animation
+            onBackdropPress={toggleModal}
+            onBackButtonPress={toggleModal}
 
-                        <View style={styles.textContainer} >
-                            <Text style={styles.headerText}>Aufträge</Text>
-                        </View>
+            header={<Text style={styles.modalHeadline}>Auftrag hinzufügen</Text>}
+        >
+            <OrderCreate toggle={toggleModal} />
+        </ModalComponent>
+    </View>
 
-                        <View style={styles.headerIconContainer} >
-                            <TouchableOpacity style={styles.headerButton} onPress={toggleModal} >
-                                <Image style={styles.headerIcon} source={require('../../../assets/add_new.png')} />
-                            </TouchableOpacity>
-
-                            <TouchableOpacity style={styles.headerButton} >
-                                <Image style={styles.headerIcon} source={require('../../../assets/filter.png')} />
-                            </TouchableOpacity>
-                        </View>
-                    </View>
-                </View>
-
-                <View style={styles.content} >
-                    <OrderList isLoaded={isLoaded} />
-                </View>
-
-                <ModalComponent
-                    isVisible={isModalVisible}
-                    animationIn="slideInUp" // Specify the slide-up animation
-                    animationOut="slideOutDown" // Specify the slide-down animation
-                    onBackdropPress={toggleModal}
-                    onBackButtonPress={toggleModal}
-
-                    header={<Text style={styles.modalHeadline}>Auftrag hinzufügen</Text>}
-                >
-                    <OrderCreate toggle={toggleModal} />
-                </ModalComponent>
-            </View>
-        </>
-    )
 }
 
 const styles = StyleSheet.create({

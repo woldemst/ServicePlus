@@ -33,10 +33,9 @@ const createOrder = async (req, res, next) => {
     firmId,
     name,
     creator,
-    worker,
+    workerId,
     date,
     customerId,
-    status,
 
     street,
     houseNr,
@@ -47,7 +46,7 @@ const createOrder = async (req, res, next) => {
 
 
   const customerItem = await Customer.findOne({ _id: customerId });
-
+  const workerItem = await Worker.findOne({_id: workerId})
   // console.log('customer item', customerItem);
 
   const createdOrder = new Order({
@@ -56,15 +55,17 @@ const createOrder = async (req, res, next) => {
     status: 1,
     firmId: firmId,
     name: name,
-    worker: worker,
+    workerId: workerId,
+    w_name: workerItem.name,
     description: description,
 
     customerId: customerId,
+    c_name: customerItem.name,
+
     street: street,
     houseNr: houseNr,
     zip: zip,
     place: place,
-    c_name: customerItem.name,
   });
 
 
@@ -76,8 +77,13 @@ const createOrder = async (req, res, next) => {
   await Customer.updateOne(
     { _id: customerId },
     { $push: { orders: createdOrder._id } },
-
   )
+
+  await Worker.updateOne(
+    { _id: workerId },
+    { $push: { orders: createdOrder._id } },
+  )
+
   try {
     await createdOrder.save();
   } catch (err) {
@@ -135,9 +141,6 @@ const getAllWorkersAsOptions = async (req, res, next) => {
       id: worker._id,
       name: worker.name
     }))
-    // res.json({
-    //   workers: workers.map(worker => worker.toObject({ getters: true })),
-    // });
 
     res.json({ workers: workerList })
   } catch (err) {
