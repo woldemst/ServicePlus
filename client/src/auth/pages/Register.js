@@ -70,7 +70,7 @@ const Register = () => {
                     <Input
                         placeholder="Name"
                         value={formData.name}
-                        onChangeText={(text) => setFormData({...formData, name: text})}
+                        onChangeText={(text) => setFormData({ ...formData, name: text })}
                         validators={[VALIDATOR_REQUIRE()]}
                         errorText="Please enter your name"
                     />
@@ -78,7 +78,7 @@ const Register = () => {
                     <Input
                         placeholder="Email"
                         value={formData.email}
-                        onChangeText={(text) => setFormData({...formData, email: text})}
+                        onChangeText={(text) => setFormData({ ...formData, email: text })}
                         validators={[VALIDATOR_EMAIL()]}
                         errorText="Please enter a valid email"
                     />
@@ -86,7 +86,7 @@ const Register = () => {
                     <Input
                         placeholder="Password"
                         value={formData.password}
-                        onChangeText={(text) => setFormData({...formData, password: text})}
+                        onChangeText={(text) => setFormData({ ...formData, password: text })}
 
                         validators={[VALIDATOR_MINLENGTH(6)]}
                         errorText="Password must be at least 6 characters long"
@@ -96,13 +96,14 @@ const Register = () => {
                     <Select
                         placeholder="Role"
                         value={formData.role}
-                        onValueChange={(text) => setFormData({...formData, role: text})}
+                        onValueChange={(option) => setFormData({ ...formData, role: option })}
                         data={[
-                            { key: "1", value: "Owner" },
-                            { key: "2", value: "Worker" },
+                            { label: "Owner", value: "Owner" },
+                            { label: "Worker", value: "Worker" },
                         ]}
                         validators={[VALIDATOR_SELECT()]}
                         errorText="Please select a role"
+                        search={false}
                     />
                 </>
             )}
