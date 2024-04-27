@@ -31,7 +31,7 @@
     "react-native": "^0.73.6",
     "react-native-date-picker": "^5.0.0",
     "react-native-dropdown-select-list": "^2.0.5",
-    "react-native-element-dropdown": "^2.10.2",
+    "react-native-element-dropdown": "^2.10.4",
     "react-native-elements": "^3.4.3",
     "react-native-modal": "^13.0.1",
     "react-native-pager-view": "^6.2.3",

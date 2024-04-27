@@ -1,44 +1,49 @@
 import { Dropdown } from 'react-native-element-dropdown';
 import { StyleSheet } from "react-native";
 import { useState, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
 
-import { setSelect } from "../../actions/selectActions";
+
 import { validate } from "../../util/validators";
 
 
 const SelectDropdown = props => {
     const [touched, setTouched] = useState(false)
+    const [isFocus, setIsFocus] = useState(false);
     const [isValid, setIsValid] = useState(true)
-    const [isValue, setIsValue] = useState('')
-    const [selectedValue, setSelectedValue] = useState(props.initialSelectedValue || ''); // Set initial selected value
+    const [value, setValue] = useState(null)
 
-    const handleChange = val => {
-        props.onValueChange(val);
-        setIsValid(validate(val, props.validators));
-      }
+    const [selectedValue, setSelectedValue] = useState(props.initialSelectedValue); // Set initial selected value
+
+    const handleChange = item => {
+        props.onValueChange(item.value)
+        // setIsFocus(false);
+        setIsValid(validate(item.value, props.validators));
+        setSelectedValue(item.value)
+        setValue(item.value)
+    }
+
+
+
 
     return <>
         <Dropdown
-            id={props.id}
-            style={[props.disable && styles.disaabled, !isValid ? styles.selectInvalid : styles.select]}
             // placeholderStyle={styles.placeholderStyle}
-            // inputSearchStyle={styles.inputSearchStyle}
-            value={isValue}
+            selectedTextStyle={styles.selectedTextStyle}
+            inputSearchStyle={styles.inputSearchStyle}
+            style={[props.disable && styles.disaabled, !isValid ? styles.selectInvalid : styles.select]}
+            iconStyle={styles.iconStyle}
             data={props.data}
             search={props.search}
             maxHeight={300}
             labelField="label"
             valueField="value"
-            // placeholder={!isFocus ? 'Select item' : '...'}
-            placeholder={selectedValue ? selectedValue : props.placeholder} // Display initial selected value if exists
-            disable={props.disable}
+            placeholder={selectedValue ? selectedValue : 'Auswählen'}
+            visibleSelectedItem={true}
+            value={value}
+            // disable={props.disable}
+            // onFocus={() => setIsFocus(true)}
+            // onBlur={() => setIsFocus(false)}
             onChange={handleChange}
-            selectedTextStyle={styles.selectedTextStyle}
-        // visibleSelectedItem={true}
-        // searchPlaceholder={props.searchPlaceholder}
-        // onFocus={() => setIsFocus(true)}
-        // onBlur={() => setIsFocus(false)}
         />
     </>
 }
