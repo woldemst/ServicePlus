@@ -5,6 +5,9 @@ const orderSchema = new mongoose.Schema({
   appointments: [{ type: mongoose.Types.ObjectId, ref: 'Appointment' }], //ref: establish connection between two schemas
   customerId: { type: mongoose.Types.ObjectId, ref: 'Customer' }, //ref: establish connection between two schemas
   c_name: { type: String },
+  workerId: { type: mongoose.Types.ObjectId, ref: 'Worker' }, //ref: establish connection between two schemas
+  w_name: { type: String },
+
   name: { type: String },
   street: { type: String },
   houseNr: { type: String },
@@ -12,13 +15,10 @@ const orderSchema = new mongoose.Schema({
   place: { type: String },
   // creator: {type: mongoose.Types.ObjectId, required: true, ref: 'User' }, // establish connecrion between two shemas
   // creator: {type: String},
-  worker: { type: String },
   // date: { type: String}, 
-  // customer: { type: String },
   status: { type: String},
   contact: { type: String },
   description: { type: String },
-
 });
 
 module.exports = mongoose.model("Order", orderSchema);
