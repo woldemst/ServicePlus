@@ -214,11 +214,9 @@ const updateOrderById = async (req, res, next) => {
   const orderId = req.params.orderId
 
   const {
-    name,
-    email,
-    customer,
-    worker,
-    contact,
+    customerId,
+    workerId,
+    // contact,
     street,
     houseNr,
     zip,
@@ -238,25 +236,29 @@ const updateOrderById = async (req, res, next) => {
       return next(error);
     }
 
-    updateOrder.name = name,
-      updateOrder.email = email,
-      updateOrder.c_name = customer,
-      updateOrder.worker = worker,
-      updateOrder.contact = contact,
-      updateOrder.street = street,
-      updateOrder.houseNr = houseNr,
-      updateOrder.zip = zip,
-      updateOrder.place = place,
-      updateOrder.description = description,
-      updateOrder.status = status,
+    const customerItem = await Customer.findOne({ _id: customerId });
+    const workerItem = await Worker.findOne({_id: workerId})
 
-      await updateOrder.save();
+    updateOrder.customerId = customerId,
+    updateOrder.c_name = customerItem.name,
+    
+    updateOrder.workerId = workerId,
+    updateOrder.w_name = workerItem.name,
+    // updateOrder.contact = contact,
+    updateOrder.street = street,
+    updateOrder.houseNr = houseNr,
+    updateOrder.zip = zip,
+    updateOrder.place = place,
+    updateOrder.description = description,
+    updateOrder.status = status,
+
+    await updateOrder.save();
 
     // Update related appointments
     const appointments = await Appointment.find({ orderId: orderId });
 
     for (const appointment of appointments) {
-      appointment.o_name = name;
+      // appointment.o_name = name;
       appointment.o_street = street;
       appointment.o_houseNr = houseNr;
       appointment.o_zip = zip;

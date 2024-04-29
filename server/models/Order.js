@@ -4,10 +4,11 @@ const orderSchema = new mongoose.Schema({
   firmId: { type: mongoose.Types.ObjectId, ref: 'Firm' }, //ref: establish connection between two schemas
   appointments: [{ type: mongoose.Types.ObjectId, ref: 'Appointment' }], //ref: establish connection between two schemas
   customerId: { type: mongoose.Types.ObjectId, ref: 'Customer' }, //ref: establish connection between two schemas
-  c_name: { type: String },
   workerId: { type: mongoose.Types.ObjectId, ref: 'Worker' }, //ref: establish connection between two schemas
+ 
+ 
+  c_name: { type: String },
   w_name: { type: String },
-
   name: { type: String },
   street: { type: String },
   houseNr: { type: String },
