@@ -57,7 +57,7 @@ const OrderItem = (props) => {
       <TouchableOpacity style={styles.container}
         onPress={() => {
           navigation.navigate('orderMain', {
-            id: props.id,
+            id: orderId,
             name: props.name,
             description: props.description,
             worker: props.worker,

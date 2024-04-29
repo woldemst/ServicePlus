@@ -39,7 +39,7 @@ const OrderInfo = (props) => {
 
 
   const [formData, setFormData] = useState({
-    name: order.name,
+    // name: order.name,
     street: order.street,
     houseNr: order.houseNr,
     zip: order.zip,
@@ -50,11 +50,13 @@ const OrderInfo = (props) => {
     // contactOption: {value: order.contact},
     customerOptions: [],
     workerOptions: [],
-    selectedCustomer: '',
-    selectedWorker: '',
+
+    selectedCustomer: order.customerId,
+    selectedWorker: order.workerId,
 
   })
 
+  // console.log(formData.name);
   const handleChange = async newStatus => {
 
     Alert.alert(
@@ -127,15 +129,14 @@ const OrderInfo = (props) => {
   }, [activeStatus])
 
 
-
   const handleSubmit = async () => {
     const URL = `http://localhost:8000/api/orders/update/${orderId}`;
     try {
       const response = await axios.patch(URL, {
         firmId: auth.firmId,
-        name: formData.name,
-        worker: formData.selectedWorker,
-        customer: formData.selectedCustomer,
+        // name: order.name,
+        customerId: formData.selectedCustomer,
+        workerId: formData.selectedWorker,
         // contact: formData.contact,
         street: formData.street,
         houseNr: formData.houseNr,

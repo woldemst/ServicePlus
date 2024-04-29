@@ -13,7 +13,7 @@ import { createMaterialTopTabNavigator } from '@react-navigation/material-top-ta
 import { Ionicons } from '@expo/vector-icons';
 import { useDispatch, useSelector } from "react-redux";
 
-import { toggleToFalseEditOrder, toggleToTrueEditOrder } from "../../actions/orderActions";
+import { toggleToFalseEditOrder, toggleToTrueEditOrder, updateOrderDataById } from "../../actions/orderActions";
 import { VALIDATOR_REQUIRE } from "../../util/validators";
 import { setInitialInputData, addToInitialData } from "../../actions/inputActions";
 import OrderAppointments from "./OrderAppointments";
@@ -22,15 +22,18 @@ import OrderFiles from "./OrderFiles";
 import Input from "../../shared/UIElements/Input";
 
 
-const OrderMain = () => {
+const OrderMain = (props) => {
     const dispatch = useDispatch()
     const route = useRoute()
     const navigation = useNavigation()
     const Tab = createMaterialTopTabNavigator()
 
-    const [isLoaded, setIsLoaded] = useState(false)
-    const fetchedInputData = useSelector(state => state.input)
+    const orderId = route.params.id
+    const fetchedArray = useSelector((state) => state.order.ordersArray.orders);
+    const order = fetchedArray.find(order => order._id == orderId)
     const edit = useSelector(state => state.order.edit);
+
+    const [isLoaded, setIsLoaded] = useState(false)
 
     const goingBack = () => {
         navigation.goBack()
@@ -38,16 +41,11 @@ const OrderMain = () => {
     }
 
     useEffect(() => {
-        dispatch(addToInitialData(initialInputState));
         setIsLoaded(true)
     }, [edit])
 
-    const initialInputState = {
-        name: {
-            value: route.params.name
-        },
-    }
 
+    
     return isLoaded && (
         <>
             <View style={styles.header} >
@@ -55,18 +53,8 @@ const OrderMain = () => {
                     <TouchableOpacity onPress={() => goingBack()}>
                         <Ionicons name="arrow-back" size={24} color="green" />
                     </TouchableOpacity>
-                    <View style={styles.headerHeadline}>
-                        <Input
-                            id='orderName'
-                            reducerKey='order'
-                            fieldName='name'
-                            thin={true}
-                            style={styles.inputName}
-                            errorText='Geben Sie den Namen ein'
-                            value={fetchedInputData.inputs.name.value}
-                            validators={[VALIDATOR_REQUIRE()]}
-                            disabled={!edit}
-                        />
+                    <View style={styles.headerHeadline}>    
+                        <Text style={styles.headline}>{order.name}</Text>
                     </View>
                     <TouchableOpacity onPress={() => dispatch(toggleToTrueEditOrder())}>
                         <Image source={require('../../../assets/order/edit.png')} />
@@ -79,7 +67,7 @@ const OrderMain = () => {
                 tabBarStyle: { paddingTop: 0, paddingBottom: 0, paddingHorizontal: 0 }, // Adjust padding here
                 tabBarIndicatorStyle: { backgroundColor: '#e0e0e0' }, // Change the color of the indicator
                 swipeEnabled: false,
-                
+
             }}
             >
                 <Tab.Screen
@@ -87,7 +75,8 @@ const OrderMain = () => {
                     component={OrderInfo}
                     initialParams={{
                         id: route.params.id,
-                        status: route.params.status
+                        status: route.params.status,
+
                     }}
                     options={{
                         headerShown: false,
@@ -138,11 +127,13 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
     },
     headerHeadline: {
-        fontSize: 18,
-        fontWeight: '400'
+        textAlign: 'center',
+        justifyContent: 'center'
     },
-    input: {
-        color: '#000'
+    headline: {
+        fontSize: 18,
+        fontWeight: '400',
+        color: '#000',
     },
     headerNav: {
         backgroundColor: 'red'
