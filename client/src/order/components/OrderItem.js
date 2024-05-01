@@ -2,8 +2,9 @@ import {
   View,
   Text,
   TouchableOpacity,
+  TouchableWithoutFeedback,
   StyleSheet,
-  Image
+  Image,
 } from "react-native";
 import { useState } from "react";
 import { useNavigation } from "@react-navigation/native"
@@ -11,16 +12,21 @@ import { SwipeListView } from "react-native-swipe-list-view";
 import { useDispatch, useSelector } from "react-redux";
 import { Alert } from 'react-native';
 import axios from "axios";
+import Modal from "react-native-modal";
 
 import { deleteOrder } from "../../actions/orderActions";
 import { deleteAppointmentsByOrder } from "../../actions/appointmentActions";
+import OrderOptions from "../../util/OrderOptions";
 
 
 const OrderItem = (props) => {
+  const [isModalVisible, setModalVisible] = useState(false);
+  const [modalPosition, setModalPosition] = useState({ x: 0, y: 0 });
+
+
   const navigation = useNavigation()
   const dispatch = useDispatch()
   const orderId = props.id
-
   const orders = useSelector(state => state.order.ordersArray.orders)
   const orderItem = orders.find(order => order._id == orderId)
 
@@ -52,6 +58,18 @@ const OrderItem = (props) => {
     )
   };
 
+  const longPressHandler = (event) => {
+    const { pageX, pageY } = event.nativeEvent;
+    setModalPosition({ x: pageX, y: pageY });
+    setModalVisible(true)
+
+  }
+  const toggleModal = () => {
+    setModalVisible(!isModalVisible)
+
+  }
+
+
   const renderItem = () => (
     <View style={styles.rowFront}>
       <TouchableOpacity style={styles.container}
@@ -66,7 +84,10 @@ const OrderItem = (props) => {
             status: props.status
             // 
           })
-        }} >
+        }}
+
+        onLongPress={longPressHandler}
+      >
         <View style={[
           styles.indicator,
           orderItem.status == 1 ? styles.notStarted : null,
@@ -98,6 +119,13 @@ const OrderItem = (props) => {
       </TouchableOpacity>
     </View>
   )
+
+  // Define a separate component for the custom backdrop
+  const CustomBackdrop = ({ onPress }) => (
+    <TouchableWithoutFeedback onPress={onPress} style={styles.backdrop}>
+      <View style={styles.backdrop}></View>
+    </TouchableWithoutFeedback>
+  );
 
   return <>
     <SwipeListView
@@ -136,13 +164,27 @@ const OrderItem = (props) => {
       )}
     />
 
+    <Modal
+      isVisible={isModalVisible}
+      animationIn="zoomIn" // Specify the slide-up animation
+      animationOut="zoomOut" // Specify the slide-down animation
+      // onBackdropPress={toggleModal}
+      onBackButtonPress={toggleModal}
+      style={styles.modal}
+      // backdropOpacity={0.3} //
+      customBackdrop={<CustomBackdrop onPress={() => setModalVisible(false)} />}
+    >
+      <OrderOptions id={orderId} onClose={() => setModalVisible(false)} position={modalPosition} />
+    </Modal>
+
   </>
 };
 
 const styles = StyleSheet.create({
   container: {
     flexDirection: "row",
-    flex: 1
+    flex: 1,
+    position: 'relative'
   },
   indicator: {
     width: "3%",
@@ -239,7 +281,17 @@ const styles = StyleSheet.create({
   canceled: {
     backgroundColor: '#DB504A',
   },
+  modal: {
+    margin: 0,
+    padding: 0,
+    justifyContent: 'center',
+    alignItems: 'center',
 
+  },
+  backdrop: {
+    flex: 1,
+    backgroundColor: "rgba(0, 0, 0, 0.5)", // Add a semi-transparent background
+  },
 });
 
 export default OrderItem;
