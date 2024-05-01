@@ -46,7 +46,7 @@ const createOrder = async (req, res, next) => {
 
 
   const customerItem = await Customer.findOne({ _id: customerId });
-  const workerItem = await Worker.findOne({_id: workerId})
+  const workerItem = await Worker.findOne({ _id: workerId })
   // console.log('customer item', customerItem);
 
   const createdOrder = new Order({
@@ -237,22 +237,22 @@ const updateOrderById = async (req, res, next) => {
     }
 
     const customerItem = await Customer.findOne({ _id: customerId });
-    const workerItem = await Worker.findOne({_id: workerId})
+    const workerItem = await Worker.findOne({ _id: workerId })
 
     updateOrder.customerId = customerId,
-    updateOrder.c_name = customerItem.name,
-    
-    updateOrder.workerId = workerId,
-    updateOrder.w_name = workerItem.name,
-    // updateOrder.contact = contact,
-    updateOrder.street = street,
-    updateOrder.houseNr = houseNr,
-    updateOrder.zip = zip,
-    updateOrder.place = place,
-    updateOrder.description = description,
-    updateOrder.status = status,
+      updateOrder.c_name = customerItem.name,
 
-    await updateOrder.save();
+      updateOrder.workerId = workerId,
+      updateOrder.w_name = workerItem.name,
+      // updateOrder.contact = contact,
+      updateOrder.street = street,
+      updateOrder.houseNr = houseNr,
+      updateOrder.zip = zip,
+      updateOrder.place = place,
+      updateOrder.description = description,
+      updateOrder.status = status,
+
+      await updateOrder.save();
 
     // Update related appointments
     const appointments = await Appointment.find({ orderId: orderId });
@@ -281,6 +281,45 @@ const updateOrderById = async (req, res, next) => {
   }
 }
 
+const updateOrderNameById = async (req, res, next) => {
+  const orderId = req.params.orderId
+
+  const { name } = req.body
+
+  let updateOrder;
+
+  try {
+
+    updateOrder = await Order.findById(orderId)
+
+    if (!updateOrder) {
+      const error = new HttpError('Could not find an order for the provided Id.', 404);
+      return next(error);
+    }
+    updateOrder.name = name,
+
+      await updateOrder.save();
+
+    // Update related appointments
+    const appointments = await Appointment.find({ orderId: orderId });
+
+    for (const appointment of appointments) {
+      appointment.o_name = name;
+      await appointment.save();
+    }
+
+    res
+      .status(200)
+      .json({ order: updateOrder.toObject({ getters: true }) });
+
+  } catch (err) {
+    const error = new HttpError(
+      "Something went wrong, could not update profile.",
+      500
+    );
+    return next(error);
+  }
+}
 
 // delete functionality 
 const deleteOrderById = async (req, res, next) => {
@@ -373,5 +412,6 @@ exports.getAllCustomersAsOptions = getAllCustomersAsOptions;
 exports.getAllContactsAsOptions = getAllContactsAsOptions;
 
 exports.updateOrderById = updateOrderById;
+exports.updateOrderNameById = updateOrderNameById;
 exports.deleteOrderById = deleteOrderById;
 exports.statusChange = statusChange;
