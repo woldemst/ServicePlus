@@ -4,6 +4,7 @@ export const UPDATE_ORDER_DATA_BY_ID = 'UPDATE_ORDER_DATA_BY_ID';
 export const CLEAR_ORDER_DATA = 'CLEAR_ORDER_DATA'
 export const TOGGLE_TO_TRUE_EDIT_ORDER = 'TOGGLE_TO_TRUE_EDIT_ORDER'
 export const TOGGLE_TO_FALSE_EDIT_ORDER = 'TOGGLE_TO_FALSE_EDIT_ORDER'
+export const TOGGLE_EDIT = 'TOGGLE_EDIT'
 export const UPDATE_ORDER_NAME = 'UPDATE_ORDER_NAME'
 export const DELETE_ORDER = 'DELETE_ORDER'
 
@@ -15,6 +16,10 @@ export const updateOrderName = (name) => {
   };
 };
 
+export const toggleEdit = (data) => ({
+  type: TOGGLE_EDIT,
+  payload: data
+})
 export const toggleToTrueEditOrder = (data) => ({
   type: TOGGLE_TO_TRUE_EDIT_ORDER,
   payload: data
