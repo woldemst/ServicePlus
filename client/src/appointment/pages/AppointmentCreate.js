@@ -12,12 +12,9 @@ import { useContext, useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 import DateTimePicker from '@react-native-community/datetimepicker';
-import DatePicker from 'react-native-date-picker'
 
 import { AuthContext } from "../../context/auth-context";
-import { setInitialInputData } from "../../actions/inputActions";
-import { setInitialSelectData } from "../../actions/selectActions";
-import SelectDropdown from "../../shared/UIElements/SelectDropdown";
+import Select from "../../shared/UIElements/Select";
 import { VALIDATOR_SELECT, VALIDATOR_REQUIRE } from "../../util/validators";
 import Input from "../../shared/UIElements/Input";
 import Button from "../../shared/UIElements/Button";
@@ -27,9 +24,6 @@ const AppointmentCreate = props => {
     const dispatch = useDispatch()
     const auth = useContext(AuthContext)
     const [isLoaded, setIsLoaded] = useState(false)
-
-    const fetchedSelectData = useSelector(state => state.select)
-    const fetchedInputData = useSelector(state => state.input)
 
     const [date, setDate] = useState(new Date());
     const [selectedDateOnly, setSelectedDateOnly] = useState('');
@@ -44,106 +38,77 @@ const AppointmentCreate = props => {
         const selectedDateTime = new Date(currentDate);
         const dateOnly = selectedDateTime.toISOString().split('T')[0];
         const timeOnly = selectedDateTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-    
+
         setSelectedDateOnly(dateOnly);
         setSelectedTimeOnly(timeOnly);
-    
+
     };
 
-    const [initialSelectState, setInitialSelectState] = useState({
-        selects: {
-            worker: [],
-            contact: [],
-            customer: [],
-            order: []
-        },
+    const [formData, setFormData] = useState({
+        orderOptions: [],
+        workerOptions: [],
+        customerOptions: [],
+        contactOptions: [],
+        selectedOrder: "",
+        selectedCustomer: "",
+        selectedWorker: "",
+        selectedContact: "",
+        description: '',
     })
-
-    const initialInputState = {
-        description: {
-            value: "",
-            isValid: false,
-        },
-    }
 
     useEffect(() => {
         const fetchedData = async () => {
             try {
-                const customerList = await axios.get(`http://localhost:8000/api/appointments/customer-options/${auth.firmId}`)
-                const workerList = await axios.get(`http://localhost:8000/api/appointments/worker-options/${auth.firmId}`)
-                const contactList = await axios.get(`http://localhost:8000/api/appointments/contact-options/${auth.firmId}`)
-                const orderList = await axios.get(`http://localhost:8000/api/appointments/order-options/${auth.firmId}`)
+                const [
+                    orderResponse,
+                    workerResponse,
+                    customerResponse,
+                    // contactResponse,
+                ] = await Promise.all([
+                    axios.get(`http://localhost:8000/api/appointments/order-options/${auth.firmId}`),
+                    axios.get(`http://localhost:8000/api/appointments/worker-options/${auth.firmId}`),
+                    axios.get(`http://localhost:8000/api/appointments/customer-options/${auth.firmId}`),
+                    // axios.get(`http://localhost:8000/api/appointments/contact-options/${auth.firmId}`),
+                ])
 
-                // console.log(contactList.data.contacts);
-                // console.log(customerList.data.customers);
-
-                setInitialSelectState(prevState => ({
-                    ...prevState,
-                    selects: {
-                        ...prevState.selects,
-                        customer: customerList.data.customers,
-                        worker: workerList.data.workers,
-                        contact: contactList.data.contacts,
-                        order: orderList.data.orders,
-                    },
+                setFormData(prevFormData => ({
+                    ...prevFormData,
+                    orderOptions: orderResponse.data.orders.map((order) => ({
+                      label: order.name,
+                      value: order.id,
+                    })),
+                    workerOptions: workerResponse.data.workers.map((worker) => ({
+                        label: worker.name,
+                        value: worker.id,
+                    })),
+                    customerOptions: customerResponse.data.customers.map((customer) => ({
+                        label: customer.name,
+                        value: customer.id,
+                    })),
+                    // contactOptions: contactResponse.data.contacts.map((contact) => ({
+                    //   key: contact.id,
+                    //   value: contact.name,
+                    // })),
                 }))
+
+                setIsLoaded(true)
 
             } catch (err) {
                 console.error('Error fetching options:', err);
             }
         }
         fetchedData()
-
     }, [])
 
-    useEffect(() => {
-        if (initialSelectState.selects.contact.length > 0) {
-
-            dispatch(setInitialInputData(initialInputState));
-            dispatch(setInitialSelectData(initialSelectState));
-            setIsLoaded(true)
-        }
-    }, [initialSelectState.selects.contact])
-
-    let workerOptions;
-    let customerOptions;
-    let contactOptions;
-    let orderOptions;
-
-    if (isLoaded) {
-        // customerOptions = fetchedSelectData.selects.customer.map(customer => ({
-        //     id: customer.id,
-        //     label: customer.name,
-        //     value: customer.name
-        // }));
-        workerOptions = fetchedSelectData.selects.worker.map(worker => ({
-            label: worker.name,
-            value: worker.name
-        }));
-        contactOptions = fetchedSelectData.selects.contact.map(contact => ({
-            label: contact.name,
-            value: contact.name
-        }));
-        orderOptions = fetchedSelectData.selects.order.map(order => ({
-            id: order.id,
-            label: order.name,
-            value: order.name
-        }));
-    }
 
     const handleSubmit = async () => {
-
-        // console.log('before api', fetchedInputData);
-        // console.log('before API', fetchedSelectData.selectedOptions.order.id );
-
-
         const URL = `http://localhost:8000/api/appointments/new`;
         try {
             const response = await axios.post(URL, {
                 firmId: auth.firmId,
-                orderId: fetchedSelectData.selectedOptions.order.id,
-                worker: fetchedSelectData.selectedOptions.worker.value,
-                description: fetchedInputData.inputs.description.value,
+                orderId: formData.selectedOrder,
+                workerId: formData.selectedWorker,
+                description: formData.description,
                 date: selectedDateOnly,
                 time: selectedTimeOnly,
                 // status: status,
@@ -152,7 +117,7 @@ const AppointmentCreate = props => {
             dispatch(refershData())
             props.toggleModal()
 
-            alert('Order updated successfuly')
+            alert('Appointment created successfuly')
             // navigation.goBack()
         } catch (err) {
             alert("An error occurred while editing the order.");
@@ -179,39 +144,38 @@ const AppointmentCreate = props => {
             </View>
 
             <Text style={styles.label}>Auftrag</Text>
-            <SelectDropdown
-                id='appointmentOrder'
-                reducerKey='appointment'
+
+            <Select
                 search={false}
-                fieldName='order'
-                data={orderOptions}
+                data={formData.orderOptions}
+                errorText="Please select an order"
                 validators={[VALIDATOR_SELECT()]}
+                onValueChange={(option) => setFormData({ ...formData, selectedOrder: option })}
             />
 
             <Text style={styles.label}>Mitarbeiter</Text>
 
-            <SelectDropdown
-                id='appointmentWorker'
-                reducerKey='appointment'
+            <Select
                 search={false}
-                fieldName='worker'
-                data={workerOptions}
+                data={formData.workerOptions}
+                errorText="Please select a worker"
                 validators={[VALIDATOR_SELECT()]}
+                onValueChange={(option) => setFormData({ ...formData, selectedWorker: option })}
             />
 
             <Text style={styles.label}>Beschreibung</Text>
 
+
             <Input
-                id='appointmentrDescr'
-                reducerKey='appointment'
-                fieldName='description'
-                placeholder="Beschreibung"
-                textArea={true}
-                errorText='Geben Sie die Beschreibung des Termins ein'
-                value={fetchedInputData.inputs.description.value}
-                validators={[VALIDATOR_REQUIRE()]}
                 multiline={true}
                 numberOfLines={4}
+                textArea={true}
+                placeholder="Beschreibung"
+                value={formData.description}
+                validators={[VALIDATOR_REQUIRE()]}
+                // style={[styles.textArea, styles.placeholderText]}
+                errorText='Geben Sie die Beschreibung des Termins ein'
+                onChangeText={(text) => setFormData({ ...formData, description: text })}
             />
 
             <View style={styles.btnContainer}>

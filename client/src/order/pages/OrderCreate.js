@@ -31,7 +31,7 @@ const OrderCreate = (props) => {
     selectedCustomer: "",
     selectedWorker: "",
     selectedContact: "",
-    description: '',
+    description: "",
   })
 
   const auth = useContext(AuthContext)
@@ -95,8 +95,8 @@ const OrderCreate = (props) => {
         description: formData.description,
       });
 
-      props.toggle();
       dispatch(refershData())
+      props.toggle();
       alert("Order created successfully!");
     } catch (err) {
       alert("An error occurred while creating the order.");
