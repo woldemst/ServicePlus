@@ -14,9 +14,11 @@ import { Alert } from 'react-native';
 import axios from "axios";
 import Modal from "react-native-modal";
 
+import Input from "../../shared/UIElements/Input";
 import { deleteOrder } from "../../actions/orderActions";
 import { deleteAppointmentsByOrder } from "../../actions/appointmentActions";
 import OrderOptions from "../../util/OrderOptions";
+import { VALIDATOR_REQUIRE } from "../../util/validators";
 
 
 const OrderItem = (props) => {
@@ -26,11 +28,16 @@ const OrderItem = (props) => {
 
   const navigation = useNavigation()
   const dispatch = useDispatch()
+
   const orderId = props.id
   const orders = useSelector(state => state.order.ordersArray.orders)
   const orderItem = orders.find(order => order._id == orderId)
+  const edit = useSelector(state => state.order.edit)
 
-
+  console.log(edit);
+  const [formData, setFormData] = useState({
+    name: orderItem.name,
+  })
 
   const deleteHandler = async () => {
     Alert.alert(
@@ -69,6 +76,16 @@ const OrderItem = (props) => {
 
   }
 
+  // onPress: async () => {
+  //     try {
+  //         await axios.delete(`http://localhost:8000/api/orders/updateName/${orderId}`);
+  //         props.onClose()
+  //     } catch (err) {
+  //         console.log("Error while deleting order:", err);
+  //     }
+  // },
+
+
 
   const renderItem = () => (
     <View style={styles.rowFront}>
@@ -98,8 +115,15 @@ const OrderItem = (props) => {
 
         <View style={styles.mainContent}>
           <View style={styles.nameContainer}>
-            <Text style={styles.order}>{props.name}</Text>
-            <Text style={styles.date}>{props._id}</Text>
+
+            <Input
+              style={styles.order}
+              disabled={!edit}
+              value={formData.name}
+              validators={[VALIDATOR_REQUIRE()]}
+              errorText='Geben Sie den Name für den Auftrag ein'
+              onChangeText={(text) => setFormData({ ...formData, name: text })}
+            />
           </View>
 
           <View style={styles.adressContainer}>

@@ -85,7 +85,7 @@ const AppointmentList = props => {
                         id={item._id}
                         name={item.name}
                         orderId={item.orderId}
-                        worker={item.worker}
+                        w_name={item.w_name}
                         date={item.date}
                         time={item.time}
                         status={item.status}

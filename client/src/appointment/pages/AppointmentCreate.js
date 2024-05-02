@@ -173,7 +173,6 @@ const AppointmentCreate = props => {
                 placeholder="Beschreibung"
                 value={formData.description}
                 validators={[VALIDATOR_REQUIRE()]}
-                // style={[styles.textArea, styles.placeholderText]}
                 errorText='Geben Sie die Beschreibung des Termins ein'
                 onChangeText={(text) => setFormData({ ...formData, description: text })}
             />

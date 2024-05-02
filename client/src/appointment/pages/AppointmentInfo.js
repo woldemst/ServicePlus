@@ -77,7 +77,7 @@ const AppointmentInfo = props => {
                 </View>
                 <View style={styles.row}>
                     <Text style={[styles.boldCell, styles.cell]}>Mitarbeiter:</Text>
-                    <Text style={[styles.thinCell, styles.cell]}>{props.worker}</Text>
+                    <Text style={[styles.thinCell, styles.cell]}>{props.w_name}</Text>
                 </View>
                 <View style={styles.row}>
                     <Text style={[styles.boldCell, styles.cell]}>Kunde:</Text>
