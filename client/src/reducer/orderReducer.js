@@ -2,26 +2,7 @@ import { GET_ORDERS, UPDATE_ORDER_DATA_BY_ID, CLEAR_ORDER_DATA, TOGGLE_EDIT, TOG
 
 const initialState = {
   ordersArray: {
-    orders: [
-      // {
-      //   "_id": "66129d2040d59fa7471096ce"
-      //   "firmId": "65b130bec45518baddc03d8b",
-      //   "appointments": [
-      //     {"6612aee8da3319dbcae561cc"},
-      //     {"6612af0bda3319dbcae561da"}
-      //   ],
-      //   "customerId": "65e4b3697e04b041ffd8bdde",
-      //   "c_name": "Customer number 3",
-      //   "name": "1st order (not delete)",
-      //   "street": "Spiekerstrasse",
-      //   "houseNr": "14",
-      //   "zip": "454545",
-      //   "place": "Gladbek",
-      //   "worker": "New Created Worker",
-      //   "description": "Address of the order ",
-      //   "status": "1"
-      // }
-    ]
+    orders: []
   },
   edit: false,
   orderName: ''
@@ -37,17 +18,17 @@ const orderReducer = (state = initialState, action) => {
         // If the order is not found, return the state unchanged
         return state;
       }
-    
+
       // Update the specific field of the order in a new copy of the state
       const updatedOrder = {
         ...state.ordersArray.orders[orderIndex],
         [fieldName]: data
       };
-    
+
       // Create a new array with the updated order
       const updatedOrdersArray = [...state.ordersArray.orders];
       updatedOrdersArray[orderIndex] = updatedOrder;
-    
+
       return {
         ...state,
         ordersArray: {
@@ -81,6 +62,11 @@ const orderReducer = (state = initialState, action) => {
       return {
         ...state,
         edit: false
+      }
+    case TOGGLE_EDIT:
+      return {
+        ...state,
+        edit: action.payload
       }
     case UPDATE_ORDER_NAME:
       return {

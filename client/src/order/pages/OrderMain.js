@@ -13,7 +13,7 @@ import { createMaterialTopTabNavigator } from '@react-navigation/material-top-ta
 import { Ionicons } from '@expo/vector-icons';
 import { useDispatch, useSelector } from "react-redux";
 
-import { toggleToFalseEditOrder, toggleToTrueEditOrder, updateOrderDataById } from "../../actions/orderActions";
+import { toggleEdit, toggleToFalseEditOrder, toggleToTrueEditOrder, updateOrderDataById } from "../../actions/orderActions";
 import { VALIDATOR_REQUIRE } from "../../util/validators";
 import { setInitialInputData, addToInitialData } from "../../actions/inputActions";
 import OrderAppointments from "./OrderAppointments";
@@ -37,7 +37,7 @@ const OrderMain = (props) => {
 
     const goingBack = () => {
         navigation.goBack()
-        dispatch(toggleToFalseEditOrder())
+        dispatch(toggleToFalseEditOrder(false))
     }
 
     useEffect(() => {
@@ -56,7 +56,7 @@ const OrderMain = (props) => {
                     <View style={styles.headerHeadline}>    
                         <Text style={styles.headline}>{order.name}</Text>
                     </View>
-                    <TouchableOpacity onPress={() => dispatch(toggleToTrueEditOrder())}>
+                    <TouchableOpacity onPress={() => dispatch(toggleEdit(!edit))}>
                         <Image source={require('../../../assets/order/edit.png')} />
                     </TouchableOpacity>
                 </View>
