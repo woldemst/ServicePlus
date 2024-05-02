@@ -42,7 +42,7 @@ const AppointmentItem = (props) => {
                         <Text style={styles.date}>um {props.time}</Text>
                     </View>
 
-                    <Text style={styles.workersName}>{props.worker}</Text>
+                    <Text style={styles.workersName}>{props.w_name}</Text>
 
                     <View style={styles.orderDetails}>
                         <Text style={styles.orderName}>{props.o_name}</Text>
@@ -154,7 +154,7 @@ const AppointmentItem = (props) => {
                     id={props.id}
                     // creator={props.creator}
                     name={props.name}
-                    worker={props.worker}
+                    w_name={props.w_name}
                     date={props.date}
                     time={props.time}
                     status={props.status}

@@ -1,4 +1,3 @@
-
 import {
   View,
   Text,
@@ -30,13 +29,11 @@ const OrderInfo = (props) => {
   const auth = useContext(AuthContext)
   const dispatch = useDispatch()
   const route = useRoute()
-
-  const fetchedArray = useSelector((state) => state.order.ordersArray.orders);
-
+  
   const orderId = route.params.id
+  const fetchedArray = useSelector((state) => state.order.ordersArray.orders);
   const order = fetchedArray.find(order => order._id == orderId)
   const edit = useSelector(state => state.order.edit);
-
 
   const [formData, setFormData] = useState({
     // name: order.name,
@@ -76,7 +73,6 @@ const OrderInfo = (props) => {
     )
 
   };
-
 
 
   useEffect(() => {

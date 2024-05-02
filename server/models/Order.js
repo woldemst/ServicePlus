@@ -6,7 +6,6 @@ const orderSchema = new mongoose.Schema({
   customerId: { type: mongoose.Types.ObjectId, ref: 'Customer' }, //ref: establish connection between two schemas
   workerId: { type: mongoose.Types.ObjectId, ref: 'Worker' }, //ref: establish connection between two schemas
  
- 
   c_name: { type: String },
   w_name: { type: String },
   name: { type: String },
