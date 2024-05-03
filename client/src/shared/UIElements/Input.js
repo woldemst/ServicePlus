@@ -1,19 +1,32 @@
 import { TextInput, StyleSheet, Text, View } from "react-native";
 import { validate } from "../../util/validators";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
+import { forwardRef } from 'react';
 
-const Input = props => {
+const Input = forwardRef((props, ref) => {
     // const [touched, setTouched] = useState(false)
     const [isValid, setIsValid] = useState(true)
+
+
 
     const handleChange = (val) => {
       props.onChangeText(val);
       setIsValid(validate(val, props.validators));
     };
 
+    const inputRef = useRef(null);
+
+    useEffect(() => {
+        // Focus on TextInput if isEdit is true
+        if (props.isEdit) {
+            inputRef.current.focus();
+        }
+    }, [props.isEdit]);
+
     return <>
         <View style={props.thin && styles.inputContainer}>
             <TextInput  
+                ref={inputRef}
                 id={props.id}
                 value={props.value}
                 placeholder={props.placeholder}
@@ -23,14 +36,15 @@ const Input = props => {
                 multiline={props.multiline}
                 numberOfLines={props.numberOfLines}
                 editable={!props.disabled}
+                textArea={props.textArea}
                 // onFocus={() => setTouched(true)}
-                // onBlur={onBlurHandler}
+                onBlur={props.isEdit ? props.onBlur : undefined} 
             />
 
             {!isValid && <Text style={props.thin ? styles.thin : styles.errorText}>{props.errorText}</Text>}
         </View>
     </>
-}
+})
 
 const styles = StyleSheet.create({
     inputContainer: {

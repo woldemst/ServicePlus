@@ -1,11 +1,21 @@
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert } from "react-native";
+import {
+    View,
+    KeyboardAvoidingView,
+    Text,
+    TextInput,
+    TouchableOpacity,
+    StyleSheet,
+    Alert,
+    Platform,
+    TouchableWithoutFeedback,
+    Keyboard
+} from "react-native";
 import { useState, useContext, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigation } from "@react-navigation/native";
 import axios from "axios";
 
 import { VALIDATOR_EMAIL, VALIDATOR_MINLENGTH } from "../../util/validators";
-import { setInitialInputData } from "../../actions/inputActions";
 import { AuthContext } from "../../context/auth-context";
 import Button from "../../shared/UIElements/Button";
 import Input from "../../shared/UIElements/Input";
@@ -61,51 +71,57 @@ const Login = () => {
         setIsLoginMode(prev => !prev)
     }
 
-
     return (
-        <View style={styles.container}>
+        <KeyboardAvoidingView style={styles.container} behavior={Platform.OS === 'ios' ? 'padding' : 'height'} >
+            <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+                <View style={styles.inner}>
 
-            <Text style={styles.logoText}>ServicePlus</Text>
-            <Text style={styles.title}>Sign in</Text>
+                    <Text style={styles.logoText}>ServicePlus</Text>
+                    <Text style={styles.title}>Sign in</Text>
 
-            {/* {error && <Text style={styles.error}>{error}</Text>} */}
+                    {/* {error && <Text style={styles.error}>{error}</Text>} */}
 
 
-            <Input
-                placeholder="Email"
-                errorText="Please enter a valid email"
-                value={formData.email}
-                onChangeText={(text) => setFormData({ ...formData, email: text })}
-                validators={[VALIDATOR_EMAIL()]}
-            />
+                    <Input
+                        placeholder="Email"
+                        errorText="Please enter a valid email"
+                        value={formData.email}
+                        onChangeText={(text) => setFormData({ ...formData, email: text })}
+                        validators={[VALIDATOR_EMAIL()]}
+                        isEdit={true}
+                    />
 
-            <Input
-                placeholder="Password"
-                value={formData.password}
-                onChangeText={(text) => setFormData({ ...formData, password: text })}
-                validators={[VALIDATOR_MINLENGTH(6)]}
-                errorText="Password must be at least 6 characters long"
-            // secureTextEntry
-            />
+                    <Input
+                        placeholder="Password"
+                        value={formData.password}
+                        onChangeText={(text) => setFormData({ ...formData, password: text })}
+                        validators={[VALIDATOR_MINLENGTH(6)]}
+                        errorText="Password must be at least 6 characters long"
+                    // secureTextEntry
+                    />
 
-            {/* <TouchableOpacity onPress={() => navigation.navigate('forgotPassword')}> */}
-                <Text style={styles.notice}>Forgot your password?</Text>
-            {/* </TouchableOpacity> */}
+                    {/* <TouchableOpacity onPress={() => navigation.navigate('forgotPassword')}> */}
+                    <Text style={styles.notice}>Forgot your password?</Text>
+                    {/* </TouchableOpacity> */}
 
-            <Button
-                style={styles.button}
-                onPress={handleSignIn}
-                title={loading ? "Signing in..." : "Sign in"}
-                disabled={loading}
-            />
+                    <Button
+                        style={styles.button}
+                        onPress={handleSignIn}
+                        title={loading ? "Signing in..." : "Sign in"}
+                        disabled={loading}
+                    />
 
-            <View style={styles.inviteContainer}>
-                <Text style={styles.inviteText}>Don't have an account?</Text>
-                <TouchableOpacity onPress={() => navigation.navigate('register')}>
-                    <Text style={styles.registerBtn}>Register</Text>
-                </TouchableOpacity>
-            </View>
-        </View>
+                    <View style={styles.inviteContainer}>
+                        <Text style={styles.inviteText}>Don't have an account?</Text>
+                        <TouchableOpacity onPress={() => navigation.navigate('register')}>
+                            <Text style={styles.registerBtn}>Register</Text>
+                        </TouchableOpacity>
+                    </View>
+                </View>
+            </TouchableWithoutFeedback>
+
+
+        </KeyboardAvoidingView>
     )
 }
 
@@ -114,17 +130,22 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         justifyContent: 'flex-end',
-        padding: 21,
-        paddingBottom: 45,
+
+
+        // borderWidth: 1,
+        // borderColor: 'red'
+    },
+    inner: {
+        paddingLeft: 21,
+        paddingRight: 21,
+        paddingTop: 21,
+        paddingBottom: 105,
 
     },
     logoText: {
         fontSize: 32,
-        position: 'absolute',
         textAlign: 'center',
-        top: 160,
-        right: 0,
-        left: 0,
+        marginBottom: 60, // Adjust margin to create space between logo and title
     },
     title: {
         fontSize: 27,
