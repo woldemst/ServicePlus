@@ -5,26 +5,22 @@ import {
   TouchableWithoutFeedback,
   StyleSheet,
   Image,
+  Alert,
+  TextInput
 } from "react-native";
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useNavigation } from "@react-navigation/native"
 import { SwipeListView } from "react-native-swipe-list-view";
 import { useDispatch, useSelector } from "react-redux";
-import { Alert } from 'react-native';
 import axios from "axios";
-import Modal from "react-native-modal";
 
-import Input from "../../shared/UIElements/Input";
 import { deleteOrder } from "../../actions/orderActions";
 import { deleteAppointmentsByOrder } from "../../actions/appointmentActions";
-import OrderOptions from "../../util/OrderOptions";
-import { VALIDATOR_REQUIRE } from "../../util/validators";
-
 
 const OrderItem = (props) => {
   const [isModalVisible, setModalVisible] = useState(false);
   const [modalPosition, setModalPosition] = useState({ x: 0, y: 0 });
-
+  const [isEdit, setIsEdit] = useState(false)
 
   const navigation = useNavigation()
   const dispatch = useDispatch()
@@ -32,12 +28,7 @@ const OrderItem = (props) => {
   const orderId = props.id
   const orders = useSelector(state => state.order.ordersArray.orders)
   const orderItem = orders.find(order => order._id == orderId)
-  const edit = useSelector(state => state.order.edit)
 
-  console.log(edit);
-  const [formData, setFormData] = useState({
-    name: orderItem.name,
-  })
 
   const deleteHandler = async () => {
     Alert.alert(
@@ -65,45 +56,30 @@ const OrderItem = (props) => {
     )
   };
 
-  const longPressHandler = (event) => {
-    const { pageX, pageY } = event.nativeEvent;
-    setModalPosition({ x: pageX, y: pageY });
-    setModalVisible(true)
+  // const longPressHandler = (event) => {
+  //   const { pageX, pageY } = event.nativeEvent;
+  //   setModalPosition({ x: pageX, y: pageY });
+  //   setModalVisible(true)
+  // }
 
+
+  const onPressHandler = () => {
+    navigation.navigate('orderMain', {
+      id: orderId,
+      name: props.name,
+      description: props.description,
+      worker: props.worker,
+      customer: props.customer,
+      contact: props.contact,
+      status: props.status
+    })
   }
-  const toggleModal = () => {
-    setModalVisible(!isModalVisible)
-
-  }
-
-  // onPress: async () => {
-  //     try {
-  //         await axios.delete(`http://localhost:8000/api/orders/updateName/${orderId}`);
-  //         props.onClose()
-  //     } catch (err) {
-  //         console.log("Error while deleting order:", err);
-  //     }
-  // },
-
-
+  const toggleModal = () => setModalVisible(!isModalVisible)
 
   const renderItem = () => (
     <View style={styles.rowFront}>
       <TouchableOpacity style={styles.container}
-        onPress={() => {
-          navigation.navigate('orderMain', {
-            id: orderId,
-            name: props.name,
-            description: props.description,
-            worker: props.worker,
-            customer: props.customer,
-            contact: props.contact,
-            status: props.status
-            // 
-          })
-        }}
-
-        onLongPress={longPressHandler}
+        onPress={onPressHandler}
       >
         <View style={[
           styles.indicator,
@@ -116,14 +92,21 @@ const OrderItem = (props) => {
         <View style={styles.mainContent}>
           <View style={styles.nameContainer}>
 
-            <Input
-              style={styles.order}
-              disabled={!edit}
+            {/* <Input
+              // style={styles.order}
+              style={[styles.order, { borderBottomWidth: isEdit ? 1 : 0 }, { pointerEvents: isEdit ? 'auto' : 'none' }]} // pointerEvents: 'none' to disable input
+              disabled={!isEdit}
               value={formData.name}
+              onBlur={onBlurHandler}
               validators={[VALIDATOR_REQUIRE()]}
               errorText='Geben Sie den Name für den Auftrag ein'
               onChangeText={(text) => setFormData({ ...formData, name: text })}
-            />
+              isEdit={isEdit}
+            /> */}
+
+            <Text style={styles.order}>{props.name}</Text>
+
+
           </View>
 
           <View style={styles.adressContainer}>
@@ -157,6 +140,7 @@ const OrderItem = (props) => {
       rightOpenValue={-75}
       // leftOpenValue={75}
       disableRightSwipe={true}
+      // disableLeftSwipe={!isEdit}
       closeOnRowOpen={true}
       data={[
         {
@@ -188,18 +172,23 @@ const OrderItem = (props) => {
       )}
     />
 
-    <Modal
+    {/* <Modal
       isVisible={isModalVisible}
       animationIn="zoomIn" // Specify the slide-up animation
       animationOut="zoomOut" // Specify the slide-down animation
-      // onBackdropPress={toggleModal}
+      onBackdropPress={toggleModal}
       onBackButtonPress={toggleModal}
       style={styles.modal}
-      // backdropOpacity={0.3} //
-      customBackdrop={<CustomBackdrop onPress={() => setModalVisible(false)} />}
+      backdropOpacity={0.1} //
+    // customBackdrop={<CustomBackdrop onPress={() => setModalVisible(false)} />}
     >
-      <OrderOptions id={orderId} onClose={() => setModalVisible(false)} position={modalPosition} />
-    </Modal>
+      <OrderOptions
+        id={orderId}
+        onClose={() => setModalVisible(false)}
+        position={modalPosition}
+        onRenameHandler={renameHandler}
+      />
+    </Modal> */}
 
   </>
 };
@@ -319,4 +308,3 @@ const styles = StyleSheet.create({
 });
 
 export default OrderItem;
-

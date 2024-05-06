@@ -217,6 +217,7 @@ const updateOrderById = async (req, res, next) => {
     customerId,
     workerId,
     // contact,
+    name,
     street,
     houseNr,
     zip,
@@ -239,7 +240,8 @@ const updateOrderById = async (req, res, next) => {
     const customerItem = await Customer.findOne({ _id: customerId });
     const workerItem = await Worker.findOne({ _id: workerId })
 
-    updateOrder.customerId = customerId,
+      updateOrder.name = name,
+      updateOrder.customerId = customerId,
       updateOrder.c_name = customerItem.name,
 
       updateOrder.workerId = workerId,
@@ -258,7 +260,7 @@ const updateOrderById = async (req, res, next) => {
     const appointments = await Appointment.find({ orderId: orderId });
 
     for (const appointment of appointments) {
-      // appointment.o_name = name;
+      appointment.o_name = name;
       appointment.o_street = street;
       appointment.o_houseNr = houseNr;
       appointment.o_zip = zip;

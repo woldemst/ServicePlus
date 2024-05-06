@@ -7,25 +7,24 @@ const Input = forwardRef((props, ref) => {
     // const [touched, setTouched] = useState(false)
     const [isValid, setIsValid] = useState(true)
 
-
+    const inputRef = useRef(null);
 
     const handleChange = (val) => {
-      props.onChangeText(val);
-      setIsValid(validate(val, props.validators));
+        props.onChangeText(val);
+        setIsValid(validate(val, props.validators));
     };
-
-    const inputRef = useRef(null);
 
     useEffect(() => {
         // Focus on TextInput if isEdit is true
-        if (props.isEdit) {
+        if (props.isEdit && inputRef.current) {
             inputRef.current.focus();
+            // console.log('inputRef', inputRef.current);
         }
     }, [props.isEdit]);
 
     return <>
         <View style={props.thin && styles.inputContainer}>
-            <TextInput  
+            <TextInput
                 ref={inputRef}
                 id={props.id}
                 value={props.value}
@@ -38,7 +37,7 @@ const Input = forwardRef((props, ref) => {
                 editable={!props.disabled}
                 textArea={props.textArea}
                 // onFocus={() => setTouched(true)}
-                onBlur={props.isEdit ? props.onBlur : undefined} 
+                onBlur={props.onBlur}
             />
 
             {!isValid && <Text style={props.thin ? styles.thin : styles.errorText}>{props.errorText}</Text>}

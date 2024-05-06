@@ -11,7 +11,7 @@ const initialState = {
 const orderReducer = (state = initialState, action) => {
   switch (action.type) {
     case UPDATE_ORDER_DATA_BY_ID:
-      const { data, orderId, fieldName } = action.payload;
+      const { data, fieldName, orderId } = action.payload;
       const orderIndex = state.ordersArray.orders.findIndex(order => order._id === orderId);
 
       if (orderIndex === -1) {

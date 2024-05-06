@@ -9,9 +9,9 @@ import {
 } from "react-native";
 import { useState } from "react";
 import axios from "axios";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
-import { deleteOrder } from "../actions/orderActions";
+import { deleteOrder, toggleToTrueEditOrder } from "../actions/orderActions";
 import { deleteAppointmentsByOrder } from "../actions/appointmentActions";
 
 const OrderOptions = props => {
@@ -27,37 +27,44 @@ const OrderOptions = props => {
 
     const dispatch = useDispatch()
     const orderId = props.id
-    
+    // const edit = useSelector(state => state.order.edit);
+
     const deleteHandler = async () => {
         Alert.alert(
-          'Delete Confirmation',
-          'Are you sure you want to delete this order and its appointments?',
-          [
-            {
-              text: 'Cancel',
-              style: 'cancel',
-            },
-            {
-              text: 'Delete',
-              onPress: async () => {
-                try {
-                  await axios.delete(`http://localhost:8000/api/orders/${orderId}/delete`);
-                  dispatch(deleteOrder(orderId));
-                  dispatch(deleteAppointmentsByOrder(orderId))
-                  props.onClose()
-                } catch (err) {
-                  console.log("Error while deleting order:", err);
-                }
-              },
-            },
-          ],
-          { cancelable: false }
+            'Delete Confirmation',
+            'Are you sure you want to delete this order and its appointments?',
+            [
+                {
+                    text: 'Cancel',
+                    style: 'cancel',
+                    onPress: () => { props.onClose() }
+                },
+                {
+                    text: 'Delete',
+                    onPress: async () => {
+                        try {
+                            await axios.delete(`http://localhost:8000/api/orders/${orderId}/delete`);
+                            dispatch(deleteOrder(orderId));
+                            dispatch(deleteAppointmentsByOrder(orderId))
+                            props.onClose()
+                        } catch (err) {
+                            console.log("Error while deleting order:", err);
+                        }
+                    },
+                },
+            ],
+            { cancelable: false }
         )
-      };
+    };
 
+    const renameHandler = async () => {
+        props.onClose(),
+        props.onRenameHandler(orderId)
+    }
+    
     return <>
         <View style={[styles.optionsContainer, { top: adjustedTop, left: adjustedLeft }]}>
-            <TouchableOpacity style={styles.option} onPress={props.onClose}>
+            <TouchableOpacity style={styles.option} onPress={renameHandler}>
                 <Text>Umbenennen</Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.option} onPress={deleteHandler}>
