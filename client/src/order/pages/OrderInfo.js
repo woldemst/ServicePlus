@@ -29,20 +29,18 @@ const OrderInfo = (props) => {
   const auth = useContext(AuthContext)
   const dispatch = useDispatch()
   const route = useRoute()
-  
+
   const orderId = route.params.id
   const fetchedArray = useSelector((state) => state.order.ordersArray.orders);
   const order = fetchedArray.find(order => order._id == orderId)
   const edit = useSelector(state => state.order.edit);
 
   const [formData, setFormData] = useState({
-    // name: order.name,
     street: order.street,
     houseNr: order.houseNr,
     zip: order.zip,
     place: order.place,
     description: order.description,
-
 
     // contactOption: {value: order.contact},
     customerOptions: [],
@@ -130,7 +128,7 @@ const OrderInfo = (props) => {
     try {
       const response = await axios.patch(URL, {
         firmId: auth.firmId,
-        // name: order.name,
+        name: order.name,
         customerId: formData.selectedCustomer,
         workerId: formData.selectedWorker,
         // contact: formData.contact,

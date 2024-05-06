@@ -26,6 +26,8 @@ const OrderList = (props) => {
     const [fetchedWorkers, setFetchedWorkers] = useState([])
     const [refreshing, setRefreshing] = useState(false);
     const [isModalVisible, setModalVisible] = useState(false);
+    const [lastEditableItemId, setLastEditableItemId] = useState(null);
+    
 
 
     const dispatch = useDispatch()
@@ -33,7 +35,6 @@ const OrderList = (props) => {
 
     const fetchedData = useSelector((state) => state.order.ordersArray);
     const refresh = useSelector(state => state.util.refresh)
-
 
 
     useEffect(() => {
@@ -158,7 +159,7 @@ const OrderList = (props) => {
                                 date={item.date}
                                 status={item.status}
                                 contact={item.contact}
-                                description={item.description}
+                                description={item.description}  
                             />
                         )}
                     >

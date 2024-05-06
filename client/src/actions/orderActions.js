@@ -42,12 +42,12 @@ export const updateField = (fieldName, value, validators, objectId) => {
   };
 };
 
-export const updateOrderDataById = (data, orderId, fieldName) => ({
+export const updateOrderDataById = (data, fieldName, orderId,) => ({
   type: UPDATE_ORDER_DATA_BY_ID,
   payload: {
     data, 
+    fieldName,
     orderId, 
-    fieldName
   }
 });
 

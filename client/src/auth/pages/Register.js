@@ -16,7 +16,6 @@ const Register = () => {
     const auth = useContext(AuthContext)
     const navigation = useNavigation()
 
-
     const [isLoaded, setIsLoaded] = useState(false)
 
     const [formData, setFormData] = useState({
@@ -73,6 +72,7 @@ const Register = () => {
                         onChangeText={(text) => setFormData({ ...formData, name: text })}
                         validators={[VALIDATOR_REQUIRE()]}
                         errorText="Please enter your name"
+                        isEdit={true}
                     />
 
                     <Input

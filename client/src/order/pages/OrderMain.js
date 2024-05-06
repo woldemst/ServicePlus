@@ -7,8 +7,8 @@ import {
     StyleSheet,
     Image
 } from "react-native";
-import { useNavigation, useRoute } from "@react-navigation/native";
-import { useContext, useEffect, useMemo, useState } from "react";
+import { useFocusEffect, useNavigation, useRoute } from "@react-navigation/native";
+import { useCallback, useContext, useEffect, useMemo, useState } from "react";
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import { Ionicons } from '@expo/vector-icons';
 import { useDispatch, useSelector } from "react-redux";
@@ -20,6 +20,7 @@ import OrderAppointments from "./OrderAppointments";
 import OrderInfo from "./OrderInfo"
 import OrderFiles from "./OrderFiles";
 import Input from "../../shared/UIElements/Input";
+import { refershData } from "../../actions/utilActions";
 
 
 const OrderMain = (props) => {
@@ -34,6 +35,7 @@ const OrderMain = (props) => {
     const edit = useSelector(state => state.order.edit);
 
     const [isLoaded, setIsLoaded] = useState(false)
+    const [activeTab, setActiveTab] = useState(0);
 
     const goingBack = () => {
         navigation.goBack()
@@ -44,8 +46,10 @@ const OrderMain = (props) => {
         setIsLoaded(true)
     }, [edit])
 
+    const onChangeHandler = (value) => {
+        dispatch(updateOrderDataById(value, 'name', orderId))
+    }
 
-    
     return isLoaded && (
         <>
             <View style={styles.header} >
@@ -53,8 +57,16 @@ const OrderMain = (props) => {
                     <TouchableOpacity onPress={() => goingBack()}>
                         <Ionicons name="arrow-back" size={24} color="green" />
                     </TouchableOpacity>
-                    <View style={styles.headerHeadline}>    
-                        <Text style={styles.headline}>{order.name}</Text>
+                    <View style={styles.headerHeadline}>
+                        {/* <Text style={styles.headline}>{order.name}</Text> */}
+                        <Input
+                            style={[styles.headline, edit ? null : styles.disbled]}
+                            disabled={!edit}
+                            value={order.name}
+                            validators={[VALIDATOR_REQUIRE()]}
+                            errorText='Geben Sie den Name für den Auftrag ein'
+                            onChangeText={onChangeHandler}
+                        />
                     </View>
                     <TouchableOpacity onPress={() => dispatch(toggleEdit(!edit))}>
                         <Image source={require('../../../assets/order/edit.png')} />
@@ -69,6 +81,14 @@ const OrderMain = (props) => {
                 swipeEnabled: false,
 
             }}
+                onTabPress={params => {
+                    console.log(params);
+                    // const index = Tab.Navigator.router.getStateForRouteName(route.name).index;
+                    // setActiveTab(index);
+
+                }}
+
+                onIndexChange={(index) => setActiveTab(index)}
             >
                 <Tab.Screen
                     name="Info"
@@ -131,9 +151,11 @@ const styles = StyleSheet.create({
         justifyContent: 'center'
     },
     headline: {
-        fontSize: 18,
+        fontSize: 20,
         fontWeight: '400',
         color: '#000',
+        padding: 7,
+        borderRadius: 4
     },
     headerNav: {
         backgroundColor: 'red'
@@ -160,6 +182,10 @@ const styles = StyleSheet.create({
         fontSize: 18,
         flex: 1
     },
+
+    disbled: {
+        backgroundColor: '#eee',
+    }
 })
 
 export default OrderMain;

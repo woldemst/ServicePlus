@@ -10,7 +10,7 @@ import {
     TouchableWithoutFeedback,
     Keyboard
 } from "react-native";
-import { useState, useContext, useEffect } from "react";
+import { useState, useContext, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigation } from "@react-navigation/native";
 import axios from "axios";
@@ -71,6 +71,7 @@ const Login = () => {
         setIsLoginMode(prev => !prev)
     }
 
+
     return (
         <KeyboardAvoidingView style={styles.container} behavior={Platform.OS === 'ios' ? 'padding' : 'height'} >
             <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
@@ -97,6 +98,7 @@ const Login = () => {
                         onChangeText={(text) => setFormData({ ...formData, password: text })}
                         validators={[VALIDATOR_MINLENGTH(6)]}
                         errorText="Password must be at least 6 characters long"
+
                     // secureTextEntry
                     />
 
