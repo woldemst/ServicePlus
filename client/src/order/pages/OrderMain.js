@@ -15,12 +15,10 @@ import { useDispatch, useSelector } from "react-redux";
 
 import { toggleEdit, toggleToFalseEditOrder, toggleToTrueEditOrder, updateOrderDataById } from "../../actions/orderActions";
 import { VALIDATOR_REQUIRE } from "../../util/validators";
-import { setInitialInputData, addToInitialData } from "../../actions/inputActions";
 import OrderAppointments from "./OrderAppointments";
 import OrderInfo from "./OrderInfo"
 import OrderFiles from "./OrderFiles";
 import Input from "../../shared/UIElements/Input";
-import { refershData } from "../../actions/utilActions";
 
 
 const OrderMain = (props) => {
@@ -60,7 +58,7 @@ const OrderMain = (props) => {
                     <View style={styles.headerHeadline}>
                         {/* <Text style={styles.headline}>{order.name}</Text> */}
                         <Input
-                            style={[styles.headline, edit ? null : styles.disbled]}
+                            style={[styles.headline, edit ? styles.enabled : styles.disbled]}
                             disabled={!edit}
                             value={order.name}
                             validators={[VALIDATOR_REQUIRE()]}
@@ -155,7 +153,9 @@ const styles = StyleSheet.create({
         fontWeight: '400',
         color: '#000',
         padding: 7,
-        borderRadius: 4
+        borderRadius: 4,
+        borderBottomWidth: 1,
+        borderColor: '#eee',
     },
     headerNav: {
         backgroundColor: 'red'
@@ -185,7 +185,11 @@ const styles = StyleSheet.create({
 
     disbled: {
         backgroundColor: '#eee',
-    }
+    },
+    enabled: {
+        borderColor: '#eee',
+        borderBottomWidth: 1,
+    },
 })
 
 export default OrderMain;
