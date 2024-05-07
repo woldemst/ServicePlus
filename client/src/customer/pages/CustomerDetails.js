@@ -23,6 +23,7 @@ const CustomerDetails = (props) => {
     // console.log(customer);
 
     const [isLoaded, setIsLoaded] = useState(false)
+    const [isEdit, setIsEdit] = useState(false)
 
     const [formData, setFormData] = useState({
         name: customer.name,
@@ -40,6 +41,10 @@ const CustomerDetails = (props) => {
         setIsLoaded(true)
     }, [])
 
+    const handleEdit = () => {
+        setIsEdit(!isEdit)
+    }
+
     const handleSubmit = async () => {
         try {
             const response = await axios.patch(
@@ -56,8 +61,7 @@ const CustomerDetails = (props) => {
                 website: formData.website,
                 description: formData.description,
             });
-
-            props.toggle();
+            setIsEdit(false)
             dispatch(refershData())
             window.alert("Customer updated!");
         } catch (err) {
@@ -71,17 +75,20 @@ const CustomerDetails = (props) => {
 
     ) : (
         <View style={styles.container}>
+
             {isLoaded && (
-                <>
+                <View style={styles.content}>
                     <Input
                         placeholder="Name des Kunden"
                         errorText="Geben Sie den Namen des Kunden"
+                        disabled={!isEdit}
                         value={formData.name}
                         validators={[VALIDATOR_REQUIRE()]}
                         onChangeText={(value) => setFormData({ ...formData, name: value })}
                     />
 
                     <Input
+                        disabled={!isEdit}
                         placeholder="E-Mail des Kunden"
                         errorText="Geben Sie eine E-Mail des Kunden"
                         value={formData.email}
@@ -93,6 +100,7 @@ const CustomerDetails = (props) => {
                             <Input
                                 placeholder="Straße des Kunden"
                                 errorText="Geben Sie die Straße des Kunden ein"
+                                disabled={!isEdit}
                                 value={formData.street}
                                 validators={[VALIDATOR_REQUIRE()]}
                                 onChangeText={(value) => setFormData({ ...formData, street: value })}
@@ -103,6 +111,7 @@ const CustomerDetails = (props) => {
                             <Input
                                 placeholder="Housnummmer des Kunden"
                                 errorText="Geben Sie die Housnummmer des Kunden ein"
+                                disabled={!isEdit}
                                 value={formData.houseNr}
                                 validators={[VALIDATOR_REQUIRE()]}
                                 onChangeText={(value) => setFormData({ ...formData, houseNr: value })}
@@ -113,6 +122,7 @@ const CustomerDetails = (props) => {
                         <View style={styles.zipWrapper}>
                             <Input
                                 placeholder="PLZ des Kunden"
+                                disabled={!isEdit}
                                 value={formData.zip}
                                 validators={[VALIDATOR_REQUIRE()]}
                                 errorText="Geben Sie das PLZ des Kunden ein"
@@ -124,9 +134,10 @@ const CustomerDetails = (props) => {
                         <View style={styles.placeWrapper}>
                             <Input
                                 placeholder="Der Ort des Kunden"
+                                errorText="Geben Sie den Ort des Kunden ein"
+                                disabled={!isEdit}
                                 value={formData.place}
                                 validators={[VALIDATOR_REQUIRE()]}
-                                errorText="Geben Sie den Ort des Kunden ein"
                                 onChangeText={(value) => setFormData({ ...formData, place: value })}
                             />
                         </View>
@@ -135,40 +146,52 @@ const CustomerDetails = (props) => {
 
                     <Input
                         placeholder="Telefonnumer"
+                        errorText="Geben Sie die Telefonnumer Kunden ein"
+                        disabled={!isEdit}
                         value={formData.phone}
                         validators={[VALIDATOR_REQUIRE()]}
-                        errorText="Geben Sie die Telefonnumer Kunden ein"
                         onChangeText={(value) => setFormData({ ...formData, phone: value })}
                     />
 
                     <Input
                         placeholder="Website"
+                        errorText="Geben Sie die Webseite des Kunden ein"
+                        disabled={!isEdit}
                         value={formData.website}
                         validators={[VALIDATOR_REQUIRE()]}
-                        errorText="Geben Sie die Webseite des Kunden ein"
                         onChangeText={(value) => setFormData({ ...formData, website: value })}
                     />
 
                     <Input
                         placeholder="Beschreibung"
+                        errorText="Geben Sie die BEschreibung des Kunden ein"
+                        disabled={!isEdit}
                         value={formData.description}
                         validators={[VALIDATOR_REQUIRE()]}
-                        errorText="Geben Sie die BEschreibung des Kunden ein"
                         onChangeText={(value) => setFormData({ ...formData, description: value })}
                     />
-                </>
+                </View>
             )}
 
 
             <View style={styles.btnContainer}>
-                <Button
-                    // style={!fetchedData.isFormValid ? [styles.createBtn, styles.button] : styles.invalideButton}
-                    style={[styles.createBtn, styles.button]}
-                    // disabled={fetchedData.isFormValid}
-                    buttonText={styles.createBtnText}
-                    onPress={handleSubmit}
-                    title={'Speichern'}
-                />
+                {!isEdit ? (
+                    <Button
+                        style={[styles.invalideButton, styles.button]}
+                        // disabled={fetchedData.isFormValid}
+                        buttonText={styles.createBtnText}
+                        onPress={handleEdit}
+                        title={'Ändern'}
+                    />
+                ) : (
+                    <Button
+                        style={[styles.createBtn, styles.button]}
+                        // disabled={fetchedData.isFormValid}
+                        buttonText={styles.createBtnText}
+                        onPress={handleSubmit}
+                        title={'Speichern'}
+                    />
+                )}
             </View>
         </View>
     )
@@ -179,6 +202,16 @@ const styles = StyleSheet.create({
         backgroundColor: "#fff",
         paddingTop: 16,
         padding: 24,
+        flex: 1,
+
+        borderWifth: 1,
+        borderColor: 'red',
+    },
+    content: {
+        // flex: 1,
+        // justifyContent: 'flex-end',
+        // borderWifth: 1,
+        // borderColor: 'red',
     },
     input: {
         width: "100%",
@@ -243,7 +276,7 @@ const styles = StyleSheet.create({
 
     btnContainer: {
         flexDirection: "row",
-        marginTop: 50,
+        marginTop: 28,
     },
 
     button: {
@@ -272,6 +305,16 @@ const styles = StyleSheet.create({
         flex: 1,
         // borderWidth: 1,
         // borderColor: 'red',
+    },
+    invalideButton: {
+        height: 53,
+        width: '40%',
+        backgroundColor: 'gray',
+        borderRadius: 5,
+        justifyContent: 'center',
+        flexDirection: "row",
+        justifyContent: "center",
+        alignItems: 'center'
     },
 });
 
