@@ -191,7 +191,7 @@ const CustomerDetails = (props) => {
                         onPress={handleSubmit}
                         title={'Speichern'}
                     />
-                )}
+                )}  
             </View>
         </View>
     )
