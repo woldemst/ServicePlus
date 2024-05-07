@@ -1,25 +1,43 @@
 import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native"
 import { useState } from "react"
-import ModalComponent from "../../../src/shared/UIElements/Modal"
+import { useNavigation } from "@react-navigation/native"
+
 import CustomerDetails from "../pages/CustomerDetails"
 
 const CustomerItem = (props) => {
     const [isModalVisible, setModalVisible] = useState(false);
+    const [isSelected, setIsSelected] = useState(false)
+
+    const navigation = useNavigation()
+    
+
+    const longPressHandler = () => {
+        setIsSelected(!isSelected)
+    }
 
     const toggleModal = () => {
         setModalVisible(!isModalVisible)
     }
 
+
     return (
         <>
             <TouchableOpacity
                 style={styles.customerContainer}
-                onPress={toggleModal}
+                // onPress={toggleModal}
+                onPress={() => {
+                    navigation.navigate('customerDetails', {
+                        id: props.id,
+                    })
+                }}
+
+            // onLongPress={longPressHandler}
             >
                 <View style={styles.customerContent}>
-                    <View style={styles.circleWrapper}>
+                    {/* <View style={styles.circleWrapper}>
                         <Image style={styles.img} source={require('../../../assets/circle.png')} />
-                    </View>
+                    </View> */}
+
                     <View style={styles.imageContainer} >
                         <View style={styles.imgSet}>
                             <Image style={styles.img} source={require('../../../assets/customer/customer.png')} />
@@ -36,39 +54,12 @@ const CustomerItem = (props) => {
                     <Image style={styles.img} source={require('../../../assets/right_arrow.png')} />
                 </View>
             </TouchableOpacity>
-
-            <ModalComponent
-                isVisible={isModalVisible}
-                animationIn="slideInUp" // Specify the slide-up animation
-                animationOut="slideOutDown" // Specify the slide-down animation
-                onBackdropPress={toggleModal}
-                onBackButtonPress={toggleModal}
-                header={<Text style={styles.modalHeadline}>Kundeniformtaion</Text>}
-            >
-                <CustomerDetails
-                    id={props.id}
-                    key={props.id}
-                    name={props.name}
-                    email={props.email}
-                    phone={props.phone}
-                    address={props.address}
-                    creator={props.creator}
-                    worker={props.worker}
-                    contact={props.contact}
-                    description={props.description}
-                    handleRefresh={props.handleRefresh}
-                    website={props.website}
-                    street={props.street}
-                    houseNr={props.houseNr}
-                    zip={props.zip}
-                    place={props.place}
-                    toggle={toggleModal}
-                />
-            </ModalComponent>
-
         </>
     )
 }
+
+
+
 
 
 const styles = StyleSheet.create({

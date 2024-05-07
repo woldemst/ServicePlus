@@ -23,6 +23,7 @@ import OrderMain from './src/order/pages/OrderMain';
 import OrderInfo from './src/order/pages/OrderInfo';
 import OrderAppointments from './src/order/pages/OrderAppointments';
 import AppointmentMain from './src/appointment/pages/AppointmentMain';
+import WorkerDetails from './src/worker/pages/WorkerDetails';
 
 
 export default function App() {
@@ -137,6 +138,7 @@ export default function App() {
           {/* workers  */}
           <Stack.Screen name='workerList' component={WorkerList} options={{ title: 'Workers' }} />
           <Stack.Screen name='createWorker' component={WorkerCreate} options={{ title: 'Worker create' }} />
+          <Stack.Screen name='workerDetails' component={WorkerDetails} options={{ title: 'Worker details' }} />
 
         </Stack.Navigator>
       </NavigationContainer>
