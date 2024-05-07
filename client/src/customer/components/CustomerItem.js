@@ -2,38 +2,25 @@ import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native"
 import { useState } from "react"
 import { useNavigation } from "@react-navigation/native"
 
-import CustomerDetails from "../pages/CustomerDetails"
-
 const CustomerItem = (props) => {
-    const [isModalVisible, setModalVisible] = useState(false);
     const [isSelected, setIsSelected] = useState(false)
-
-    const navigation = useNavigation()
     
+    const navigation = useNavigation()
+
 
     const longPressHandler = () => {
         setIsSelected(!isSelected)
-    }
-
-    const toggleModal = () => {
-        setModalVisible(!isModalVisible)
     }
 
 
     return (
         <>
             <TouchableOpacity
-                style={styles.customerContainer}
-                // onPress={toggleModal}
-                onPress={() => {
-                    navigation.navigate('customerDetails', {
-                        id: props.id,
-                    })
-                }}
-
-            // onLongPress={longPressHandler}
+                style={styles.container}
+                onPress={() => { navigation.navigate('customerDetails', { id: props.id }) }}
+                // onLongPress={longPressHandler}
             >
-                <View style={styles.customerContent}>
+                <View style={styles.content}>
                     {/* <View style={styles.circleWrapper}>
                         <Image style={styles.img} source={require('../../../assets/circle.png')} />
                     </View> */}
@@ -77,14 +64,14 @@ const styles = StyleSheet.create({
         paddingLeft: 16,
         paddingRight: 16
     },
-    customerContainer: {
+    container: {
         flexDirection: 'row',
         justifyContent: 'space-between',
         marginBottom: 12
         // borderColor: 'red',
         // borderWidth: 2
     },
-    customerContent: {
+    content: {
         justifyContent: 'space-between',
         flexDirection: 'row'
     },
