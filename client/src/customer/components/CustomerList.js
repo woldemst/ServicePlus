@@ -7,6 +7,8 @@ import axios from "axios"
 import { getCustomerData } from "../../actions/customerActions"
 import { AuthContext } from "../../context/auth-context"
 import CustomerItem from "./CustomerItem"
+import CreateCustomer from "../pages/CreateCustomer"
+import ModalComponent from "../../shared/UIElements/Modal"
 
 const CustomerList = () => {
     const dispatch = useDispatch()
@@ -14,13 +16,14 @@ const CustomerList = () => {
     const auth = useContext(AuthContext)
 
     const [isLoaded, setisLoaded] = useState(true)
-    const [refresh, setRefresh] = useState(false)
+    const [isModalVisible, setModalVisible] = useState(false);
 
+    const refresh = useSelector(state => state.util.refresh)    
     const fetchedData = useSelector(state => state.customer.customersArray)
-    const handleRefresh = () => setRefresh(prevData => !prevData);
 
-    // console.log(fetchedData);
-
+    const toggleModal = () => {
+        setModalVisible(!isModalVisible)
+    }
     useEffect(() => {
         const fetchCustomers = async () => {
             try {
@@ -34,7 +37,7 @@ const CustomerList = () => {
         }
         fetchCustomers()
     }, [refresh])
-    
+
     if (isLoaded || fetchedData.customers.length === 0) {
 
         // if (fetchedData.customers.length === 0) {
@@ -44,7 +47,7 @@ const CustomerList = () => {
 
                 <View style={styles.centeredImageContainer}>
                     <TouchableOpacity
-                        onPress={() => { navigation.navigate('createCustomer', { handleRefresh: () => handleRefresh() }) }} >
+                        onPress={() => { navigation.navigate('createCustomer') }} >
                         <Image style={styles.addImg} source={require('../../../assets/firm/add.png')} />
                     </TouchableOpacity>
 
@@ -55,62 +58,75 @@ const CustomerList = () => {
     }
 
     return !isLoaded && (
-        <View style={styles.container}>
-            <ScrollView showsVerticalScrollIndicator={false}>
-                <View style={styles.header} >
-                    <View style={styles.headerContent}>
-                        <View style={styles.textContainer} >
-                            <Text style={styles.headerText}>Kunden</Text>
+        <>
+            <View style={styles.container}>
+                <ScrollView showsVerticalScrollIndicator={false}>
+                    <View style={styles.header} >
+                        <View style={styles.headerContent}>
+                            <View style={styles.textContainer} >
+                                <Text style={styles.headerText}>Kunden</Text>
+                            </View>
+
+                            <View style={styles.headerIconContainer} >
+                                <TouchableOpacity
+                                    style={styles.headerButton}
+                                    onPress={() => {
+                                        navigation.navigate('createCustomer', {
+                                            name: 'Create customer',
+
+                                        })
+                                    }} >
+                                    <Image style={styles.headerIcon} source={require('../../../assets/customer/user_plus.png')} />
+                                </TouchableOpacity>
+
+                            </View>
+
                         </View>
+                    </View>
 
-                        <View style={styles.headerIconContainer} >
-                            <TouchableOpacity
-                                style={styles.headerButton}
-                                onPress={() => {
-                                    navigation.navigate('createCustomer', {
-                                        name: 'Create customer',
-                                        handleRefresh: () => handleRefresh()
-
-                                    })
-                                }} >
-                                <Image style={styles.headerIcon} source={require('../../../assets/customer/user_plus.png')} />
-                            </TouchableOpacity>
-
-                        </View>
+                    <View style={styles.customerList}>
+                        {!isLoaded ? (
+                            fetchedData.customers.map(customer => (
+                                <CustomerItem
+                                    id={customer._id}
+                                    key={customer._id}
+                                    name={customer.name}
+                                    // customerNr={customer.customerNr}
+                                    email={customer.email}
+                                    worker={customer.worker}
+                                    phone={customer.phone}
+                                    // nextAppointment
+                                    description={customer.description}
+                                    website={customer.website}
+                                    street={customer.street}
+                                    houseNr={customer.houseNr}
+                                    zip={customer.zip}
+                                    place={customer.place}
+                                />
+                            ))
+                        ) : (
+                            <ActivityIndicator style={styles.loader} size="large" color="#7A9B76" />
+                        )}
 
                     </View>
-                </View>
-
-                <View style={styles.customerList}>
-                    {!isLoaded ? (
-                        fetchedData.customers.map(customer => (
-                            <CustomerItem
-                                id={customer._id}
-                                key={customer._id}
-                                name={customer.name}
-                                // customerNr={customer.customerNr}
-                                email={customer.email}
-                                worker={customer.worker}
-                                phone={customer.phone}
-                                // nextAppointment
-                                description={customer.description}
-                                website={customer.website}
-                                street={customer.street}
-                                houseNr={customer.houseNr}
-                                zip={customer.zip}
-                                place={customer.place}
-                                handleRefresh={handleRefresh}
-                            />
-                        ))
-                    ) : (
-                        <ActivityIndicator style={styles.loader} size="large" color="#7A9B76" />
-                    )}
-
-                </View>
-            </ScrollView>
-        </View>
+                </ScrollView>
+            </View>
+            <ModalComponent
+                isVisible={isModalVisible}
+                animationIn="slideInUp" // Specify the slide-up animation
+                animationOut="slideOutDown" // Specify the slide-down animation
+                onBackdropPress={toggleModal}
+                onBackButtonPress={toggleModal}
+                header={<Text style={styles.modalHeadline}>Kundeniformtaion</Text>}
+            >
+                <CreateCustomer toggle={toggleModal} />
+            </ModalComponent>
+        </>
     )
 }
+
+
+
 
 
 const styles = StyleSheet.create({
@@ -156,8 +172,8 @@ const styles = StyleSheet.create({
     customerList: {
         paddingTop: 32,
         paddingBottom: 32,
-        paddingLeft: 16,
-        paddingRight: 16
+        paddingLeft: 24,
+        paddingRight: 24
     },
     customerContainer: {
         flexDirection: 'row',

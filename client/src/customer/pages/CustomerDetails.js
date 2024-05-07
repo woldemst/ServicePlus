@@ -9,9 +9,12 @@ import { clearCustomerField } from "../../actions/customerActions";
 import Input from "../../shared/UIElements/Input";
 import { setInitialInputData } from "../../actions/inputActions";
 import Button from "../../shared/UIElements/Button";
+import { refershData } from "../../actions/utilActions";
+import { useRoute } from "@react-navigation/native";
 
 const CustomerDetails = (props) => {
-    const customerId = props.id;
+    const route = useRoute();
+    const customerId = route.params.id;
     const auth = useContext(AuthContext);
 
     const dispatch = useDispatch();
@@ -20,49 +23,20 @@ const CustomerDetails = (props) => {
     // console.log(customer);
 
     const [isLoaded, setIsLoaded] = useState(false)
-    const fetchedData = useSelector(state => state.input)
 
-    const initialState = {
-        name: {
-            value: customer.name,
-            isValid: false,
-        },
-        email: {
-            value: customer.email,
-            isValid: false,
-        },
-        street: {
-            value: customer.street,
-            isValid: false,
-        },
-        houseNr: {
-            value: customer.houseNr,
-            isValid: false,
-        },
-        zip: {
-            value: customer.zip,
-            isValid: false,
-        },
-        place: {
-            value: customer.place,
-            isValid: false,
-        },
-        phone: {
-            value: customer.phone,
-            isValid: false,
-        },
-        website: {
-            value: customer.website,
-            isValid: false,
-        },
-        description: {
-            value: customer.description,
-            isValid: false,
-        },
-    };
+    const [formData, setFormData] = useState({
+        name: customer.name,
+        email: customer.email,
+        street: customer.street,
+        houseNr: customer.houseNr,
+        zip: customer.zip,
+        place: customer.place,
+        phone: customer.phone,
+        website: customer.website,
+        description: customer.description,
+    })
 
     useEffect(() => {
-        dispatch(setInitialInputData(initialState))
         setIsLoaded(true)
     }, [])
 
@@ -72,19 +46,19 @@ const CustomerDetails = (props) => {
                 `http://localhost:8000/api/customers/${auth.firmId}/update/${customerId}`, {
                 customerId: customerId,
                 firmId: auth.firmId,
-                name: fetchedData.inputs.name.value,
-                email: fetchedData.inputs.email.value,
-                street: fetchedData.inputs.street.value,
-                houseNr: fetchedData.inputs.houseNr.value,
-                zip: fetchedData.inputs.zip.value,
-                place: fetchedData.inputs.place.value,
-                phone: fetchedData.inputs.phone.value,
-                website: fetchedData.inputs.website.value,
-                description: fetchedData.inputs.description.value,
+                name: formData.name,
+                email: formData.email,
+                street: formData.street,
+                houseNr: formData.houseNr,
+                zip: formData.zip,
+                place: formData.place,
+                phone: formData.phone,
+                website: formData.website,
+                description: formData.description,
             });
 
             props.toggle();
-            props.handleRefresh();
+            dispatch(refershData())
             window.alert("Customer updated!");
         } catch (err) {
             console.log("Error fetching while updating customers' profile", err);
@@ -100,116 +74,89 @@ const CustomerDetails = (props) => {
             {isLoaded && (
                 <>
                     <Input
-                        id="customerName"
-                        fieldName="name"
-                        objectId={customerId}
-                        reducerKey="customer"
                         placeholder="Name des Kunden"
                         errorText="Geben Sie den Namen des Kunden"
-                        value={fetchedData.inputs.name.value}
+                        value={formData.name}
                         validators={[VALIDATOR_REQUIRE()]}
+                        onChangeText={(value) => setFormData({ ...formData, name: value })}
                     />
 
                     <Input
-                        id="customerEmail"
-                        fieldName="email"
-                        objectId={customerId}
-                        reducerKey="customer"
                         placeholder="E-Mail des Kunden"
                         errorText="Geben Sie eine E-Mail des Kunden"
-                        value={fetchedData.inputs.email.value}
+                        value={formData.email}
                         validators={[VALIDATOR_EMAIL()]}
-
+                        onChangeText={(value) => setFormData({ ...formData, email: value })}
                     />
                     <View style={styles.streetContainer}>
                         <View style={styles.streetWrapper}>
                             <Input
-                                id="customerStreet"
-                                objectId={customerId}
-                                reducerKey="customer"
-                                fieldName="street"
                                 placeholder="Straße des Kunden"
                                 errorText="Geben Sie die Straße des Kunden ein"
-                                value={fetchedData.inputs.street.value}
+                                value={formData.street}
                                 validators={[VALIDATOR_REQUIRE()]}
+                                onChangeText={(value) => setFormData({ ...formData, street: value })}
                             />
                         </View>
 
                         <View style={styles.nrWrapper}>
                             <Input
-                                id="customerHouseNr"
-                                objectId={customerId}
-                                reducerKey="customer"
-                                fieldName="houseNr"
                                 placeholder="Housnummmer des Kunden"
                                 errorText="Geben Sie die Housnummmer des Kunden ein"
-                                value={fetchedData.inputs.houseNr.value}
+                                value={formData.houseNr}
                                 validators={[VALIDATOR_REQUIRE()]}
+                                onChangeText={(value) => setFormData({ ...formData, houseNr: value })}
                             />
                         </View>
                     </View>
                     <View style={styles.zipContainer}>
                         <View style={styles.zipWrapper}>
                             <Input
-                                id="customerZip"
-                                objectId={customerId}
-                                reducerKey="customer"
-                                fieldName="zip"
                                 placeholder="PLZ des Kunden"
-                                errorText="Geben Sie das PLZ des Kunden ein"
-                                value={fetchedData.inputs.zip.value}
+                                value={formData.zip}
                                 validators={[VALIDATOR_REQUIRE()]}
+                                errorText="Geben Sie das PLZ des Kunden ein"
+                                onChangeText={(value) => setFormData({ ...formData, zip: value })}
                             />
                         </View>
 
 
                         <View style={styles.placeWrapper}>
                             <Input
-                                id="customerPlace"
-                                objectId={customerId}
-                                reducerKey="customer"
-                                fieldName="place"
                                 placeholder="Der Ort des Kunden"
-                                errorText="Geben Sie den Ort des Kunden ein"
-                                value={fetchedData.inputs.place.value}
+                                value={formData.place}
                                 validators={[VALIDATOR_REQUIRE()]}
+                                errorText="Geben Sie den Ort des Kunden ein"
+                                onChangeText={(value) => setFormData({ ...formData, place: value })}
                             />
                         </View>
                     </View>
 
 
                     <Input
-                        id="customerPhone"
-                        objectId={customerId}
-                        reducerKey="customer"
-                        fieldName="place"
                         placeholder="Telefonnumer"
+                        value={formData.phone}
+                        validators={[VALIDATOR_REQUIRE()]}
                         errorText="Geben Sie die Telefonnumer Kunden ein"
-                        value={fetchedData.inputs.phone.value}
-                        validators={[VALIDATOR_REQUIRE()]}
+                        onChangeText={(value) => setFormData({ ...formData, phone: value })}
                     />
 
                     <Input
-                        id="customerWebsite"
-                        objectId={customerId}
-                        reducerKey="customer"
-                        fieldName="website"
                         placeholder="Website"
-                        errorText="Geben Sie die Webseite des Kunden ein"
-                        value={fetchedData.inputs.website.value}
+                        value={formData.website}
                         validators={[VALIDATOR_REQUIRE()]}
+                        errorText="Geben Sie die Webseite des Kunden ein"
+                        onChangeText={(value) => setFormData({ ...formData, website: value })}
                     />
 
                     <Input
-                        id="customerDescription"
-                        objectId={customerId}
-                        reducerKey="customer"
-                        fieldName="description"
                         placeholder="Beschreibung"
-                        errorText="Geben Sie die BEschreibung des Kunden ein"
-                        value={fetchedData.inputs.description.value}
+                        value={formData.description}
                         validators={[VALIDATOR_REQUIRE()]}
-                    /></>
+                        errorText="Geben Sie die BEschreibung des Kunden ein"
+                        onChangeText={(value) => setFormData({ ...formData, description: value })}
+                    />
+                </>
             )}
 
 
@@ -230,7 +177,8 @@ const CustomerDetails = (props) => {
 const styles = StyleSheet.create({
     container: {
         backgroundColor: "#fff",
-        paddingTop: 20,
+        paddingTop: 16,
+        padding: 24,
     },
     input: {
         width: "100%",

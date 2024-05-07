@@ -7,6 +7,7 @@ import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import Input from "../../shared/UIElements/Input";
 import { VALIDATOR_EMAIL, VALIDATOR_REQUIRE } from "../../util/validators";
+import { refershData } from "../../actions/utilActions";
 
 
 const CreateCustomer = (props) => {
@@ -50,6 +51,7 @@ const CreateCustomer = (props) => {
 
       alert("Customer created successfully!");
       // auth.setCustomer(response.data.customer._id)
+      dispatch(refershData())
       props.route.params.handleRefresh();
       navigation.goBack()
       // dispatch(clearCustomerField())
