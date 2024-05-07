@@ -93,7 +93,7 @@ const CreateCustomer = (props) => {
 
           <View style={styles.nrWrapper}>
             <Input
-              placeholder="Housenummer"
+              placeholder="Nr."
               value={formData.houseNr}
               validators={[VALIDATOR_REQUIRE()]}
               errorText='Geben Sie die Housenummer des Kunden ein'
@@ -166,7 +166,9 @@ const styles = StyleSheet.create({
   },
   container: {
     backgroundColor: "#fff",
-    padding: 30,
+    paddingTop: 16,
+
+    // padding: 30,
     flex: 1,
     // borderColor: 'red',
     // borderWidth: 1,
@@ -235,7 +237,7 @@ const styles = StyleSheet.create({
 
   btnContainer: {
     flexDirection: "row",
-    marginTop: 50,
+    marginTop: 28,
   },
 
   button: {

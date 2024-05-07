@@ -18,7 +18,7 @@ const CustomerList = () => {
     const [isLoaded, setisLoaded] = useState(true)
     const [isModalVisible, setModalVisible] = useState(false);
 
-    const refresh = useSelector(state => state.util.refresh)    
+    const refresh = useSelector(state => state.util.refresh)
     const fetchedData = useSelector(state => state.customer.customersArray)
 
     const toggleModal = () => {
@@ -47,7 +47,7 @@ const CustomerList = () => {
 
                 <View style={styles.centeredImageContainer}>
                     <TouchableOpacity
-                        onPress={() => { navigation.navigate('createCustomer') }} >
+                        onPress={toggleModal}>
                         <Image style={styles.addImg} source={require('../../../assets/firm/add.png')} />
                     </TouchableOpacity>
 
@@ -68,19 +68,10 @@ const CustomerList = () => {
                             </View>
 
                             <View style={styles.headerIconContainer} >
-                                <TouchableOpacity
-                                    style={styles.headerButton}
-                                    onPress={() => {
-                                        navigation.navigate('createCustomer', {
-                                            name: 'Create customer',
-
-                                        })
-                                    }} >
+                                <TouchableOpacity style={styles.headerButton} onPress={toggleModal}>
                                     <Image style={styles.headerIcon} source={require('../../../assets/customer/user_plus.png')} />
                                 </TouchableOpacity>
-
                             </View>
-
                         </View>
                     </View>
 
@@ -111,13 +102,15 @@ const CustomerList = () => {
                     </View>
                 </ScrollView>
             </View>
+
             <ModalComponent
                 isVisible={isModalVisible}
                 animationIn="slideInUp" // Specify the slide-up animation
                 animationOut="slideOutDown" // Specify the slide-down animation
                 onBackdropPress={toggleModal}
                 onBackButtonPress={toggleModal}
-                header={<Text style={styles.modalHeadline}>Kundeniformtaion</Text>}
+                header={<Text style={styles.modalHeadline}>Kunde hinzufügen</Text>}
+                modalHeight={'70%'}
             >
                 <CreateCustomer toggle={toggleModal} />
             </ModalComponent>
