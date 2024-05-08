@@ -76,128 +76,131 @@ const CustomerDetails = (props) => {
 
     ) : (
         <View style={styles.container}>
+            <ScrollView showsVerticalScrollIndicator={false}>
 
-            <View style={styles.imgContainer}>
-            <Avatar source={require('../../../assets/customer/customer_avatar.jpg')} />
-            </View>
-            {isLoaded && (
-                <View style={styles.content}>
-                    <Input
-                        placeholder="Name des Kunden"
-                        errorText="Geben Sie den Namen des Kunden"
-                        disabled={!isEdit}
-                        value={formData.name}
-                        validators={[VALIDATOR_REQUIRE()]}
-                        onChangeText={(value) => setFormData({ ...formData, name: value })}
-                    />
-
-                    <Input
-                        disabled={!isEdit}
-                        placeholder="E-Mail des Kunden"
-                        errorText="Geben Sie eine E-Mail des Kunden"
-                        value={formData.email}
-                        validators={[VALIDATOR_EMAIL()]}
-                        onChangeText={(value) => setFormData({ ...formData, email: value })}
-                    />
-                    <View style={styles.streetContainer}>
-                        <View style={styles.streetWrapper}>
-                            <Input
-                                placeholder="Straße des Kunden"
-                                errorText="Geben Sie die Straße des Kunden ein"
-                                disabled={!isEdit}
-                                value={formData.street}
-                                validators={[VALIDATOR_REQUIRE()]}
-                                onChangeText={(value) => setFormData({ ...formData, street: value })}
-                            />
-                        </View>
-
-                        <View style={styles.nrWrapper}>
-                            <Input
-                                placeholder="Housnummmer des Kunden"
-                                errorText="Geben Sie die Housnummmer des Kunden ein"
-                                disabled={!isEdit}
-                                value={formData.houseNr}
-                                validators={[VALIDATOR_REQUIRE()]}
-                                onChangeText={(value) => setFormData({ ...formData, houseNr: value })}
-                            />
-                        </View>
-                    </View>
-
-                    <View style={styles.zipContainer}>
-                        <View style={styles.zipWrapper}>
-                            <Input
-                                placeholder="PLZ des Kunden"
-                                disabled={!isEdit}
-                                value={formData.zip}
-                                validators={[VALIDATOR_REQUIRE()]}
-                                errorText="Geben Sie das PLZ des Kunden ein"
-                                onChangeText={(value) => setFormData({ ...formData, zip: value })}
-                            />
-                        </View>
-
-
-                        <View style={styles.placeWrapper}>
-                            <Input
-                                placeholder="Der Ort des Kunden"
-                                errorText="Geben Sie den Ort des Kunden ein"
-                                disabled={!isEdit}
-                                value={formData.place}
-                                validators={[VALIDATOR_REQUIRE()]}
-                                onChangeText={(value) => setFormData({ ...formData, place: value })}
-                            />
-                        </View>
-                    </View>
-
-
-                    <Input
-                        placeholder="Telefonnumer"
-                        errorText="Geben Sie die Telefonnumer Kunden ein"
-                        disabled={!isEdit}
-                        value={formData.phone}
-                        validators={[VALIDATOR_REQUIRE()]}
-                        onChangeText={(value) => setFormData({ ...formData, phone: value })}
-                    />
-
-                    <Input
-                        placeholder="Website"
-                        errorText="Geben Sie die Webseite des Kunden ein"
-                        disabled={!isEdit}
-                        value={formData.website}
-                        validators={[VALIDATOR_REQUIRE()]}
-                        onChangeText={(value) => setFormData({ ...formData, website: value })}
-                    />
-
-                    <Input
-                        placeholder="Beschreibung"
-                        errorText="Geben Sie die BEschreibung des Kunden ein"
-                        disabled={!isEdit}
-                        value={formData.description}
-                        validators={[VALIDATOR_REQUIRE()]}
-                        onChangeText={(value) => setFormData({ ...formData, description: value })}
-                    />
-
-                    <View style={styles.btnContainer}>
-                        {!isEdit ? (
-                            <Button
-                                style={[styles.invalideButton, styles.button]}
-                                // disabled={fetchedData.isFormValid}
-                                buttonText={styles.createBtnText}
-                                onPress={handleEdit}
-                                title={'Ändern'}
-                            />
-                        ) : (
-                            <Button
-                                style={[styles.createBtn, styles.button]}
-                                // disabled={fetchedData.isFormValid}
-                                buttonText={styles.createBtnText}
-                                onPress={handleSubmit}
-                                title={'Speichern'}
-                            />
-                        )}
-                    </View>
+                <View style={styles.imgContainer}>
+                    <Avatar source={require('../../../assets/customer/customer_avatar.jpg')} />
                 </View>
-            )}
 
+                {isLoaded && (
+                    <View style={styles.content}>
+                        <Input
+                            placeholder="Name des Kunden"
+                            errorText="Geben Sie den Namen des Kunden"
+                            disabled={!isEdit}
+                            value={formData.name}
+                            validators={[VALIDATOR_REQUIRE()]}
+                            onChangeText={(value) => setFormData({ ...formData, name: value })}
+                        />
+
+                        <Input
+                            disabled={!isEdit}
+                            placeholder="E-Mail des Kunden"
+                            errorText="Geben Sie eine E-Mail des Kunden"
+                            value={formData.email}
+                            validators={[VALIDATOR_EMAIL()]}
+                            onChangeText={(value) => setFormData({ ...formData, email: value })}
+                        />
+                        <View style={styles.streetContainer}>
+                            <View style={styles.streetWrapper}>
+                                <Input
+                                    placeholder="Straße des Kunden"
+                                    errorText="Geben Sie die Straße des Kunden ein"
+                                    disabled={!isEdit}
+                                    value={formData.street}
+                                    validators={[VALIDATOR_REQUIRE()]}
+                                    onChangeText={(value) => setFormData({ ...formData, street: value })}
+                                />
+                            </View>
+
+                            <View style={styles.nrWrapper}>
+                                <Input
+                                    placeholder="Housnummmer des Kunden"
+                                    errorText="Geben Sie die Housnummmer des Kunden ein"
+                                    disabled={!isEdit}
+                                    value={formData.houseNr}
+                                    validators={[VALIDATOR_REQUIRE()]}
+                                    onChangeText={(value) => setFormData({ ...formData, houseNr: value })}
+                                />
+                            </View>
+                        </View>
+
+                        <View style={styles.zipContainer}>
+                            <View style={styles.zipWrapper}>
+                                <Input
+                                    placeholder="PLZ des Kunden"
+                                    disabled={!isEdit}
+                                    value={formData.zip}
+                                    validators={[VALIDATOR_REQUIRE()]}
+                                    errorText="Geben Sie das PLZ des Kunden ein"
+                                    onChangeText={(value) => setFormData({ ...formData, zip: value })}
+                                />
+                            </View>
+
+
+                            <View style={styles.placeWrapper}>
+                                <Input
+                                    placeholder="Der Ort des Kunden"
+                                    errorText="Geben Sie den Ort des Kunden ein"
+                                    disabled={!isEdit}
+                                    value={formData.place}
+                                    validators={[VALIDATOR_REQUIRE()]}
+                                    onChangeText={(value) => setFormData({ ...formData, place: value })}
+                                />
+                            </View>
+                        </View>
+
+
+                        <Input
+                            placeholder="Telefonnumer"
+                            errorText="Geben Sie die Telefonnumer Kunden ein"
+                            disabled={!isEdit}
+                            value={formData.phone}
+                            validators={[VALIDATOR_REQUIRE()]}
+                            onChangeText={(value) => setFormData({ ...formData, phone: value })}
+                        />
+
+                        <Input
+                            placeholder="Website"
+                            errorText="Geben Sie die Webseite des Kunden ein"
+                            disabled={!isEdit}
+                            value={formData.website}
+                            validators={[VALIDATOR_REQUIRE()]}
+                            onChangeText={(value) => setFormData({ ...formData, website: value })}
+                        />
+
+                        <Input
+                            placeholder="Beschreibung"
+                            errorText="Geben Sie die BEschreibung des Kunden ein"
+                            disabled={!isEdit}
+                            value={formData.description}
+                            validators={[VALIDATOR_REQUIRE()]}
+                            onChangeText={(value) => setFormData({ ...formData, description: value })}
+                        />
+
+                        <View style={styles.btnContainer}>
+                            {!isEdit ? (
+                                <Button
+                                    style={[styles.invalideButton, styles.button]}
+                                    // disabled={fetchedData.isFormValid}
+                                    buttonText={styles.createBtnText}
+                                    onPress={handleEdit}
+                                    title={'Ändern'}
+                                />
+                            ) : (
+                                <Button
+                                    style={[styles.createBtn, styles.button]}
+                                    // disabled={fetchedData.isFormValid}
+                                    buttonText={styles.createBtnText}
+                                    onPress={handleSubmit}
+                                    title={'Speichern'}
+                                />
+                            )}
+                        </View>
+                    </View>
+
+                )}
+            </ScrollView>
         </View>
     )
 };
@@ -205,8 +208,8 @@ const CustomerDetails = (props) => {
 const styles = StyleSheet.create({
     container: {
         backgroundColor: "#fff",
-        paddingTop: 16,
-        padding: 24,
+        padding: 16,
+        paddingBottom: 30,
         flex: 1,
         justifyContent: 'space-between',
         borderWifth: 1,
@@ -322,10 +325,10 @@ const styles = StyleSheet.create({
         alignItems: 'center'
     },
     imgContainer: {
-        flex: 1, 
-        justifyContent: 'center',   
+        flex: 1,
+        justifyContent: 'center',
         alignContent: 'center',
-
+        height: 400,
         // borderWidth: 1,
         // borderColor: 'red',
     },
