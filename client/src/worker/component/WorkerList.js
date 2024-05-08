@@ -7,6 +7,8 @@ import axios from "axios"
 import { getWorkerData } from "../../actions/workerActions"
 import { AuthContext } from "../../context/auth-context"
 import WorkerItem from "./WokerItem"
+import WorkerCreate from "../pages/WorkerCreate"
+import ModalComponent from "../../shared/UIElements/Modal"
 
 
 const WorkerList = () => {
@@ -15,10 +17,14 @@ const WorkerList = () => {
     const auth = useContext(AuthContext)
 
     const [isLoaded, setisLoaded] = useState(true)
-    const [refresh, setRefresh] = useState(false)
+    const [isModalVisible, setModalVisible] = useState(false);
 
+    const refresh = useSelector(state => state.util.refresh)    
     const fetchedData = useSelector(state => state.worker.workersArray)
-    const handleRefresh = () => setRefresh(prevData => !prevData);
+
+    const toggleModal = () => {
+        setModalVisible(!isModalVisible)
+    }
 
     // console.log(fetchedData);
     useEffect(() => {
@@ -42,13 +48,7 @@ const WorkerList = () => {
                 <Text style={styles.addText}>Noch kein Mitarbeiter</Text>
 
                 <View style={styles.centeredImageContainer}>
-                    <TouchableOpacity
-                        onPress={() => {
-                            navigation.navigate('createWorker', {
-                                handleRefresh: () => handleRefresh()
-
-                            })
-                        }} >
+                    <TouchableOpacity onPress={toggleModal}>
                         <Image style={styles.addImg} source={require('../../../assets/firm/add.png')} />
                     </TouchableOpacity>
 
@@ -59,66 +59,72 @@ const WorkerList = () => {
     }
 
     return !isLoaded && (
-        <View style={styles.container}>
-            <ScrollView showsVerticalScrollIndicator={false}>
-                <View style={styles.header} >
-                    <View style={styles.headerContent}>
-                        <View style={styles.textContainer} >
-                            <Text style={styles.headerText}>Mitarbeiter</Text>
+        <>
+            <View style={styles.container}>
+                <ScrollView showsVerticalScrollIndicator={false}>
+                    <View style={styles.header} >
+                        <View style={styles.headerContent}>
+                            <View style={styles.textContainer} >
+                                <Text style={styles.headerText}>Mitarbeiter</Text>
+                            </View>
+
+                            <View style={styles.headerIconContainer} >
+                            <TouchableOpacity style={styles.headerButton} onPress={toggleModal}>
+                                    <Image style={styles.headerIcon} source={require('../../../assets/customer/user_plus.png')} />
+                                </TouchableOpacity>
+                            </View>
+
                         </View>
-
-                        <View style={styles.headerIconContainer} >
-                            <TouchableOpacity
-                                style={styles.headerButton}
-                                onPress={() => {
-                                    navigation.navigate('createWorker', {
-                                        name: 'Create worker',
-                                        handleRefresh: () => handleRefresh()
-
-                                    })
-                                }} >
-                                <Image style={styles.headerIcon} source={require('../../../assets/customer/user_plus.png')} />
-                            </TouchableOpacity>
-                        </View>
-
                     </View>
-                </View>
 
-                <View style={styles.workerList}>
-                    {isLoaded ? (
-                        <ActivityIndicator style={styles.loader} size="large" color="#7A9B76" />
+                    <View style={styles.workerList}>
+                        {isLoaded ? (
+                            <ActivityIndicator style={styles.loader} size="large" color="#7A9B76" />
 
-                    ) : (
-                        fetchedData.workers.map(worker => (
-                            <WorkerItem
-                                id={worker._id}
-                                key={worker._id}
-                                workerNr={worker._id}
-                                name={worker.name}
-                                email={worker.email}
-                                phone={worker.phone}
-                                description={worker.description}
-                                // nextAppointment
-                                street={worker.street}
-                                houseNr={worker.houseNr}
-                                zip={worker.zip}
-                                place={worker.place}
-                                handleRefresh={handleRefresh}
-                            />
-                        ))
+                        ) : (
+                            fetchedData.workers.map(worker => (
+                                <WorkerItem
+                                    id={worker._id}
+                                    key={worker._id}
+                                    workerNr={worker._id}
+                                    name={worker.name}
+                                    email={worker.email}
+                                    phone={worker.phone}
+                                    description={worker.description}
+                                    // nextAppointment
+                                    street={worker.street}
+                                    houseNr={worker.houseNr}
+                                    zip={worker.zip}
+                                    place={worker.place}
+                                />
+                            ))
 
-                    )}
-                </View>
-            </ScrollView>
-        </View>
-    )    
+                        )}
+                    </View>
+                </ScrollView>
+            </View>
+
+            <ModalComponent
+                isVisible={isModalVisible}
+                animationIn="slideInUp" // Specify the slide-up animation
+                animationOut="slideOutDown" // Specify the slide-down animation
+                onBackdropPress={toggleModal}
+                onBackButtonPress={toggleModal}
+                header={<Text style={styles.modalHeadline}>Miterbeiter hinzufügen</Text>}
+                modalHeight={'65%'}
+
+            >
+                <WorkerCreate toggle={toggleModal} /> 
+            </ModalComponent>
+        </>
+    )
 }
 
 
 const styles = StyleSheet.create({
     container: {
         // borderWidth: 2,
-        // borderColor: 'red',
+        // borderColor: 'red',  
 
         backgroundColor: '#fff',
         flex: 1,
