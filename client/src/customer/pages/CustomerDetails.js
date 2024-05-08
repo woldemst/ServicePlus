@@ -1,4 +1,4 @@
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, ScrollView, ActivityIndicator } from "react-native";
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image, ScrollView, ActivityIndicator } from "react-native";
 import { useContext, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
@@ -11,6 +11,7 @@ import { setInitialInputData } from "../../actions/inputActions";
 import Button from "../../shared/UIElements/Button";
 import { refershData } from "../../actions/utilActions";
 import { useRoute } from "@react-navigation/native";
+import Avatar from "../../../components/Avatar";
 
 const CustomerDetails = (props) => {
     const route = useRoute();
@@ -76,6 +77,9 @@ const CustomerDetails = (props) => {
     ) : (
         <View style={styles.container}>
 
+            <View style={styles.imgContainer}>
+            <Avatar source={require('../../../assets/customer/customer_avatar.jpg')} />
+            </View>
             {isLoaded && (
                 <View style={styles.content}>
                     <Input
@@ -118,6 +122,7 @@ const CustomerDetails = (props) => {
                             />
                         </View>
                     </View>
+
                     <View style={styles.zipContainer}>
                         <View style={styles.zipWrapper}>
                             <Input
@@ -170,29 +175,29 @@ const CustomerDetails = (props) => {
                         validators={[VALIDATOR_REQUIRE()]}
                         onChangeText={(value) => setFormData({ ...formData, description: value })}
                     />
+
+                    <View style={styles.btnContainer}>
+                        {!isEdit ? (
+                            <Button
+                                style={[styles.invalideButton, styles.button]}
+                                // disabled={fetchedData.isFormValid}
+                                buttonText={styles.createBtnText}
+                                onPress={handleEdit}
+                                title={'Ändern'}
+                            />
+                        ) : (
+                            <Button
+                                style={[styles.createBtn, styles.button]}
+                                // disabled={fetchedData.isFormValid}
+                                buttonText={styles.createBtnText}
+                                onPress={handleSubmit}
+                                title={'Speichern'}
+                            />
+                        )}
+                    </View>
                 </View>
             )}
 
-
-            <View style={styles.btnContainer}>
-                {!isEdit ? (
-                    <Button
-                        style={[styles.invalideButton, styles.button]}
-                        // disabled={fetchedData.isFormValid}
-                        buttonText={styles.createBtnText}
-                        onPress={handleEdit}
-                        title={'Ändern'}
-                    />
-                ) : (
-                    <Button
-                        style={[styles.createBtn, styles.button]}
-                        // disabled={fetchedData.isFormValid}
-                        buttonText={styles.createBtnText}
-                        onPress={handleSubmit}
-                        title={'Speichern'}
-                    />
-                )}  
-            </View>
         </View>
     )
 };
@@ -203,7 +208,7 @@ const styles = StyleSheet.create({
         paddingTop: 16,
         padding: 24,
         flex: 1,
-
+        justifyContent: 'space-between',
         borderWifth: 1,
         borderColor: 'red',
     },
@@ -315,6 +320,14 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         justifyContent: "center",
         alignItems: 'center'
+    },
+    imgContainer: {
+        flex: 1, 
+        justifyContent: 'center',   
+        alignContent: 'center',
+
+        // borderWidth: 1,
+        // borderColor: 'red',
     },
 });
 
