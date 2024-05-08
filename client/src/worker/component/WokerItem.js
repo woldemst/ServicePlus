@@ -2,9 +2,10 @@ import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native"
 import { useEffect, useState } from "react"
 import ModalComponent from "../../../src/shared/UIElements/Modal"
 import WorkerDetails from "../pages/WorkerDetails"
+import { useNavigation } from "@react-navigation/native"
 
 const WorkerItem = (props) => {
-
+    const navigation = useNavigation()  
     const [isModalVisible, setModalVisible] = useState(false);
 
     const toggleModal = () => {
@@ -16,12 +17,13 @@ const WorkerItem = (props) => {
         <>
             <TouchableOpacity
                 style={styles.workerContainer}
-                onPress={toggleModal}
+                onPress={() => { navigation.navigate('workerDetails', { id: props.id }) }}
+                // onLongPress={longPressHandler}
             >
                 <View style={styles.workerContent}>
-                    <View style={styles.circleWrapper}>
+                    {/* <View style={styles.circleWrapper}>  
                         <Image style={styles.img} source={require('../../../assets/circle.png')} />
-                    </View>
+                    </View> */}
                     <View style={styles.imageContainer} >
                         <View style={styles.imgSet}>
                             <Image style={styles.img} source={require('../../../assets/customer/customer.png')} />
@@ -38,32 +40,6 @@ const WorkerItem = (props) => {
                     <Image style={styles.img} source={require('../../../assets/right_arrow.png')} />
                 </View>
             </TouchableOpacity>
-
-            <ModalComponent
-                isVisible={isModalVisible}
-                animationIn="slideInUp" // Specify the slide-up animation
-                animationOut="slideOutDown" // Specify the slide-down animation
-                onBackdropPress={toggleModal}
-                onBackButtonPress={toggleModal}
-                header={<Text style={styles.modalHeadline}>Miterbeiteriformtaion</Text>}
-            >
-                <WorkerDetails
-                    id={props.id}
-                    key={props.id}
-                    name={props.name}
-                    email={props.email}
-                    phone={props.phone}
-                    street={props.street}
-                    houseNr={props.houseNr}
-                    zip={props.zip}
-                    place={props.place}
-                    workerNr={props.workerNr}
-                    description={props.description}
-                    handleRefresh={props.handleRefresh}
-                    toggle={toggleModal}
-                />
-            </ModalComponent>
-
         </>
     )
 }

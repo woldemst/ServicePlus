@@ -5,82 +5,64 @@ import axios from "axios";
 
 import { VALIDATOR_EMAIL, VALIDATOR_REQUIRE } from "../../util/validators";
 import { AuthContext } from "../../context/auth-context";
-import { updateWorker } from '../../actions/workerActions'
 import Input from '../../shared/UIElements/Input'
 import Button from '../../shared/UIElements/Button'
-import { setInitialInputData } from "../../actions/inputActions";
+import { refershData } from "../../actions/utilActions";
+import { useRoute } from "@react-navigation/native";
+import Avatar from "../../../components/Avatar";
 
 
 const WorkerDetails = props => {
-    const workerId = props.id
+    const route = useRoute()
+    const workerId = route.params.id
     const dispatch = useDispatch()
     const auth = useContext(AuthContext)
-
-    const [isLoaded, setIsLoaded] = useState(false)
-
 
     const workersArr = useSelector(state => state.worker.workersArray.workers)
     const worker = workersArr.find(worker => worker._id == workerId)
 
-    const fetchedData = useSelector(state => state.input)
+    const [isLoaded, setIsLoaded] = useState(false)
+    const [isEdit, setIsEdit] = useState(false)
 
-    const initialState = {
-        name: {
-            value: worker.name,
-            isValid: false,
-        },
-        email: {
-            value: worker.email,
-            isValid: false,
-        },
-        street: {
-            value: worker.street,
-            isValid: false,
-        },
-        houseNr: {
-            value: worker.houseNr,
-            isValid: false,
-        },
-        zip: {
-            value: worker.zip,
-            isValid: false,
-        },
-        place: {
-            value: worker.place,
-            isValid: false,
-        },
-        phone: {
-            value: worker.phone,
-            isValid: false,
-        },
-        description: {
-            value: worker.description,
-            isValid: false,
-        },
-    };
+
+    const [formData, setFormData] = useState({
+        name: worker.name,
+        email: worker.email,
+        street: worker.street,
+        houseNr: worker.houseNr,
+        zip: worker.zip,
+        place: worker.place,
+        phone: worker.phone,
+        website: worker.website,
+        description: worker.description,
+    })
 
     useEffect(() => {
-        dispatch(setInitialInputData(initialState))
         setIsLoaded(true)
     }, [])
+
+    const handleEdit = () => {
+        setIsEdit(!isEdit)
+    }
+
 
     const handleSubmit = async () => {
         try {
             const response = await axios.patch(`http://localhost:8000/api/workers/${auth.firmId}/update/${workerId}`, {
                 workerId: workerId,
                 firmId: auth.firmId,
-                name: fetchedData.inputs.name.value,
-                email: fetchedData.inputs.email.value,
-                street: fetchedData.inputs.street.value,
-                houseNr: fetchedData.inputs.houseNr.value,
-                zip: fetchedData.inputs.zip.value,
-                place: fetchedData.inputs.place.value,
-                phone: fetchedData.inputs.phone.value,
-                description: fetchedData.inputs.description.value,
+                name: formData.name,
+                email: formData.email,
+                street: formData.street,
+                houseNr: formData.houseNr,
+                zip: formData.zip,
+                place: formData.place,
+                phone: formData.phone,
+                description: formData.description,
             })
 
-            props.toggle()
-            props.handleRefresh();
+            setIsEdit(false)
+            dispatch(refershData())
             window.alert('Worker updated!')
         } catch (err) {
             console.log("Error while updating worker's profile", err);
@@ -92,59 +74,52 @@ const WorkerDetails = props => {
         <ActivityIndicator style={styles.loader} size="large" color="#7A9B76" />
     ) : (
         <View style={styles.container}>
+            <View style={styles.imgContainer}>
+                <Avatar source={require('../../../assets/customer/customer_avatar.jpg')} />
+            </View>
             {isLoaded && (
-                <>
+                <View style={styles.content}>
                     <Input
-                        id='workerName'
-                        objectId={workerId}
-                        reducerKey='worker'
-                        fetchedData='worker'
-                        fieldName='name'
                         placeholder="Name des Mitarbeiter"
                         errorText='Type a name of worker'
-                        // value={worker.name}
-                        value={fetchedData.inputs.name.value}
+                        disabled={!isEdit}
+                        value={formData.name}
                         validators={[VALIDATOR_REQUIRE()]}
+                        onChangeText={(value) => setFormData({ ...formData, name: value })}
+
                     />
 
                     <Input
-                        id='workerEmail'
-                        objectId={workerId}
-                        reducerKey='worker'
-                        fetchedData='worker'
-                        fieldName='email'
                         placeholder="Email des Mitarbeiter"
                         errorText='Type an email of worker'
-                        value={fetchedData.inputs.email.value}
+                        disabled={!isEdit}
+                        value={formData.email}
                         validators={[VALIDATOR_EMAIL()]}
+                        onChangeText={(value) => setFormData({ ...formData, email: value })}
                     />
 
                     <View style={styles.streetContainer}>
                         <View style={styles.streetWrapper}>
                             <Input
-                                id='workerStreet'
-                                objectId={workerId}
-                                reducerKey='worker'
-                                fetchedData='worker'
-                                fieldName='street'
                                 placeholder="Straße des Mitarbeiter"
                                 errorText='Type an email of worker'
-                                value={fetchedData.inputs.street.value}
+                                disabled={!isEdit}
+                                value={formData.street}
                                 validators={[VALIDATOR_REQUIRE()]}
+                                onChangeText={(value) => setFormData({ ...formData, street: value })}
+
                             />
                         </View>
 
                         <View style={styles.nrWrapper}>
                             <Input
-                                id='workerHouseNr'
-                                objectId={workerId}
-                                reducerKey='worker'
-                                fetchedData='worker'
-                                fieldName='houseNr'
                                 placeholder="Housnummer des Mitarbeiter"
                                 errorText='House number'
-                                value={fetchedData.inputs.houseNr.value}
+                                disabled={!isEdit}
+                                value={formData.houseNr}
                                 validators={[VALIDATOR_REQUIRE()]}
+                                onChangeText={(value) => setFormData({ ...formData, houseNr: value })}
+
                             />
                         </View>
                     </View>
@@ -152,69 +127,68 @@ const WorkerDetails = props => {
                     <View style={styles.zipContainer}>
                         <View style={styles.zipWrapper}>
                             <Input
-                                id='workerZip'
-                                objectId={workerId}
-                                reducerKey='worker'
-                                fetchedData='worker'
-                                fieldName='zip'
                                 placeholder="PLZ des Mitarbeiter"
                                 errorText='Type a zip code of worker'
-                                value={fetchedData.inputs.zip.value}
+                                disabled={!isEdit}
+                                value={formData.zip}
                                 validators={[VALIDATOR_REQUIRE()]}
+                                onChangeText={(value) => setFormData({ ...formData, zip: value })}
+
                             />
                         </View>
 
                         <View style={styles.placeWrapper}>
                             <Input
-                                id='workerPlace'
-                                objectId={workerId}
-                                reducerKey='worker'
-                                fetchedData='worker'
-                                fieldName='place'
                                 placeholder="Ort des Mitarbeiter"
                                 errorText='Type a place of worker'
-                                value={fetchedData.inputs.place.value}
+                                disabled={!isEdit}
+                                value={formData.place}
                                 validators={[VALIDATOR_REQUIRE()]}
+                                onChangeText={(value) => setFormData({ ...formData, place: value })}
                             />
                         </View>
                     </View>
 
                     <Input
-                        id='workerPhone'
-                        objectId={workerId}
-                        reducerKey='worker'
-                        fetchedData='worker'
-                        fieldName='phone'
                         placeholder="Phone des Mitarbeiter"
                         errorText='Type a phone of worker'
-                        value={fetchedData.inputs.phone.value}
+                        disabled={!isEdit}
+                        value={formData.phone}
                         validators={[VALIDATOR_REQUIRE()]}
+                        onChangeText={(value) => setFormData({ ...formData, phone: value })}
                     />
 
                     <Input
-                        id='workerDeskr'
-                        objectId={workerId}
-                        reducerKey='worker'
-                        fetchedData='worker'
-                        fieldName='description'
                         placeholder="Beschreibung des Mitarbeiter"
                         errorText='Type a description of the worker'
-                        value={fetchedData.inputs.description.value}
+                        disabled={!isEdit}
+                        value={formData.description}
                         validators={[VALIDATOR_REQUIRE()]}
+                        onChangeText={(value) => setFormData({ ...formData, description: value })}
+
                     />
-                </>
+                    <View style={styles.btnContainer}>
+                        {!isEdit ? (
+                            <Button
+                                style={[styles.invalideButton, styles.button]}
+                                // disabled={fetchedData.isFormValid}
+                                buttonText={styles.createBtnText}
+                                onPress={handleEdit}
+                                title={'Ändern'}
+                            />
+                        ) : (
+                            <Button
+                                style={[styles.createBtn, styles.button]}
+                                // disabled={fetchedData.isFormValid}
+                                buttonText={styles.createBtnText}
+                                onPress={handleSubmit}
+                                title={'Speichern'}
+                            />
+                        )}
+                    </View>
+                </View>
             )}
 
-            <View style={styles.btnContainer}>
-                <Button
-                    // style={!fetchedData.isFormValid ? [styles.createBtn, styles.button] : styles.invalideButton}
-                    style={[styles.createBtn, styles.button]}
-                    // disabled={fetchedData.isFormValid}
-                    buttonText={styles.createBtnText}
-                    onPress={handleSubmit}
-                    title={'Speichern'}
-                />
-            </View>
         </View>
 
     )
@@ -224,10 +198,19 @@ const WorkerDetails = props => {
 
 const styles = StyleSheet.create({
     container: {
+        backgroundColor: "#fff",
+        paddingTop: 16,
+        padding: 24,
         flex: 1,
-        backgroundColor: '#fff',
-        paddingTop: 20,
-
+        justifyContent: 'space-between',
+        borderWifth: 1,
+        borderColor: 'red',
+    },
+    content: {
+        // flex: 1,
+        // justifyContent: 'flex-end',
+        // borderWifth: 1,
+        // borderColor: 'red',
     },
     input: {
         width: '100%',
@@ -292,7 +275,7 @@ const styles = StyleSheet.create({
 
     btnContainer: {
         flexDirection: 'row',
-        marginTop: 50
+        marginTop: 28
     },
 
     button: {
@@ -331,6 +314,14 @@ const styles = StyleSheet.create({
     },
     loader: {
         flex: 1,
+        // borderWidth: 1,
+        // borderColor: 'red',
+    },
+    imgContainer: {
+        flex: 1,
+        justifyContent: 'center',
+        alignContent: 'center',
+
         // borderWidth: 1,
         // borderColor: 'red',
     },

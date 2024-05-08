@@ -10,6 +10,7 @@ import { AuthContext } from "../../context/auth-context";
 import Input from "../../shared/UIElements/Input";
 import Button from "../../shared/UIElements/Button";
 import { setInitialInputData } from "../../actions/inputActions";
+import { refershData } from "../../actions/utilActions";
 
 const WorkerCreate = (props) => {
   const [isLoaded, setIsLoaded] = useState(false)
@@ -52,9 +53,8 @@ const WorkerCreate = (props) => {
       })
 
       alert("Worker created successfully!");
-
-      props.route.params.handleRefresh();
-      navigation.goBack()
+      dispatch(refershData())
+      props.toggle()
       // dispatch(clearWorkerField())
     } catch (err) {
       console.log("Error if creating a mew worker", err);
@@ -162,7 +162,9 @@ const styles = StyleSheet.create({
   },
   container: {
     backgroundColor: "#fff",
-    padding: 30,
+    paddingTop: 16,
+
+    // padding: 30,
     flex: 1,
     // borderColor: 'red',
     // borderWidth: 1,
@@ -231,7 +233,7 @@ const styles = StyleSheet.create({
 
   btnContainer: {
     flexDirection: "row",
-    marginTop: 50,
+    marginTop: 28,
   },
 
   button: {
