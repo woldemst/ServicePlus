@@ -7,7 +7,6 @@ const CustomerItem = (props) => {
     
     const navigation = useNavigation()
 
-
     const longPressHandler = () => {
         setIsSelected(!isSelected)
     }
@@ -46,7 +45,7 @@ const CustomerItem = (props) => {
 }
 
 
-
+ 
 
 
 const styles = StyleSheet.create({
