@@ -74,123 +74,124 @@ const WorkerDetails = props => {
         <ActivityIndicator style={styles.loader} size="large" color="#7A9B76" />
     ) : (
         <View style={styles.container}>
-            <View style={styles.imgContainer}>
-                <Avatar source={require('../../../assets/customer/customer_avatar.jpg')} />
-            </View>
-            {isLoaded && (
-                <View style={styles.content}>
-                    <Input
-                        placeholder="Name des Mitarbeiter"
-                        errorText='Type a name of worker'
-                        disabled={!isEdit}
-                        value={formData.name}
-                        validators={[VALIDATOR_REQUIRE()]}
-                        onChangeText={(value) => setFormData({ ...formData, name: value })}
-
-                    />
-
-                    <Input
-                        placeholder="Email des Mitarbeiter"
-                        errorText='Type an email of worker'
-                        disabled={!isEdit}
-                        value={formData.email}
-                        validators={[VALIDATOR_EMAIL()]}
-                        onChangeText={(value) => setFormData({ ...formData, email: value })}
-                    />
-
-                    <View style={styles.streetContainer}>
-                        <View style={styles.streetWrapper}>
-                            <Input
-                                placeholder="Straße des Mitarbeiter"
-                                errorText='Type an email of worker'
-                                disabled={!isEdit}
-                                value={formData.street}
-                                validators={[VALIDATOR_REQUIRE()]}
-                                onChangeText={(value) => setFormData({ ...formData, street: value })}
-
-                            />
-                        </View>
-
-                        <View style={styles.nrWrapper}>
-                            <Input
-                                placeholder="Housnummer des Mitarbeiter"
-                                errorText='House number'
-                                disabled={!isEdit}
-                                value={formData.houseNr}
-                                validators={[VALIDATOR_REQUIRE()]}
-                                onChangeText={(value) => setFormData({ ...formData, houseNr: value })}
-
-                            />
-                        </View>
-                    </View>
-
-                    <View style={styles.zipContainer}>
-                        <View style={styles.zipWrapper}>
-                            <Input
-                                placeholder="PLZ des Mitarbeiter"
-                                errorText='Type a zip code of worker'
-                                disabled={!isEdit}
-                                value={formData.zip}
-                                validators={[VALIDATOR_REQUIRE()]}
-                                onChangeText={(value) => setFormData({ ...formData, zip: value })}
-
-                            />
-                        </View>
-
-                        <View style={styles.placeWrapper}>
-                            <Input
-                                placeholder="Ort des Mitarbeiter"
-                                errorText='Type a place of worker'
-                                disabled={!isEdit}
-                                value={formData.place}
-                                validators={[VALIDATOR_REQUIRE()]}
-                                onChangeText={(value) => setFormData({ ...formData, place: value })}
-                            />
-                        </View>
-                    </View>
-
-                    <Input
-                        placeholder="Phone des Mitarbeiter"
-                        errorText='Type a phone of worker'
-                        disabled={!isEdit}
-                        value={formData.phone}
-                        validators={[VALIDATOR_REQUIRE()]}
-                        onChangeText={(value) => setFormData({ ...formData, phone: value })}
-                    />
-
-                    <Input
-                        placeholder="Beschreibung des Mitarbeiter"
-                        errorText='Type a description of the worker'
-                        disabled={!isEdit}
-                        value={formData.description}
-                        validators={[VALIDATOR_REQUIRE()]}
-                        onChangeText={(value) => setFormData({ ...formData, description: value })}
-
-                    />
-                    <View style={styles.btnContainer}>
-                        {!isEdit ? (
-                            <Button
-                                style={[styles.invalideButton, styles.button]}
-                                // disabled={fetchedData.isFormValid}
-                                buttonText={styles.createBtnText}
-                                onPress={handleEdit}
-                                title={'Ändern'}
-                            />
-                        ) : (
-                            <Button
-                                style={[styles.createBtn, styles.button]}
-                                // disabled={fetchedData.isFormValid}
-                                buttonText={styles.createBtnText}
-                                onPress={handleSubmit}
-                                title={'Speichern'}
-                            />
-                        )}
-                    </View>
+            <ScrollView showsVerticalScrollIndicator={false}>
+                <View style={styles.imgContainer}>
+                    <Avatar source={require('../../../assets/customer/customer_avatar.jpg')} />
                 </View>
-            )}
+                {isLoaded && (
+                    <View style={styles.content}>
+                        <Input
+                            placeholder="Name des Mitarbeiter"
+                            errorText='Type a name of worker'
+                            disabled={!isEdit}
+                            value={formData.name}
+                            validators={[VALIDATOR_REQUIRE()]}
+                            onChangeText={(value) => setFormData({ ...formData, name: value })}
 
+                        />
+
+                        <Input
+                            placeholder="Email des Mitarbeiter"
+                            errorText='Type an email of worker'
+                            disabled={!isEdit}
+                            value={formData.email}
+                            validators={[VALIDATOR_EMAIL()]}
+                            onChangeText={(value) => setFormData({ ...formData, email: value })}
+                        />
+
+                        <View style={styles.streetContainer}>
+                            <View style={styles.streetWrapper}>
+                                <Input
+                                    placeholder="Straße des Mitarbeiter"
+                                    errorText='Type an email of worker'
+                                    disabled={!isEdit}
+                                    value={formData.street}
+                                    validators={[VALIDATOR_REQUIRE()]}
+                                    onChangeText={(value) => setFormData({ ...formData, street: value })}
+
+                                />
+                            </View>
+
+                            <View style={styles.nrWrapper}>
+                                <Input
+                                    placeholder="Housnummer des Mitarbeiter"
+                                    errorText='House number'
+                                    disabled={!isEdit}
+                                    value={formData.houseNr}
+                                    validators={[VALIDATOR_REQUIRE()]}
+                                    onChangeText={(value) => setFormData({ ...formData, houseNr: value })}
+
+                                />
+                            </View>
+                        </View>
+
+                        <View style={styles.zipContainer}>
+                            <View style={styles.zipWrapper}>
+                                <Input
+                                    placeholder="PLZ des Mitarbeiter"
+                                    errorText='Type a zip code of worker'
+                                    disabled={!isEdit}
+                                    value={formData.zip}
+                                    validators={[VALIDATOR_REQUIRE()]}
+                                    onChangeText={(value) => setFormData({ ...formData, zip: value })}
+
+                                />
+                            </View>
+
+                            <View style={styles.placeWrapper}>
+                                <Input
+                                    placeholder="Ort des Mitarbeiter"
+                                    errorText='Type a place of worker'
+                                    disabled={!isEdit}
+                                    value={formData.place}
+                                    validators={[VALIDATOR_REQUIRE()]}
+                                    onChangeText={(value) => setFormData({ ...formData, place: value })}
+                                />
+                            </View>
+                        </View>
+
+                        <Input
+                            placeholder="Phone des Mitarbeiter"
+                            errorText='Type a phone of worker'
+                            disabled={!isEdit}
+                            value={formData.phone}
+                            validators={[VALIDATOR_REQUIRE()]}
+                            onChangeText={(value) => setFormData({ ...formData, phone: value })}
+                        />
+
+                        <Input
+                            placeholder="Beschreibung des Mitarbeiter"
+                            errorText='Type a description of the worker'
+                            disabled={!isEdit}
+                            value={formData.description}
+                            validators={[VALIDATOR_REQUIRE()]}
+                            onChangeText={(value) => setFormData({ ...formData, description: value })}
+
+                        />
+                        <View style={styles.btnContainer}>
+                            {!isEdit ? (
+                                <Button
+                                    style={[styles.invalideButton, styles.button]}
+                                    // disabled={fetchedData.isFormValid}
+                                    buttonText={styles.createBtnText}
+                                    onPress={handleEdit}
+                                    title={'Ändern'}
+                                />
+                            ) : (
+                                <Button
+                                    style={[styles.createBtn, styles.button]}
+                                    // disabled={fetchedData.isFormValid}
+                                    buttonText={styles.createBtnText}
+                                    onPress={handleSubmit}
+                                    title={'Speichern'}
+                                />
+                            )}
+                        </View>
+                    </View>
+                )}
+
+            </ScrollView>
         </View>
-
     )
 }
 
@@ -199,8 +200,8 @@ const WorkerDetails = props => {
 const styles = StyleSheet.create({
     container: {
         backgroundColor: "#fff",
-        paddingTop: 16,
-        padding: 24,
+        padding: 16,
+        paddingBottom: 30,
         flex: 1,
         justifyContent: 'space-between',
         borderWifth: 1,
@@ -291,9 +292,6 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         alignItems: 'center'
     },
-
-
-
     createBtn: {
         backgroundColor: '#7A9B76',
     },
@@ -321,7 +319,7 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignContent: 'center',
-
+        height: 400,
         // borderWidth: 1,
         // borderColor: 'red',
     },
