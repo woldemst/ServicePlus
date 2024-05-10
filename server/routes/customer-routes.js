@@ -8,6 +8,7 @@ router.get('/:firmId/all', custommerController.getAllCustomersByFirmId)
 router.get('/:firmId//:customerId', custommerController.getCustomerById)
 router.patch('/:firmId/update/:customerId', custommerController.updateCustomerById)
 router.post('/:firmId/new', custommerController.createCustomer)
+router.delete('/:firmId/delete/:customerId', custommerController.deleteCustomerById)
 
 module.exports = router;
 

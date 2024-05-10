@@ -3,9 +3,9 @@ import { useState } from "react"
 import { useNavigation } from "@react-navigation/native"
 
 const CustomerItem = (props) => {
-    const [isSelected, setIsSelected] = useState(false)
-    
     const navigation = useNavigation()
+    
+    const [isSelected, setIsSelected] = useState(false)
 
     const longPressHandler = () => {
         setIsSelected(!isSelected)
