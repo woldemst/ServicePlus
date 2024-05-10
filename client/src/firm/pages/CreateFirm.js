@@ -67,10 +67,8 @@ const CreateFirm = props => {
   }
 
   return <View style={styles.container}>
+
     <Input
-      id='firmName'
-      reducerKey='firm'
-      fieldName='name'
       placeholder="Name des Betriebs"
       errorText='Type a name of firm'
       value={formData.name}
@@ -79,9 +77,6 @@ const CreateFirm = props => {
     />
 
     <Input
-      id='ownerName'
-      reducerKey='firm'
-      fieldName='ownerName'
       placeholder="Name des Inhabers"
       value={formData.ownerName}
       validators={[VALIDATOR_MINLENGTH(6)]}
@@ -89,40 +84,29 @@ const CreateFirm = props => {
     />
 
     <Input
-      id='firmEmail'
-      reducerKey='firm'
-      fieldName='email'
       placeholder="Email"
       value={formData.email}
       validators={[VALIDATOR_EMAIL()]}
       onChangeText={(text) => setFormData({ ...formData, email: text })}
-
     />
 
     <View style={styles.streetContainer}>
       <View style={styles.streetWrapper}>
         <Input
-          id='firmStreet'
-          reducerKey='firm'
-          fieldName='street'
           placeholder="Straße"
           value={formData.street}
           validators={[VALIDATOR_REQUIRE()]}
           onChangeText={(text) => setFormData({ ...formData, street: text })}
-
         />
       </View>
 
       <View style={styles.nrWrapper}>
         <Input
-          fieldName='houseNr'
-          reducerKey='firm'
           placeholder="Nr."
           errorText='Number'
           value={formData.houseNr}
           validators={[VALIDATOR_REQUIRE()]}
           onChangeText={(text) => setFormData({ ...formData, houseNr: text })}
-
         />
       </View>
     </View>
@@ -130,9 +114,6 @@ const CreateFirm = props => {
     <View style={styles.zipContainer}>
       <View style={styles.zipWrapper}>
         <Input
-          id='firmZip'
-          fieldName='zip'
-          reducerKey='firm'
           placeholder="PLZ"
           errorText='Type a ZIP code'
           value={formData.zip}
@@ -143,9 +124,6 @@ const CreateFirm = props => {
 
       <View style={styles.placeWrapper}>
         <Input
-          id='firmPlace'
-          reducerKey='firm'
-          fieldName='place'
           placeholder="Ort"
           errorText='Type a place'
           value={formData.place}
@@ -156,27 +134,19 @@ const CreateFirm = props => {
     </View>
 
     <Input
-      id='firmPhone'
-      fieldName='phone'
-      reducerKey='firm'
       placeholder="Telefon"
       errorText='Type a phone'
       value={formData.phone}
       validators={[VALIDATOR_REQUIRE()]}
       onChangeText={(text) => setFormData({ ...formData, phone: text })}
-
     />
 
     <Input
-      id='firmWebsite'
-      reducerKey='firm'
-      fieldName='website'
       placeholder="Webseite"
       errorText='Type a website'
       value={formData.website}
       validators={[VALIDATOR_REQUIRE()]}
       onChangeText={(text) => setFormData({ ...formData, website: text })}
-
     />
 
     <View style={styles.btnContainer}>
@@ -196,10 +166,12 @@ const styles = StyleSheet.create({
     //   padding: 32,
     paddingTop: 22,
     backgroundColor: "#fff",
+    justifyContent: 'flex-end',
     flex: 1,
 
-    //   borderColor: 'red',
-    //   borderWidth: 2
+
+    // borderColor: 'red',
+    // borderWidth: 2
   },
   input: {
     width: "100%",

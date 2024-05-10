@@ -12,7 +12,7 @@ import CustomerDetails from './src/customer/pages/CustomerDetails';
 import CreateCustomer from './src/customer/pages/CreateCustomer';
 import WorkerList from './src/worker/component/WorkerList';
 import WorkerCreate from './src/worker/pages/WorkerCreate';
-import UpdateProfile from './src/firm/pages/UpdateProfile';
+import Profile from './src/firm/pages/Profile';
 import OrderCreate from './src/order/pages/OrderCreate';
 import OrderView from './src/order/pages/OrderView';
 import Register from "./src/auth/pages/Register";
@@ -33,7 +33,7 @@ export default function App() {
   const [firmId, setFirmId] = useState(null)
   const [refresh, setRefresh] = useState(false)
   const [customers, setCustomers] = useState([])
-  
+
   const Stack = createNativeStackNavigator()
   const auth = useContext(AuthContext)
 
@@ -128,7 +128,7 @@ export default function App() {
 
 
           {/* firm */}
-          <Stack.Screen name='updateProfile' component={UpdateProfile} options={{ title: 'Edit Profile' }} />
+          <Stack.Screen name='profile' component={Profile} options={{ title: 'Edit Profile' }} />
 
           {/* customers */}
           <Stack.Screen name='customerList' component={CustomerList} options={{ title: 'Customers' }} />

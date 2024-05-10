@@ -27,17 +27,17 @@ const register = async (req, res, next) => {
 
     // creating new firm
     const createdFirm = new Firm({
+      role,
+      userId,
       ownerName,
       name,
       email,
-      role,
       street,
       houseNr,
       zip,
       place,
       phone,
       website,
-      userId
     });
 
     await createdFirm.save();
