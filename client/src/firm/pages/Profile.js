@@ -14,6 +14,8 @@ import { AuthContext } from "../../context/auth-context";
 import Input from "../../shared/UIElements/Input";
 import Button from "../../shared/UIElements/Button";
 import Avatar from "../../../components/Avatar";
+import { refershData } from "../../actions/utilActions";
+
 
 const Profile = (props) => {
   const auth = useContext(AuthContext)
@@ -63,8 +65,10 @@ const Profile = (props) => {
         website: formData.website,
       });
 
-      // props.route.params.handleRefresh();
-      navigation.goBack()
+      // navigation.goBack()
+      dispatch(refershData())
+      setIsEdit(false);
+      window.alert("Firm updated!");
       console.log("Firm updated!", response.data);
     } catch (err) {
       console.error("Error updating firm:", err);
