@@ -9,14 +9,14 @@ import { getFirmData } from '../../actions/firmActions'
 import { AuthContext } from "../../context/auth-context"
 
 const FirmItem = () => {
-    const [refresh, setRefresh] = useState(false)
     const [isLoaded, setIsLoaded] = useState(false)
+
+    const refresh = useSelector(state => state.refresh) 
 
     const auth = useContext(AuthContext)
     const navigation = useNavigation()
     const dispatch = useDispatch()
-    const fetchedData = useSelector(state => state.firm.firmsArray)
-    const handleRefresh = () => setRefresh(prevData => !prevData);
+    const fetchedData = useSelector(state => state.firm)
 
     // console.log('Stored as Profile:', fetchedData);
 
@@ -44,10 +44,8 @@ const FirmItem = () => {
     return <>
 
         <TouchableOpacity style={styles.firmContainer} onPress={() => {
-            navigation.navigate('updateProfile', {
-                name: 'Update Profile',
-                handleRefresh: handleRefresh
-            }
+            navigation.navigate('profile', {
+                name: 'Update Profile'}
             )
         }}>
 

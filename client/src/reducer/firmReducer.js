@@ -1,8 +1,6 @@
 import { UPDATE_FIRM_DATA, GET_FIRM_DATA } from "../actions/firmActions";
 
-const initialState = {
-  firmsArray: {}
-};
+const initialState = {};
 
 const firmReducer = (state = initialState, action) => {
   switch (action.type) {
@@ -15,7 +13,7 @@ const firmReducer = (state = initialState, action) => {
     case GET_FIRM_DATA:
       return {
         ...state,
-        firmsArray: action.payload,
+        ...action.payload,
       };
     default:
       return state;
