@@ -1,5 +1,5 @@
-import { View, Text, StyleSheet, Image, TouchableOpacity, ScrollView, ActivityIndicator } from "react-native"
-import { useContext, useEffect, useState } from "react"
+import { View, Text, StyleSheet, Image, TouchableOpacity, ScrollView, ActivityIndicator, FlatList, RefreshControl } from "react-native"
+import { useContext, useEffect, useState, useCallback } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { useNavigation } from "@react-navigation/native"
 import axios from "axios"
@@ -15,11 +15,19 @@ const CustomerList = () => {
     const navigation = useNavigation()
     const auth = useContext(AuthContext)
 
-    const [isLoaded, setisLoaded] = useState(true)
-    const [isModalVisible, setModalVisible] = useState(false);
-
     const refresh = useSelector(state => state.util.refresh)
     const fetchedData = useSelector(state => state.customer.customersArray)
+
+    const [isLoaded, setisLoaded] = useState(true)
+    const [isModalVisible, setModalVisible] = useState(false);
+    const [refreshing, setRefreshing] = useState(false);
+
+    const onRefresh = useCallback(() => {
+        setRefreshing(true);
+        setTimeout(() => {
+            setRefreshing(false);
+        }, 1000);
+    }, []);
 
     const toggleModal = () => {
         setModalVisible(!isModalVisible)
@@ -37,6 +45,7 @@ const CustomerList = () => {
         }
         fetchCustomers()
     }, [refresh])
+
 
     if (isLoaded || fetchedData.customers.length === 0) {
 
@@ -60,47 +69,51 @@ const CustomerList = () => {
     return !isLoaded && (
         <>
             <View style={styles.container}>
-                <ScrollView showsVerticalScrollIndicator={false}>
-                    <View style={styles.header} >
-                        <View style={styles.headerContent}>
-                            <View style={styles.textContainer} >
-                                <Text style={styles.headerText}>Kunden</Text>
-                            </View>
+                <View style={styles.header} >
+                    <View style={styles.headerContent}>
+                        <View style={styles.textContainer} >
+                            <Text style={styles.headerText}>Kunden</Text>
+                        </View>
 
-                            <View style={styles.headerIconContainer} >
-                                <TouchableOpacity style={styles.headerButton} onPress={toggleModal}>
-                                    <Image style={styles.headerIcon} source={require('../../../assets/customer/user_plus.png')} />
-                                </TouchableOpacity>
-                            </View>
+                        <View style={styles.headerIconContainer} >
+                            <TouchableOpacity style={styles.headerButton} onPress={toggleModal}>
+                                <Image style={styles.headerIcon} source={require('../../../assets/customer/user_plus.png')} />
+                            </TouchableOpacity>
                         </View>
                     </View>
+                </View>
 
-                    <View style={styles.customerList}>
-                        {!isLoaded ? (
-                            fetchedData.customers.map(customer => (
+                <View style={styles.customerList}>
+                    {!isLoaded ? (
+                        <FlatList
+                            refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
+                            showsVerticalScrollIndicator={false}
+                            style={styles.scroll}
+                            data={fetchedData.customers}
+                            keyExtractor={item => item._id}
+                            renderItem={({ item }) => (
                                 <CustomerItem
-                                    id={customer._id}
-                                    key={customer._id}
-                                    name={customer.name}
-                                    // customerNr={customer.customerNr}
-                                    email={customer.email}
-                                    worker={customer.worker}
-                                    phone={customer.phone}
+                                    id={item._id}
+                                    key={item._id}
+                                    name={item.name}
+                                    customerNr={item._id}
+                                    email={item.email}
+                                    worker={item.worker}
+                                    phone={item.phone}
                                     // nextAppointment
-                                    description={customer.description}
-                                    website={customer.website}
-                                    street={customer.street}
-                                    houseNr={customer.houseNr}
-                                    zip={customer.zip}
-                                    place={customer.place}
+                                    description={item.description}
+                                    website={item.website}
+                                    street={item.street}
+                                    houseNr={item.houseNr}
+                                    zip={item.zip}
+                                    place={item.place}
                                 />
-                            ))
-                        ) : (
-                            <ActivityIndicator style={styles.loader} size="large" color="#7A9B76" />
-                        )}
-
-                    </View>
-                </ScrollView>
+                            )}
+                        />
+                    ) : (
+                        <ActivityIndicator style={styles.loader} size="large" color="#7A9B76" />
+                    )}
+                </View>
             </View>
 
             <ModalComponent
@@ -125,7 +138,7 @@ const CustomerList = () => {
 const styles = StyleSheet.create({
     container: {
         // borderWidth: 2, 
-        // borderColor: 'red'
+        // borderColor: 'red',
 
         backgroundColor: '#fff',
         flex: 1,
@@ -163,10 +176,14 @@ const styles = StyleSheet.create({
 
     },
     customerList: {
-        paddingTop: 32,
-        paddingBottom: 32,
-        paddingLeft: 24,
-        paddingRight: 24
+        // borderWidth: 1,
+        // borderColor: 'red',
+
+        flex: 1,
+        // paddingTop: 32,
+        // paddingBottom: 32,
+        // paddingLeft: 24,
+        // paddingRight: 24
     },
     customerContainer: {
         flexDirection: 'row',

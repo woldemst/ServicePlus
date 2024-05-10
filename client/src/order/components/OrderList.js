@@ -20,22 +20,18 @@ import ModalComponent from "../../shared/UIElements/Modal";
 import OrderCreate from "../pages/OrderCreate";
 import { getOrders } from "../../actions/orderActions";
 
-const OrderList = (props) => {
+const OrderList = (props) => {    
+    const dispatch = useDispatch()
+    const auth = useContext(AuthContext)
+    
+    const fetchedData = useSelector((state) => state.order.ordersArray);
+    const refresh = useSelector(state => state.util.refresh)
+    
     const [isLoaded, setIsLoaded] = useState(false)
     const [fetchedCustomers, setFetchedCustomers] = useState([])
     const [fetchedWorkers, setFetchedWorkers] = useState([])
     const [refreshing, setRefreshing] = useState(false);
     const [isModalVisible, setModalVisible] = useState(false);
-    const [lastEditableItemId, setLastEditableItemId] = useState(null);
-    
-
-
-    const dispatch = useDispatch()
-    const auth = useContext(AuthContext)
-
-    const fetchedData = useSelector((state) => state.order.ordersArray);
-    const refresh = useSelector(state => state.util.refresh)
-
 
     useEffect(() => {
         const fetchOrders = async () => {
@@ -53,14 +49,12 @@ const OrderList = (props) => {
             }
         };
         fetchOrders();
-    }, [refresh]);
+    }, [refresh, refreshing]);
 
 
     useEffect(() => {
         const fetcheCustomers = async () => {
             try {
-                // const workerResponse = await axios.get(`http://localhost:8000/api/workers/${auth.firmId}/all`)
-                // setFetchedWorkers(workerResponse.data.workers)
                 const response = await axios.get(`http://localhost:8000/api/customers/${auth.firmId}/all`)
                 setFetchedCustomers(response.data.customers)
             } catch (err) {
