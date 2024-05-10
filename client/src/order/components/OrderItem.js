@@ -18,10 +18,6 @@ import { deleteOrder } from "../../actions/orderActions";
 import { deleteAppointmentsByOrder } from "../../actions/appointmentActions";
 
 const OrderItem = (props) => {
-  const [isModalVisible, setModalVisible] = useState(false);
-  const [modalPosition, setModalPosition] = useState({ x: 0, y: 0 });
-  const [isEdit, setIsEdit] = useState(false)
-
   const navigation = useNavigation()
   const dispatch = useDispatch()
 
@@ -29,6 +25,9 @@ const OrderItem = (props) => {
   const orders = useSelector(state => state.order.ordersArray.orders)
   const orderItem = orders.find(order => order._id == orderId)
 
+  const [isModalVisible, setModalVisible] = useState(false);
+  // const [modalPosition, setModalPosition] = useState({ x: 0, y: 0 });
+  // const [isEdit, setIsEdit] = useState(false)
 
   const deleteHandler = async () => {
     Alert.alert(
@@ -78,9 +77,7 @@ const OrderItem = (props) => {
 
   const renderItem = () => (
     <View style={styles.rowFront}>
-      <TouchableOpacity style={styles.container}
-        onPress={onPressHandler}
-      >
+      <TouchableOpacity style={styles.container} onPress={onPressHandler} >
         <View style={[
           styles.indicator,
           orderItem.status == 1 ? styles.notStarted : null,
@@ -91,22 +88,7 @@ const OrderItem = (props) => {
 
         <View style={styles.mainContent}>
           <View style={styles.nameContainer}>
-
-            {/* <Input
-              // style={styles.order}
-              style={[styles.order, { borderBottomWidth: isEdit ? 1 : 0 }, { pointerEvents: isEdit ? 'auto' : 'none' }]} // pointerEvents: 'none' to disable input
-              disabled={!isEdit}
-              value={formData.name}
-              onBlur={onBlurHandler}
-              validators={[VALIDATOR_REQUIRE()]}
-              errorText='Geben Sie den Name für den Auftrag ein'
-              onChangeText={(text) => setFormData({ ...formData, name: text })}
-              isEdit={isEdit}
-            /> */}
-
             <Text style={styles.order}>{props.name}</Text>
-
-
           </View>
 
           <View style={styles.adressContainer}>
@@ -114,7 +96,6 @@ const OrderItem = (props) => {
             <Text style={styles.adressItem}>{props.houseNr}</Text>
             <Text style={styles.adressItem}>{props.zip}</Text>
             <Text style={styles.adressItem}>{props.place}</Text>
-
           </View>
 
           <Text style={styles.customerName}>{props.c_name}</Text>
@@ -126,13 +107,6 @@ const OrderItem = (props) => {
       </TouchableOpacity>
     </View>
   )
-
-  // Define a separate component for the custom backdrop
-  const CustomBackdrop = ({ onPress }) => (
-    <TouchableWithoutFeedback onPress={onPress} style={styles.backdrop}>
-      <View style={styles.backdrop}></View>
-    </TouchableWithoutFeedback>
-  );
 
   return <>
     <SwipeListView

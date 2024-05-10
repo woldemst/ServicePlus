@@ -3,6 +3,7 @@ export const GET_CUSTOMER_DATA = 'GET_CUSTOMER_DATA'
 export const UPDATE_CUSTOMER = 'UPDATE_CUSTOMER'
 export const CREATE_CUSTOMER = 'CREATE_CUSTOMER' 
 export const CLEAR_CUSTOMER_FIELD = 'CLEAR_CUSTOMER_FIELD'
+export const DELETE_CUSTOMER = 'DELETE_CUSTOMER'
 
 export const updateInput = (fieldName, value, validators) =>({
     type: UPDATE_INPUT, 
@@ -41,3 +42,7 @@ export const clearCustomerField = (data) => ({
     payload: data
 })
 
+export const deleteCustomer = (data) => ({
+    type: DELETE_CUSTOMER,
+    payload: data
+  })
