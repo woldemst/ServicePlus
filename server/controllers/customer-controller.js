@@ -1,5 +1,6 @@
 const HttpError = require("../models/http-error")
 const Customer = require('../models/Customer')
+const Firm = require('../models/Firm')
 
 const getAllCustomersByFirmId = async (req, res, next) => {
   const firmId = req.params.firmId; 
@@ -162,9 +163,42 @@ const createCustomer = async (req, res, next) => {
       return next(error);
   }
 
+  await Firm.updateOne(
+    { _id: firmId },
+    { $push: { customers: createCustomer._id } },
+  )
+
   res
     .status(201)
     .json({ customer: createCustomer.toObject({ getters: true }) });
+}
+
+// delete functionality 
+const deleteCustomerById = async (req, res, next) => {
+  const orderId = req.params.orderId
+
+  try {
+    // Delete the appointment
+    const deletedCustomer = await Customer.deleteOne({ _id: orderId });
+
+    // Check if the appointment exists
+    if (!deletedCustomer) {
+      return res.status(404).json({ message: 'Customer not found' });
+    }
+
+    await Firm.findOneAndUpdate(
+      { _id: orderId },
+      { $pull: { customers: orderId } }
+    );
+
+    res.status(200).json({ message: 'Customer was deleted successfully' });
+  } catch (err) {
+    const error = new HttpError(
+      "Something went wrong, could not delete this appointment.",
+      500
+    );
+    return next(error);
+  }
 }
 
 exports.getAllCustomersByFirmId = getAllCustomersByFirmId; 
