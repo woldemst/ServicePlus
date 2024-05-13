@@ -1,30 +1,61 @@
-import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native"
+import { View, Text, StyleSheet, Image, TouchableOpacity, Alert } from "react-native"
 import { useEffect, useState } from "react"
+import { useNavigation } from "@react-navigation/native"
+import { useDispatch } from "react-redux"
+import { SwipeListView } from "react-native-swipe-list-view";
+
 import ModalComponent from "../../../src/shared/UIElements/Modal"
 import WorkerDetails from "../pages/WorkerDetails"
-import { useNavigation } from "@react-navigation/native"
+import { deleteWorker } from "../../actions/workerActions"
 
 const WorkerItem = (props) => {
-    const navigation = useNavigation()  
+    const workerId = props.id
+    const navigation = useNavigation()
+    const dispatch = useDispatch()
     const [isModalVisible, setModalVisible] = useState(false);
 
     const toggleModal = () => {
         setModalVisible(!isModalVisible)
     }
-  
+
     // console.log(props);
-    return (
-        <>
-            <TouchableOpacity
-                style={styles.workerContainer}
-                onPress={() => { navigation.navigate('workerDetails', { id: props.id }) }}
-                // onLongPress={longPressHandler}
-            >
-                <View style={styles.workerContent}>
+    const deleteHandler = async () => {
+        Alert.alert(
+            'Delete Confirmation',
+            'Are you sure you want to delete this worker?',
+            [
+                {
+                    text: 'Cancel',
+                    style: 'cancel',
+                },
+                {
+                    text: 'Delete',
+                    onPress: async () => {
+                        try {
+                            await axios.delete(`http://localhost:8000/api/workers/${auth.firmId}/delete/${workerId}`);
+                            dispatch(deleteWorker(workerId))
+
+
+                        } catch (err) {
+                            console.log("Error while deleting ther customer:", err);
+                        }
+                    },
+                },
+            ],
+            { cancelable: false }
+        )
+    };
+
+    const renderItem = () => (
+        <View style={styles.rowFront}>
+            <TouchableOpacity style={styles.workerContainer} onPress={() => { navigation.navigate('workerDetails', { id: props.id }) }}>
+                {/* onLongPress={longPressHandler} */}
+
+                <View style={styles.content}>
                     {/* <View style={styles.circleWrapper}>  
                         <Image style={styles.img} source={require('../../../assets/circle.png')} />
                     </View> */}
-                    <View style={styles.imageContainer} >
+                    <View style={styles.imgContainer} >
                         <View style={styles.imgSet}>
                             <Image style={styles.img} source={require('../../../assets/customer/customer.png')} />
                         </View>
@@ -40,8 +71,28 @@ const WorkerItem = (props) => {
                     <Image style={styles.img} source={require('../../../assets/right_arrow.png')} />
                 </View>
             </TouchableOpacity>
-        </>
+        </View>
     )
+
+    return <>
+        <SwipeListView
+            renderItem={renderItem}
+            rightOpenValue={-75}
+            // leftOpenValue={75}
+            disableRightSwipe={true}
+            // disableLeftSwipe={!isEdit}
+            closeOnRowOpen={true}
+            data={[props]}
+            renderHiddenItem={(data, rowMap) => (
+                <View style={styles.rowBack}>
+                    <TouchableOpacity onPress={deleteHandler} style={styles.hiddenItem}>
+                        <Image style={styles.deleteImage} source={require('../../../assets/buttons/delete.png')} />
+                    </TouchableOpacity>
+                </View>
+            )}
+
+        />
+    </>
 }
 
 
@@ -63,15 +114,17 @@ const styles = StyleSheet.create({
     workerContainer: {
         flexDirection: 'row',
         justifyContent: 'space-between',
-        marginBottom: 12
+        width: '100%',
+        padding: 6,
+        paddingHorizontal: 24,
         // borderColor: 'red',
         // borderWidth: 2
     },
-    workerContent: {
+    content: {
         justifyContent: 'space-between',
         flexDirection: 'row'
     },
-    imageContainer: {
+    imgContainer: {
         justifyContent: 'center'
     },
     img: {
@@ -127,7 +180,35 @@ const styles = StyleSheet.create({
         width: '13%',
         // borderColor: 'red',
         // borderWidth: 2
-    }
+    },
+    // swipeable styles
+    rowFront: {
+        flex: 1,
+        flexDirection: 'row',
+        alignItems: 'center',
+        backgroundColor: '#fff',
+        // marginBottom: 16,
+        borderBottomWidth: 1,
+        borderColor: '#eee',
+        // borderRadius: 10,
+    },
+    rowBack: {
+        backgroundColor: '#C70000',
+        // borderWidth: 1,
+        // borderColor: '#C70000',
+        // borderRadius: 10,
+        // marginBottom: 16,
+    },
+    deleteImage: {
+        width: 30,
+        height: 30
+    },
+    hiddenItem: {
+        alignItems: 'flex-end',
+        justifyContent: 'center',
+        paddingRight: 20,
+        height: '100%',
+    },
 })
 
 export default WorkerItem;

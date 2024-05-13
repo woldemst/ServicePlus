@@ -104,7 +104,7 @@ const CustomerList = () => {
                             renderItem={({ item }) => (
                                 <CustomerItem
                                     id={item._id}
-                                    key={item._id}
+                                    // key={item._id}
                                     name={item.name}
                                     customerNr={item._id}
                                     email={item.email}
