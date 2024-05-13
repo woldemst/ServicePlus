@@ -14,9 +14,9 @@ const CustomerItem = (props) => {
     const dispatch = useDispatch()
     const [isSelected, setIsSelected] = useState(false)
 
-    const longPressHandler = () => {
-        setIsSelected(!isSelected)
-    }
+    // const longPressHandler = () => {
+    //     setIsSelected(!isSelected)
+    // }
 
 
     // console.log(auth);
@@ -48,7 +48,8 @@ const CustomerItem = (props) => {
 
     const renderItem = () => (
         <View style={styles.rowFront}>
-            <TouchableOpacity onPress={() => { navigation.navigate('customerDetails', { id: props.id }) }}
+            <TouchableOpacity
+                onPress={() => { navigation.navigate('customerDetails', { id: props.id }) }}
                 style={styles.container}
             // onLongPress={longPressHandler}
             >
@@ -85,17 +86,7 @@ const CustomerItem = (props) => {
             disableRightSwipe={true}
             // disableLeftSwipe={!isEdit}
             closeOnRowOpen={true}
-            data={[
-                {
-                    id: props.id,
-                    name: props.name,
-                    c_name: props.o_name,
-                    o_street: props.o_street,
-                    o_houseNr: props.o_houseNr,
-                    o_zip: props.o_zip,
-                    o_place: props.o_place,
-                },
-            ]}
+            data={[props]}
             renderHiddenItem={(data, rowMap) => (
                 <View style={styles.rowBack}>
                     <TouchableOpacity onPress={deleteHandler} style={styles.hiddenItrem}>
@@ -103,6 +94,7 @@ const CustomerItem = (props) => {
                     </TouchableOpacity>
                 </View>
             )}
+
         />
     </>
 

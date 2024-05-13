@@ -33,6 +33,13 @@ const OrderList = (props) => {
     const [refreshing, setRefreshing] = useState(false);
     const [isModalVisible, setModalVisible] = useState(false);
 
+    const onRefresh = useCallback(() => {
+        setRefreshing(true);
+        setTimeout(() => {
+            setRefreshing(false);
+        }, 1000);
+    }, []);
+
     useEffect(() => {
         const fetchOrders = async () => {
             try {
@@ -88,12 +95,7 @@ const OrderList = (props) => {
         }
     }
 
-    const onRefresh = useCallback(() => {
-        setRefreshing(true);
-        setTimeout(() => {
-            setRefreshing(false);
-        }, 1000);
-    }, []);
+
 
 
     // console.log(fetchedCustomers.length, fetchedWorkers.length);
@@ -103,15 +105,10 @@ const OrderList = (props) => {
                 <View style={styles.suggestContainer}>
                     <View style={styles.centeredImageContainer}>
                         <TouchableOpacity onPress={toggleModal}>
-                            <Image
-                                style={styles.addImg}
-                                source={require("../../../assets/firm/add.png")}
-                            />
+                            <Image style={styles.addImg} source={require("../../../assets/firm/add.png")} />
                         </TouchableOpacity>
                     </View>
                 </View>
-
-
             </View>
 
             <ModalComponent
@@ -120,7 +117,7 @@ const OrderList = (props) => {
                 animationOut="slideOutDown" // Specify the slide-down animation
                 onBackdropPress={toggleModal}
                 onBackButtonPress={toggleModal}
-
+                modalHeight={'70%'}
                 header={<Text style={styles.modalHeadline}>Auftrag hinzufügen</Text>}
             >
                 <OrderCreate toggle={toggleModal} />
@@ -164,11 +161,6 @@ const OrderList = (props) => {
 
         </>
     )
-
-
-
-
-
 };
 
 const styles = StyleSheet.create({

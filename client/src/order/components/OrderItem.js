@@ -73,7 +73,7 @@ const OrderItem = (props) => {
       status: props.status
     })
   }
-  const toggleModal = () => setModalVisible(!isModalVisible)
+  // const toggleModal = () => setModalVisible(!isModalVisible)
 
   const renderItem = () => (
     <View style={styles.rowFront}>
@@ -114,56 +114,16 @@ const OrderItem = (props) => {
       rightOpenValue={-75}
       // leftOpenValue={75}
       disableRightSwipe={true}
-      // disableLeftSwipe={!isEdit}
       closeOnRowOpen={true}
-      data={[
-        {
-          id: props.id,
-          name: props.name,
-          c_name: props.o_name,
-          o_street: props.o_street,
-          o_houseNr: props.o_houseNr,
-          o_zip: props.o_zip,
-          o_place: props.o_place,
-        },
-      ]}
+      data={[props]}
       renderHiddenItem={(data, rowMap) => (
         <View style={styles.rowBack}>
-          <TouchableOpacity
-            onPress={deleteHandler}
-            style={{
-              alignItems: 'flex-end',
-              justifyContent: 'center',
-              paddingRight: 20,
-              height: '100%',
-
-            }}
-          >
+          <TouchableOpacity style={styles.hiddenItrem} onPress={deleteHandler}>
             <Image style={styles.deleteImage} source={require('../../../assets/buttons/delete.png')} />
           </TouchableOpacity>
-
         </View>
       )}
     />
-
-    {/* <Modal
-      isVisible={isModalVisible}
-      animationIn="zoomIn" // Specify the slide-up animation
-      animationOut="zoomOut" // Specify the slide-down animation
-      onBackdropPress={toggleModal}
-      onBackButtonPress={toggleModal}
-      style={styles.modal}
-      backdropOpacity={0.1} //
-    // customBackdrop={<CustomBackdrop onPress={() => setModalVisible(false)} />}
-    >
-      <OrderOptions
-        id={orderId}
-        onClose={() => setModalVisible(false)}
-        position={modalPosition}
-        onRenameHandler={renameHandler}
-      />
-    </Modal> */}
-
   </>
 };
 
@@ -279,6 +239,12 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "rgba(0, 0, 0, 0.5)", // Add a semi-transparent background
   },
+  hiddenItrem: {
+    alignItems: 'flex-end',
+    justifyContent: 'center',
+    paddingRight: 20,
+    height: '100%',
+  }
 });
 
 export default OrderItem;
