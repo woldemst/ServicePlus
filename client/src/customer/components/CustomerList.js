@@ -18,7 +18,7 @@ const CustomerList = () => {
     const refresh = useSelector(state => state.util.refresh)
     const fetchedData = useSelector(state => state.customer.customersArray)
 
-    const [isLoaded, setisLoaded] = useState(true)
+    const [isLoaded, setisLoaded] = useState(false)
     const [isModalVisible, setModalVisible] = useState(false);
     const [refreshing, setRefreshing] = useState(false);
 
@@ -32,41 +32,49 @@ const CustomerList = () => {
     const toggleModal = () => {
         setModalVisible(!isModalVisible)
     }
+
     useEffect(() => {
         const fetchCustomers = async () => {
             try {
                 const response = await axios.get(`http://localhost:8000/api/customers/${auth.firmId}/all`)
                 dispatch(getCustomerData(response.data))
-                setisLoaded(false)
+                setisLoaded(true)
             } catch (err) {
                 console.log('Error while fetching customers', err);
-                setisLoaded(false)
+                setisLoaded(true)
             }
         }
         fetchCustomers()
-    }, [refresh])
+    }, [refresh, refreshing])
 
 
-    if (isLoaded || fetchedData.customers.length === 0) {
 
-        // if (fetchedData.customers.length === 0) {
-        return (
+
+    return fetchedData.customers.length === 0 ? (
+        <>
             <View style={styles.suggestContainer}>
                 <Text style={styles.addText}>Noch kein Kunde</Text>
 
                 <View style={styles.centeredImageContainer}>
-                    <TouchableOpacity
-                        onPress={toggleModal}>
+                    <TouchableOpacity onPress={toggleModal}>
                         <Image style={styles.addImg} source={require('../../../assets/firm/add.png')} />
                     </TouchableOpacity>
-
                 </View>
-
             </View>
-        )
-    }
 
-    return !isLoaded && (
+            <ModalComponent
+                isVisible={isModalVisible}
+                animationIn="slideInUp" // Specify the slide-up animation
+                animationOut="slideOutDown" // Specify the slide-down animation
+                onBackdropPress={toggleModal}
+                onBackButtonPress={toggleModal}
+                header={<Text style={styles.modalHeadline}>Kunde hinzufügen</Text>}
+                modalHeight={'70%'}
+            >
+                <CreateCustomer toggle={toggleModal} />
+            </ModalComponent>
+        </>
+    ) : (
         <>
             <View style={styles.container}>
                 <View style={styles.header} >
@@ -85,6 +93,8 @@ const CustomerList = () => {
 
                 <View style={styles.customerList}>
                     {!isLoaded ? (
+                        <ActivityIndicator style={styles.loader} size="large" color="#7A9B76" />
+                    ) : (
                         <FlatList
                             refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
                             showsVerticalScrollIndicator={false}
@@ -110,8 +120,6 @@ const CustomerList = () => {
                                 />
                             )}
                         />
-                    ) : (
-                        <ActivityIndicator style={styles.loader} size="large" color="#7A9B76" />
                     )}
                 </View>
             </View>
@@ -130,8 +138,6 @@ const CustomerList = () => {
         </>
     )
 }
-
-
 
 
 
