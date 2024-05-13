@@ -22,7 +22,7 @@ const Register = () => {
         name: '',
         email: '',
         password: '',
-        role: '',
+        admin: null,
     })
 
     useEffect(() => {
@@ -33,21 +33,22 @@ const Register = () => {
     async function handleSubmit() {
         const URL = "http://localhost:8000/api/users/register";
 
-        console.log(formData);
         try {
             const response = await axios.post(URL, {
                 name: formData.name,
                 email: formData.email,
                 password: formData.password,
-                role: formData.role
+                admin: formData.admin
             });
-
+            
+            // console.log(formData); 
 
             if (response.status === 201) {
-                auth.login(response.data.userId, response.data.token, response.data.role, response.data.firmId)
+                auth.login(response.data.userId, response.data.token, response.data.admin, response.data.firmId)
                 navigation.navigate('overviewNavigator', {
                     screen: 'FirmView',
                 });
+                console.log(response.data);
                 // alert('User created');
             } else {
                 alert('User already exists, please log in instead');
@@ -95,11 +96,11 @@ const Register = () => {
 
                     <Select
                         placeholder="Role"
-                        value={formData.role}
-                        onValueChange={(option) => setFormData({ ...formData, role: option })}
+                        value={formData.admin}
+                        onValueChange={(option) => setFormData({ ...formData, admin: option })}
                         data={[
-                            { label: "Owner", value: "Owner" },
-                            { label: "Worker", value: "Worker" },
+                            { label: "Owner", value: true },
+                            { label: "Worker", value: false },
                         ]}
                         validators={[VALIDATOR_SELECT()]}
                         errorText="Please select a role"

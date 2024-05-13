@@ -45,7 +45,7 @@ export default function App() {
       try {
         const userData = JSON.parse(await AsyncStorage.getItem('userData'))
         if (userData && userData.token) {
-          login(userData.usedId, userData.token, userData.role, userData.firmId)
+          login(userData.usedId, userData.token, userData.admin, userData.firmId)
           setUserToken(userData.token)
         }
 
@@ -59,13 +59,13 @@ export default function App() {
   }, [login])
 
 
-  const login = useCallback(async (uid, token, role, fid) => {
+  const login = useCallback(async (uid, token, admin, fid) => {
     try {
       setUserToken(token)
       setUserId(uid)
-      setUserRole(role)
+      setUserRole(admin)
       setFirmId(fid)
-      await AsyncStorage.setItem('userData', JSON.stringify({ userId: uid, token: token, role: role, firmId: fid }))
+      await AsyncStorage.setItem('userData', JSON.stringify({ userId: uid, token: token, admin: admin, firmId: fid }))
 
 
 
@@ -115,17 +115,13 @@ export default function App() {
           {/* main */}
           <Stack.Screen name='overviewNavigator' component={OverviewNavigator} options={{ headerShown: false }} />
 
-
           {/* orders */}
           <Stack.Screen name='orderView' component={OrderView} />
           <Stack.Screen name='orderCreate' component={OrderCreate} options={{ title: 'Create order' }} />
           <Stack.Screen name='orderMain' component={OrderMain} options={{ headerShown: false }} />
 
-
           {/* appointemts */}
           <Stack.Screen name='appointmentMain' component={AppointmentMain} options={{ headerShown: false }} />
-
-
 
           {/* firm */}
           <Stack.Screen name='profile' component={Profile} options={{ title: 'Edit Profile' }} />
@@ -147,6 +143,7 @@ export default function App() {
     routes = (
       <NavigationContainer>
         <Stack.Navigator>
+
           {/* main */}
           <Stack.Screen name='onboarding' component={OnboardingNavigator} options={{ headerShown: false }} />
 
@@ -156,7 +153,6 @@ export default function App() {
 
           {/* main */}
           <Stack.Screen name='overviewNavigator' component={OverviewNavigator} options={{ headerShown: false }} />
-
 
         </Stack.Navigator>
       </NavigationContainer>
@@ -175,13 +171,12 @@ export default function App() {
           userToken: userToken,
           userId: userId,
           firmId: firmId,
-          role: userRole,
+          admin: userRole,
           refresh: refresh,
           handleRefresh: handleRefresh,
 
           customers: customers,
           setCustomer: handleSetCustomer,
-
         }}>
         <React.Fragment>{routes}</React.Fragment>
       </AuthContext.Provider>
