@@ -196,7 +196,7 @@ const deleteCustomerById = async (req, res, next) => {
     res.status(200).json({ message: 'Customer was deleted successfully' });
   } catch (err) {
     const error = new HttpError(
-      "Something went wrong, could not delete this appointment.",
+      "Something went wrong, could not delete this customer.",
       500
     );
     return next(error);
