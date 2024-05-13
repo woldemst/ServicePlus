@@ -1,6 +1,4 @@
-import { CREATE_CUSTOMER, GET_CUSTOMER_DATA, UPDATE_CUSTOMER, UPDATE_INPUT, DELETE_CUSTOMER} from '../actions/customerActions'
-// import { SET_INPUT } from '../actions/inputActions';
-import { validate } from '../util/validators';
+import { CREATE_CUSTOMER, GET_CUSTOMER_DATA, DELETE_CUSTOMER } from '../actions/customerActions'
 
 const initialState = {
   customersArray: {
@@ -25,15 +23,15 @@ const customerReducer = (state = initialState, action) => {
           customers: [...state.customersArray.customers, newCustomer],
         },
       };
-      case DELETE_CUSTOMER:
-        const filteredCustomer = state.customersArray.customers.filter(customer => customer._id !== action.payload);
-        return {
-          ...state,
-          customersArray: {
-            ...state.customersArray,
-            customers: filteredCustomer
-          }
-        };     
+    case DELETE_CUSTOMER:
+      const filteredCustomer = state.customersArray.customers.filter(customer => customer._id !== action.payload);
+      return {
+        ...state,
+        customersArray: {
+          ...state.customersArray,
+          customers: filteredCustomer
+        }
+      };
     default:
       return state;
   }

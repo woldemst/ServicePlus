@@ -1,6 +1,6 @@
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, ScrollView } from "react-native";
 import { useContext, useEffect, useState } from "react";
-import { clearCustomerField, createCustomer, getCustomerData, updateInput } from "../../actions/customerActions";
+import { clearCustomerField, createCustomer, getCustomerData } from "../../actions/customerActions";
 import { useNavigation } from "@react-navigation/native";
 import { AuthContext } from "../../context/auth-context";
 import axios from "axios";

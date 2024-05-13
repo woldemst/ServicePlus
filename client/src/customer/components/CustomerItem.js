@@ -1,11 +1,12 @@
 import { View, Text, StyleSheet, Image, TouchableOpacity, Alert } from "react-native"
 import { useContext, useState } from "react"
 import { useNavigation } from "@react-navigation/native"
-import { AuthContext } from "../../context/auth-context"
 import { useDispatch } from "react-redux"
-import { deleteCustomer } from "../../actions/customerActions"
 import { SwipeListView } from "react-native-swipe-list-view";
 import axios from "axios"
+
+import { AuthContext } from "../../context/auth-context"
+import { deleteCustomer } from "../../actions/customerActions"
 
 const CustomerItem = (props) => {
     const customerId = props.id
@@ -58,7 +59,7 @@ const CustomerItem = (props) => {
                         <Image style={styles.img} source={require('../../../assets/circle.png')} />
                     </View> */}
 
-                    <View style={styles.imageContainer} >
+                    <View style={styles.imgContainer} >
                         <View style={styles.imgSet}>
                             <Image style={styles.img} source={require('../../../assets/customer/customer.png')} />
                         </View>
@@ -89,7 +90,7 @@ const CustomerItem = (props) => {
             data={[props]}
             renderHiddenItem={(data, rowMap) => (
                 <View style={styles.rowBack}>
-                    <TouchableOpacity onPress={deleteHandler} style={styles.hiddenItrem}>
+                    <TouchableOpacity onPress={deleteHandler} style={styles.hiddenItem}>
                         <Image style={styles.deleteImage} source={require('../../../assets/buttons/delete.png')} />
                     </TouchableOpacity>
                 </View>
@@ -133,7 +134,7 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         flexDirection: 'row'
     },
-    imageContainer: {
+    imgContainer: {
         justifyContent: 'center'
     },
     img: {
@@ -213,7 +214,7 @@ const styles = StyleSheet.create({
         width: 30,
         height: 30
     },
-    hiddenItrem: {
+    hiddenItem: {
         alignItems: 'flex-end',
         justifyContent: 'center',
         paddingRight: 20,

@@ -138,7 +138,7 @@ const OrderList = (props) => {
                         renderItem={({ item }) => (
                             <OrderItem
                                 id={item._id}
-                                key={item._id}
+                                // key={item._id}
                                 name={item.name}
                                 street={item.street}
                                 houseNr={item.houseNr}
