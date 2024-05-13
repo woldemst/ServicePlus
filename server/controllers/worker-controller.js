@@ -132,6 +132,13 @@ const createWorker = async (req, res, next) => {
 
     try {
         await createWorker.save()
+
+        await Firm.findOneAndUpdate(
+            { _id: firmId },
+            { $push: { workers: createWorker._id } },
+        );
+
+
     } catch (err) {
         const error = new HttpError(
             "Something went wrong, could not create profile.",
@@ -216,4 +223,4 @@ exports.getWorkerById = getWorkerById;
 exports.updateWorkerById = updateWorkerById;
 exports.createWorker = createWorker;
 exports.getWorkerByFirmId = getWorkerByFirmId;
-exports.deleteWorkerById =  deleteWorkerById;
+exports.deleteWorkerById = deleteWorkerById;
