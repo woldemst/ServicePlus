@@ -5,7 +5,7 @@ const jwt = require('jsonwebtoken')
 const Firm = require('../models/Firm')
 
 const register = async (req, res, next) => {
-  const { name, email, password, role} = req.body;
+  const { name, email, password, admin} = req.body;
 
   let existingUser;
   try {
@@ -22,7 +22,7 @@ const register = async (req, res, next) => {
       email,
       // password: hashedPassword,
       password, 
-      role, 
+      admin, 
     });
 
     await createdUser.save();
@@ -42,7 +42,7 @@ const register = async (req, res, next) => {
         firmId: firmId,
         email: createdUser.email,
         token,
-        role
+        admin
     });
   } catch (err) {
     const error = new HttpError(
@@ -129,11 +129,11 @@ const login = async (req, res, next) => {
     return next(error);
   }
 
-  const userRole = identifiedUser.role
+  const userRole = identifiedUser.admin
 
 
   res.json({
-    role: userRole,
+    admin: userRole,
     firmId: firmId,
     userId: identifiedUser.id,
     email: identifiedUser.email,

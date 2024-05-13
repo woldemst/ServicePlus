@@ -44,8 +44,9 @@ const Login = () => {
             });
 
             // console.log('response', response.data);
-            auth.login(response.data.userId, response.data.token, response.data.role, response.data.firmId)
-
+            auth.login(response.data.userId, response.data.token, response.data.admin, response.data.firmId)
+            console.log(response.data);
+            
             if (!auth.firmId) {
                 navigation.navigate('overviewNavigator', {
                     screen: 'FirmView',
