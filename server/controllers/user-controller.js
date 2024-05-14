@@ -9,6 +9,7 @@ const register = async (req, res, next) => {
   const { name, email, password, admin } = req.body;
 
   let existingUser;
+  let existingWorker
   try {
     existingUser = await User.findOne({ email });
 
@@ -16,33 +17,24 @@ const register = async (req, res, next) => {
       return res.status(422).json({ message: 'User exists already, please login instead.' });
     }
 
-    let existingWorker
 
-    if (!admin) {
-      existingWorker = await Worker.findOne({ email })
-      // console.log(existingWorker);
+    existingWorker = await Worker.findOne({ email })
+    // console.log(existingWorker);
 
-      if (existingWorker) {
-        return res.status(403).json({ message: 'User already registered as non-admin. Please log in instead.' });
-      }
+    if (existingWorker) {
+      return res.status(403).json({ message: 'User already registered as non-admin. Please log in instead.' });
     }
-    
-   
-    const hashedPassword = await bcrypt.hash(password, 12);
 
-    const createdUser = new User({
-      name,
-      email,
-      // password: hashedPassword,
-      password,
-      admin,
-    });
+
+
+    const hashedPassword = await bcrypt.hash(password, 12);
+    const createdUser = new User({ name, email, password, admin });
+    await createdUser.save();
 
     let firmId
 
 
 
-    await createdUser.save();
 
     // await Firm.updateOne(
     //   { _id: firmId },
@@ -75,90 +67,56 @@ const register = async (req, res, next) => {
 
 const login = async (req, res, next) => {
   const { email, password } = req.body;
-
-  let identifiedUser;
-
   try {
-    // find user by email
-    identifiedUser = await User.findOne({ email });
-  } catch (err) {
-    const error = new HttpError(
-      "Logging in failed, please try again later.",
-      500
-    );
+    // Attempt to find a User or Worker by email
+    let identifiedPerson = await User.findOne({ email }) || await Worker.findOne({ email });
 
-    return next(error);
-  }
-
-  if (!identifiedUser) {
-    const error = new HttpError(
-      "Invalid credentials, could not log you in.",
-      401
-    );
-    return next(error);
-  }
-
-  const passwortDB = identifiedUser.password;
-
-  // compare the password
-  let isValidPassword
-  try {
-    isValidPassword = await bcrypt.compare(password, passwortDB);
-    if (password == passwortDB) {
-      isValidPassword = true
+    // console.log(identifiedPerson) 
+    if (!identifiedPerson) {
+      const error = new HttpError("Invalid credentials, could not log you in.", 401);
+      return next(error);
     }
 
-  } catch (err) {
-    const error = new HttpError(
-      "Could not log you in, please check your credentials and try again.",
-      500
-    );
-    return next(error);
-  }
+    // Debugging output
+    // Compare the provided password with the stored hash
+    // const isValidPassword = await bcrypt.compareSync(password.trim(), identifiedPerson.password.trim());
+    const isValidPassword = password.trim() === identifiedPerson.password.trim() ? true : false
 
-  if (!isValidPassword) {
-    const error = new HttpError(
-      "Invalid credentials, could not log you in.",
-      403
-    );
-    return next(error);
-  }
+    // console.log(`Password valid: ${isValidPassword}`); 
+    if (!isValidPassword) {
+      const error = new HttpError("Invalid credentials, could not log you in.", 403);
+      return next(error);
+    }
 
+    // Find the firm if the person is a User and has a firmId
+    // let firm;
+    // if (identifiedPerson.firmId) {
+    //   firm = await Firm.findById(identifiedPerson.firmId);
+    //   if (!firm) {
+    //     console.log('Firm not found. User does not have a firm');
+    //   }
+    // }
 
-  const firmId = identifiedUser.firmId
-  const firm = await Firm.findById(firmId)
-
-  if (!firm) {
-    console.log('Firm not found. User does not have a firm');
-  }
-
-  let token;
-
-  try {
-    token = jwt.sign(
-      { userId: identifiedUser.id, email: identifiedUser.email },
+    // Sign a new token
+    const token = jwt.sign(
+      { userId: identifiedPerson.id, email: identifiedPerson.email },
       'supersecret_dont_share',
       { expiresIn: '1h' }
-    )
-
-  } catch (err) {
-    const error = new HttpError(
-      'Logging in failed, please try again later.',
-      500
     );
+
+    // Respond with the user or worker's details
+    res.json({
+      admin: identifiedPerson.admin || false,
+      firmId: identifiedPerson.firmId || null,
+      userId: identifiedPerson.id,
+      email: identifiedPerson.email,
+      token: token,
+    });
+  } catch (err) {
+    console.log(err);
+    const error = new HttpError("Logging in failed, please try again later.", 500);
     return next(error);
   }
-
-  const userRole = identifiedUser.admin
-
-
-  res.json({
-    admin: userRole,
-    firmId: firmId,
-    userId: identifiedUser.id,
-    email: identifiedUser.email,
-    token: token,
-  });
 };
 
 exports.register = register;
