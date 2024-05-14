@@ -25,26 +25,11 @@ const CustomerDetails = (props) => {
 
     const [isLoaded, setIsLoaded] = useState(false)
     const [isEdit, setIsEdit] = useState(false)
+    const [formData, setFormData] = useState({ ...customer });
 
-    const [formData, setFormData] = useState({
-        name: customer.name,
-        email: customer.email,
-        street: customer.street,
-        houseNr: customer.houseNr,
-        zip: customer.zip,
-        place: customer.place,
-        phone: customer.phone,
-        website: customer.website,
-        description: customer.description,
-    })
+    useEffect(() => setIsLoaded(true), [])
 
-    useEffect(() => {
-        setIsLoaded(true)
-    }, [])
-
-    const handleEdit = () => {
-        setIsEdit(!isEdit)
-    }
+    const handleEdit = () => setIsEdit(!isEdit)
 
     const handleSubmit = async () => {
         try {
@@ -176,27 +161,32 @@ const CustomerDetails = (props) => {
                             value={formData.description}
                             validators={[VALIDATOR_REQUIRE()]}
                             onChangeText={(value) => setFormData({ ...formData, description: value })}
+                            multiline={true}    
+                            textArea={true}
                         />
 
-                        <View style={styles.btnContainer}>
-                            {!isEdit ? (
-                                <Button
-                                    style={[styles.invalideButton, styles.button]}
-                                    // disabled={fetchedData.isFormValid}
-                                    buttonText={styles.createBtnText}
-                                    onPress={handleEdit}
-                                    title={'Ändern'}
-                                />
-                            ) : (
-                                <Button
-                                    style={[styles.createBtn, styles.button]}
-                                    // disabled={fetchedData.isFormValid}
-                                    buttonText={styles.createBtnText}
-                                    onPress={handleSubmit}
-                                    title={'Speichern'}
-                                />
-                            )}
-                        </View>
+                        {auth.admin && (
+                            <View style={styles.btnContainer}>
+                                {!isEdit ? (
+                                    <Button
+                                        style={[styles.invalideButton, styles.button]}
+                                        // disabled={fetchedData.isFormValid}
+                                        buttonText={styles.createBtnText}
+                                        onPress={handleEdit}
+                                        title={'Ändern'}
+                                    />
+                                ) : (
+                                    <Button
+                                        style={[styles.createBtn, styles.button]}
+                                        // disabled={fetchedData.isFormValid}
+                                        buttonText={styles.createBtnText}
+                                        onPress={handleSubmit}
+                                        title={'Speichern'}
+                                    />
+                                )}
+                            </View>
+                        )}
+
                     </View>
 
                 )}

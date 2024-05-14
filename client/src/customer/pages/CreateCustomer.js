@@ -29,9 +29,7 @@ const CreateCustomer = (props) => {
     description: '',
   })
 
-  useEffect(() => {
-    setIsLoaded(true)
-  }, [])
+  useEffect(() => setIsLoaded(true), [])
 
   const handleSubmit = async () => {
     try {
@@ -52,7 +50,7 @@ const CreateCustomer = (props) => {
       alert("Customer created successfully!");
       // auth.setCustomer(response.data.customer._id)
       dispatch(refershData())
-      props.route.params.handleRefresh();
+      // props.route.params.handleRefresh();
       navigation.goBack()
       // dispatch(clearCustomerField())
     } catch (err) {

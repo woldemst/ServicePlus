@@ -1,22 +1,18 @@
 import { View, Text, StyleSheet, Image, TouchableOpacity, Alert } from "react-native"
-import { useEffect, useState } from "react"
+import { useContext, useEffect, useState } from "react"
 import { useNavigation } from "@react-navigation/native"
 import { useDispatch } from "react-redux"
 import { SwipeListView } from "react-native-swipe-list-view";
+import axios from "axios";
 
-import ModalComponent from "../../../src/shared/UIElements/Modal"
-import WorkerDetails from "../pages/WorkerDetails"
 import { deleteWorker } from "../../actions/workerActions"
+import { AuthContext } from "../../context/auth-context";
 
 const WorkerItem = (props) => {
+    const auth = useContext(AuthContext)
     const workerId = props.id
     const navigation = useNavigation()
     const dispatch = useDispatch()
-    const [isModalVisible, setModalVisible] = useState(false);
-
-    const toggleModal = () => {
-        setModalVisible(!isModalVisible)
-    }
 
     // console.log(props);
     const deleteHandler = async () => {
