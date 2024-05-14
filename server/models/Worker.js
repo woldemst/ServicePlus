@@ -1,9 +1,10 @@
 const mongoose = require("mongoose");
 
 const workerSchema = new mongoose.Schema({
-  firmId: { type: mongoose.Types.ObjectId, ref: 'Firm'}, //ref: establish connection between two schemas
+  firmId: { type: mongoose.Types.ObjectId, ref: 'Firm' }, //ref: establish connection between two schemas
   name: { type: String, required: true },
   email: { type: String, required: true },
+  password: { type: String },
   street: { type: String, required: true },
   houseNr: { type: String, required: true },
   zip: { type: String, required: true },
@@ -12,7 +13,7 @@ const workerSchema = new mongoose.Schema({
   description: { type: String, required: false },
   // orders: { type: Array, required: false },
 
-  
+
 });
 
 module.exports = mongoose.model("Worker", workerSchema);
