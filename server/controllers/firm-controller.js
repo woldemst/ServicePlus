@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 const Firm = require("../models/Firm");
 const HttpError = require("../models/http-error");
 const User = require('../models/User')
+const Worker = require('../models/Worker')  
 
 const register = async (req, res, next) => {
   // destructuring assignment from body
@@ -96,35 +97,22 @@ const updateFirm = async (req, res, next) => {
   }
 };
 
-const getFirmProfile = async (req, res, next) => {
-  const firmId = req.params.firmId;
-  try {
-    const firm = await Firm.find();
-    res.json(firm);
-  } catch (err) {
-    const error = new HttpError(
-      "Fetch the firm failed, please try again later",
-      500
-    );
-    next(error);
-  }
-};
 
 const getFirmByUserId = async (req, res, next) => {
   const userId = req.params.userId;
 
   try {
     // Fetch user data by ID to get the associated firmId
-    const user = await User.findById(userId);
+    const user = await User.findById(userId) || await Worker.findById(userId) 
     if (!user) {
       return res.status(404).json({ message: 'User not found' });
     }
-
     const firmId = user.firmId;
 
+
+    console.log(firmId);
     // Use firmId to get firm data
     const firm = await Firm.findById(firmId);
-    console.log(firm);
     if (!firm) {
       return res.status(404).json({ message: 'Firm data not found' });
     }
@@ -142,5 +130,4 @@ const getFirmByUserId = async (req, res, next) => {
 
 exports.register = register;
 exports.updateFirm = updateFirm;
-exports.getFirmProfile = getFirmProfile;
 exports.getFirmByUserId = getFirmByUserId;
