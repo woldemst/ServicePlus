@@ -3,29 +3,51 @@ const HttpError = require("../models/http-error");
 const bcrypt = require("bcryptjs");
 const jwt = require('jsonwebtoken')
 const Firm = require('../models/Firm')
+const Worker = require('../models/Worker')
 
 const register = async (req, res, next) => {
-  const { name, email, password, admin} = req.body;
+  const { name, email, password, admin } = req.body;
 
   let existingUser;
   try {
-     existingUser = await User.findOne({ email });
+    existingUser = await User.findOne({ email });
 
     if (existingUser) {
       return res.status(422).json({ message: 'User exists already, please login instead.' });
     }
 
+    let existingWorker
+
+    if (!admin) {
+      existingWorker = await Worker.findOne({ email })
+      // console.log(existingWorker);
+
+      if (existingWorker) {
+        return res.status(403).json({ message: 'User already registered as non-admin. Please log in instead.' });
+      }
+    }
+    
+   
     const hashedPassword = await bcrypt.hash(password, 12);
 
     const createdUser = new User({
       name,
       email,
       // password: hashedPassword,
-      password, 
-      admin, 
+      password,
+      admin,
     });
 
+    let firmId
+
+
+
     await createdUser.save();
+
+    // await Firm.updateOne(
+    //   { _id: firmId },
+    //   { $push: { orders: createdOrder._id } },
+    // )
 
     let token = jwt.sign(
       { userId: createdUser.id, email: createdUser.email },
@@ -33,8 +55,6 @@ const register = async (req, res, next) => {
       { expiresIn: '1h' }
     );
 
-    let firmId
-  
     res
       .status(201)
       .json({
@@ -43,7 +63,7 @@ const register = async (req, res, next) => {
         email: createdUser.email,
         token,
         admin
-    });
+      });
   } catch (err) {
     const error = new HttpError(
       'Signing up failed, please try again later.',
@@ -84,8 +104,8 @@ const login = async (req, res, next) => {
   let isValidPassword
   try {
     isValidPassword = await bcrypt.compare(password, passwortDB);
-    if  (password == passwortDB){
-        isValidPassword = true
+    if (password == passwortDB) {
+      isValidPassword = true
     }
 
   } catch (err) {
@@ -107,24 +127,24 @@ const login = async (req, res, next) => {
 
   const firmId = identifiedUser.firmId
   const firm = await Firm.findById(firmId)
-  
+
   if (!firm) {
     console.log('Firm not found. User does not have a firm');
   }
 
-  let token; 
+  let token;
 
   try {
     token = jwt.sign(
-      {userId: identifiedUser.id, email: identifiedUser.email },
+      { userId: identifiedUser.id, email: identifiedUser.email },
       'supersecret_dont_share',
-      {expiresIn: '1h'}
+      { expiresIn: '1h' }
     )
 
   } catch (err) {
     const error = new HttpError(
       'Logging in failed, please try again later.',
-      500 
+      500
     );
     return next(error);
   }
@@ -137,7 +157,7 @@ const login = async (req, res, next) => {
     firmId: firmId,
     userId: identifiedUser.id,
     email: identifiedUser.email,
-    token: token, 
+    token: token,
   });
 };
 

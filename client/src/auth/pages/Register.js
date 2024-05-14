@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
+import { View, Text, TouchableOpacity, StyleSheet, Alert } from "react-native";
 import { useContext, useEffect, useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 
@@ -40,8 +40,9 @@ const Register = () => {
                 password: formData.password,
                 admin: formData.admin
             });
-            
+
             // console.log(formData); 
+            // console.log(response.status);
 
             if (response.status === 201) {
                 auth.login(response.data.userId, response.data.token, response.data.admin, response.data.firmId)
@@ -51,11 +52,20 @@ const Register = () => {
                 console.log(response.data);
                 // alert('User created');
             } else {
+                console.log(response.data);
                 alert('User already exists, please log in instead');
-            }
 
+            }
         } catch (error) {
-            console.error(error);
+            if (error.response) {
+                if (error.response.status === 403) {
+                    Alert.alert('Der Benutzer ist bereits als Nicht-Administrator registriert. Bitte melden Sie sich stattdessen an');
+                } else {
+                    alert('Forbidden: You do not have permission to access this resource');
+                }
+            } else {
+                console.error(error);
+            }
         }
     }
 
