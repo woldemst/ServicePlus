@@ -26,26 +26,13 @@ const Profile = (props) => {
 
   const [isLoaded, setIsLoaded] = useState(false)
   const [isEdit, setIsEdit] = useState(false)
-
-  const [formData, setFormData] = useState({
-    name: fetchedData.name,
-    ownerName: fetchedData.ownerName,
-    email: fetchedData.email,
-    street: fetchedData.street,
-    houseNr: fetchedData.houseNr,
-    place: fetchedData.place,
-    zip: fetchedData.zip,
-    phone: fetchedData.phone,
-    website: fetchedData.website,
-  })
+  const [formData, setFormData] = useState({ ...fetchedData });
 
   useEffect(() => {
     setIsLoaded(true)
   }, [])
 
-  const handleEdit = () => {
-    setIsEdit(!isEdit)
-  }
+  const handleEdit = () => setIsEdit(!isEdit)
   // console.log(fetchedData.name);
 
 
@@ -173,25 +160,27 @@ const Profile = (props) => {
             onChangeText={(text) => setFormData({ ...formData, website: text })}
           />
 
-          <View style={styles.btnContainer}>
-            {!isEdit ? (
-              <Button
-                style={[styles.invalideButton, styles.button]}
-                // disabled={fetchedData.isFormValid}
-                buttonText={styles.createBtnText}
-                onPress={handleEdit}
-                title={'Ändern'}
-              />
-            ) : (
-              <Button
-                style={[styles.createBtn, styles.button]}
-                // disabled={fetchedData.isFormValid}
-                buttonText={styles.createBtnText}
-                onPress={handleSubmit}
-                title={'Speichern'}
-              />
-            )}
-          </View>
+          {auth.admin && (
+            <View style={styles.btnContainer}>
+              {!isEdit ? (
+                <Button
+                  style={[styles.invalideButton, styles.button]}
+                  // disabled={fetchedData.isFormValid}
+                  buttonText={styles.createBtnText}
+                  onPress={handleEdit}
+                  title={'Ändern'}
+                />
+              ) : (
+                <Button
+                  style={[styles.createBtn, styles.button]}
+                  // disabled={fetchedData.isFormValid}
+                  buttonText={styles.createBtnText}
+                  onPress={handleSubmit}
+                  title={'Speichern'}
+                />
+              )}
+            </View>
+          )}
         </View>
       </ScrollView>
     </View>
