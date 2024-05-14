@@ -17,7 +17,6 @@ const register = async (req, res, next) => {
       return res.status(422).json({ message: 'User exists already, please login instead.' });
     }
 
-
     existingWorker = await Worker.findOne({ email })
     // console.log(existingWorker);
 
@@ -25,14 +24,11 @@ const register = async (req, res, next) => {
       return res.status(403).json({ message: 'User already registered as non-admin. Please log in instead.' });
     }
 
-
-
     const hashedPassword = await bcrypt.hash(password, 12);
     const createdUser = new User({ name, email, password, admin });
     await createdUser.save();
 
     let firmId
-
 
 
 
@@ -103,6 +99,7 @@ const login = async (req, res, next) => {
       'supersecret_dont_share',
       { expiresIn: '1h' }
     );
+
 
     // Respond with the user or worker's details
     res.json({
