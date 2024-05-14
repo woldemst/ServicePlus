@@ -12,10 +12,10 @@ const FirmItem = () => {
     const auth = useContext(AuthContext)
     const navigation = useNavigation()
     const dispatch = useDispatch()
-    
+
     const refresh = useSelector(state => state.util.refresh)
     const fetchedData = useSelector(state => state.firm)
-    
+
     const [isLoaded, setIsLoaded] = useState(false)
 
     // console.log('Stored as Profile:', fetchedData);
@@ -43,13 +43,7 @@ const FirmItem = () => {
 
     return <>
 
-        <TouchableOpacity style={styles.firmContainer} onPress={() => {
-            navigation.navigate('profile', {
-
-            }
-            )
-        }}>
-
+        <TouchableOpacity style={styles.firmContainer} onPress={() => navigation.navigate('profile')}>
             <View style={styles.imageContainer} >
                 <Image style={styles.img} source={require('../../../assets/firmImage.jpeg')} ></Image>
             </View>
@@ -66,25 +60,14 @@ const FirmItem = () => {
         </TouchableOpacity>
 
         <View style={styles.listContainer} >
-            <TouchableOpacity style={styles.listItem}
-                onPress={() => {
-                    navigation.navigate('workerList', {
-                        name: 'Workers'
-                    })
-                }}
-            >
-
+            <TouchableOpacity style={styles.listItem} onPress={() => navigation.navigate('workerList')}>
                 <Image style={styles.icon} source={require('../../../assets/firm/customer.png')} />
-                <Text style={styles.itemText}>Mitarbeiter verwalten</Text>
+                <Text style={styles.itemText}>{auth.admin ? 'Mitarbeiter verwalten' : 'Mitarbeiter'}</Text>
             </TouchableOpacity>
 
-            <TouchableOpacity style={styles.listItem} onPress={() => {
-                navigation.navigate('customerList', {
-                    name: 'Customers'
-                })
-            }}>
+            <TouchableOpacity style={styles.listItem} onPress={() => navigation.navigate('customerList')}>
                 <Image style={styles.icon} source={require('../../../assets/firm/worker.png')} />
-                <Text style={styles.itemText}>Kunden verwalten</Text>
+                <Text style={styles.itemText}>{auth.admin ? 'Kunden verwalten' : 'Kunden'}</Text>
             </TouchableOpacity>
 
             <TouchableOpacity style={styles.listItem}>
