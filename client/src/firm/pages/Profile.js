@@ -28,9 +28,7 @@ const Profile = (props) => {
   const [isEdit, setIsEdit] = useState(false)
   const [formData, setFormData] = useState({ ...fetchedData });
 
-  useEffect(() => {
-    setIsLoaded(true)
-  }, [])
+  useEffect(() => setIsLoaded(true), [])
 
   const handleEdit = () => setIsEdit(!isEdit)
   // console.log(fetchedData.name);
