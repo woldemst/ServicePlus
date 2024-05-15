@@ -47,7 +47,7 @@ const OverviewNavigator = () => {
                             options={{
                                 headerShown: false,
                                 tabBarLabel: 'Termine',
-                                tabBarIcon: () => (<Image source={require("../../../assets/tabler.png")} />),
+                                tabBarIcon: () => (<Image style={{ width: 24, height: 24 }} source={require("../../../assets/overview/appointment.png")} />),
                                 tabBarActiveTintColor: "#000",
                             }}
                         />
@@ -58,7 +58,7 @@ const OverviewNavigator = () => {
                             options={{
                                 headerShown: false,
                                 tabBarLabel: 'Aufträge',
-                                tabBarIcon: () => (<Image source={require("../../../assets/settings.png")} />),
+                                tabBarIcon: () => (<Image style={{ width: 22, height: 22 }} source={require("../../../assets/overview/orders.png")} />),
                                 tabBarActiveTintColor: "#000",
                             }}
                         />
@@ -71,7 +71,7 @@ const OverviewNavigator = () => {
                     options={{
                         headerShown: false,
                         tabBarLabel: 'Betrieb',
-                        tabBarIcon: () => (<Image source={require("../../../assets/betrieb.png")} />),
+                        tabBarIcon: () => (<Image style={{ width: 24, height: 24 }} source={require("../../../assets/overview/firm_bold.png")} />),
                         tabBarActiveTintColor: "#000"
                     }}
                 />
