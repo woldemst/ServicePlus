@@ -3,6 +3,7 @@ const Appointment = require("../models/Appointment")
 const Customer = require('../models/Customer')
 const Worker = require("../models/Worker")
 const Order = require('../models/Order')
+const Firm = require('../models/Firm')
 
 const getAllAppointments = async (req, res, next) => {
   const firmId = req.params.firmId;
@@ -48,7 +49,7 @@ const createAppointment = async (req, res, next) => {
     const orderItem = await Order.findOne({ _id: orderId })
     const workerItem = await Worker.findOne({ _id: workerId });
 
-    
+
 
 
     // console.log('worker item ', workerItem);
@@ -81,6 +82,11 @@ const createAppointment = async (req, res, next) => {
 
     await Order.updateOne(
       { _id: orderId },
+      { $push: { appointments: createdAppointment._id } },
+    )
+
+    await Firm.updateOne(
+      { _id: firmId },
       { $push: { appointments: createdAppointment._id } },
     )
 
@@ -231,6 +237,11 @@ const deleteAppointmentById = async (req, res, next) => {
     }
 
     await Order.findOneAndUpdate(
+      { appointments: appointmentId },
+      { $pull: { appointments: appointmentId } }
+    );
+
+    await Firm.findOneAndUpdate(
       { appointments: appointmentId },
       { $pull: { appointments: appointmentId } }
     );
