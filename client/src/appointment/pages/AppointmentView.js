@@ -1,9 +1,11 @@
 import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native"
-import { useState } from "react";
+import { useContext, useState } from "react";
 import AppointmentList from '../components/AppointmentList'
 import { useSelector } from "react-redux";
+import { AuthContext } from "../../context/auth-context";
 
 const AppointmentView = () => {
+    const auth = useContext(AuthContext)
     const [isModalVisible, setModalVisible] = useState(false);
 
     const toggleModal = () => {
@@ -18,10 +20,13 @@ const AppointmentView = () => {
                         <Text style={styles.headerText}>Terminübersicht</Text>
                     </View>
 
-                    <View style={styles.headerIconContainer} >
-                        <TouchableOpacity onPress={toggleModal} style={styles.headerButton} >
-                            <Image style={styles.headerIcon} source={require('../../../assets/add_new.png')} />
-                        </TouchableOpacity>
+                    <View style={[styles.headerIconContainer, { justifyContent: auth.admin ? 'space-between' : 'flex-end' }]} >
+
+                        {auth.admin && (
+                            <TouchableOpacity onPress={toggleModal} style={styles.headerButton} >
+                                <Image style={styles.headerIcon} source={require('../../../assets/add_new.png')} />
+                            </TouchableOpacity>
+                        )}
 
                         <TouchableOpacity style={styles.headerButton} >
                             <Image style={styles.headerIcon} source={require('../../../assets/filter.png')} />
@@ -81,7 +86,7 @@ const styles = StyleSheet.create({
         height: 24
     },
     content: {
-        paddingTop: 24,
+        // paddingTop: 24,
         flex: 1,
         backgroundColor: '#fff'
     },

@@ -5,6 +5,7 @@ import {
     TouchableOpacity,
     ActivityIndicator,
     StyleSheet,
+    ScrollView,
     Image
 } from "react-native";
 import { useFocusEffect, useNavigation, useRoute } from "@react-navigation/native";
@@ -19,6 +20,7 @@ import OrderAppointments from "./OrderAppointments";
 import OrderInfo from "./OrderInfo"
 import OrderFiles from "./OrderFiles";
 import Input from "../../shared/UIElements/Input";
+import { AuthContext } from "../../context/auth-context";
 
 
 const OrderMain = (props) => {
@@ -26,6 +28,8 @@ const OrderMain = (props) => {
     const route = useRoute()
     const navigation = useNavigation()
     const Tab = createMaterialTopTabNavigator()
+    const auth = useContext(AuthContext)
+
 
     const orderId = route.params.id
     const fetchedArray = useSelector((state) => state.order.ordersArray.orders);
@@ -40,9 +44,7 @@ const OrderMain = (props) => {
         dispatch(toggleToFalseEditOrder(false))
     }
 
-    useEffect(() => {
-        setIsLoaded(true)
-    }, [edit])
+    useEffect(() => setIsLoaded(true), [edit])
 
     const onChangeHandler = (value) => {
         dispatch(updateOrderDataById(value, 'name', orderId))
@@ -52,12 +54,14 @@ const OrderMain = (props) => {
         <>
             <View style={styles.header} >
                 <View style={styles.headerContent}>
-                    <TouchableOpacity onPress={() => goingBack()}>
+                    <TouchableOpacity style={styles.backButton} onPress={() => goingBack()}>
                         <Ionicons name="arrow-back" size={24} color="green" />
                     </TouchableOpacity>
                     <View style={styles.headerHeadline}>
-                        {/* <Text style={styles.headline}>{order.name}</Text> */}
                         <Input
+                            multiline={true}
+                            scrollEnabled={false}
+                            numberOfLines={2}
                             style={[styles.headline, edit ? styles.enabled : styles.disbled]}
                             disabled={!edit}
                             value={order.name}
@@ -66,9 +70,13 @@ const OrderMain = (props) => {
                             onChangeText={onChangeHandler}
                         />
                     </View>
-                    <TouchableOpacity onPress={() => dispatch(toggleEdit(!edit))}>
-                        <Image source={require('../../../assets/order/edit.png')} />
-                    </TouchableOpacity>
+                    <View style={styles.editBtnContainer}>
+                        {auth.admin && (
+                            <TouchableOpacity onPress={() => dispatch(toggleEdit(!edit))}>
+                                <Image source={require('../../../assets/order/edit.png')} />
+                            </TouchableOpacity>
+                        )}
+                    </View>
                 </View>
             </View >
 
@@ -131,7 +139,7 @@ const styles = StyleSheet.create({
         paddingLeft: 24,
         paddingRight: 24,
         backgroundColor: '#fff',
-        width: '100%',
+        // width: '100%',
         paddingTop: 66,
         paddingBottom: 16,
         position: 'fixed',
@@ -143,10 +151,17 @@ const styles = StyleSheet.create({
     headerContent: {
         flexDirection: 'row',
         justifyContent: 'space-between',
+        alignItems: 'center',
+        maxWidth: '100%',
+    },
+    backButton: {
+        height: '100%',
+        width: '10%',
+        alignItems: 'center',
+        flexDirection: 'row',
     },
     headerHeadline: {
-        textAlign: 'center',
-        justifyContent: 'center'
+        maxWidth: '70%',
     },
     headline: {
         fontSize: 20,
@@ -156,6 +171,15 @@ const styles = StyleSheet.create({
         borderRadius: 4,
         borderBottomWidth: 1,
         borderColor: '#eee',
+        // maxWidth: '90%', // Adjudzhbnsst this as needed to fit your layout
+        // overflow: 'hidden', // Hide overflow
+    },
+    editBtnContainer: {
+        height: '100%',
+        width: '10%',
+        alignItems: 'center',
+        justifyContent: 'flex-end',
+        flexDirection: 'row'
     },
     headerNav: {
         backgroundColor: 'red'

@@ -83,11 +83,14 @@ const CustomerList = () => {
                             <Text style={styles.headerText}>Kunden</Text>
                         </View>
 
-                        <View style={styles.headerIconContainer} >
-                            <TouchableOpacity style={styles.headerButton} onPress={toggleModal}>
-                                <Image style={styles.headerIcon} source={require('../../../assets/customer/user_plus.png')} />
-                            </TouchableOpacity>
-                        </View>
+                        {auth.admin && (
+                            <View style={styles.headerIconContainer} >
+                                <TouchableOpacity style={styles.headerButton} onPress={toggleModal}>
+                                    <Image style={styles.headerIcon} source={require('../../../assets/customer/user_plus.png')} />
+                                </TouchableOpacity>
+                            </View>
+                        )}
+
                     </View>
                 </View>
 

@@ -80,7 +80,7 @@ const AppointmentList = props => {
                 }
                 data={appointmentsToRender}
                 keyExtractor={item => item._id}
-                renderItem={({ item }) => (
+                renderItem={({ item, index}) => (
                     <AppointmentItem
                         id={item._id}
                         name={item.name}
@@ -97,6 +97,8 @@ const AppointmentList = props => {
                         o_place={item.o_place}
                         o_name={item.o_name}
                         c_name={item.c_name}
+                        style={index === 0 ? { marginTop: 24 } : {}}
+
                     />
                 )}
             >
@@ -122,7 +124,6 @@ const AppointmentList = props => {
             header={<Text style={styles.modalHeadline}>Termin hinzufügen</Text>}
         >
             <AppointmentCreate toggleModal={props.toggleModal} />
-            {/* <OrderCreate handleRefresh={handleRefresh} toggle={toggleModal} /> */}
         </ModalComponent >
 
 

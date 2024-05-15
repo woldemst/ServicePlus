@@ -76,7 +76,7 @@ const OrderItem = (props) => {
   // const toggleModal = () => setModalVisible(!isModalVisible)
 
   const renderItem = () => (
-    <View style={styles.rowFront}>
+    <View style={[styles.rowFront, props.style]}>
       <TouchableOpacity style={styles.container} onPress={onPressHandler} >
         <View style={[
           styles.indicator,
@@ -117,7 +117,7 @@ const OrderItem = (props) => {
       closeOnRowOpen={true}
       data={[props]}
       renderHiddenItem={(data, rowMap) => (
-        <View style={styles.rowBack}>
+        <View style={[styles.rowBack, props.style]}>
           <TouchableOpacity style={styles.hiddenItrem} onPress={deleteHandler}>
             <Image style={styles.deleteImage} source={require('../../../assets/buttons/delete.png')} />
           </TouchableOpacity>
@@ -197,7 +197,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     marginRight: 24,
     marginLeft: 24,
-    marginBottom: 16,
+    marginTop: 16,
+
     borderWidth: 1,
     borderColor: '#757575',
     borderRadius: 10,
@@ -209,7 +210,10 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     marginRight: 24,
     marginLeft: 24,
-    marginBottom: 16,
+    marginTop: 16,
+
+
+
   },
   deleteImage: {
     width: 30,
