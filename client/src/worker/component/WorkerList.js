@@ -55,12 +55,10 @@ const WorkerList = () => {
         <>
             <View style={styles.suggestContainer}>
                 <Text style={styles.addText}>Noch kein Mitarbeiter</Text>
-
                 <View style={styles.centeredImageContainer}>
                     <TouchableOpacity onPress={toggleModal}>
                         <Image style={styles.addImg} source={require('../../../assets/firm/add.png')} />
                     </TouchableOpacity>
-
                 </View>
             </View>
 
@@ -84,12 +82,13 @@ const WorkerList = () => {
                         <View style={styles.textContainer} >
                             <Text style={styles.headerText}>Mitarbeiter</Text>
                         </View>
-
-                        <View style={styles.headerIconContainer} >
-                            <TouchableOpacity style={styles.headerButton} onPress={toggleModal}>
-                                <Image style={styles.headerIcon} source={require('../../../assets/customer/user_plus.png')} />
-                            </TouchableOpacity>
-                        </View>
+                        {auth.admin && (
+                            <View style={styles.headerIconContainer} >
+                                <TouchableOpacity style={styles.headerButton} onPress={toggleModal}>
+                                    <Image style={styles.headerIcon} source={require('../../../assets/customer/user_plus.png')} />
+                                </TouchableOpacity>
+                            </View>
+                        )}
 
                     </View>
                 </View>

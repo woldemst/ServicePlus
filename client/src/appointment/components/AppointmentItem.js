@@ -25,7 +25,7 @@ const AppointmentItem = (props) => {
     }
 
     const renderItem = (data) => (
-        <View style={styles.rowFront}>
+        <View style={[styles.rowFront, props.style]}>
             <TouchableOpacity style={styles.container} onPress={toggleModal} >
                 <View style={[
                     styles.indicator,
@@ -100,21 +100,9 @@ const AppointmentItem = (props) => {
                 rightOpenValue={-75}
                 // leftOpenValue={75}
                 disableRightSwipe={true}
-                data={[
-                    {
-                        id: props.id,
-                        date: props.date,
-                        time: props.time,
-                        worker: props.worker,
-                        o_name: props.o_name,
-                        o_street: props.o_street,
-                        o_houseNr: props.o_houseNr,
-                        o_zip: props.o_zip,
-                        o_place: props.o_place,
-                    },
-                ]}
+                data={[props]}
                 renderHiddenItem={(data, rowMap) => (
-                    <View style={styles.rowBack}>
+                    <View style={[styles.rowBack, props.style]}>
                         <TouchableOpacity
                             onPress={deleteHandler}
                             style={{
@@ -242,7 +230,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#fff',
         marginRight: 24,
         marginLeft: 24,
-        marginBottom: 16,
+        marginTop: 16,
         borderWidth: 1,
         borderColor: '#757575',
         borderRadius: 10,
@@ -254,7 +242,7 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         marginRight: 24,
         marginLeft: 24,
-        marginBottom: 16,
+        marginTop: 16,
     },
     deleteImage: {
         width: 30,

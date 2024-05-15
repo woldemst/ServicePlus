@@ -47,7 +47,7 @@ const OverviewNavigator = () => {
                             options={{
                                 headerShown: false,
                                 tabBarLabel: 'Termine',
-                                tabBarIcon: () => (<Image style={{ width: 24, height: 24 }} source={require("../../../assets/overview/appointment.png")} />),
+                                tabBarIcon: () => (<Image style={{ width: 28, height: 28 }} source={require("../../../assets/overview/appointment.png")} />),
                                 tabBarActiveTintColor: "#000",
                             }}
                         />
@@ -58,7 +58,7 @@ const OverviewNavigator = () => {
                             options={{
                                 headerShown: false,
                                 tabBarLabel: 'Aufträge',
-                                tabBarIcon: () => (<Image style={{ width: 22, height: 22 }} source={require("../../../assets/overview/orders.png")} />),
+                                tabBarIcon: () => (<Image style={{ width: 20, height: 20 }} source={require("../../../assets/overview/orders.png")} />),
                                 tabBarActiveTintColor: "#000",
                             }}
                         />

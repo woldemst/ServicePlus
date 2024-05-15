@@ -20,13 +20,13 @@ import ModalComponent from "../../shared/UIElements/Modal";
 import OrderCreate from "../pages/OrderCreate";
 import { getOrders } from "../../actions/orderActions";
 
-const OrderList = (props) => {    
+const OrderList = (props) => {
     const dispatch = useDispatch()
     const auth = useContext(AuthContext)
-    
+
     const fetchedData = useSelector((state) => state.order.ordersArray);
     const refresh = useSelector(state => state.util.refresh)
-    
+
     const [isLoaded, setIsLoaded] = useState(false)
     const [fetchedCustomers, setFetchedCustomers] = useState([])
     const [fetchedWorkers, setFetchedWorkers] = useState([])
@@ -58,7 +58,6 @@ const OrderList = (props) => {
         fetchOrders();
     }, [refresh, refreshing]);
 
-
     useEffect(() => {
         const fetcheCustomers = async () => {
             try {
@@ -86,7 +85,6 @@ const OrderList = (props) => {
         fetchWorkers()
     }, [refresh])
 
-
     const toggleModal = () => {
         if (fetchedCustomers.length <= 0 || fetchedWorkers.length <= 0) {
             Alert.alert('To create a new order, you need at least one worker and one customer.')
@@ -94,9 +92,6 @@ const OrderList = (props) => {
             setModalVisible(!isModalVisible)
         }
     }
-
-
-
 
     // console.log(fetchedCustomers.length, fetchedWorkers.length);
     return fetchedData.orders.length === 0 ? (
@@ -135,7 +130,7 @@ const OrderList = (props) => {
                         style={styles.scroll}
                         data={fetchedData.orders}
                         keyExtractor={item => item._id}
-                        renderItem={({ item }) => (
+                        renderItem={({ item, index }) => (
                             <OrderItem
                                 id={item._id}
                                 // key={item._id}
@@ -150,7 +145,9 @@ const OrderList = (props) => {
                                 date={item.date}
                                 status={item.status}
                                 contact={item.contact}
-                                description={item.description}  
+                                description={item.description}
+                                style={index === 0 ? { marginTop: 24 } : {}}
+
                             />
                         )}
                     >
@@ -218,7 +215,6 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: '#fff'
     },
-
     suggestHeader: {
         paddingLeft: 24,
         paddingRight: 24,
@@ -232,7 +228,6 @@ const styles = StyleSheet.create({
         borderBottomColor: '#eee',
         borderBottomWidth: 1,
         backgroundColor: '#fff',
-
     },
     textContainer: {
         // borderColor: 'red',

@@ -275,6 +275,7 @@ const styles = StyleSheet.create({
     btnContainer: {
         flexDirection: "row",
         marginTop: 28,
+
     },
 
     button: {

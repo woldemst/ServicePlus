@@ -38,6 +38,7 @@ const Input = forwardRef((props, ref) => {
                 textArea={props.textArea}
                 // onFocus={() => setTouched(true)}
                 onBlur={props.onBlur}
+                scrollEnabled={props.scrollEnabled}
             />
 
             {!isValid && <Text style={props.thin ? styles.thin : styles.errorText}>{props.errorText}</Text>}
@@ -71,11 +72,8 @@ const styles = StyleSheet.create({
         height: 130, // Adjust the height as needed
         borderColor: "#e0e0e0",
         borderWidth: 1,
-        marginBottom: 30,
-        paddingTop: 7,
-        paddingBottom: 7,
-        paddingLeft: 7,
-        paddingRight: 7,
+        // marginBottom: 14,
+        padding: 7,
         fontSize: 18,
         borderRadius: 6,
     },

@@ -16,10 +16,11 @@ import { AuthContext } from "../../context/auth-context";
 
 
 const OrderView = () => {
+    const auth = useContext(AuthContext);
     const [isModalVisible, setModalVisible] = useState(false);
 
     const fetchedData = useSelector((state) => state.order.ordersArray);
-    
+
     const toggleModal = () => {
         setModalVisible(!isModalVisible)
     }
@@ -32,10 +33,12 @@ const OrderView = () => {
                     <Text style={styles.headerText}>{fetchedData.orders.length === 0 ? 'Noch keinen Auftrag?' : 'Aufträge'}</Text>
                 </View>
 
-                <View style={styles.headerIconContainer} >
-                    <TouchableOpacity style={styles.headerButton} onPress={toggleModal} >
-                        <Image style={styles.headerIcon} source={require('../../../assets/add_new.png')} />
-                    </TouchableOpacity>
+                <View style={[styles.headerIconContainer, { justifyContent: auth.admin ? 'space-between' : 'flex-end' }]} >
+                    {auth.admin && ( 
+                        <TouchableOpacity style={styles.headerButton} onPress={toggleModal} >
+                            <Image style={styles.headerIcon} source={require('../../../assets/add_new.png')} />
+                        </TouchableOpacity>
+                    )}
 
                     <TouchableOpacity style={styles.headerButton} >
                         <Image style={styles.headerIcon} source={require('../../../assets/filter.png')} />
@@ -93,8 +96,9 @@ const styles = StyleSheet.create({
     },
     headerIconContainer: {
         flexDirection: 'row',
-        justifyContent: 'space-between',
-        width: '20%'
+        width: '20%',
+
+
     },
     headerButton: {
         justifyContent: 'center',
@@ -105,7 +109,7 @@ const styles = StyleSheet.create({
         height: 24
     },
     content: {
-        paddingTop: 24,
+
         flex: 1,
         backgroundColor: '#fff'
     },
