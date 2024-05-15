@@ -24,7 +24,6 @@ const FirmView = () => {
                     {!auth.firmId ? <CreateSuggest /> : <FirmItem />}
                 </View>
             </View>
-
         </>
     )
 }
@@ -46,16 +45,12 @@ const styles = StyleSheet.create({
         top: 0,
         borderBottomColor: '#eee',
         borderBottomWidth: 1,
-
     },
     headerContent: {
-
         flexDirection: 'row',
         justifyContent: 'space-between'
     },
-    textContainer: {
-
-    },
+    textContainer: {},
     headerText: {
         fontSize: 21,
         fontWeight: '400'
