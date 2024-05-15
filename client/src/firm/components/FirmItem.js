@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native"
+import { View, Text, StyleSheet, Image, TouchableOpacity, Alert } from "react-native"
 import { useEffect, useState, useContext } from "react"
 import { useNavigation } from '@react-navigation/native'
 import { useRoute } from "@react-navigation/native"
@@ -35,10 +35,27 @@ const FirmItem = () => {
         fetcheFirm()
     }, [dispatch, refresh])
 
-    const logout = () => {
-        auth.logout()
-        navigation.navigate('onboarding')
-    }
+
+    const logoutHandler = async () => {
+        Alert.alert(
+            'Logout',
+            'Möchten Sie wirklich ausloggen?',
+            [
+                {
+                    text: 'Abbrechen',
+                    style: 'cancel',
+                },
+                {
+                    text: 'Ausloggen',
+                    onPress: () => {
+                        auth.logout()
+                        navigation.navigate('onboarding')
+                    },
+                },
+            ],
+            { cancelable: false }
+        )
+    };
 
 
     return <>
@@ -76,7 +93,7 @@ const FirmItem = () => {
             </TouchableOpacity>
         </View>
         <View style={styles.logoutContainer}>
-            <TouchableOpacity style={styles.listItem} onPress={logout} >
+            <TouchableOpacity style={styles.listItem} onPress={logoutHandler} >
                 <Image style={styles.icon} source={require('../../../assets/firm/logout.png')} />
                 <Text style={styles.itemText}>Logout</Text>
             </TouchableOpacity>
