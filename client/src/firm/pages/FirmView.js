@@ -5,9 +5,17 @@ import ModalComponent from "../../shared/UIElements/Modal"
 import { useContext, useState, useEffect } from "react"
 import { AuthContext } from "../../context/auth-context"
 import CreateSuggest from "./CreateSuggest"
+import JoinFirm from "../../worker/pages/JoinFirm"
 
 const FirmView = () => {
     const auth = useContext(AuthContext)
+
+    const renderContent = () => {
+        if (!auth.firmId) {
+            return !auth.admin ? <JoinFirm /> : <CreateSuggest />
+        }
+        return <FirmItem />
+    }
 
     return (
         <>
@@ -20,9 +28,7 @@ const FirmView = () => {
                     </View>
                 </View>
 
-                <View style={styles.content} >
-                    {!auth.firmId ? <CreateSuggest /> : <FirmItem />}
-                </View>
+                <View style={styles.content}>{renderContent()}</View>
             </View>
         </>
     )

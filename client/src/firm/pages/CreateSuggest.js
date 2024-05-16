@@ -1,13 +1,13 @@
 import { View, Text, TouchableOpacity, StyleSheet, Image } from "react-native";
-import { useState } from "react";
+import { useContext, useState } from "react";
 
 import ModalComponent from "../../shared/UIElements/Modal";
 import CreateFirm from "./CreateFirm";
-
+import { AuthContext } from "../../context/auth-context";
 
 const CreateSuggest = props => {
     const [isModalVisible, setIsModalVisible] = useState(false)
-
+    
     const toggleModal = () => setIsModalVisible(!isModalVisible)
     const createFirmCall = () => toggleModal()
 
@@ -24,7 +24,6 @@ const CreateSuggest = props => {
             animationOut="slideOutDown" // Specify the slide-down animation
             onBackdropPress={toggleModal}
             onBackButtonPress={toggleModal}
-
             header={<Text style={styles.modalHeadline}>Unternehmen hinzufügen</Text>}
         >
             <CreateFirm toggle={toggleModal} />
@@ -46,6 +45,7 @@ const styles = StyleSheet.create({
         color: '#7a9b76',
         fontWeight: '700'
     },
+
 })
 
 export default CreateSuggest
