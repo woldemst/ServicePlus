@@ -1,6 +1,8 @@
+const mongoose = require('mongoose');
 const HttpError = require("../models/http-error")
 const Worker = require('../models/Worker')
 const Firm = require('../models/Firm')
+const User = require('../models/User')
 
 const getAllWorkersByFirmId = async (req, res, next) => {
     const firmId = req.params.firmId
@@ -151,7 +153,7 @@ const createWorker = async (req, res, next) => {
         .status(201)
         .json({ worker: createWorker.toObject({ getters: true }) });
 }
-
+ 
 const getWorkerByFirmId = async (req, res, next) => {
     const firmId = req.params.firmId
     const workerId = req.params.workerId
@@ -216,7 +218,55 @@ const deleteWorkerById = async (req, res, next) => {
     }
 }
 
+// join functionality
+const joinFirm = async (req, res, next) => {
+    const { firmId, userId } = req.params
+    //  console.log(req.params);
+    try {
+        const userObj = await User.findById(userId)
+        if (!userObj) {
+            return next(new HttpError('Worker not found with the provided ID.', 404));
+        }
+        // console.log(userObj)
 
+        const firmObj = await Firm.findById(firmId)
+        if (!firmObj) {
+            return next(new HttpError('Firm not found with the provided ID.', 404));
+        }
+
+        const newWorker = new Worker({
+            _id: userId,
+            firmId: firmId,
+            name: userObj.name,
+            email: userObj.email,
+            password: userObj.password,
+            street: '',
+            houseNr: '',
+            zip: '',
+            place: '',
+            phone: '',
+            description: '',
+            // mobilePhone: mobilePhone, 
+        })
+
+        
+        await newWorker.save();
+
+        await Firm.findByIdAndUpdate(firmId, { $push: { workers: userId } });
+
+        await User.deleteOne({ _id: userId })
+
+        // Optionally, update the firm's workers list if needed
+
+        res.status(200).json({ message: 'Worker was joined successfully' });
+    } catch (err) {
+        const error = new HttpError(
+            "Something went wrong, could not join firm.",
+            500
+        );
+        return next(error);
+    }
+}
 
 exports.getAllWorkersByFirmId = getAllWorkersByFirmId;
 exports.getWorkerById = getWorkerById;
@@ -224,3 +274,5 @@ exports.updateWorkerById = updateWorkerById;
 exports.createWorker = createWorker;
 exports.getWorkerByFirmId = getWorkerByFirmId;
 exports.deleteWorkerById = deleteWorkerById;
+exports.joinFirm = joinFirm;
+
