@@ -29,10 +29,10 @@ const Input = forwardRef((props, ref) => {
                 id={props.id}
                 value={props.value}
                 placeholder={props.placeholder}
-                style={props.style ? props.style : [props.disabled && styles.disabled, !isValid ? styles.inputInvalid : styles.input, props.textArea && styles.textArea]}
+                style={props.style ? [props.disabled && styles.disabled, !isValid ? styles.inputInvalid : props.style, props.textArea && styles.textArea] : [props.disabled && styles.disabled, !isValid ? styles.inputInvalid : styles.input, props.textArea && styles.textArea]}
                 onChangeText={handleChange}
                 autoCapitalize="none"
-                multiline={props.multiline}
+                multiline={props.multiline} 
                 numberOfLines={props.numberOfLines}
                 editable={!props.disabled}
                 textArea={props.textArea}
@@ -56,7 +56,7 @@ const styles = StyleSheet.create({
         borderColor: '#e0e0e0',
         borderWidth: 1,
         borderRadius: 4,
-        marginTop: 14,
+        marginTop: 18,
         padding: 7,
     },
     inputInvalid: {
@@ -65,7 +65,7 @@ const styles = StyleSheet.create({
         borderColor: 'red',
         borderWidth: 1,
         borderRadius: 4,
-        marginTop: 14,
+        marginTop: 18,
         padding: 7,
     },
     textArea: {
@@ -82,7 +82,11 @@ const styles = StyleSheet.create({
         fontSize: 18, // Set the font size of the placeholder text
     },
     errorText: {
-        color: 'red'
+        fontSize: 12,
+        color: 'red',
+        position: 'absolute',
+        top: 68,
+        left: 0,
     },
     thin: {
         color: 'red',
