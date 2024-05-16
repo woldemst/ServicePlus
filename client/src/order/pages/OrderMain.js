@@ -60,8 +60,8 @@ const OrderMain = (props) => {
                     <View style={styles.headerHeadline}>
                         <Input
                             multiline={true}
-                            scrollEnabled={false}
-                            numberOfLines={2}
+                            // scrollEnabled={false}
+                            // numberOfLines={2}
                             style={[styles.headline, edit ? styles.enabled : styles.disbled]}
                             disabled={!edit}
                             value={order.name}
