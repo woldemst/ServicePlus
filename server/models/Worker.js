@@ -2,15 +2,15 @@ const mongoose = require("mongoose");
 
 const workerSchema = new mongoose.Schema({
   firmId: { type: mongoose.Types.ObjectId, ref: 'Firm' }, //ref: establish connection between two schemas
-  name: { type: String, required: true },
-  email: { type: String, required: true },
+  name: { type: String },
+  email: { type: String },
   password: { type: String },
-  street: { type: String, required: true },
-  houseNr: { type: String, required: true },
-  zip: { type: String, required: true },
-  place: { type: String, required: true },
-  phone: { type: String, required: false },
-  description: { type: String, required: false },
+  street: { type: String },
+  houseNr: { type: String },
+  zip: { type: String },
+  place: { type: String },
+  phone: { type: String },
+  description: { type: String },
   // orders: { type: Array, required: false },
 
 

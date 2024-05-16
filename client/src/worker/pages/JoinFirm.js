@@ -8,20 +8,23 @@ import Button from "../../shared/UIElements/Button";
 
 const JoinFirm = props => {
     const auth = useContext(AuthContext)
-    
-    const [formData, setFormData] = useState({
-        firmId: ''
-    })
-    const handleSubmit = () => {
-        console.log(formData)
+
+    const [formData, setFormData] = useState({ firmId: '' })
+
+    const joinHandler = () => { 
+        console.log('join')
     }
+
 
     return <>
         <View style={styles.container}>
+            <Text style={styles.headline}>Gib die Betriebs-ID ein, um beizutreten.</Text>
             <Input
                 placeholder="Betrieb ID"
                 errorText="Bitte geben Sie eine gültige Betrieb-ID ein"
                 style={styles.input}
+                inputInvalid={styles.inputInvalid}
+                errorTextStyle={styles.errorTextStyle}
                 value={formData.firmId}
                 onChangeText={(value) => setFormData({ ...formData, firmId: value })}
                 validators={[VALIDATOR_REQUIRE()]}
@@ -30,13 +33,12 @@ const JoinFirm = props => {
             <View style={styles.btnContainer}>
                 <Button
                     style={styles.button}
-                    onPress={handleSubmit}
+                    onPress={joinHandler}
                     title="Weiter"
                     buttonText={styles.buttonText}
-                    disabled={!auth.firmId ? false : true}
+                    disabled={!!formData.firmId ? false : true}
                 />
             </View>
-            <Text>{ }</Text>
         </View>
     </>
 }
@@ -51,6 +53,11 @@ const styles = StyleSheet.create({
         // borderColor: 'red',
         // borderWidth: 2
     },
+    headline: {
+        fontSize: 16,
+        // fontWeight: '500',
+        marginBottom: 24,
+    },
     input: {
         width: '100%',
         height: 50,
@@ -59,6 +66,22 @@ const styles = StyleSheet.create({
         borderRadius: 4,
         // marginTop: 14,
         padding: 7,
+    },
+    inputInvalid: {
+        width: '100%',
+        height: 50,
+        borderColor: 'red',
+        borderWidth: 1,
+        borderRadius: 4,
+        // marginTop: 18,
+        padding: 7,
+    },
+    errorTextStyle: {
+        fontSize: 12,
+        color: 'red',
+        position: 'absolute',
+        top: 55,
+        left: 0,
     },
     btnContainer: {
         flexDirection: "row",
