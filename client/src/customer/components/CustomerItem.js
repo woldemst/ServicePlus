@@ -85,7 +85,7 @@ const CustomerItem = (props) => {
             rightOpenValue={-75}
             // leftOpenValue={75}
             disableRightSwipe={true}
-            // disableLeftSwipe={!isEdit}
+            disableLeftSwipe={!auth.admin}
             closeOnRowOpen={true}
             data={[props]}
             renderHiddenItem={(data, rowMap) => (

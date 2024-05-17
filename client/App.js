@@ -107,7 +107,7 @@ export default function App() {
           <Stack.Screen name='register' component={Register} options={{ headerShown: false }} />
 
           {/* main */}
-          <Stack.Screen name='overviewNavigator' component={OverviewNavigator} options={{ headerShown: false }} />
+          <Stack.Screen name='overviewNavigator' component={OverviewNavigator} options={{ headerShown: false, title: 'Übersicht' }} />
 
           {/* orders */}
           <Stack.Screen name='orderView' component={OrderView} />
