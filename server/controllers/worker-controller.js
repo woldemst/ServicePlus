@@ -153,7 +153,7 @@ const createWorker = async (req, res, next) => {
         .status(201)
         .json({ worker: createWorker.toObject({ getters: true }) });
 }
- 
+
 const getWorkerByFirmId = async (req, res, next) => {
     const firmId = req.params.firmId
     const workerId = req.params.workerId
@@ -249,7 +249,6 @@ const joinFirm = async (req, res, next) => {
             // mobilePhone: mobilePhone, 
         })
 
-        
         await newWorker.save();
 
         await Firm.findByIdAndUpdate(firmId, { $push: { workers: userId } });
@@ -258,7 +257,10 @@ const joinFirm = async (req, res, next) => {
 
         // Optionally, update the firm's workers list if needed
 
-        res.status(200).json({ message: 'Worker was joined successfully' });
+        res.status(200).json({
+            message: 'Worker was joined successfully',
+            firmId: firmId
+        });
     } catch (err) {
         const error = new HttpError(
             "Something went wrong, could not join firm.",

@@ -1,21 +1,30 @@
 import { View, Text, StyleSheet } from "react-native"
 
 import FirmItem from "../components/FirmItem"
-import ModalComponent from "../../shared/UIElements/Modal"
+
 import { useContext, useState, useEffect } from "react"
 import { AuthContext } from "../../context/auth-context"
 import CreateSuggest from "./CreateSuggest"
 import JoinFirm from "../../worker/pages/JoinFirm"
+import { useSelector } from "react-redux"
 
 const FirmView = () => {
     const auth = useContext(AuthContext)
+    const refresh = useSelector(state => state.util.refresh)
+    const [content, setContent] = useState(null);
 
-    const renderContent = () => {
-        if (!auth.firmId) {
-            return !auth.admin ? <JoinFirm /> : <CreateSuggest />
+    useEffect(() => {
+        const renderContent = () => {
+            if (!auth.firmId) {
+                return !auth.admin ? <JoinFirm /> : <CreateSuggest />
+            }
+            return <FirmItem />
         }
-        return <FirmItem />
-    }
+        setContent(renderContent());
+
+    }, [refresh, auth.firmId])
+
+    console.log(refresh, auth.firmId)
 
     return (
         <>
@@ -28,7 +37,7 @@ const FirmView = () => {
                     </View>
                 </View>
 
-                <View style={styles.content}>{renderContent()}</View>
+                <View style={styles.content}>{content}</View>
             </View>
         </>
     )

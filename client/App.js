@@ -45,7 +45,7 @@ export default function App() {
       try {
         const userData = JSON.parse(await AsyncStorage.getItem('userData'))
         if (userData && userData.token) {
-          login(userData.usedId, userData.token, userData.admin, userData.firmId)
+          login(userData.userId, userData.token, userData.admin, userData.firmId)
           setUserToken(userData.token)
         }
 
@@ -66,7 +66,6 @@ export default function App() {
       setUserRole(admin)
       setFirmId(fid)
       await AsyncStorage.setItem('userData', JSON.stringify({ userId: uid, token: token, admin: admin, firmId: fid }))
-
 
 
     } catch (err) {
@@ -90,13 +89,8 @@ export default function App() {
   }, [])
 
 
-  const updateId = id => {
-    setFirmId(id)
-  }
-
-  const handleSetCustomer = (id) => {
-    setCustomers([...customers, id])
-  }
+  const updateId = id => setFirmId(id)
+  const handleSetCustomer = (id) => setCustomers([...customers, id])
 
   let routes;
 

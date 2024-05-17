@@ -30,8 +30,6 @@ const register = async (req, res, next) => {
 
     let firmId
 
-
-
     // await Firm.updateOne(
     //   { _id: firmId },
     //   { $push: { orders: createdOrder._id } },

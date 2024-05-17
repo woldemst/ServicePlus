@@ -1,18 +1,35 @@
 import { View, Text, TouchableOpacity, StyleSheet, Image } from "react-native";
 import { useContext, useState } from "react";
+import axios from "axios";
 
 import { AuthContext } from "../../context/auth-context";
 import Input from "../../shared/UIElements/Input";
 import { VALIDATOR_REQUIRE } from "../../util/validators";
 import Button from "../../shared/UIElements/Button";
+import { useNavigation } from "@react-navigation/native";
+import { useDispatch } from "react-redux";
+import { refershData } from "../../actions/utilActions";
+
 
 const JoinFirm = props => {
     const auth = useContext(AuthContext)
-
+    const dispatch = useDispatch();
+    const navigation = useNavigation();
     const [formData, setFormData] = useState({ firmId: '' })
 
-    const joinHandler = () => { 
-        console.log('join')
+    const joinHandler = async () => {
+        try {
+            const URL = `http://localhost:8000/api/workers/${formData.firmId}/join/${auth.userId}`
+            // console.log('URL', URL);
+            const response = await axios.post(URL)
+            alert("Erfolgreich beigetreten!");
+            console.log('response', response.data)
+            auth.updateId(response.data.firmId)
+            dispatch(refershData())
+            // navigation.navigate('overviewNavigator', { screen: 'FirmView' });
+        } catch (err) {
+            alert("Fehler beim Beitreten!");
+        }
     }
 
 

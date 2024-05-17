@@ -47,9 +47,7 @@ const Login = () => {
             auth.login(response.data.userId, response.data.token, response.data.admin, response.data.firmId)
             // console.log(response.data);
             if (!auth.firmId) {
-                navigation.navigate('overviewNavigator', {
-                    screen: 'FirmView',
-                });
+                navigation.navigate('overviewNavigator', { screen: 'FirmView' });
             } else {
                 navigation.navigate('overviewNavigator')
             }
@@ -110,6 +108,7 @@ const Login = () => {
                         style={styles.button}
                         onPress={handleSignIn}
                         title={loading ? "Signing in..." : "Sign in"}
+                        buttonText={styles.buttonText}
                         disabled={loading}
                     />
 
