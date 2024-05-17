@@ -24,7 +24,7 @@ const FirmView = () => {
 
     }, [refresh, auth.firmId])
 
-    console.log(refresh, auth.firmId)
+    // console.log(refresh, auth.firmId)
 
     return (
         <>

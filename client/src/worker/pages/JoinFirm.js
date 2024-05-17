@@ -23,10 +23,9 @@ const JoinFirm = props => {
             // console.log('URL', URL);
             const response = await axios.post(URL)
             alert("Erfolgreich beigetreten!");
-            console.log('response', response.data)
+            // console.log('response', response.data)
             auth.updateId(response.data.firmId)
             dispatch(refershData())
-            // navigation.navigate('overviewNavigator', { screen: 'FirmView' });
         } catch (err) {
             alert("Fehler beim Beitreten!");
         }

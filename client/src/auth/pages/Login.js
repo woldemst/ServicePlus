@@ -108,7 +108,7 @@ const Login = () => {
                         style={styles.button}
                         onPress={handleSignIn}
                         title={loading ? "Signing in..." : "Sign in"}
-                        buttonText={styles.buttonText}
+                        buttonText={sty}
                         disabled={loading}
                     />
 

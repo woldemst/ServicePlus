@@ -17,11 +17,11 @@ const WorkerItem = (props) => {
     // console.log(props);
     const deleteHandler = async () => {
         Alert.alert(
-            'Delete Confirmation',
-            'Are you sure you want to delete this worker?',
+            'Löschbestätigung',
+            'Bist du sicher, dass du diesen Mitarbeiter löschen möchtest??',
             [
                 {
-                    text: 'Cancel',
+                    text: 'Abbrechen',
                     style: 'cancel',
                 },
                 {
@@ -76,7 +76,7 @@ const WorkerItem = (props) => {
             rightOpenValue={-75}
             // leftOpenValue={75}
             disableRightSwipe={true}
-            // disableLeftSwipe={!isEdit}
+            disableLeftSwipe={!auth.admin}
             closeOnRowOpen={true}
             data={[props]}
             renderHiddenItem={(data, rowMap) => (

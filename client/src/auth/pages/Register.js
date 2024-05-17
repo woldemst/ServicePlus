@@ -46,9 +46,7 @@ const Register = () => {
 
             if (response.status === 201) {
                 auth.login(response.data.userId, response.data.token, response.data.admin, response.data.firmId)
-                navigation.navigate('overviewNavigator', {
-                    screen: 'FirmView',
-                });
+                navigation.navigate('overviewNavigator', { screen: 'FirmView' });
                 // console.log(response.data);
                 // alert('User created');
             } else {

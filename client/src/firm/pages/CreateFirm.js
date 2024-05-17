@@ -54,9 +54,7 @@ const CreateFirm = props => {
 
       props.toggle()
 
-      navigation.navigate('overviewNavigator', {
-        screen: 'FirmView',
-      });
+      navigation.navigate('overviewNavigator', { screen: 'FirmView' });
 
       console.log("Firm created!", response.data);
     } catch (err) {
