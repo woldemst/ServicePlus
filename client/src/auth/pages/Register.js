@@ -49,7 +49,7 @@ const Register = () => {
                 navigation.navigate('overviewNavigator', {
                     screen: 'FirmView',
                 });
-                console.log(response.data);
+                // console.log(response.data);
                 // alert('User created');
             } else {
                 console.log(response.data);

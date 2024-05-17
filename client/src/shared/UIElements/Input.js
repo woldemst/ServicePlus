@@ -29,10 +29,15 @@ const Input = forwardRef((props, ref) => {
                 id={props.id}
                 value={props.value}
                 placeholder={props.placeholder}
-                style={props.style ? [props.disabled && styles.disabled, !isValid ? styles.inputInvalid : props.style, props.textArea && styles.textArea] : [props.disabled && styles.disabled, !isValid ? styles.inputInvalid : styles.input, props.textArea && styles.textArea]}
+                style={
+                    props.style ? [
+                        props.disabled && styles.disabled, !isValid ? [props.inputInvalid ? props.inputInvalid : styles.inputInvalid] : props.style, props.textArea && styles.textArea
+                    ] : [
+                        props.disabled && styles.disabled, !isValid ? styles.inputInvalid : styles.input, props.textArea && styles.textArea
+                    ]}
                 onChangeText={handleChange}
                 autoCapitalize="none"
-                multiline={props.multiline} 
+                multiline={props.multiline}
                 numberOfLines={props.numberOfLines}
                 editable={!props.disabled}
                 textArea={props.textArea}
@@ -41,7 +46,7 @@ const Input = forwardRef((props, ref) => {
                 scrollEnabled={props.scrollEnabled}
             />
 
-            {!isValid && <Text style={props.thin ? styles.thin : styles.errorText}>{props.errorText}</Text>}
+            {!isValid && <Text style={props.thin ? styles.thin : [props.errorTextStyle ? props.errorTextStyle : styles.errorText]}>{props.errorText}</Text>}
         </View>
     </>
 })
