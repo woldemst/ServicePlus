@@ -8,7 +8,7 @@ import {
   Alert,
   TextInput
 } from "react-native";
-import { useState, useEffect, useRef } from "react";
+import { useState, useContext } from "react";
 import { useNavigation } from "@react-navigation/native"
 import { SwipeListView } from "react-native-swipe-list-view";
 import { useDispatch, useSelector } from "react-redux";
@@ -16,8 +16,10 @@ import axios from "axios";
 
 import { deleteOrder } from "../../actions/orderActions";
 import { deleteAppointmentsByOrder } from "../../actions/appointmentActions";
+import { AuthContext } from "../../context/auth-context";
 
 const OrderItem = (props) => {
+  const auth = useContext(AuthContext)
   const navigation = useNavigation()
   const dispatch = useDispatch()
 
@@ -113,6 +115,7 @@ const OrderItem = (props) => {
       renderItem={renderItem}
       rightOpenValue={-75}
       // leftOpenValue={75}
+      disableLeftSwipe={!auth.admin}
       disableRightSwipe={true}
       closeOnRowOpen={true}
       data={[props]}
