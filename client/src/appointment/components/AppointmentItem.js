@@ -1,28 +1,24 @@
-import { View, StyleSheet, Image, Text, TouchableOpacity } from "react-native";
+import { View, StyleSheet, Image, Text, TouchableOpacity, Alert } from "react-native";
 import { SwipeListView } from 'react-native-swipe-list-view';
-import { useState, useRef, useEffect } from "react";
-import axios from "axios";
+import { useContext, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Alert } from "react-native";
+import axios from "axios";
 
 import ModalComponent from "../../shared/UIElements/Modal";
 import AppointmentInfo from "../pages/AppointmentInfo";
 import { deleteAppointment } from '../../actions/appointmentActions'
-import { useNavigation } from "@react-navigation/native";
+import { AuthContext } from "../../context/auth-context";
 
 const AppointmentItem = (props) => {
+    const auth = useContext(AuthContext)
     const dispatch = useDispatch()
     const appointmentId = props.id
-    const navigation = useNavigation()
     const [isModalVisible, setModalVisible] = useState(false);
 
     const appointments = useSelector(state => state.appointment.appointmentsArray.appointments)
     const appointmentItem = appointments.find(appointment => appointment._id == appointmentId)
 
-
-    const toggleModal = () => {
-        setModalVisible(!isModalVisible)
-    }
+    const toggleModal = () => setModalVisible(!isModalVisible)
 
     const renderItem = (data) => (
         <View style={[styles.rowFront, props.style]}>
@@ -89,9 +85,6 @@ const AppointmentItem = (props) => {
         )
     }
 
-
-
-
     return (
         <>
             <SwipeListView
@@ -99,6 +92,7 @@ const AppointmentItem = (props) => {
                 renderItem={renderItem}
                 rightOpenValue={-75}
                 // leftOpenValue={75}
+                disableLeftSwipe={!auth.admin}
                 disableRightSwipe={true}
                 data={[props]}
                 renderHiddenItem={(data, rowMap) => (
