@@ -33,12 +33,9 @@ const getAllAppointments = async (req, res, next) => {
 const createAppointment = async (req, res, next) => {
   try {
     const {
-      // firmId,
-      // creator,
-      // status,
       firmId,
       orderId,
-      workerId,
+      workers,
       name,
       date,
       time,
@@ -47,21 +44,20 @@ const createAppointment = async (req, res, next) => {
 
     const customerItem = await Customer.findOne({ orders: { $in: [orderId] } });
     const orderItem = await Order.findOne({ _id: orderId })
-    const workerItem = await Worker.findOne({ _id: workerId });
 
-
-
+    const workerNamesArray = await Promise.all(workers.map(async (workerId) => {
+      const workerItem = await Worker.findOne({ _id: workerId });
+      return workerItem ? workerItem.name : null;
+    }))
+    const workerNames = workerNamesArray.join(', ')
 
     // console.log('worker item ', workerItem);
     // console.log('customer item ', customerItem);
 
     const createdAppointment = new Appointment({
-      // creator: creator, // auth.userId in frontend 
-      // status: status,    
-
       firmId: firmId,
       orderId: orderId,
-      workerId: workerId,
+      workers: workers,
       name: name,
       date: date,
       time: time,
@@ -75,24 +71,16 @@ const createAppointment = async (req, res, next) => {
       o_name: orderItem.name,
 
       c_name: customerItem.name,
-      w_name: workerItem.name,
+      w_name: workerNames,
     });
 
     await createdAppointment.save()
 
-    await Order.updateOne(
-      { _id: orderId },
-      { $push: { appointments: createdAppointment._id } },
-    )
+    await Order.updateOne({ _id: orderId }, { $push: { appointments: createdAppointment._id } })
+    await Firm.updateOne({ _id: firmId }, { $push: { appointments: createdAppointment._id } })
+    // await Promise.all(workers.map(workerId => Worker.updateOne({ _id: workerId }, { $push: { appointments: createdAppointment._id } })))
 
-    await Firm.updateOne(
-      { _id: firmId },
-      { $push: { appointments: createdAppointment._id } },
-    )
-
-    res.status(201).json({
-      appointment: createdAppointment.toObject({ getters: true }),
-    });
+    res.status(201).json({ appointment: createdAppointment.toObject({ getters: true }) });
 
   } catch (err) {
     const error = new HttpError(
