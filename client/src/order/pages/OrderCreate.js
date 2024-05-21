@@ -10,6 +10,7 @@ import { useContext, useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 
+
 import { VALIDATOR_REQUIRE, VALIDATOR_SELECT } from "../../util/validators";
 import { AuthContext } from "../../context/auth-context";
 import { refershData } from "../../actions/utilActions";
@@ -18,6 +19,10 @@ import Button from "../../shared/UIElements/Button";
 import Select from "../../shared/UIElements/Select";
 
 const OrderCreate = (props) => {
+  const auth = useContext(AuthContext)
+  const dispatch = useDispatch()
+
+
   const [isLoaded, setIsLoaded] = useState(false)
   const [formData, setFormData] = useState({
     name: '',
@@ -29,13 +34,10 @@ const OrderCreate = (props) => {
     workerOptions: [],
     contactOptions: [],
     selectedCustomer: "",
-    selectedWorker: "",
+    selectedWorkers: [],
     selectedContact: "",
     description: "",
   })
-
-  const auth = useContext(AuthContext)
-  const dispatch = useDispatch()
 
   useEffect(() => {
     const fetchedData = async () => {
@@ -52,11 +54,11 @@ const OrderCreate = (props) => {
 
         setFormData((prevFormData) => ({
           ...prevFormData,
-          workerOptions: workerResponse.data.workers.map((worker) => ({
+          workerOptions: workerResponse.data.workers.map(worker => ({
             label: worker.name,
-            value: worker.id,
+            value: worker.id
           })),
-          customerOptions: customerResponse.data.customers.map((customer) => ({
+          customerOptions: customerResponse.data.customers.map(customer => ({
             label: customer.name,
             value: customer.id,
           })),
@@ -85,7 +87,7 @@ const OrderCreate = (props) => {
       const response = await axios.post(URL, {
         firmId: auth.firmId,
         name: formData.name,
-        workerId: formData.selectedWorker,
+        workerId: formData.selectedWorkers,
         customerId: formData.selectedCustomer,
         // contact: formData.selectedContact,
         street: formData.street,
@@ -128,14 +130,16 @@ const OrderCreate = (props) => {
         onValueChange={(option) => setFormData({ ...formData, selectedCustomer: option })}
       />
 
+
       <Text style={styles.label}>Mitarbeiter</Text>
 
       <Select
+        multi={true}
         search={false}
         data={formData.workerOptions}
         errorText="Please select a worker"
         validators={[VALIDATOR_SELECT()]}
-        onValueChange={(option) => setFormData({ ...formData, selectedWorker: option })}
+        onValueChange={(option) => setFormData({ ...formData, selectedWorkers: option })}
       />
 
       {/* <Text style={styles.label}>Ansprechspartner</Text>
@@ -255,6 +259,7 @@ const styles = StyleSheet.create({
     borderColor: "#e0e0e0",
     borderWidth: 1,
     marginBottom: 30,
+    marginTop: 10,
     paddingTop: 7,
     paddingBottom: 7,
     paddingLeft: 7,
@@ -268,7 +273,7 @@ const styles = StyleSheet.create({
   },
   label: {
     marginTop: 12,
-    marginBottom: 6,
+    // marginBottom: 6,
     fontSize: 18,
   },
 
@@ -326,16 +331,16 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between'
   },
   streetWrapper: {
-    width: '75%'
+    width: '76%'
   },
   nrWrapper: {
-    width: '20%'
+    width: '21%'
   },
   zipWrapper: {
-    width: '35%'
+    width: '36%'
   },
   placeWrapper: {
-    width: '60%'
+    width: '61%'
   },
 });
 
