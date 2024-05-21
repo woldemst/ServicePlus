@@ -30,13 +30,10 @@ const getAllOrdersByFirmId = async (req, res, next) => {
 // create order
 const createOrder = async (req, res, next) => {
   const {
+    // creator,
     firmId,
-    name,
-    creator,
-    workerId,
-    date,
     customerId,
-
+    name,
     street,
     houseNr,
     zip,
@@ -44,19 +41,14 @@ const createOrder = async (req, res, next) => {
     description,
   } = req.body;
 
-
   const customerItem = await Customer.findOne({ _id: customerId });
-  const workerItem = await Worker.findOne({ _id: workerId })
   // console.log('customer item', customerItem);
 
   const createdOrder = new Order({
     // creator: creator, // auth.userId in frontend 
-    // date: date,
     status: 1,
     firmId: firmId,
     name: name,
-    workerId: workerId,
-    w_name: workerItem.name,
     description: description,
 
     customerId: customerId,
@@ -69,23 +61,14 @@ const createOrder = async (req, res, next) => {
   });
 
 
-  await Firm.updateOne(
-    { _id: firmId },
-    { $push: { orders: createdOrder._id } },
-  )
-
-  await Customer.updateOne(
-    { _id: customerId },
-    { $push: { orders: createdOrder._id } },
-  )
-
-  await Worker.updateOne(
-    { _id: workerId },
-    { $push: { orders: createdOrder._id } },
-  )
-
   try {
     await createdOrder.save();
+
+    // Update the firm and customer with the new order
+    await Firm.updateOne({ _id: firmId }, { $push: { orders: createdOrder._id } })
+    await Customer.updateOne({ _id: customerId }, { $push: { orders: createdOrder._id } })
+
+    res.status(201).json({ order: createdOrder.toObject({ getters: true }) });
   } catch (err) {
     const error = new HttpError(
       "Something went wrong, could not create an order.",
@@ -93,10 +76,6 @@ const createOrder = async (req, res, next) => {
     );
     return next(error);
   }
-
-  res
-    .status(201)
-    .json({ order: createdOrder.toObject({ getters: true }) });
 };
 
 const getOrderById = async (req, res, next) => {
@@ -240,7 +219,7 @@ const updateOrderById = async (req, res, next) => {
     const customerItem = await Customer.findOne({ _id: customerId });
     const workerItem = await Worker.findOne({ _id: workerId })
 
-      updateOrder.name = name,
+    updateOrder.name = name,
       updateOrder.customerId = customerId,
       updateOrder.c_name = customerItem.name,
 
