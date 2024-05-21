@@ -23,8 +23,8 @@ import { refershData } from "../../actions/utilActions";
 const AppointmentCreate = props => {
     const dispatch = useDispatch()
     const auth = useContext(AuthContext)
-    const [isLoaded, setIsLoaded] = useState(false)
 
+    const [isLoaded, setIsLoaded] = useState(false)
     const [date, setDate] = useState(new Date());
     const [selectedDateOnly, setSelectedDateOnly] = useState('');
     const [selectedTimeOnly, setSelectedTimeOnly] = useState('');
@@ -48,11 +48,9 @@ const AppointmentCreate = props => {
         orderOptions: [],
         workerOptions: [],
         customerOptions: [],
-        contactOptions: [],
         selectedOrder: "",
         selectedCustomer: "",
-        selectedWorker: "",
-        selectedContact: "",
+        selectedWorkers: [],
         description: '',
     })
 
@@ -74,8 +72,8 @@ const AppointmentCreate = props => {
                 setFormData(prevFormData => ({
                     ...prevFormData,
                     orderOptions: orderResponse.data.orders.map((order) => ({
-                      label: order.name,
-                      value: order.id,
+                        label: order.name,
+                        value: order.id,
                     })),
                     workerOptions: workerResponse.data.workers.map((worker) => ({
                         label: worker.name,
@@ -107,7 +105,7 @@ const AppointmentCreate = props => {
             const response = await axios.post(URL, {
                 firmId: auth.firmId,
                 orderId: formData.selectedOrder,
-                workerId: formData.selectedWorker,
+                workers: formData.selectedWorkers,
                 description: formData.description,
                 date: selectedDateOnly,
                 time: selectedTimeOnly,
@@ -156,11 +154,12 @@ const AppointmentCreate = props => {
             <Text style={styles.label}>Mitarbeiter</Text>
 
             <Select
+                multi={true}
                 search={false}
                 data={formData.workerOptions}
-                errorText="Please select a worker"
+                errorText="Please select workers"
                 validators={[VALIDATOR_SELECT()]}
-                onValueChange={(option) => setFormData({ ...formData, selectedWorker: option })}
+                onValueChange={(option) => setFormData({ ...formData, selectedWorkers: option })}
             />
 
             <Text style={styles.label}>Beschreibung</Text>
