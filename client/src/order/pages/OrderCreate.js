@@ -22,7 +22,6 @@ const OrderCreate = (props) => {
   const auth = useContext(AuthContext)
   const dispatch = useDispatch()
 
-
   const [isLoaded, setIsLoaded] = useState(false)
   const [formData, setFormData] = useState({
     name: '',
@@ -31,11 +30,10 @@ const OrderCreate = (props) => {
     zip: '',
     place: '',
     customerOptions: [],
-    workerOptions: [],
-    contactOptions: [],
+    // contactOptions: [],
     selectedCustomer: "",
-    selectedWorkers: [],
-    selectedContact: "",
+    // selectedWorkers: [],
+    // selectedContact: "",
     description: "",
   })
 
@@ -43,29 +41,25 @@ const OrderCreate = (props) => {
     const fetchedData = async () => {
       try {
         const [
-          workerResponse,
           customerResponse,
+          // workerResponse,
           // contactResponse
         ] = await Promise.all([
-          axios.get(`http://localhost:8000/api/orders/worker-options/${auth.firmId}`),
           axios.get(`http://localhost:8000/api/orders/customer-options/${auth.firmId}`),
+          // axios.get(`http://localhost:8000/api/orders/worker-options/${auth.firmId}`),
           // axios.get(`http://localhost:8000/api/orders/contact-options/${auth.firmId}`),
         ])
 
         setFormData((prevFormData) => ({
           ...prevFormData,
-          workerOptions: workerResponse.data.workers.map(worker => ({
-            label: worker.name,
-            value: worker.id
-          })),
+          // workerOptions: workerResponse.data.workers.map(worker => ({
+          //   label: worker.name,
+          //   value: worker.id
+          // })),
           customerOptions: customerResponse.data.customers.map(customer => ({
             label: customer.name,
             value: customer.id,
           })),
-          // contactOptions: contactResponse.data.contacts.map((contact) => ({
-          //   key: contact.id,
-          //   value: contact.name,
-          // })),
         }));
 
         setIsLoaded(true)
@@ -87,7 +81,7 @@ const OrderCreate = (props) => {
       const response = await axios.post(URL, {
         firmId: auth.firmId,
         name: formData.name,
-        workerId: formData.selectedWorkers,
+        // workers: formData.selectedWorkers,
         customerId: formData.selectedCustomer,
         // contact: formData.selectedContact,
         street: formData.street,
@@ -130,8 +124,7 @@ const OrderCreate = (props) => {
         onValueChange={(option) => setFormData({ ...formData, selectedCustomer: option })}
       />
 
-
-      <Text style={styles.label}>Mitarbeiter</Text>
+      {/* <Text style={styles.label}>Mitarbeiter</Text>
 
       <Select
         multi={true}
@@ -140,7 +133,7 @@ const OrderCreate = (props) => {
         errorText="Please select a worker"
         validators={[VALIDATOR_SELECT()]}
         onValueChange={(option) => setFormData({ ...formData, selectedWorkers: option })}
-      />
+      /> */}
 
       {/* <Text style={styles.label}>Ansprechspartner</Text>
 
