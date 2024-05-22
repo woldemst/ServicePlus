@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState, useCallback} from 'react';
+import { useContext, useEffect, useState, useCallback } from 'react';
 import { View, Text, StyleSheet, Image, ScrollView, ActivityIndicator, FlatList, RefreshControl } from 'react-native';
 import axios from 'axios';
 
@@ -11,10 +11,14 @@ import { AuthContext } from '../../context/auth-context';
 
 const AppointmentList = props => {
     const dispatch = useDispatch()
-    const fetchedData = useSelector(state => state.appointment.appointmentsArray)
-    const refresh = useSelector(state => state.util.refresh)
     const auth = useContext(AuthContext)
     const id = props.id
+
+
+    const fetchedData = useSelector(state => state.appointment.appointmentsArray)
+    const fetchedArchivedData = useSelector(state => state.appointment.archivedAppointments)
+    const showArchived = useSelector(state => state.appointment.showArchived)    
+    const refresh = useSelector(state => state.util.refresh)
 
     const [isLoaded, setIsLoaded] = useState(false)
     const [refreshing, setRefreshing] = useState(false);
@@ -28,9 +32,9 @@ const AppointmentList = props => {
     const onRefresh = useCallback(() => {
         setRefreshing(true);
         setTimeout(() => {
-          setRefreshing(false);
+            setRefreshing(false);
         }, 1000);
-      }, []);
+    }, []);
 
     useEffect(() => {
         const fetchOrders = async () => {
@@ -47,6 +51,7 @@ const AppointmentList = props => {
         fetchOrders()
     }, [refresh, refreshing])
 
+
     const renderAppointments = () => {
         if (fetchedData.appointments.length === 0) {
             return (
@@ -55,8 +60,9 @@ const AppointmentList = props => {
                 </View>
             )
         }
-
-        let appointmentsToRender = fetchedData.appointments;
+        // console.log(showArchived);
+        
+        let appointmentsToRender = showArchived ? fetchedArchivedData : fetchedData.appointments;
 
         if (props.id) {
             appointmentsToRender = appointmentsToRender.filter(appointment => appointment.orderId === props.id);
@@ -76,11 +82,11 @@ const AppointmentList = props => {
             <FlatList
                 showsVerticalScrollIndicator={false}
                 refreshControl={
-                    <RefreshControl refreshing={refreshing} onRefresh={onRefresh}/>
+                    <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
                 }
                 data={appointmentsToRender}
                 keyExtractor={item => item._id}
-                renderItem={({ item, index}) => (
+                renderItem={({ item, index }) => (
                     <AppointmentItem
                         id={item._id}
                         name={item.name}

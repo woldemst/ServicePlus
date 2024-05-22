@@ -1,9 +1,11 @@
-import { GET_APPOINTMENTS, DELETE_APPOINTMENT, DELETE_APPOINTMENTS_BY_ORDER, UPDATE_APPOINTMENT_DATA } from '../actions/appointmentActions';
+import { GET_APPOINTMENTS, DELETE_APPOINTMENT, DELETE_APPOINTMENTS_BY_ORDER, UPDATE_APPOINTMENT_DATA, GET_ARCHIVED_APPOINTMENTS } from '../actions/appointmentActions';
 
 const initialState = {
   appointmentsArray: {
     appointments: []
   },
+  archivedAppointments: [],
+  showArchived: false
 };
 
 const appointmentReducer = (state = initialState, action) => {
@@ -33,6 +35,16 @@ const appointmentReducer = (state = initialState, action) => {
           appointments: filteredAppointmentsByOrder
         }
       };
+
+    case GET_ARCHIVED_APPOINTMENTS:
+      const filteredArchivedAppointments = state.appointmentsArray.appointments.filter(appointment => appointment.status === '3' || appointment.status === '4');
+
+      // console.log(filteredArchivedAppointments);
+      return {
+        ...state,
+        showArchived: !state.showArchived,
+        archivedAppointments: filteredArchivedAppointments
+      }
     default:
       return state;
   }

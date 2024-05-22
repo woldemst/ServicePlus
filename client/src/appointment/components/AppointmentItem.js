@@ -16,6 +16,7 @@ const AppointmentItem = (props) => {
     const [isModalVisible, setModalVisible] = useState(false);
 
     const appointments = useSelector(state => state.appointment.appointmentsArray.appointments)
+    const showArchived = useSelector(state => state.appointment.showArchived)
     const appointmentItem = appointments.find(appointment => appointment._id == appointmentId)
 
     const toggleModal = () => setModalVisible(!isModalVisible)
@@ -27,8 +28,8 @@ const AppointmentItem = (props) => {
                     styles.indicator,
                     appointmentItem.status == 1 ? styles.notStarted : null,
                     appointmentItem.status == 2 ? styles.inProgress : null,
-                    appointmentItem.status == 3 ? styles.completed : null,
-                    appointmentItem.status == 4 ? styles.canceled : null,
+                    appointmentItem.status == 3 ? [!showArchived ? styles.completed : styles.archivedCompleted] : null,
+                    appointmentItem.status == 4 ? [!showArchived ? styles.canceled : styles.archivedCanceled] : null,
                 ]}></View>
 
                 <View style={styles.mainContent}>
@@ -162,10 +163,13 @@ const styles = StyleSheet.create({
         flex: 1,
     },
     indicator: {
-        width: '3%',
+        width: '4%',
         backgroundColor: '#7A9B76',
-        borderTopLeftRadius: 10,
-        borderBottomLeftRadius: 10
+        borderTopLeftRadius: 50,
+        borderBottomLeftRadius: 50,
+
+        // borderWidth: 1, 
+        // borderColor: 'green'
 
     },
     mainContent: {
@@ -174,6 +178,13 @@ const styles = StyleSheet.create({
         paddingBottom: 6,
         paddingLeft: 16,
         textAlign: 'left',
+
+        borderLeftWidth: 0, 
+        borderWidth: 1, 
+        borderColor: '#757575',
+        borderTopRightRadius: 10,
+        borderBottomRightRadius: 10,
+
     },
     iconContainer: {
         // width: '8%',
@@ -225,8 +236,9 @@ const styles = StyleSheet.create({
         marginRight: 24,
         marginLeft: 24,
         marginTop: 16,
-        borderWidth: 1,
-        borderColor: '#757575',
+        // borderWidth: 1,
+        // borderLeftWidth: 0,
+        // borderColor: '#757575',
         borderRadius: 10,
     },
     rowBack: {
@@ -256,7 +268,7 @@ const styles = StyleSheet.create({
 
     // status indicator 
     notStarted: {
-        backgroundColor: '#808080',
+        backgroundColor: '#FBB13C',
     },
     inProgress: {
         backgroundColor: '#1769FF',
@@ -267,7 +279,12 @@ const styles = StyleSheet.create({
     canceled: {
         backgroundColor: '#DB504A',
     },
-
+    archivedCanceled: {
+        backgroundColor: '#666666',
+    },
+    archivedCompleted: {
+        backgroundColor: '#999999',
+    },
 })
 
 
