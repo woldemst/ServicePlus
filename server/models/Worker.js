@@ -2,6 +2,7 @@ const mongoose = require("mongoose");
 
 const workerSchema = new mongoose.Schema({
   firmId: { type: mongoose.Types.ObjectId, ref: 'Firm' }, //ref: establish connection between two schemas
+  appointments: [{ type: mongoose.Types.ObjectId, ref: 'Appointment' }],
   name: { type: String },
   email: { type: String },
   password: { type: String },

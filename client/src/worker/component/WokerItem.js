@@ -7,6 +7,7 @@ import axios from "axios";
 
 import { deleteWorker } from "../../actions/workerActions"
 import { AuthContext } from "../../context/auth-context";
+import { refershData } from "../../actions/utilActions";
 
 const WorkerItem = (props) => {
     const auth = useContext(AuthContext)
@@ -30,7 +31,7 @@ const WorkerItem = (props) => {
                         try {
                             await axios.delete(`http://localhost:8000/api/workers/${auth.firmId}/delete/${workerId}`);
                             dispatch(deleteWorker(workerId))
-
+                            dispatch(refershData())
 
                         } catch (err) {
                             console.log("Error while deleting ther customer:", err);

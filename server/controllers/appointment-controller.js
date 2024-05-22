@@ -45,11 +45,14 @@ const createAppointment = async (req, res, next) => {
     const customerItem = await Customer.findOne({ orders: { $in: [orderId] } });
     const orderItem = await Order.findOne({ _id: orderId })
 
-    const workerNamesArray = await Promise.all(workers.map(async (workerId) => {
+    const workerNames = await Promise.all(workers.map(async (workerId) => {
       const workerItem = await Worker.findOne({ _id: workerId });
-      return workerItem ? workerItem.name : null;
+      if (!workerItem) {
+        const error = new HttpError(`Worker with ID ${workerId} not found`, 404);
+        throw error; // This will stop the process and move to the catch block
+      }
+      return workerItem.name
     }))
-    const workerNames = workerNamesArray.join(', ')
 
     // console.log('worker item ', workerItem);
     // console.log('customer item ', customerItem);
@@ -71,13 +74,18 @@ const createAppointment = async (req, res, next) => {
       o_name: orderItem.name,
 
       c_name: customerItem.name,
-      w_name: workerNames,
+      w_name: workerNames.join(', '),
     });
 
     await createdAppointment.save()
 
     await Order.updateOne({ _id: orderId }, { $push: { appointments: createdAppointment._id } })
     await Firm.updateOne({ _id: firmId }, { $push: { appointments: createdAppointment._id } })
+
+    for (const workerId of workers) {
+      await Worker.updateOne({ _id: workerId }, { $push: { appointments: createdAppointment._id } })
+    }
+    // await Worker.updateMany({ _id: { $in: workers } }, { $push: { appointments: createdAppointment._id } })
     // await Promise.all(workers.map(workerId => Worker.updateOne({ _id: workerId }, { $push: { appointments: createdAppointment._id } })))
 
     res.status(201).json({ appointment: createdAppointment.toObject({ getters: true }) });
@@ -224,15 +232,10 @@ const deleteAppointmentById = async (req, res, next) => {
       return res.status(404).json({ message: 'Appointment not found' });
     }
 
-    await Order.findOneAndUpdate(
-      { appointments: appointmentId },
-      { $pull: { appointments: appointmentId } }
-    );
+    await Order.findOneAndUpdate({ appointments: appointmentId }, { $pull: { appointments: appointmentId } });
+    await Firm.findOneAndUpdate({ appointments: appointmentId }, { $pull: { appointments: appointmentId } });
+    await Worker.updateMany({ appointments: appointmentId }, { $pull: { appointments: appointmentId } });
 
-    await Firm.findOneAndUpdate(
-      { appointments: appointmentId },
-      { $pull: { appointments: appointmentId } }
-    );
 
     res.status(200).json({ message: 'Appointment was deleted successfully' });
   } catch (err) {

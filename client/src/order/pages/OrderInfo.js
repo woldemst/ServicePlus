@@ -164,16 +164,16 @@ const OrderInfo = (props) => {
           disable={!edit}
         />
 
-        <Text style={styles.label}>Mitarbeiter</Text>
-
+        {/* <Text style={styles.label}>Mitarbeiter</Text>
         <Select
+          multi={true}
           search={false}
           data={formData.workerOptions}
           validators={[VALIDATOR_SELECT()]}
           initialSelectedValue={order.w_name}
           onValueChange={(option) => setFormData({ ...formData, selectedWorker: option })}
           disable={!edit}
-        />
+        /> */}
 
         <Text style={styles.label}>Auftragsadresse</Text>
 
@@ -377,7 +377,7 @@ const styles = StyleSheet.create({
   statusContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginBottom: 16
+    marginVertical: 16
     // borderWidth: 2,
     // borderColor: 'red'
   },
