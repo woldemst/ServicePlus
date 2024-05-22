@@ -3,6 +3,7 @@ const HttpError = require("../models/http-error")
 const Worker = require('../models/Worker')
 const Firm = require('../models/Firm')
 const User = require('../models/User')
+const Appointment = require('../models/Appointment')
 
 const getAllWorkersByFirmId = async (req, res, next) => {
     const firmId = req.params.firmId
@@ -200,13 +201,27 @@ const deleteWorkerById = async (req, res, next) => {
             return res.status(404).json({ message: 'Worker not found' });
         }
 
-        // If customer exists, proceed to delete
+        // related to the worker
         await Worker.deleteOne({ _id: workerId });
+        await Firm.findOneAndUpdate({ _id: firmId }, { $pull: { workers: workerId } });
+        // await Appointment.updateMany({ workers: workerId }, { $pull: { workers: workerId, w_name: worker.name } });
 
-        await Firm.findOneAndUpdate(
-            { _id: firmId },
-            { $pull: { workers: workerId } }
-        );
+        // Find and update all related appointments
+        const appointmentsToUpdate = await Appointment.find({ workers: workerId }); 
+
+        for (let appointment of appointmentsToUpdate) {
+            // Remove the worker ID from the appointment
+            const newWorkerIds = appointment.workers.filter(id => id.toString() !== workerId);
+
+            // Fetch new list of worker names
+            const updatedWorkers = await Worker.find({ '_id': { $in: newWorkerIds } });
+            const newWorkerNames = updatedWorkers.map(worker => worker.name).join(', ');
+
+            // Update the appointment
+            await Appointment.updateOne({ _id: appointment._id }, {
+                $set: { workers: newWorkerIds, w_name: newWorkerNames }
+            });
+        }
 
         res.status(200).json({ message: 'Worker was deleted successfully' });
     } catch (err) {

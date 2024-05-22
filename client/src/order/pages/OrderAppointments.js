@@ -18,7 +18,7 @@ const styles = StyleSheet.create({
     appointmentListing: {
         flex: 1,
         backgroundColor: '#fff',
-        paddingVertical: 32,
+        // paddingVertical: 32,
         // paddingHorizontal: 16
     }
 })
