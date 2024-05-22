@@ -2,6 +2,7 @@ export const GET_APPOINTMENTS = 'GET_APPOINTMENTS'
 export const UPDATE_APPOINTMENT_DATA = 'UPDATE_APPOINTMENT_DATA';
 export const DELETE_APPOINTMENT = 'DELETE_APPOINTMENT'
 export const DELETE_APPOINTMENTS_BY_ORDER = 'DELETE_APPOINTMENTS_BY_ORDER'
+export const GET_ARCHIVED_APPOINTMENTS = 'GET_ARCHIVED_APPOINTMENTS'
 
 export const updateAppointmentData = (data) => ({
     type: UPDATE_APPOINTMENT_DATA,
@@ -22,3 +23,9 @@ export const deleteAppointmentsByOrder = (data) => ({
     type: DELETE_APPOINTMENTS_BY_ORDER,
     payload: data
 })
+
+export const getArchivedAppointments = (data) => ({
+    type: GET_ARCHIVED_APPOINTMENTS,
+    payload: data
+})
+

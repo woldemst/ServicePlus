@@ -28,7 +28,6 @@ const getAllAppointments = async (req, res, next) => {
     next(error)
   }
 }
-
 // create an appointment
 const createAppointment = async (req, res, next) => {
   try {
@@ -279,6 +278,27 @@ const statusChange = async (req, res, next) => {
   }
 }
 
+const getAllArchivedAppointments = async (req, res, next) => {
+  const firmId = req.params.firmId
+    try {
+    const appointments = await Appointment.find({ firmId: firmId, status: 2 });
+    if (!appointments || appointments.length === 0) {
+      const error = new HttpError(
+        'Could not find appointments for the provided firm id.',
+        404
+      );
+      return next(error);
+    }
+    res.json({ appointments: appointments.map(appointment => appointment.toObject({ getters: true })) })
+  } catch (err) {
+    const error = new HttpError(
+      'Fetching appointments failed, please try again later.',
+      500
+    );
+    return next(error);
+  }
+}
+
 exports.getAllAppointments = getAllAppointments;
 exports.createAppointment = createAppointment;
 exports.getAllContactsAsOptionsByFirmId = getAllContactsAsOptionsByFirmId;
@@ -289,3 +309,4 @@ exports.getAllWorkersAsOptionsByFirmId = getAllWorkersAsOptionsByFirmId;
 exports.getAllOrdersAsOptionsByFirmId = getAllOrdersAsOptionsByFirmId;
 
 exports.statusChange = statusChange;
+exports.getAllArchivedAppointments = getAllArchivedAppointments;
