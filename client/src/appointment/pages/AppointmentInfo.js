@@ -10,16 +10,14 @@ import Button from "../../shared/UIElements/Button";
 
 
 const AppointmentInfo = props => {
-    const [edit, setEdit] = useState(false);
+    const appointments = useSelector(state => state.appointment.appointmentsArray.appointments)
+    const showArchived = useSelector(state => state.appointment.showArchived)
+    const appointmentItem = appointments.find(appointment => appointment._id == props.id)
     
     const dispatch = useDispatch()
     
-    const appointments = useSelector(state => state.appointment.appointmentsArray.appointments)
-    const appointmentItem = appointments.find(appointment => appointment._id == props.id)
+    const [edit, setEdit] = useState(false);
     const [activeStatus, setActiveStatus] = useState(props.status);
-
-    // console.log(appointmentItem.status);
-
     
     useEffect(() => {
         setActiveStatus(appointmentItem.status)
@@ -27,7 +25,6 @@ const AppointmentInfo = props => {
             setActiveStatus(activeStatus)
         }
     }, [activeStatus, edit])
-
 
     const handleStatusChange = async newStatus => {
         setActiveStatus(newStatus);
@@ -58,7 +55,6 @@ const AppointmentInfo = props => {
         )
 
     };
-
 
     return <>
         <View style={styles.container}>
@@ -140,6 +136,7 @@ const AppointmentInfo = props => {
                         buttonText={styles.editButtonText}
                         onPress={() => setEdit(false)}
                         title={'Abbrechen'}
+                        disabled={showArchived}
                     />
                 ) : (
                     <Button
@@ -147,6 +144,7 @@ const AppointmentInfo = props => {
                         buttonText={styles.editButtonText}
                         onPress={() => setEdit(true)}
                         title={'Ändern'}
+                        disabled={showArchived}
                     />
                 )}
             </View>
