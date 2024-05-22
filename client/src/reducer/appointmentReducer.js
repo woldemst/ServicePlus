@@ -4,16 +4,20 @@ const initialState = {
   appointmentsArray: {
     appointments: []
   },
+  activeAppointments: [],
   archivedAppointments: [],
-  showArchived: false
+  showArchived: false,
 };
 
 const appointmentReducer = (state = initialState, action) => {
   switch (action.type) {
     case GET_APPOINTMENTS:
+      const activeAppointments = action.payload.appointments.filter(appointment => appointment.status !== '3' && appointment.status !== '4');
+      // console.log(activeAppointments);
       return {
         ...state,
         appointmentsArray: action.payload,
+        activeAppointments: activeAppointments
       };
 
     case DELETE_APPOINTMENT:

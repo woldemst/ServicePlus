@@ -12,22 +12,14 @@ import { AuthContext } from '../../context/auth-context';
 const AppointmentList = props => {
     const dispatch = useDispatch()
     const auth = useContext(AuthContext)
-    const id = props.id
 
-
-    const fetchedData = useSelector(state => state.appointment.appointmentsArray)
+    const fetchedActiveAppointments = useSelector(state => state.appointment.activeAppointments)
     const fetchedArchivedData = useSelector(state => state.appointment.archivedAppointments)
-    const showArchived = useSelector(state => state.appointment.showArchived)    
+    const showArchived = useSelector(state => state.appointment.showArchived)
     const refresh = useSelector(state => state.util.refresh)
 
     const [isLoaded, setIsLoaded] = useState(false)
     const [refreshing, setRefreshing] = useState(false);
-
-
-    // const appointmentArr = useSelector(state => state.appointment.appointmentsArray.appointments)
-    // const byOrderId = appointmentArr.find(appointment => appointment.orderId == '660d6bd14f47ff40447d52cf')
-
-    // console.log('orderId', props.id);
 
     const onRefresh = useCallback(() => {
         setRefreshing(true);
@@ -53,7 +45,7 @@ const AppointmentList = props => {
 
 
     const renderAppointments = () => {
-        if (fetchedData.appointments.length === 0) {
+        if (fetchedActiveAppointments.length === 0) {
             return (
                 <View style={styles.imgContainer}>
                     <Image style={styles.bannerImg} source={require('../../../assets/empty_folder.png')} />
@@ -61,8 +53,8 @@ const AppointmentList = props => {
             )
         }
         // console.log(showArchived);
-        
-        let appointmentsToRender = showArchived ? fetchedArchivedData : fetchedData.appointments;
+
+        let appointmentsToRender = showArchived ? fetchedArchivedData : fetchedActiveAppointments;
 
         if (props.id) {
             appointmentsToRender = appointmentsToRender.filter(appointment => appointment.orderId === props.id);
@@ -81,9 +73,7 @@ const AppointmentList = props => {
         return (
             <FlatList
                 showsVerticalScrollIndicator={false}
-                refreshControl={
-                    <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-                }
+                refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
                 data={appointmentsToRender}
                 keyExtractor={item => item._id}
                 renderItem={({ item, index }) => (
@@ -131,10 +121,6 @@ const AppointmentList = props => {
         >
             <AppointmentCreate toggleModal={props.toggleModal} />
         </ModalComponent >
-
-
-
-
     </>
 
 }
