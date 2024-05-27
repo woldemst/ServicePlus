@@ -25,6 +25,7 @@ const OrderItem = (props) => {
 
   const orderId = props.id
   const orders = useSelector(state => state.order.ordersArray.orders)
+  const showArchivedOrders = useSelector(state => state.order.showArchivedOrders)
   const orderItem = orders.find(order => order._id == orderId)
 
   const [isModalVisible, setModalVisible] = useState(false);
@@ -84,8 +85,8 @@ const OrderItem = (props) => {
           styles.indicator,
           orderItem.status == 1 ? styles.notStarted : null,
           orderItem.status == 2 ? styles.inProgress : null,
-          orderItem.status == 3 ? styles.completed : null,
-          orderItem.status == 4 ? styles.canceled : null,
+          orderItem.status == 3 ? [!showArchivedOrders ? styles.completed : styles.archivedCompleted] : null,
+          orderItem.status == 4 ? [!showArchivedOrders ? styles.canceled : styles.archivedCanceled] : null,
         ]}></View>
 
         <View style={styles.mainContent}>
@@ -121,7 +122,7 @@ const OrderItem = (props) => {
       data={[props]}
       renderHiddenItem={(data, rowMap) => (
         <View style={[styles.rowBack, props.style]}>
-          <TouchableOpacity style={styles.hiddenItrem} onPress={deleteHandler}>
+          <TouchableOpacity style={styles.hiddenItem} onPress={deleteHandler}>
             <Image style={styles.deleteImage} source={require('../../../assets/buttons/delete.png')} />
           </TouchableOpacity>
         </View>
@@ -132,27 +133,30 @@ const OrderItem = (props) => {
 
 const styles = StyleSheet.create({
   container: {
-    flexDirection: "row",
+    flexDirection: 'row',
     flex: 1,
-    position: 'relative'
   },
   indicator: {
-    width: "3%",
-    backgroundColor: "#7A9B76",
-    borderTopLeftRadius: 10,
-    borderBottomLeftRadius: 10,
+    width: '4%',
+    backgroundColor: '#7A9B76',
+    borderTopLeftRadius: 50,
+    borderBottomLeftRadius: 50,
+
+    // borderWidth: 1, 
+    // borderColor: 'green'
   },
   mainContent: {
     flex: 1,
     paddingTop: 6,
     paddingBottom: 6,
     paddingLeft: 16,
-    textAlign: "left",
-  },
-  modalHeadline: {
-    fontSize: 21,
-    color: '#7a9b76',
-    fontWeight: '700'
+    textAlign: 'left',
+
+    borderLeftWidth: 0,
+    borderWidth: 1,
+    borderColor: '#757575',
+    borderTopRightRadius: 10,
+    borderBottomRightRadius: 10,
   },
   iconContainer: {
     // width: '8%',
@@ -201,22 +205,19 @@ const styles = StyleSheet.create({
     marginRight: 24,
     marginLeft: 24,
     marginTop: 16,
-
-    borderWidth: 1,
-    borderColor: '#757575',
+    // borderWidth: 1,
+    // borderLeftWidth: 0,
+    // borderColor: '#757575',
     borderRadius: 10,
   },
   rowBack: {
     backgroundColor: '#C70000',
-    borderWidth: 1,
+    borderWidth: 3,
     borderColor: '#C70000',
     borderRadius: 10,
     marginRight: 24,
     marginLeft: 24,
     marginTop: 16,
-
-
-
   },
   deleteImage: {
     width: 30,
@@ -246,12 +247,31 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "rgba(0, 0, 0, 0.5)", // Add a semi-transparent background
   },
-  hiddenItrem: {
+  hiddenItem: {
     alignItems: 'flex-end',
     justifyContent: 'center',
     paddingRight: 20,
     height: '100%',
-  }
+  },
+  // status indicator 
+  notStarted: {
+    backgroundColor: '#FBB13C',
+  },
+  inProgress: {
+    backgroundColor: '#1769FF',
+  },
+  completed: {
+    backgroundColor: '#7A9B76',
+  },
+  canceled: {
+    backgroundColor: '#DB504A',
+  },
+  archivedCanceled: {
+    backgroundColor: '#666666',
+  },
+  archivedCompleted: {
+    backgroundColor: '#999999',
+  },
 });
 
 export default OrderItem;

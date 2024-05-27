@@ -13,17 +13,21 @@ import OrderList from '../components/OrderList'
 import ModalComponent from "../../shared/UIElements/Modal";
 import OrderCreate from "./OrderCreate";
 import { AuthContext } from "../../context/auth-context";
+import { getArchivedOrders } from "../../actions/orderActions";
 
 
 const OrderView = () => {
     const auth = useContext(AuthContext);
+    const dispatch = useDispatch()
+
+
     const [isModalVisible, setModalVisible] = useState(false);
+
 
     const fetchedData = useSelector((state) => state.order.ordersArray);
 
-    const toggleModal = () => {
-        setModalVisible(!isModalVisible)
-    }
+    const toggleModal = () => setModalVisible(!isModalVisible)
+    const toggleArchived = () => dispatch(getArchivedOrders())
 
     return <View style={styles.orderContainer}>
         <View style={styles.header} >
@@ -34,15 +38,20 @@ const OrderView = () => {
                 </View>
 
                 <View style={[styles.headerIconContainer, { justifyContent: auth.admin ? 'space-between' : 'flex-end' }]} >
-                    {auth.admin && ( 
+                    <TouchableOpacity style={styles.headerButton} >
+                        <Image style={styles.headerIcon} source={require('../../../assets/filter.png')} />
+                    </TouchableOpacity>
+                    
+                    {auth.admin && (
                         <TouchableOpacity style={styles.headerButton} onPress={toggleModal} >
                             <Image style={styles.headerIcon} source={require('../../../assets/add_new.png')} />
                         </TouchableOpacity>
                     )}
 
-                    <TouchableOpacity style={styles.headerButton} >
-                        <Image style={styles.headerIcon} source={require('../../../assets/filter.png')} />
+                    <TouchableOpacity onPress={toggleArchived} style={styles.headerButton} >
+                        <Image style={styles.headerIcon} source={require('../../../assets/order/archive.png')} />
                     </TouchableOpacity>
+
                 </View>
             </View>
         </View>
@@ -96,7 +105,7 @@ const styles = StyleSheet.create({
     },
     headerIconContainer: {
         flexDirection: 'row',
-        width: '20%',
+        width: '30%',
 
 
     },

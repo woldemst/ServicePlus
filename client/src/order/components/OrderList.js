@@ -24,8 +24,10 @@ const OrderList = (props) => {
     const dispatch = useDispatch()
     const auth = useContext(AuthContext)
 
-    const fetchedData = useSelector((state) => state.order.ordersArray);
+    const fetchedActiveOrders = useSelector((state) => state.order.activeOrders);
+    const fetchedArchivedOrders = useSelector((state) => state.order.archivedOrders);
     const refresh = useSelector(state => state.util.refresh)
+    const showArchivedOrders = useSelector(state => state.order.showArchivedOrders)
 
     const [isLoaded, setIsLoaded] = useState(false)
     const [fetchedCustomers, setFetchedCustomers] = useState([])
@@ -35,9 +37,7 @@ const OrderList = (props) => {
 
     const onRefresh = useCallback(() => {
         setRefreshing(true);
-        setTimeout(() => {
-            setRefreshing(false);
-        }, 1000);
+        setTimeout(() => setRefreshing(false), 1000);
     }, []);
 
     useEffect(() => {
@@ -93,8 +93,10 @@ const OrderList = (props) => {
         }
     }
 
+    const ordersToRender = showArchivedOrders ? fetchedArchivedOrders : fetchedActiveOrders
+
     // console.log(fetchedCustomers.length, fetchedWorkers.length);
-    return fetchedData.orders.length === 0 ? (
+    return fetchedActiveOrders.length === 0 ? (
         <>
             <View style={styles.orderContainer}>
                 <View style={styles.suggestContainer}>
@@ -128,7 +130,7 @@ const OrderList = (props) => {
                         refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
                         showsVerticalScrollIndicator={false}
                         style={styles.scroll}
-                        data={fetchedData.orders}
+                        data={ordersToRender}
                         keyExtractor={item => item._id}
                         renderItem={({ item, index }) => (
                             <OrderItem
