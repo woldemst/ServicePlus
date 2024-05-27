@@ -1,11 +1,12 @@
-import { GET_ORDERS, UPDATE_ORDER_DATA_BY_ID, CLEAR_ORDER_DATA, TOGGLE_EDIT, TOGGLE_TO_TRUE_EDIT_ORDER, TOGGLE_TO_FALSE_EDIT_ORDER, UPDATE_ORDER_NAME, DELETE_ORDER } from '../actions/orderActions';
+import { GET_ORDERS, UPDATE_ORDER_DATA_BY_ID, CLEAR_ORDER_DATA, TOGGLE_EDIT, TOGGLE_TO_TRUE_EDIT_ORDER, TOGGLE_TO_FALSE_EDIT_ORDER, UPDATE_ORDER_NAME, DELETE_ORDER, GET_ARCHIVED_ORDERS } from '../actions/orderActions';
 
 const initialState = {
-  ordersArray: {
-    orders: []
-  },
+  ordersArray: { orders: [] },
+  activeOrders: [],
+  archivedOrders: [],
+  showArchivedOrders: false,
+  orderName: '',
   edit: false,
-  orderName: ''
 };
 
 const orderReducer = (state = initialState, action) => {
@@ -38,21 +39,12 @@ const orderReducer = (state = initialState, action) => {
       };
 
     case GET_ORDERS:
+      const activeOrders = action.payload.orders.filter(order => order.status !== '3' && order.status !== '4');
       return {
         ...state,
         ordersArray: action.payload,
+        activeOrders: activeOrders,
       };
-    // case CREATE_CUSTOMER:
-    //   const newOrder= action.payload.order;
-    //   // console.log(action.payload);
-    //   return {
-    //     ...state,
-    //     ordersArray: {
-    //       ...state.ordersArray,
-    //       orders: [...state.ordersArray.orders, newOrder],
-    //     },
-    //   };
-
     case TOGGLE_TO_TRUE_EDIT_ORDER:
       return {
         ...state,
@@ -83,6 +75,14 @@ const orderReducer = (state = initialState, action) => {
           orders: filteredOrders
         }
       };
+
+    case GET_ARCHIVED_ORDERS:
+      const filteredArchivedOrders = state.ordersArray.orders.filter(order => order.status === '3' || order.status === '4');
+      return {
+        ...state,
+        showArchivedOrders: !state.showArchivedOrders,
+        archivedOrders: filteredArchivedOrders
+      }
     default:
       return state;
   }

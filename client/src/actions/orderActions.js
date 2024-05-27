@@ -1,4 +1,4 @@
-export const UPDATE_FIELD = 'UPDATE_FIELD'
+
 export const GET_ORDERS = 'GET_ORDERS'
 export const UPDATE_ORDER_DATA_BY_ID = 'UPDATE_ORDER_DATA_BY_ID';
 export const CLEAR_ORDER_DATA = 'CLEAR_ORDER_DATA'
@@ -7,14 +7,13 @@ export const TOGGLE_TO_FALSE_EDIT_ORDER = 'TOGGLE_TO_FALSE_EDIT_ORDER'
 export const TOGGLE_EDIT = 'TOGGLE_EDIT'
 export const UPDATE_ORDER_NAME = 'UPDATE_ORDER_NAME'
 export const DELETE_ORDER = 'DELETE_ORDER'
+export const GET_ARCHIVED_ORDERS = 'GET_ARCHIVED_ORDERS'
 
 
-export const updateOrderName = (name) => {
-  return {
-      type: UPDATE_ORDER_NAME,
-      payload: name
-  };
-};
+export const updateOrderName = (name) => ({
+  type: UPDATE_ORDER_NAME,
+  payload: name
+})
 
 export const toggleEdit = (data) => ({
   type: TOGGLE_EDIT,
@@ -30,24 +29,13 @@ export const toggleToFalseEditOrder = (data) => ({
   payload: data
 })
 
-export const updateField = (fieldName, value, validators, objectId) => {
-  return {
-    type: UPDATE_FIELD,
-    payload: {
-      fieldName,
-      value,
-      validators,
-      objectId
-    }
-  };
-};
 
 export const updateOrderDataById = (data, fieldName, orderId,) => ({
   type: UPDATE_ORDER_DATA_BY_ID,
   payload: {
-    data, 
+    data,
     fieldName,
-    orderId, 
+    orderId,
   }
 });
 
@@ -65,3 +53,9 @@ export const deleteOrder = (data) => ({
   type: DELETE_ORDER,
   payload: data
 })
+
+export const getArchivedOrders = (data) => ({
+  type: GET_ARCHIVED_ORDERS,
+  payload: data
+})
+

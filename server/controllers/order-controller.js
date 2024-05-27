@@ -191,7 +191,7 @@ const getAllContactsAsOptions = async (req, res, next) => {
 
 const updateOrderById = async (req, res, next) => {
   const orderId = req.params.orderId
-
+  console.log(req.params);
   const {
     customerId,
     // workerId,
@@ -219,11 +219,11 @@ const updateOrderById = async (req, res, next) => {
     const customerItem = await Customer.findOne({ _id: customerId });
     // const workerItem = await Worker.findOne({ _id: workerId })
 
-    updateOrder.name = name,
+      updateOrder.name = name,
       updateOrder.customerId = customerId,
       updateOrder.c_name = customerItem.name,
 
-      updateOrder.workerId = workerId,
+      // updateOrder.workerId = workerId,
       // updateOrder.w_name = workerItem.name,
       // updateOrder.contact = contact,
       updateOrder.street = street,

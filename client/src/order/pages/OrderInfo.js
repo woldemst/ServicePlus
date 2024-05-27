@@ -44,10 +44,10 @@ const OrderInfo = (props) => {
 
     // contactOption: {value: order.contact},
     customerOptions: [],
-    workerOptions: [],
+    // workerOptions: [],
 
     selectedCustomer: order.customerId,
-    selectedWorker: order.workerId,
+    // selectedWorker: order.workerId,
 
   })
 
@@ -78,11 +78,11 @@ const OrderInfo = (props) => {
       try {
         const [
           customerResponse,
-          workerResponse,
+          // workerResponse,
           // contactResponse
         ] = await Promise.all([
           axios.get(`http://localhost:8000/api/orders/customer-options/${auth.firmId}`),
-          axios.get(`http://localhost:8000/api/orders/worker-options/${auth.firmId}`),
+          // axios.get(`http://localhost:8000/api/orders/worker-options/${auth.firmId}`),
           // axios.get(`http://localhost:8000/api/orders/contact-options/${auth.firmId}`),
         ])
 
@@ -92,10 +92,10 @@ const OrderInfo = (props) => {
             label: customer.name,
             value: customer.id,
           })),
-          workerOptions: workerResponse.data.workers.map((worker) => ({
-            label: worker.name,
-            value: worker.id,
-          })),
+          // workerOptions: workerResponse.data.workers.map((worker) => ({
+          //   label: worker.name,
+          //   value: worker.id,
+          // })),
           // contactOptions: contactResponse.data.contacts.map((contact) => ({
           //   key: contact.id,
           //   value: contact.name,
@@ -127,10 +127,10 @@ const OrderInfo = (props) => {
     const URL = `http://localhost:8000/api/orders/update/${orderId}`;
     try {
       const response = await axios.patch(URL, {
-        firmId: auth.firmId,
-        name: order.name,
+        // firmId: auth.firmId,
         customerId: formData.selectedCustomer,
-        workerId: formData.selectedWorker,
+        name: order.name, 
+        // workerId: formData.selectedWorker,
         // contact: formData.contact,
         street: formData.street,
         houseNr: formData.houseNr,
