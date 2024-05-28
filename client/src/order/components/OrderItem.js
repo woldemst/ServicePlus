@@ -95,10 +95,10 @@ const OrderItem = (props) => {
           </View>
 
           <View style={styles.adressContainer}>
-            <Text style={styles.adressItem}>{props.street}</Text>
-            <Text style={styles.adressItem}>{props.houseNr}</Text>
-            <Text style={styles.adressItem}>{props.zip}</Text>
-            <Text style={styles.adressItem}>{props.place}</Text>
+            <Text style={styles.adressItem} numberOfLines={1} ellipsizeMode="tail">{props.street}</Text>
+            <Text style={styles.adressItem} numberOfLines={1} ellipsizeMode="tail">{props.houseNr}</Text>
+            <Text style={styles.adressItem} numberOfLines={1} ellipsizeMode="tail">{props.zip}</Text>
+            <Text style={styles.adressItem} numberOfLines={1} ellipsizeMode="tail">{props.place}</Text>
           </View>
 
           <Text style={styles.customerName}>{props.c_name}</Text>
@@ -135,6 +135,7 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
     flex: 1,
+
   },
   indicator: {
     width: '4%',
@@ -170,9 +171,14 @@ const styles = StyleSheet.create({
   },
   adressContainer: {
     flexDirection: "row",
+    overflow: 'hidden',
+    paddingTop: 5,
+
   },
   adressItem: {
-    marginRight: 5
+    marginRight: 5,
+    // flex: 1,
+    // fontSize: 13,
   },
   date: {
     fontSize: 14,
