@@ -74,7 +74,8 @@ const orderReducer = (state = initialState, action) => {
           ...state.ordersArray,
           orders: filteredOrders
         },
-        activeOrders: state.activeOrders.filter(order => order._id !== action.payload)
+        activeOrders: state.activeOrders.filter(order => order._id !== action.payload),
+        archivedOrders: state.archivedOrders.filter(order => order._id !== action.payload)
       };
 
     case GET_ARCHIVED_ORDERS:
