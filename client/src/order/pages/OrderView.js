@@ -21,10 +21,10 @@ const OrderView = () => {
     const dispatch = useDispatch()
 
 
-    const [isModalVisible, setModalVisible] = useState(false);
-
-
     const fetchedData = useSelector((state) => state.order.ordersArray);
+    const showArchivedOrders = useSelector(state => state.order.showArchivedOrders)    
+    
+    const [isModalVisible, setModalVisible] = useState(false);
 
     const toggleModal = () => setModalVisible(!isModalVisible)
     const toggleArchived = () => dispatch(getArchivedOrders())
@@ -34,7 +34,7 @@ const OrderView = () => {
             <View style={styles.headerContent}>
 
                 <View style={styles.textContainer} >
-                    <Text style={styles.headerText}>{fetchedData.orders.length === 0 ? 'Noch keinen Auftrag?' : 'Aufträge'}</Text>
+                    <Text style={styles.headerText}>{fetchedData.orders.length === 0 ? 'Noch keinen Auftrag?' : ['Aufträge ', showArchivedOrders && '(archiviert)']}</Text>
                 </View>
 
                 <View style={[styles.headerIconContainer, { justifyContent: auth.admin ? 'space-between' : 'flex-end' }]} >
@@ -43,7 +43,7 @@ const OrderView = () => {
                     </TouchableOpacity>
                     
                     {auth.admin && (
-                        <TouchableOpacity style={styles.headerButton} onPress={toggleModal} >
+                        <TouchableOpacity disabled={showArchivedOrders} style={styles.headerButton} onPress={toggleModal} >
                             <Image style={styles.headerIcon} source={require('../../../assets/add_new.png')} />
                         </TouchableOpacity>
                     )}
