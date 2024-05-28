@@ -41,7 +41,6 @@ const AppointmentCreate = props => {
 
         setSelectedDateOnly(dateOnly);
         setSelectedTimeOnly(timeOnly);
-
     };
 
     const [formData, setFormData] = useState({
@@ -69,9 +68,11 @@ const AppointmentCreate = props => {
                     // axios.get(`http://localhost:8000/api/appointments/contact-options/${auth.firmId}`),
                 ])
 
+                const filteredOrders = orderResponse.data.orders.filter(order => order.status !== '3' && order.status !== '4')
+
                 setFormData(prevFormData => ({
                     ...prevFormData,
-                    orderOptions: orderResponse.data.orders.map((order) => ({
+                    orderOptions: filteredOrders.map((order) => ({
                         label: order.name,
                         value: order.id,
                     })),
