@@ -8,6 +8,7 @@ import ModalComponent from "../../shared/UIElements/Modal";
 import AppointmentInfo from "../pages/AppointmentInfo";
 import { deleteAppointment } from '../../actions/appointmentActions'
 import { AuthContext } from "../../context/auth-context";
+import { refershData } from "../../actions/utilActions";
 
 const AppointmentItem = (props) => {
     const auth = useContext(AuthContext)
@@ -24,12 +25,14 @@ const AppointmentItem = (props) => {
     const renderItem = (data) => (
         <View style={[styles.rowFront, props.style]}>
             <TouchableOpacity style={styles.container} onPress={toggleModal} >
+
+                {console.log(props.id, props.status)}
                 <View style={[
                     styles.indicator,
-                    appointmentItem.status == 1 ? styles.notStarted : null,
-                    appointmentItem.status == 2 ? styles.inProgress : null,
-                    appointmentItem.status == 3 ? [!showArchived ? styles.completed : styles.archivedCompleted] : null,
-                    appointmentItem.status == 4 ? [!showArchived ? styles.canceled : styles.archivedCanceled] : null,
+                    appointmentItem.status == '1' ? styles.notStarted : null,
+                    appointmentItem.status == '2' ? styles.inProgress : null,
+                    appointmentItem.status == '3' ? [!showArchived ? styles.completed : styles.archivedCompleted] : null,
+                    appointmentItem.status == '4' ? [!showArchived ? styles.canceled : styles.archivedCanceled] : null,
                 ]}></View>
 
                 <View style={styles.mainContent}>
@@ -62,8 +65,8 @@ const AppointmentItem = (props) => {
 
     const deleteHandler = async () => {
         Alert.alert(
-            'Delete Confirmation',
-            'Are you sure you want to delete this appointment?',
+            'Löschbestätigung',
+            'Möchtest du diesen Termin wirklich löschen?',
             [
                 {
                     text: 'Cancel',
@@ -75,6 +78,7 @@ const AppointmentItem = (props) => {
                         try {
                             await axios.delete(`http://localhost:8000/api/appointments/${appointmentId}/delete`)
                             dispatch(deleteAppointment(appointmentId))
+                            dispatch(refershData())
 
                         } catch (err) {
                             console.log("Error while deleting appointments", err);

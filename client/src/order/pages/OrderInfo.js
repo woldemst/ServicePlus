@@ -53,23 +53,21 @@ const OrderInfo = (props) => {
 
   // console.log(formData.name);
   const handleChange = async newStatus => {
-
     Alert.alert(
-      'Changing Confirmation',
-      'Are you sure you want to change the information of this order?',
+      'Änderungsbestätigung',
+      'Sind Sie sicher, dass Sie die Informationen dieses Auftrags ändern möchten?',
       [
         {
-          text: 'Cancel',
+          text: 'Abbrechen',
           style: 'cancel',
         },
         {
-          text: "Change",
+          text: "Ändern",
           onPress: handleSubmit
         }
       ],
       { cancelable: false }
     )
-
   };
 
 
@@ -125,11 +123,12 @@ const OrderInfo = (props) => {
 
   const handleSubmit = async () => {
     const URL = `http://localhost:8000/api/orders/update/${orderId}`;
+
     try {
       const response = await axios.patch(URL, {
         // firmId: auth.firmId,
         customerId: formData.selectedCustomer,
-        name: order.name, 
+        name: order.name,
         // workerId: formData.selectedWorker,
         // contact: formData.contact,
         street: formData.street,
@@ -141,7 +140,7 @@ const OrderInfo = (props) => {
       });
       dispatch(refershData())
       dispatch(toggleToFalseEditOrder())
-      alert('Order updated successfuly')
+      alert('Der Auftrag wurde erfolgreich geändert');
       // navigation.goBack()
     } catch (err) {
       alert("An error occurred while editing the order.");
@@ -253,7 +252,7 @@ const OrderInfo = (props) => {
             onPress={() => setActiveStatus(2)}
             disabled={!edit}
           >
-            <Text style={styles.statusButtonText}>In Progress</Text>
+            <Text style={styles.statusButtonText}>In Arbeit</Text>
           </TouchableOpacity>
 
           <TouchableOpacity
@@ -264,7 +263,7 @@ const OrderInfo = (props) => {
             onPress={() => setActiveStatus(3)}
             disabled={!edit}
           >
-            <Text style={styles.statusButtonText}>Completed</Text>
+            <Text style={styles.statusButtonText}>Fertig</Text>
           </TouchableOpacity>
 
           <TouchableOpacity
@@ -278,7 +277,7 @@ const OrderInfo = (props) => {
             ]}
             onPress={() => setActiveStatus(4)}
             disabled={!edit}>
-            <Text style={styles.statusButtonText}>Canceled</Text>
+            <Text style={styles.statusButtonText}>Strorniert</Text>
           </TouchableOpacity>
 
         </View>
@@ -390,7 +389,8 @@ const styles = StyleSheet.create({
   statusButtonText: {
     fontWeight: 'bold',
     color: 'white',
-    borderColor: 'red'
+    borderColor: 'red',
+    // fontSize: 11
 
   },
   disabledButton: {

@@ -83,10 +83,10 @@ const OrderItem = (props) => {
       <TouchableOpacity style={styles.container} onPress={onPressHandler} >
         <View style={[
           styles.indicator,
-          orderItem.status == 1 ? styles.notStarted : null,
-          orderItem.status == 2 ? styles.inProgress : null,
-          orderItem.status == 3 ? [!showArchivedOrders ? styles.completed : styles.archivedCompleted] : null,
-          orderItem.status == 4 ? [!showArchivedOrders ? styles.canceled : styles.archivedCanceled] : null,
+          orderItem.status == '1' ? styles.notStarted : null,
+          orderItem.status == '2' ? styles.inProgress : null,
+          orderItem.status == '3' ? [!showArchivedOrders ? styles.completed : styles.archivedCompleted] : null,
+          orderItem.status == '4' ? [!showArchivedOrders ? styles.canceled : styles.archivedCanceled] : null,
         ]}></View>
 
         <View style={styles.mainContent}>

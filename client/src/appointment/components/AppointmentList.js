@@ -23,9 +23,7 @@ const AppointmentList = props => {
 
     const onRefresh = useCallback(() => {
         setRefreshing(true);
-        setTimeout(() => {
-            setRefreshing(false);
-        }, 1000);
+        setTimeout(() => setRefreshing(false), 1000);
     }, []);
 
     useEffect(() => {
@@ -68,7 +66,7 @@ const AppointmentList = props => {
                 </View>
             );
         }
-
+        // console.log(appointmentsToRender);
 
         return (
             <FlatList
