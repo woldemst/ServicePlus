@@ -7,7 +7,12 @@ const initialState = {
   showArchived: false,
 };
 
+
+
 const appointmentReducer = (state = initialState, action) => {
+  
+  // const activeAppointments = state.appointmentsArray.appointments.filter(appointment => appointment.status !== '3' && appointment.status !== '4');
+
   switch (action.type) {
     case GET_APPOINTMENTS:
       const activeAppointments = action.payload.appointments.filter(appointment => appointment.status !== '3' && appointment.status !== '4');
@@ -26,7 +31,8 @@ const appointmentReducer = (state = initialState, action) => {
           ...state.appointmentsArray,
           appointments: filteredAppointments
         },
-        activeAppointments: state.activeAppointments.filter(appointment => appointment._id !== action.payload)
+        activeAppointments: state.activeAppointments.filter(appointment => appointment._id !== action.payload),
+        archivedAppointments: state.archivedAppointments.filter(appointment => appointment._id !== action.payload)
       };
 
     case DELETE_APPOINTMENTS_BY_ORDER:
