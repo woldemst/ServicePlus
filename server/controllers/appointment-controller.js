@@ -202,7 +202,8 @@ const getAllOrdersAsOptionsByFirmId = async (req, res, next) => {
 
     const orderList = orders.map(order => ({
       id: order._id,
-      name: order.name
+      name: order.name,
+      status: order.status,
     }))
     // res.json({
     //   workers: workers.map(worker => worker.toObject({ getters: true })),

@@ -26,7 +26,6 @@ const AppointmentItem = (props) => {
         <View style={[styles.rowFront, props.style]}>
             <TouchableOpacity style={styles.container} onPress={toggleModal} >
 
-                {console.log(props.id, props.status)}
                 <View style={[
                     styles.indicator,
                     appointmentItem.status == '1' ? styles.notStarted : null,
