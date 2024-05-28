@@ -1,9 +1,7 @@
 import { GET_APPOINTMENTS, DELETE_APPOINTMENT, DELETE_APPOINTMENTS_BY_ORDER, UPDATE_APPOINTMENT_DATA, GET_ARCHIVED_APPOINTMENTS } from '../actions/appointmentActions';
 
 const initialState = {
-  appointmentsArray: {
-    appointments: []
-  },
+  appointmentsArray: { appointments: [] },
   activeAppointments: [],
   archivedAppointments: [],
   showArchived: false,
@@ -27,7 +25,8 @@ const appointmentReducer = (state = initialState, action) => {
         appointmentsArray: {
           ...state.appointmentsArray,
           appointments: filteredAppointments
-        }
+        },
+        activeAppointments: state.activeAppointments.filter(appointment => appointment._id !== action.payload)
       };
 
     case DELETE_APPOINTMENTS_BY_ORDER:

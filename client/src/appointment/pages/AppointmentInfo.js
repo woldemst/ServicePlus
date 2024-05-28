@@ -97,7 +97,7 @@ const AppointmentInfo = props => {
                         onPress={() => handleStatusChange(2)}
                         disabled={!edit}
                     >
-                        <Text style={styles.statusButtonText}>In Progress</Text>
+                        <Text style={styles.statusButtonText}>In Arbeit</Text>
                     </TouchableOpacity>
 
                     <TouchableOpacity
@@ -108,7 +108,7 @@ const AppointmentInfo = props => {
                         onPress={() => handleStatusChange(3)}
                         disabled={!edit}
                     >
-                        <Text style={styles.statusButtonText}>Completed</Text>
+                        <Text style={styles.statusButtonText}>Fertig</Text>
                     </TouchableOpacity>
 
                     <TouchableOpacity
@@ -122,7 +122,7 @@ const AppointmentInfo = props => {
                         ]}
                         onPress={() => handleStatusChange(4)}
                         disabled={!edit}>
-                        <Text style={styles.statusButtonText}>Canceled</Text>
+                        <Text style={styles.statusButtonText}>Storniert</Text>
                     </TouchableOpacity>
 
                 </View>

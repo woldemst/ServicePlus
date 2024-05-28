@@ -95,6 +95,7 @@ const OrderList = (props) => {
 
     const ordersToRender = showArchivedOrders ? fetchedArchivedOrders : fetchedActiveOrders
 
+    // console.log(ordersToRender);
     // console.log(fetchedCustomers.length, fetchedWorkers.length);
     return fetchedActiveOrders.length === 0 ? (
         <>
