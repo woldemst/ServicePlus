@@ -15,6 +15,7 @@ const orderSchema = new mongoose.Schema({
   // creator: {type: String},
   // date: { type: String}, 
   status: { type: String},
+  // archived: { type: Boolean},
   contact: { type: String },
   description: { type: String },
 });

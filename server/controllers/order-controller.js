@@ -46,6 +46,7 @@ const createOrder = async (req, res, next) => {
 
   const createdOrder = new Order({
     // creator: creator, // auth.userId in frontend 
+    archived: false,
     status: 1,
     firmId: firmId,
     name: name,
@@ -191,7 +192,7 @@ const getAllContactsAsOptions = async (req, res, next) => {
 
 const updateOrderById = async (req, res, next) => {
   const orderId = req.params.orderId
-  console.log(req.params);
+  // console.log(req.params);
   const {
     customerId,
     // workerId,
@@ -219,7 +220,7 @@ const updateOrderById = async (req, res, next) => {
     const customerItem = await Customer.findOne({ _id: customerId });
     // const workerItem = await Worker.findOne({ _id: workerId })
 
-      updateOrder.name = name,
+    updateOrder.name = name,
       updateOrder.customerId = customerId,
       updateOrder.c_name = customerItem.name,
 
@@ -231,9 +232,9 @@ const updateOrderById = async (req, res, next) => {
       updateOrder.zip = zip,
       updateOrder.place = place,
       updateOrder.description = description,
-      updateOrder.status = status,
+      updateOrder.status = status;
 
-      await updateOrder.save();
+    await updateOrder.save();
 
     // Update related appointments
     const appointments = await Appointment.find({ orderId: orderId });
@@ -244,10 +245,13 @@ const updateOrderById = async (req, res, next) => {
       appointment.o_houseNr = houseNr;
       appointment.o_zip = zip;
       appointment.o_place = place;
+      if (status === 3 || status === 4) {
+        // console.log(appointment.status, 'new one: ', status)
+        appointment.status = status;
+      }
 
       await appointment.save();
     }
-
 
     res
       .status(200)
