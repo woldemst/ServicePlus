@@ -30,8 +30,10 @@ const AppointmentItem = (props) => {
                     styles.indicator,
                     appointmentItem.status == '1' ? styles.notStarted : null,
                     appointmentItem.status == '2' ? styles.inProgress : null,
-                    appointmentItem.status == '3' ? [!showArchived ? styles.completed : styles.archivedCompleted] : null,
-                    appointmentItem.status == '4' ? [!showArchived ? styles.canceled : styles.archivedCanceled] : null,
+                    // appointmentItem.status == '3' ? [!showArchived ? styles.completed : styles.archivedCompleted] : null,
+                    // appointmentItem.status == '4' ? [!showArchived ? styles.canceled : styles.archivedCanceled] : null,
+                    appointmentItem.status == '3' ? styles.archivedCompleted : null,
+                    appointmentItem.status == '4' ? styles.archivedCanceled : null
                 ]}></View>
 
                 <View style={styles.mainContent}>

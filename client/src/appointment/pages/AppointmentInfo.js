@@ -144,7 +144,7 @@ const AppointmentInfo = props => {
                         buttonText={styles.editButtonText}
                         onPress={() => setEdit(true)}
                         title={'Ändern'}
-                        disabled={showArchived}
+                        disabled={props.status == '3' || props.status == '4'}
                     />
                 )}
             </View>

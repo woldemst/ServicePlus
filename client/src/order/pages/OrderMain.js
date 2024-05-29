@@ -40,16 +40,14 @@ const OrderMain = (props) => {
     const [isLoaded, setIsLoaded] = useState(false)
     const [activeTab, setActiveTab] = useState(0);
 
+    console.log(activeTab);
     const goingBack = () => {
         navigation.goBack()
         dispatch(toggleToFalseEditOrder(false))
     }
 
     useEffect(() => setIsLoaded(true), [edit])
-
-    const onChangeHandler = (value) => {
-        dispatch(updateOrderDataById(value, 'name', orderId))
-    }
+    const onChangeHandler = (value) => dispatch(updateOrderDataById(value, 'name', orderId))
 
     return isLoaded && (
         <>
@@ -72,8 +70,13 @@ const OrderMain = (props) => {
                         />
                     </View>
                     <View style={styles.editBtnContainer}>
-                        {auth.admin && !showArchivedOrders && (
+                        {(auth.admin && !showArchivedOrders && activeTab == 0) && (
                             <TouchableOpacity onPress={() => dispatch(toggleEdit(!edit))}>
+                                <Image source={require('../../../assets/order/edit.png')} />
+                            </TouchableOpacity>
+                        )}
+                        {activeTab == 1 && (
+                            <TouchableOpacity>
                                 <Image source={require('../../../assets/order/edit.png')} />
                             </TouchableOpacity>
                         )}
@@ -81,51 +84,43 @@ const OrderMain = (props) => {
                 </View>
             </View >
 
-            <Tab.Navigator screenOptions={{
-                labelStyle: { fontSize: 14, textTransform: 'none' }, // Style for the tab labels
-                tabBarStyle: { paddingTop: 0, paddingBottom: 0, paddingHorizontal: 0 }, // Adjust padding here
-                tabBarIndicatorStyle: { backgroundColor: '#e0e0e0' }, // Change the color of the indicator
-                swipeEnabled: false,
-
-            }}
-                onTabPress={params => {
-                    console.log(params);
-                    // const index = Tab.Navigator.router.getStateForRouteName(route.name).index;
-                    // setActiveTab(index);
-
+            <Tab.Navigator
+                // onIndexChange={(index) => setActiveTab(index)}
+                // tabBar={({ navigationState }) => {
+                //     setActiveTab(navigationState.index);
+                //     // return null; // Return null so we don't render the default tab bar
+                // }}
+                screenOptions={{
+                    labelStyle: { fontSize: 14, textTransform: 'none' }, // Style for the tab labels
+                    tabBarStyle: { paddingTop: 0, paddingBottom: 0, paddingHorizontal: 0 }, // Adjust padding here
+                    tabBarIndicatorStyle: { backgroundColor: '#e0e0e0' }, // Change the color of the indicator
+                    swipeEnabled: false,
                 }}
-
-                onIndexChange={(index) => setActiveTab(index)}
             >
                 <Tab.Screen
                     name="Info"
                     component={OrderInfo}
-                    initialParams={{
-                        id: route.params.id,
-                        status: route.params.status,
-
-                    }}
-                    options={{
-                        headerShown: false,
+                    initialParams={{ id: route.params.id, status: route.params.status }}
+                    options={{ headerShown: false }}
+                    listeners={{
+                        tabPress: () => setActiveTab(0)
                     }}
                 />
                 <Tab.Screen
                     name="Termine"
                     component={OrderAppointments}
-                    initialParams={{
-                        id: route.params.id,
-                    }}
-                    options={{
-                        headerShown: false
-
+                    initialParams={{ id: route.params.id }}
+                    options={{ headerShown: false }}
+                    listeners={{
+                        tabPress: () => setActiveTab(1)
                     }}
                 />
                 <Tab.Screen
                     name="dateien"
                     component={OrderFiles}
-                    options={{
-                        headerShown: false
-
+                    options={{ headerShown: false }}
+                    listeners={{
+                        tabPress: () => setActiveTab(2)
                     }}
                 />
 
