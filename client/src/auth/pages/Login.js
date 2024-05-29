@@ -76,14 +76,14 @@ const Login = () => {
                 <View style={styles.inner}>
 
                     <Text style={styles.logoText}>ServicePlus</Text>
-                    <Text style={styles.title}>Sign in</Text>
+                    <Text style={styles.title}>Anmelden</Text>
 
                     {/* {error && <Text style={styles.error}>{error}</Text>} */}
 
 
                     <Input
                         placeholder="Email"
-                        errorText="Please enter a valid email"
+                        errorText="Bitte gib eine gültige Email-Adresse ein"
                         value={formData.email}
                         onChangeText={(text) => setFormData({ ...formData, email: text })}
                         validators={[VALIDATOR_EMAIL()]}
@@ -95,27 +95,27 @@ const Login = () => {
                         value={formData.password}
                         onChangeText={(text) => setFormData({ ...formData, password: text })}
                         validators={[VALIDATOR_MINLENGTH(6)]}
-                        errorText="Password must be at least 6 characters long"
+                        errorText="Das Passwort muss mindestens 6 Zeichen lang sein"
 
                     // secureTextEntry
                     />
 
                     {/* <TouchableOpacity onPress={() => navigation.navigate('forgotPassword')}> */}
-                    <Text style={styles.notice}>Forgot your password?</Text>
+                    <Text style={styles.notice}>Passwort vergessen?</Text>
                     {/* </TouchableOpacity> */}
 
                     <Button
                         style={styles.button}
                         onPress={handleSignIn}
-                        title={loading ? "Signing in..." : "Sign in"}
-                        buttonText={sty}
+                        title={loading ? "Signing in..." : "Anmelden"}
+                        buttonText={styles.buttonText}
                         disabled={loading}
                     />
 
                     <View style={styles.inviteContainer}>
-                        <Text style={styles.inviteText}>Don't have an account?</Text>
+                        <Text style={styles.inviteText}>Noch kein Account?</Text>
                         <TouchableOpacity onPress={() => navigation.navigate('register')}>
-                            <Text style={styles.registerBtn}>Register</Text>
+                            <Text style={styles.registerBtn}>Registriren</Text>
                         </TouchableOpacity>
                     </View>
                 </View>
@@ -180,7 +180,7 @@ const styles = StyleSheet.create({
     inviteText: {
         fontSize: 14,
         fontWeight: '400',
-
+        marginRight: 5
     },
     registerBtn: {
         fontSize: 14,
