@@ -10,6 +10,7 @@ import WorkerItem from "./WokerItem"
 import WorkerCreate from "../pages/WorkerCreate"
 
 import ModalComponent from "../../shared/UIElements/Modal"
+import WorkerProfile from "../pages/WorkerProfile"
 
 const WorkerList = () => {
     const dispatch = useDispatch()
@@ -92,6 +93,8 @@ const WorkerList = () => {
 
                     </View>
                 </View>
+
+                <WorkerProfile />
 
                 <View style={styles.workerList}>
                     {!isLoaded ? (
