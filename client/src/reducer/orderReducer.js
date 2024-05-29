@@ -39,11 +39,11 @@ const orderReducer = (state = initialState, action) => {
       };
 
     case GET_ORDERS:
-      const activeOrders = action.payload.orders.filter(order => order.status !== '3' && order.status !== '4');
       return {
         ...state,
         ordersArray: action.payload,
-        activeOrders: activeOrders,
+        activeOrders: action.payload.orders.filter(order => order.status !== '3' && order.status !== '4'),
+        archivedOrders: action.payload.orders.filter(order => order.status === '3' || order.status === '4')
       };
     case TOGGLE_TO_TRUE_EDIT_ORDER:
       return {
