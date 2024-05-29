@@ -111,14 +111,14 @@ const styles = StyleSheet.create({
     },
     headerButton: {
         justifyContent: 'center',
-        alignItems: 'center'
+        alignItems: 'center',
+        paddingLeft: 15
     },
     headerIcon: {
         width: 24,
-        height: 24
+        height: 24,
     },
     content: {
-
         flex: 1,
         backgroundColor: '#fff'
     },

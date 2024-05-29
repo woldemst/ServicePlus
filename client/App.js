@@ -32,10 +32,8 @@ export default function App() {
   const [userRole, setUserRole] = useState(null)
   const [firmId, setFirmId] = useState(null)
   const [refresh, setRefresh] = useState(false)
-  const [customers, setCustomers] = useState([])
 
   const Stack = createNativeStackNavigator()
-  const auth = useContext(AuthContext)
 
   const handleRefresh = () => setRefresh(prevData => !prevData);
 
@@ -90,7 +88,6 @@ export default function App() {
 
 
   const updateId = id => setFirmId(id)
-  const handleSetCustomer = (id) => setCustomers([...customers, id])
 
   let routes;
 
@@ -168,9 +165,6 @@ export default function App() {
           admin: userRole,
           refresh: refresh,
           handleRefresh: handleRefresh,
-
-          customers: customers,
-          setCustomer: handleSetCustomer,
         }}>
         <React.Fragment>{routes}</React.Fragment>
       </AuthContext.Provider>

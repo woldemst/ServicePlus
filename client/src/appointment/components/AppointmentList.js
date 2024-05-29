@@ -67,6 +67,8 @@ const AppointmentList = props => {
             appointmentsToRender = showArchived ? fetchedArchivedAppointments : fetchedActiveAppointments
         }
 
+        // console.log(appointmentsToRender);
+
         if (appointmentsToRender.length === 0) {
             return (
                 <View style={styles.imgContainer}>
@@ -86,6 +88,7 @@ const AppointmentList = props => {
                         id={item._id}
                         name={item.name}
                         orderId={item.orderId}
+                        workers={item.workers}
                         w_name={item.w_name}
                         date={item.date}
                         time={item.time}

@@ -40,7 +40,7 @@ const OrderMain = (props) => {
     const [isLoaded, setIsLoaded] = useState(false)
     const [activeTab, setActiveTab] = useState(0);
 
-    console.log(activeTab);
+    // console.log(activeTab);
     const goingBack = () => {
         navigation.goBack()
         dispatch(toggleToFalseEditOrder(false))
@@ -72,11 +72,6 @@ const OrderMain = (props) => {
                     <View style={styles.editBtnContainer}>
                         {(auth.admin && !showArchivedOrders && activeTab == 0) && (
                             <TouchableOpacity onPress={() => dispatch(toggleEdit(!edit))}>
-                                <Image source={require('../../../assets/order/edit.png')} />
-                            </TouchableOpacity>
-                        )}
-                        {activeTab == 1 && (
-                            <TouchableOpacity>
                                 <Image source={require('../../../assets/order/edit.png')} />
                             </TouchableOpacity>
                         )}

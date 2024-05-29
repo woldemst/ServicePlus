@@ -91,6 +91,7 @@ const AppointmentItem = (props) => {
         )
     }
 
+
     return (
         <>
             <SwipeListView
@@ -142,6 +143,7 @@ const AppointmentItem = (props) => {
                     id={props.id}
                     // creator={props.creator}
                     name={props.name}
+                    workers={props.workers}
                     w_name={props.w_name}
                     date={props.date}
                     time={props.time}

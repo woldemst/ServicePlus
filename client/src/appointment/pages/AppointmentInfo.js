@@ -1,24 +1,26 @@
 import { View, StyleSheet, Image, Text, TouchableOpacity } from "react-native";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { refershData } from "../../actions/utilActions";
 import { Alert } from "react-native";
 
 import Button from "../../shared/UIElements/Button";
+import { AuthContext } from "../../context/auth-context";
 
 
 
 const AppointmentInfo = props => {
+    const auth = useContext(AuthContext)
     const appointments = useSelector(state => state.appointment.appointmentsArray.appointments)
     const showArchived = useSelector(state => state.appointment.showArchived)
     const appointmentItem = appointments.find(appointment => appointment._id == props.id)
-    
+
     const dispatch = useDispatch()
-    
+
     const [edit, setEdit] = useState(false);
     const [activeStatus, setActiveStatus] = useState(props.status);
-    
+
     useEffect(() => {
         setActiveStatus(appointmentItem.status)
         if (activeStatus !== appointmentItem.status) {
@@ -55,6 +57,16 @@ const AppointmentInfo = props => {
         )
 
     };
+
+    // console.log(auth);
+
+    const disabledButton = () => {
+        if (auth.admin) {
+            return showArchived
+        } 
+        return !props.workers.includes(auth.userId) || (props.status == '3' || props.status == '4')
+
+    }
 
     return <>
         <View style={styles.container}>
@@ -144,7 +156,7 @@ const AppointmentInfo = props => {
                         buttonText={styles.editButtonText}
                         onPress={() => setEdit(true)}
                         title={'Ändern'}
-                        disabled={props.status == '3' || props.status == '4'}
+                        disabled={disabledButton()}
                     />
                 )}
             </View>

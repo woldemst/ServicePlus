@@ -26,7 +26,7 @@ const AppointmentView = () => {
             <View style={styles.header} >
                 <View style={styles.headerContent}>
                     <View style={styles.textContainer} >
-                        <Text style={styles.headerText}>Terminbersicht {showArchived && '(archiviert)'}</Text>
+                        <Text style={styles.headerText}>Terminübersicht {showArchived && '(archiviert)'}</Text>
                     </View>
  
                     <View style={[styles.headerIconContainer, { justifyContent: auth.admin ? 'space-between' : 'flex-end' }]} >
@@ -91,11 +91,13 @@ const styles = StyleSheet.create({
     },
     headerButton: {
         justifyContent: 'center',
-        alignItems: 'center'
+        alignItems: 'center',
+        paddingLeft: 15
+
     },
     headerIcon: {
         width: 24,
-        height: 24
+        height: 24,
     },
     content: {
         // paddingTop: 24,

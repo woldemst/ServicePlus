@@ -44,7 +44,6 @@ const appointmentReducer = (state = initialState, action) => {
     case GET_ARCHIVED_APPOINTMENTS:
       const filteredArchivedAppointments = state.appointmentsArray.appointments.filter(appointment => appointment.status === '3' || appointment.status === '4');
 
-      // console.log(filteredArchivedAppointments);
       return {
         ...state,
         showArchived: !state.showArchived,

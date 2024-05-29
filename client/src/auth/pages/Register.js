@@ -124,7 +124,7 @@ const Register = () => {
                 style={styles.button}
                 buttonText={styles.buttonText}
                 onPress={handleSubmit}
-                title={'Sign up'}
+                title={'Registrie ren'}
 
             />
 
@@ -187,7 +187,7 @@ const styles = StyleSheet.create({
     inviteText: {
         fontSize: 14,
         fontWeight: '400',
-
+        marginRight: 5
     },
     registerBtn: {
         fontSize: 14,
