@@ -14,7 +14,7 @@ const AppointmentList = props => {
     const auth = useContext(AuthContext)
 
     const fetchedActiveAppointments = useSelector(state => state.appointment.activeAppointments)
-    const fetchedArchivedData = useSelector(state => state.appointment.archivedAppointments)
+    const fetchedArchivedAppointments = useSelector(state => state.appointment.archivedAppointments)
     const showArchived = useSelector(state => state.appointment.showArchived)
     const refresh = useSelector(state => state.util.refresh)
 
@@ -52,10 +52,19 @@ const AppointmentList = props => {
         }
         // console.log(showArchived);
 
-        let appointmentsToRender = showArchived ? fetchedArchivedData : fetchedActiveAppointments;
+        // let appointmentsToRender = showArchived ? fetchedArchivedAppointments : fetchedActiveAppointments;
 
+        // if (props.id) { appointmentsToRender = appointmentsToRender.filter(appointment => appointment.orderId === props.id) }
+
+
+        let appointmentsToRender = []
         if (props.id) {
-            appointmentsToRender = appointmentsToRender.filter(appointment => appointment.orderId === props.id);
+            appointmentsToRender = [
+                ...fetchedActiveAppointments.filter(appointment => appointment.orderId === props.id),
+                ...fetchedArchivedAppointments.filter(appointment => appointment.orderId === props.id)
+            ]
+        }else {
+            appointmentsToRender = showArchived ? fetchedArchivedAppointments : fetchedActiveAppointments
         }
 
         if (appointmentsToRender.length === 0) {
@@ -66,8 +75,6 @@ const AppointmentList = props => {
                 </View>
             );
         }
-        // console.log(appointmentsToRender);
-
         return (
             <FlatList
                 showsVerticalScrollIndicator={false}
