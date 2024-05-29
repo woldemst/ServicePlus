@@ -6,8 +6,6 @@ import Modal from 'react-native-modal'
 
 
 const ModalComponent = (props) => {
-  const modlaHeight = props.modalHeight
-
   return (
     <View>
 
@@ -18,18 +16,18 @@ const ModalComponent = (props) => {
         animationOut={props.animationOut} // Specify the slide-down animation
         onBackdropPress={props.onBackdropPress}
         onBackButtonPress={props.onBackButtonPress}
-
       >
 
-        <View style={[styles.modalContainer, { height: props.modalHeight || '80%' }]}>
+        <View style={[styles.modalContainer, { height: props.modalHeight && props.modalHeight }]}>
           <View style={styles.modalHeader}>{props.header}</View>
 
-          <ScrollView showsVerticalScrollIndicator={false}>
-            <View style={styles.modalContent}>
-              {props.children}
-            </View>
+          <ScrollView
+            showsVerticalScrollIndicator={false}
+            contentContainerStyle={styles.scrollViewContent}
+          >
+            <View style={styles.modalContent}>{props.children}</View>
 
-            {/* <View style={styles.modalHeader}>{props.footer}</View> */}
+            {props.footer && <View style={styles.modalFooter}>{props.footer}</View>}
           </ScrollView>
         </View>
 
@@ -60,6 +58,9 @@ const styles = StyleSheet.create({
     // borderWidth: 4,
     flex: 1,
     minHeight: "100%",
+  },
+  scrollViewContent: {
+    flexGrow: 1,
   },
 
 

@@ -127,7 +127,7 @@ const AppointmentItem = (props) => {
                 animationOut="slideOutDown" // Specify the slide-down animation
                 onBackdropPress={toggleModal}
                 onBackButtonPress={toggleModal}
-                modalHeight="50%"
+                // modalHeight="50%"
                 header={<>
                     <View style={styles.headlineContainer}>
                         <Text style={styles.modalHeadline}>Termin</Text>
