@@ -94,8 +94,12 @@ const WorkerList = () => {
                     </View>
                 </View>
 
-                <WorkerProfile />
-
+                {!auth.admin && (
+                    <View style={styles.workerProfileConainer}>
+                        <WorkerProfile />
+                    </View>
+                )}
+                
                 <View style={styles.workerList}>
                     {!isLoaded ? (
                         <ActivityIndicator style={styles.loader} size="large" color="#7A9B76" />
@@ -283,6 +287,10 @@ const styles = StyleSheet.create({
         // borderColor: 'red',
         // borderWidth: 2
 
+    },
+    workerProfileConainer: {
+        // borderColor: 'red',
+        // borderWidth: 2
     }
 })
 
