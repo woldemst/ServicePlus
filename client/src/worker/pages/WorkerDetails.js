@@ -21,9 +21,9 @@ const WorkerDetails = props => {
     const workersArr = useSelector(state => state.worker.workersArray.workers)
     const worker = workersArr.find(worker => worker._id == workerId)
 
+    console.log(workersArr);
     const [isLoaded, setIsLoaded] = useState(false)
     const [isEdit, setIsEdit] = useState(false)
-
 
     const [formData, setFormData] = useState({
         name: worker.name,
@@ -37,14 +37,9 @@ const WorkerDetails = props => {
         description: worker.description,
     })
 
-    useEffect(() => {
-        setIsLoaded(true)
-    }, [])
 
-    const handleEdit = () => {
-        setIsEdit(!isEdit)
-    }
-
+    useEffect(() => setIsLoaded(true), [])
+    const handleEdit = () => setIsEdit(!isEdit)
 
     const handleSubmit = async () => {
         try {
@@ -120,7 +115,6 @@ const WorkerDetails = props => {
                                     value={formData.houseNr}
                                     validators={[VALIDATOR_REQUIRE()]}
                                     onChangeText={(value) => setFormData({ ...formData, houseNr: value })}
-
                                 />
                             </View>
                         </View>
