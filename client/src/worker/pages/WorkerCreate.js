@@ -5,7 +5,7 @@ import { useSelector, useDispatch } from "react-redux";
 import axios from "axios";
 
 import { clearWorkerField, createWorker } from "../../actions/workerActions";
-import { VALIDATOR_EMAIL, VALIDATOR_REQUIRE } from "../../util/validators";
+import { VALIDATOR_EMAIL, VALIDATOR_REQUIRE, VALIDATOR_MINLENGTH} from "../../util/validators";
 import { AuthContext } from "../../context/auth-context";
 import Input from "../../shared/UIElements/Input";
 import Button from "../../shared/UIElements/Button";
@@ -22,6 +22,7 @@ const WorkerCreate = (props) => {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
+    tempPassword: '',
     street: '',
     houseNr: '',
     zip: '',
@@ -44,6 +45,7 @@ const WorkerCreate = (props) => {
         firmId: auth.firmId,
         name: formData.name,
         email: formData.email,
+        tempPassword: formData.tempPassword,
         street: formData.street,
         houseNr: formData.houseNr,
         zip: formData.zip,
@@ -77,8 +79,16 @@ const WorkerCreate = (props) => {
           placeholder="E-Mail"
           value={formData.email}
           validators={[VALIDATOR_EMAIL()]}
-          errorText='Geben Sie ein E-Mail des Mitarbeiters ein'
+          errorText='Geben Sie eine gültige E-Mail ein'
           onChangeText={(text) => setFormData({ ...formData, email: text })}
+        />
+
+        <Input
+          placeholder="Temporäres Passwort"
+          value={formData.tempPassword}
+          validators={[VALIDATOR_MINLENGTH(6)]}
+          errorText='Geben Sie ein temporäres Passwort ein'
+          onChangeText={(text) => setFormData({ ...formData, tempPassword: text })}
         />
 
         <View style={styles.streetContainer}>
@@ -87,7 +97,7 @@ const WorkerCreate = (props) => {
               placeholder="Straße"
               value={formData.street}
               validators={[VALIDATOR_REQUIRE()]}
-              errorText='Geben Sie die Straße des Mitarbeiters ein'
+              errorText='Geben Sie die Straße ein'
               onChangeText={(text) => setFormData({ ...formData, street: text })}
             />
           </View>
@@ -109,7 +119,7 @@ const WorkerCreate = (props) => {
               placeholder="PLZ"
               value={formData.zip}
               validators={[VALIDATOR_REQUIRE()]}
-              errorText='Geben Sie PLZ des Mitarbeiters ein'
+              errorText='Geben Sie PLZ ein'
               onChangeText={(text) => setFormData({ ...formData, zip: text })}
             />
           </View>
@@ -119,7 +129,7 @@ const WorkerCreate = (props) => {
               placeholder="Ort"
               value={formData.place}
               validators={[VALIDATOR_REQUIRE()]}
-              errorText='Geben Sie den Ort des Mitarbeiters ein'
+              errorText='Geben Sie den Ort ein'
               onChangeText={(text) => setFormData({ ...formData, place: text })}
             />
           </View>
@@ -129,7 +139,7 @@ const WorkerCreate = (props) => {
           placeholder="Telefonnummer"
           value={formData.phone}
           validators={[VALIDATOR_REQUIRE()]}
-          errorText='Geben Sie die Telefonnummer des Mitarbeiters ein'
+          errorText='Geben Sie die Telefonnummer ein'
           onChangeText={(text) => setFormData({ ...formData, phone: text })}
         />
 
@@ -137,7 +147,7 @@ const WorkerCreate = (props) => {
           placeholder="Beschreibung"
           value={formData.description}
           validators={[VALIDATOR_REQUIRE()]}
-          errorText='Geben Sie die Beschreibung des Mitarbeiters ein'
+          errorText='Geben Sie die Beschreibung ein'
           onChangeText={(text) => setFormData({ ...formData, description: text })}
         />
 
