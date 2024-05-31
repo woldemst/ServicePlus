@@ -18,7 +18,7 @@ const ModalComponent = (props) => {
         onBackButtonPress={props.onBackButtonPress}
       >
 
-        <View style={[styles.modalContainer, { height: props.modalHeight && props.modalHeight }]}>
+        <View style={[styles.modalContainer, props.modalHeight && { height: props.modalHeight }]}>
           <View style={styles.modalHeader}>{props.header}</View>
 
           <ScrollView

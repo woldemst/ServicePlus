@@ -69,7 +69,6 @@ const WorkerList = () => {
                 onBackdropPress={toggleModal}
                 onBackButtonPress={toggleModal}
                 header={<Text style={styles.modalHeadline}>Miterbeiter hinzufügen</Text>}
-                modalHeight={'65%'}
             >
                 <WorkerCreate toggle={toggleModal} />
             </ModalComponent>
@@ -138,7 +137,6 @@ const WorkerList = () => {
                 onBackdropPress={toggleModal}
                 onBackButtonPress={toggleModal}
                 header={<Text style={styles.modalHeadline}>Miterbeiter hinzufügen</Text>}
-                modalHeight={'65%'}
             >
                 <WorkerCreate toggle={toggleModal} />
             </ModalComponent>
