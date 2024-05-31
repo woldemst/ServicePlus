@@ -21,7 +21,9 @@ const WorkerDetails = props => {
     const workersArr = useSelector(state => state.worker.workersArray.workers)
     const worker = workersArr.find(worker => worker._id == workerId)
 
-    console.log(workersArr);
+    // console.log(worker._id, 'worker ');
+    // console.log(auth.userId, 'id from context ');
+
     const [isLoaded, setIsLoaded] = useState(false)
     const [isEdit, setIsEdit] = useState(false)
 
@@ -58,7 +60,7 @@ const WorkerDetails = props => {
 
             setIsEdit(false)
             dispatch(refershData())
-            window.alert('Worker updated!')
+            window.alert('Profile aktualisiert!')
         } catch (err) {
             console.log("Error while updating worker's profile", err);
         }
@@ -163,27 +165,16 @@ const WorkerDetails = props => {
                             multiline={true}
                             textArea={true}
                         />
-                        {auth.admin && (
+                        {auth.admin || auth.userId === workerId ? (
                             <View style={styles.btnContainer}>
-                                {!isEdit ? (
-                                    <Button
-                                        style={[styles.invalideButton, styles.button]}
-                                        // disabled={fetchedData.isFormValid}
-                                        buttonText={styles.createBtnText}
-                                        onPress={handleEdit}
-                                        title={'Ändern'}
-                                    />
-                                ) : (
-                                    <Button
-                                        style={[styles.createBtn, styles.button]}
-                                        // disabled={fetchedData.isFormValid}
-                                        buttonText={styles.createBtnText}
-                                        onPress={handleSubmit}
-                                        title={'Speichern'}
-                                    />
-                                )}
+                                <Button
+                                    style={isEdit ? [styles.createBtn, styles.button] : [styles.invalideButton, styles.button]}
+                                    buttonText={styles.createBtnText}
+                                    onPress={isEdit ? handleSubmit : handleEdit}
+                                    title={isEdit ? "Speichern" : "Ändern"}
+                                />
                             </View>
-                        )}
+                        ) : null}
                     </View>
                 )}
 
@@ -273,7 +264,7 @@ const styles = StyleSheet.create({
 
     btnContainer: {
         flexDirection: 'row',
-        marginTop: 28
+        marginTop: 16
     },
 
     button: {
