@@ -24,17 +24,14 @@ const WorkerList = () => {
     const [isModalVisible, setModalVisible] = useState(false);
     const [refreshing, setRefreshing] = useState(false)
 
+    const toggleModal = () => setModalVisible(!isModalVisible)
+
     const onRefresh = useCallback(() => {
         setRefreshing(true);
         setTimeout(() => {
             setRefreshing(false);
         }, 1000);
     }, []);
-
-    const toggleModal = () => {
-        setModalVisible(!isModalVisible)
-    }
-
 
     // console.log(fetchedData);
     useEffect(() => {
@@ -51,6 +48,8 @@ const WorkerList = () => {
         fetchWorkers()
     }, [refresh, refreshing])
 
+    // Filetering worker's data based on auth.userId and workerId
+    const filteredData = fetchedData.workers.filter(worker => worker._id !== auth.userId)
 
     return fetchedData.workers.length === 0 ? (
         <>
@@ -99,7 +98,7 @@ const WorkerList = () => {
                         <WorkerProfile />
                     </View>
                 )}
-                
+
                 <View style={styles.workerList}>
                     {!isLoaded ? (
                         <ActivityIndicator style={styles.loader} size="large" color="#7A9B76" />
@@ -109,7 +108,7 @@ const WorkerList = () => {
                             refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
                             showsVerticalScrollIndicator={false}
                             style={styles.scroll}
-                            data={fetchedData.workers}
+                            data={!auth.admin ? filteredData : fetchedData.workers}
                             keyExtractor={item => item._id}
                             renderItem={({ item }) => (
                                 <WorkerItem
