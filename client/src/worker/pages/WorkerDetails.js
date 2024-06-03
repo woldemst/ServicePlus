@@ -18,11 +18,10 @@ const WorkerDetails = props => {
     const dispatch = useDispatch()
     const auth = useContext(AuthContext)
 
+    const firmId = useSelector(state => state.context.firmId)
     const workersArr = useSelector(state => state.worker.workersArray.workers)
     const worker = workersArr.find(worker => worker._id == workerId)
-
-    // console.log(worker._id, 'worker ');
-    // console.log(auth.userId, 'id from context ');
+    const userRole = useSelector(state => state.context.userRole)
 
     const [isLoaded, setIsLoaded] = useState(false)
     const [isEdit, setIsEdit] = useState(false)
@@ -45,9 +44,9 @@ const WorkerDetails = props => {
 
     const handleSubmit = async () => {
         try {
-            const response = await axios.patch(`http://localhost:8000/api/workers/${auth.firmId}/update/${workerId}`, {
+            const response = await axios.patch(`http://localhost:8000/api/workers/${firmId}/update/${workerId}`, {
                 workerId: workerId,
-                firmId: auth.firmId,
+                firmId: firmId,
                 name: formData.name,
                 email: formData.email,
                 street: formData.street,
@@ -95,6 +94,15 @@ const WorkerDetails = props => {
                             validators={[VALIDATOR_EMAIL()]}
                             onChangeText={(value) => setFormData({ ...formData, email: value })}
                         />
+
+                        <View style={styles.passwortBtnContainer}>
+                            <Button
+                                style={isEdit ? [styles.passwordBtn, styles.button] : [styles.invalidePasswordButton, styles.button]}
+                                buttonText={styles.changePasswordBtn}
+                                onPress={isEdit ? handleSubmit : handleEdit}
+                                title={"Passwort ändern"}
+                            />
+                        </View>
 
                         <View style={styles.streetContainer}>
                             <View style={styles.streetWrapper}>
@@ -165,7 +173,7 @@ const WorkerDetails = props => {
                             multiline={true}
                             textArea={true}
                         />
-                        {auth.admin || auth.userId === workerId ? (
+                        {userRole || auth.userId === workerId ? (
                             <View style={styles.btnContainer}>
                                 <Button
                                     style={isEdit ? [styles.createBtn, styles.button] : [styles.invalideButton, styles.button]}
@@ -206,7 +214,7 @@ const styles = StyleSheet.create({
         height: 50,
         borderColor: 'gray',
         borderBottomWidth: 1,
-        borderColor: '#e0e0e0',
+        borderColor: 'gray',
         // marginTop: 6,
         marginBottom: 16,
         padding: 7,
@@ -266,7 +274,10 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         marginTop: 16
     },
+    passwortBtnContainer: {
+        marginTop: 12
 
+    },
     button: {
         // height: 53,
         paddingLeft: 16,
@@ -288,6 +299,15 @@ const styles = StyleSheet.create({
         color: '#fff',
         fontWeight: '700'
     },
+    passwordBtn: {
+        borderColor: '#e0e0e0',
+        borderWidth: 1
+    },
+    changePasswordBtn: {
+        fontSize: 16,
+        color: 'gray',
+        // fontWeight: '700'
+    },
     invalideButton: {
         height: 53,
         width: '100%',
@@ -297,6 +317,17 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         justifyContent: "center",
         alignItems: 'center'
+    },
+    invalidePasswordButton: {
+        height: 53,
+        backgroundColor: '#eee',
+        borderRadius: 5,
+        justifyContent: 'center',
+        flexDirection: "row",
+        justifyContent: "center",
+        alignItems: 'center',
+        borderColor: '#e0e0e0',
+        borderWidth: 1, 
     },
     loader: {
         flex: 1,
