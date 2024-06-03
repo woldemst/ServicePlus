@@ -10,6 +10,7 @@ const register = async (req, res, next) => {
 
   let existingUser;
   let existingWorker
+
   try {
     existingUser = await User.findOne({ email });
 
@@ -25,15 +26,10 @@ const register = async (req, res, next) => {
     }
 
     const hashedPassword = await bcrypt.hash(password, 12);
-    const createdUser = new User({ name, email, password, admin });
+    const createdUser = new User({ name, email, password: hashedPassword, admin });
     await createdUser.save();
 
     let firmId
-
-    // await Firm.updateOne(
-    //   { _id: firmId },
-    //   { $push: { orders: createdOrder._id } },
-    // )
 
     let token = jwt.sign(
       { userId: createdUser.id, email: createdUser.email },
@@ -71,11 +67,13 @@ const login = async (req, res, next) => {
       return next(error);
     }
 
-    // Debugging output
+    
+    
     // Compare the provided password with the stored hash
-    // const isValidPassword = await bcrypt.compareSync(password.trim(), identifiedPerson.password.trim());
-    const isValidPassword = password.trim() === identifiedPerson.password.trim() ? true : false
+    const isValidPassword = await bcrypt.compare(password.trim(), identifiedPerson.password)
+    // const isValidPassword = password.trim() === identifiedPerson.password.trim() ? true : false
 
+    console.log(identifiedPerson.password);
     // console.log(`Password valid: ${isValidPassword}`); 
     if (!isValidPassword) {
       const error = new HttpError("Invalid credentials, could not log you in.", 403);
@@ -113,6 +111,7 @@ const login = async (req, res, next) => {
     return next(error);
   }
 };
+
 
 exports.register = register;
 exports.login = login;
