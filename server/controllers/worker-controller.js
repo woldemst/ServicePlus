@@ -4,6 +4,7 @@ const Worker = require('../models/Worker')
 const Firm = require('../models/Firm')
 const User = require('../models/User')
 const Appointment = require('../models/Appointment')
+const bcrypt = require("bcryptjs");
 
 const getAllWorkersByFirmId = async (req, res, next) => {
     const firmId = req.params.firmId
@@ -120,12 +121,15 @@ const createWorker = async (req, res, next) => {
         // mobilePhone, 
     } = req.body
 
+
+    const hashedTempPassword = await bcrypt.hash(tempPassword, 12)
+
     const createWorker = new Worker({
         firmId: firmId,
         // workerNr: workerNr,
         name: name,
         email: email,
-        password: tempPassword,
+        password: hashedTempPassword,
         street: street,
         houseNr: houseNr,
         zip: zip,
@@ -209,7 +213,7 @@ const deleteWorkerById = async (req, res, next) => {
         // await Appointment.updateMany({ workers: workerId }, { $pull: { workers: workerId, w_name: worker.name } });
 
         // Find and update all related appointments
-        const appointmentsToUpdate = await Appointment.find({ workers: workerId }); 
+        const appointmentsToUpdate = await Appointment.find({ workers: workerId });
 
         for (let appointment of appointmentsToUpdate) {
             // Remove the worker ID from the appointment
@@ -287,6 +291,37 @@ const joinFirm = async (req, res, next) => {
     }
 }
 
+const resetWorkerPassword = async (req, res, next) => {
+    const {  workerId } = req.params
+    const { actualPassword, newPassword, confirmPassword } = req.body
+
+    try {
+        const worker = await Worker.findById(workerId)
+        if (!worker) {
+            return next(new HttpError('Worker not found with the provided ID.', 404));
+        }
+        if (newPassword !== confirmPassword) {
+            return next(new HttpError('Passwords do not match', 404));
+        }
+
+        const isPasswordMatch = bcrypt.compare(actualPassword, worker.password);
+        if (!isPasswordMatch) {
+            return next(new HttpError('Incorrect current password.', 403));
+        }
+
+        const hashedPassword = bcrypt.hash(newPassword, 12);
+        await Worker.findByIdAndUpdate(workerId, { password: hashedPassword });
+
+
+        res.status(200).json({ message: 'Worker password was reset successfully' })
+    }catch {
+        const error = new HttpError(
+            "Something went wrong, could not reset worker password.",
+            500
+        );
+        return next(error);
+    }
+}
 exports.getAllWorkersByFirmId = getAllWorkersByFirmId;
 exports.getWorkerById = getWorkerById;
 exports.updateWorkerById = updateWorkerById;
@@ -294,4 +329,5 @@ exports.createWorker = createWorker;
 exports.getWorkerByFirmId = getWorkerByFirmId;
 exports.deleteWorkerById = deleteWorkerById;
 exports.joinFirm = joinFirm;
+exports.resetWorkerPassword = resetWorkerPassword;
 
