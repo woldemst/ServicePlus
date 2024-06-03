@@ -10,6 +10,7 @@ const AppointmentView = () => {
     const dispatch = useDispatch()
 
     const showArchived = useSelector(state => state.appointment.showArchived)
+    const userRole = useSelector(state => state.context.userRole)
 
     const [isModalVisible, setModalVisible] = useState(false);
 
@@ -29,12 +30,12 @@ const AppointmentView = () => {
                         <Text style={styles.headerText}>Terminübersicht {showArchived && '(archiviert)'}</Text>
                     </View>
  
-                    <View style={[styles.headerIconContainer, { justifyContent: auth.admin ? 'space-between' : 'flex-end' }]} >
+                    <View style={[styles.headerIconContainer, { justifyContent: userRole ? 'space-between' : 'flex-end' }]} >
                         <TouchableOpacity disabled={showArchived} style={styles.headerButton} >
                             <Image style={styles.headerIcon} source={require('../../../assets/filter.png')} />
                         </TouchableOpacity>
 
-                        {auth.admin && (
+                        {userRole && (
                             <TouchableOpacity disabled={showArchived} onPress={toggleModal} style={styles.headerButton} >
                                 <Image style={styles.headerIcon} source={require('../../../assets/add_new.png')} />
                             </TouchableOpacity>

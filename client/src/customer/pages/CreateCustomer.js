@@ -17,6 +17,9 @@ const CreateCustomer = (props) => {
   const dispatch = useDispatch()
   const navigation = useNavigation()
 
+  const firmId = useSelector(state => state.context.firmId)
+
+
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -33,9 +36,9 @@ const CreateCustomer = (props) => {
 
   const handleSubmit = async () => {
     try {
-      const URL = `http://localhost:8000/api/customers/${auth.firmId}/new`
+      const URL = `http://localhost:8000/api/customers/${firmId}/new`
       const response = await axios.post(URL, {
-        firmId: auth.firmId,
+        firmId: firmId,
         name: formData.name,
         email: formData.email,
         street: formData.street,
@@ -48,7 +51,6 @@ const CreateCustomer = (props) => {
       })
 
       alert("Customer created successfully!");
-      // auth.setCustomer(response.data.customer._id)
       dispatch(refershData())
       // props.route.params.handleRefresh();
       navigation.goBack()

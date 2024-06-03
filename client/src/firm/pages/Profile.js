@@ -23,7 +23,9 @@ const Profile = (props) => {
   const dispatch = useDispatch()
 
   const fetchedData = useSelector(state => state.firm)
-
+  const firmId = useSelector(state => state.context.firmId)
+  const userRole = useSelector(state => state.context.userRole)
+  
   const [isLoaded, setIsLoaded] = useState(false)
   const [isEdit, setIsEdit] = useState(false)
   const [formData, setFormData] = useState({ ...fetchedData });
@@ -35,7 +37,7 @@ const Profile = (props) => {
 
 
   const handleSubmit = async () => {
-    const URL = `http://localhost:8000/api/firm/update/${auth.firmId}`;
+    const URL = `http://localhost:8000/api/firm/update/${firmId}`;
 
     try {
       const response = await axios.patch(URL, {
@@ -158,7 +160,7 @@ const Profile = (props) => {
             onChangeText={(text) => setFormData({ ...formData, website: text })}
           />
 
-          {auth.admin && (
+          {userRole && (
             <View style={styles.btnContainer}>
               {!isEdit ? (
                 <Button

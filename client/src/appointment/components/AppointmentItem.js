@@ -19,6 +19,7 @@ const AppointmentItem = (props) => {
     const appointments = useSelector(state => state.appointment.appointmentsArray.appointments)
     const showArchived = useSelector(state => state.appointment.showArchived)
     const appointmentItem = appointments.find(appointment => appointment._id == appointmentId)
+    const userRole = useSelector(state => state.context.userRole)
 
     const toggleModal = () => setModalVisible(!isModalVisible)
 
@@ -99,7 +100,7 @@ const AppointmentItem = (props) => {
                 renderItem={renderItem}
                 rightOpenValue={-75}
                 // leftOpenValue={75}
-                disableLeftSwipe={!auth.admin}
+                disableLeftSwipe={!userRole}
                 disableRightSwipe={true}
                 data={[props]}
                 renderHiddenItem={(data, rowMap) => (

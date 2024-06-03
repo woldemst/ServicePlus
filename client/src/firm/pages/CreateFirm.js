@@ -9,6 +9,7 @@ import { AuthContext } from "../../context/auth-context";
 import Input from "../../shared/UIElements/Input";
 import Button from "../../shared/UIElements/Button";
 import { getFirmData } from "../../actions/firmActions";
+import { updateFirmId } from "../../actions/contextActions";
 
 const CreateFirm = props => {
   const auth = useContext(AuthContext)
@@ -50,7 +51,7 @@ const CreateFirm = props => {
       const response = await axios.post(URL, firmData)
 
       dispatch(getFirmData(response.data))
-      auth.updateId(response.data.firmId)
+      dispatch(updateFirmId(response.data.firmId))
 
       props.toggle()
 

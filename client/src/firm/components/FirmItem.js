@@ -15,6 +15,7 @@ const FirmItem = () => {
 
     const refresh = useSelector(state => state.util.refresh)
     const fetchedData = useSelector(state => state.firm)
+    const userRole = useSelector(state => state.context.userRole)
 
     const [isLoaded, setIsLoaded] = useState(false)
 
@@ -79,12 +80,12 @@ const FirmItem = () => {
         <View style={styles.listContainer} >
             <TouchableOpacity style={styles.listItem} onPress={() => navigation.navigate('workerList')}>
                 <Image style={styles.icon} source={require('../../../assets/firm/customer.png')} />
-                <Text style={styles.itemText}>{auth.admin ? 'Mitarbeiter verwalten' : 'Mitarbeiter'}</Text>
+                <Text style={styles.itemText}>{userRole ? 'Mitarbeiter verwalten' : 'Mitarbeiter'}</Text>
             </TouchableOpacity>
 
             <TouchableOpacity style={styles.listItem} onPress={() => navigation.navigate('customerList')}>
                 <Image style={styles.icon} source={require('../../../assets/firm/worker.png')} />
-                <Text style={styles.itemText}>{auth.admin ? 'Kunden verwalten' : 'Kunden'}</Text>
+                <Text style={styles.itemText}>{userRole ? 'Kunden verwalten' : 'Kunden'}</Text>
             </TouchableOpacity>
 
             <TouchableOpacity style={styles.listItem}>

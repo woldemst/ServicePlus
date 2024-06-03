@@ -17,8 +17,10 @@ const WorkerList = () => {
     const navigation = useNavigation()
     const auth = useContext(AuthContext)
 
+    const firmId = useSelector(state => state.context.firmId)
     const refresh = useSelector(state => state.util.refresh)
     const fetchedData = useSelector(state => state.worker.workersArray)
+    const userRole = useSelector(state => state.context.userRole)
 
     const [isLoaded, setisLoaded] = useState(false)
     const [isModalVisible, setModalVisible] = useState(false);
@@ -37,7 +39,7 @@ const WorkerList = () => {
     useEffect(() => {
         const fetchWorkers = async () => {
             try {
-                const response = await axios.get(`http://localhost:8000/api/workers/${auth.firmId}/all`)
+                const response = await axios.get(`http://localhost:8000/api/workers/${firmId}/all`)
                 dispatch(getWorkerData(response.data))
                 setisLoaded(true)
             } catch (err) {
@@ -48,8 +50,8 @@ const WorkerList = () => {
         fetchWorkers()
     }, [refresh, refreshing])
 
-    // Filetering worker's data based on auth.userId and workerId
-    const filteredData = fetchedData.workers.filter(worker => worker._id !== auth.userId)
+    // Filetering worker's data based on userRole.userId and workerId
+    const filteredData = fetchedData.workers.filter(worker => worker._id !== userRole.userId)
 
     return fetchedData.workers.length === 0 ? (
         <>
@@ -81,7 +83,7 @@ const WorkerList = () => {
                         <View style={styles.textContainer} >
                             <Text style={styles.headerText}>Mitarbeiter</Text>
                         </View>
-                        {auth.admin && (
+                        {userRole.admin && (
                             <View style={styles.headerIconContainer} >
                                 <TouchableOpacity style={styles.headerButton} onPress={toggleModal}>
                                     <Image style={styles.headerIcon} source={require('../../../assets/customer/user_plus.png')} />
@@ -92,7 +94,7 @@ const WorkerList = () => {
                     </View>
                 </View>
 
-                {!auth.admin && (
+                {!userRole && (
                     <View style={styles.workerProfileConainer}>
                         <WorkerProfile />
                     </View>
@@ -107,7 +109,7 @@ const WorkerList = () => {
                             refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
                             showsVerticalScrollIndicator={false}
                             style={styles.scroll}
-                            data={!auth.admin ? filteredData : fetchedData.workers}
+                            data={!userRole ? filteredData : fetchedData.workers}
                             keyExtractor={item => item._id}
                             renderItem={({ item }) => (
                                 <WorkerItem

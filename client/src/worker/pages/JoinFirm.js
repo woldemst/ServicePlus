@@ -1,5 +1,5 @@
 import { View, Text, TouchableOpacity, StyleSheet, Image } from "react-native";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import axios from "axios";
 
 import { AuthContext } from "../../context/auth-context";
@@ -7,15 +7,29 @@ import Input from "../../shared/UIElements/Input";
 import { VALIDATOR_REQUIRE } from "../../util/validators";
 import Button from "../../shared/UIElements/Button";
 import { useNavigation } from "@react-navigation/native";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { refershData } from "../../actions/utilActions";
-
+import { updateFirmId } from "../../actions/contextActions";
 
 const JoinFirm = props => {
     const auth = useContext(AuthContext)
     const dispatch = useDispatch();
     const navigation = useNavigation();
     const [formData, setFormData] = useState({ firmId: '' })
+    const [isLoaded, setIsLoaded] = useState(false)
+    const firmId = useSelector(state => state.context.firmId)
+
+    useEffect(() => {
+        if (isLoaded) {
+            // console.log(firmId, 'after dispatch');
+
+            if (!firmId) {
+                navigation.navigate('resetPassword')
+            } else {
+                navigation.navigate('overviewNavigator', { screen: 'FirmView' });
+            }
+        }
+    }, [isLoaded])
 
     const joinHandler = async () => {
         try {
@@ -24,8 +38,10 @@ const JoinFirm = props => {
             const response = await axios.post(URL)
             alert("Erfolgreich beigetreten!");
             // console.log('response', response.data)
-            auth.updateId(response.data.firmId)
+            console.log(firmId, 'before dispatch');
+            dispatch(updateFirmId(response.data.firmId))
             dispatch(refershData())
+            setIsLoaded(true)
         } catch (err) {
             alert("Fehler beim Beitreten!");
         }
@@ -60,14 +76,8 @@ const JoinFirm = props => {
 }
 
 const styles = StyleSheet.create({
-
-    // join functionality
     container: {
         flex: 1,
-        // alignItems: 'center',
-        // justifyContent: 'center',
-        // borderColor: 'red',
-        // borderWidth: 2
     },
     headline: {
         fontSize: 16,

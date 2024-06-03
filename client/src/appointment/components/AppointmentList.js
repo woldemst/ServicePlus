@@ -17,6 +17,8 @@ const AppointmentList = props => {
     const fetchedArchivedAppointments = useSelector(state => state.appointment.archivedAppointments)
     const showArchived = useSelector(state => state.appointment.showArchived)
     const refresh = useSelector(state => state.util.refresh)
+    const firmId = useSelector(state => state.context.firmId)
+
 
     const [isLoaded, setIsLoaded] = useState(false)
     const [refreshing, setRefreshing] = useState(false);
@@ -29,7 +31,7 @@ const AppointmentList = props => {
     useEffect(() => {
         const fetchOrders = async () => {
             try {
-                const response = await axios.get(`http://localhost:8000/api/appointments/${auth.firmId}/all`)
+                const response = await axios.get(`http://localhost:8000/api/appointments/${firmId}/all`)
                 dispatch(getAppointments(response.data))
                 setIsLoaded(true)
 

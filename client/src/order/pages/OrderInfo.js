@@ -34,6 +34,7 @@ const OrderInfo = (props) => {
   const fetchedArray = useSelector((state) => state.order.ordersArray.orders);
   const order = fetchedArray.find(order => order._id == orderId)
   const edit = useSelector(state => state.order.edit);
+  const firmId = useSelector(state => state.context.firmId)
 
   const [formData, setFormData] = useState({
     street: order.street,
@@ -79,9 +80,9 @@ const OrderInfo = (props) => {
           // workerResponse,
           // contactResponse
         ] = await Promise.all([
-          axios.get(`http://localhost:8000/api/orders/customer-options/${auth.firmId}`),
-          // axios.get(`http://localhost:8000/api/orders/worker-options/${auth.firmId}`),
-          // axios.get(`http://localhost:8000/api/orders/contact-options/${auth.firmId}`),
+          axios.get(`http://localhost:8000/api/orders/customer-options/${firmId}`),
+          // axios.get(`http://localhost:8000/api/orders/worker-options/${firmId}`),
+          // axios.get(`http://localhost:8000/api/orders/contact-options/${firmId}`),
         ])
 
         setFormData((prevFormData) => ({
@@ -126,7 +127,7 @@ const OrderInfo = (props) => {
 
     try {
       const response = await axios.patch(URL, {
-        // firmId: auth.firmId,
+        // firmId: firmId,
         customerId: formData.selectedCustomer,
         name: order.name,
         // workerId: formData.selectedWorker,
