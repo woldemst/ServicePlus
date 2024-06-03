@@ -17,6 +17,8 @@ const CustomerList = () => {
 
     const refresh = useSelector(state => state.util.refresh)
     const fetchedData = useSelector(state => state.customer.customersArray)
+    const firmId = useSelector(state => state.context.firmId)
+    const userRole = useSelector(state => state.context.userRole)
 
     const [isLoaded, setisLoaded] = useState(false)
     const [isModalVisible, setModalVisible] = useState(false);
@@ -36,7 +38,7 @@ const CustomerList = () => {
     useEffect(() => {
         const fetchCustomers = async () => {
             try {
-                const response = await axios.get(`http://localhost:8000/api/customers/${auth.firmId}/all`)
+                const response = await axios.get(`http://localhost:8000/api/customers/${firmId}/all`)
                 dispatch(getCustomerData(response.data))
                 setisLoaded(true)
             } catch (err) {
@@ -83,7 +85,7 @@ const CustomerList = () => {
                             <Text style={styles.headerText}>Kunden</Text>
                         </View>
 
-                        {auth.admin && (
+                        {userRole && (
                             <View style={styles.headerIconContainer} >
                                 <TouchableOpacity style={styles.headerButton} onPress={toggleModal}>
                                     <Image style={styles.headerIcon} source={require('../../../assets/customer/user_plus.png')} />

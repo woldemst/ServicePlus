@@ -3,7 +3,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import OnboardingNavigator from './src/onboarding/OnboardingNavigator';
 import { NavigationContainer } from '@react-navigation/native';
 import { useCallback, useEffect, useState, useContext } from 'react';
-import { Provider } from 'react-redux';
+import { Provider, useDispatch } from 'react-redux';
 import { AuthContext } from './src/context/auth-context';
 import React from 'react';
 
@@ -24,14 +24,16 @@ import OrderInfo from './src/order/pages/OrderInfo';
 import OrderAppointments from './src/order/pages/OrderAppointments';
 import AppointmentMain from './src/appointment/pages/AppointmentMain';
 import WorkerDetails from './src/worker/pages/WorkerDetails';
+import ResetPassword from './src/auth/pages/ResetPassword';
+import { setUserRole, updateFirmId } from './src/actions/contextActions';
 
 
+const MainApp = () => {
+  const dispatch = useDispatch()
 
-export default function App() {
   const [userToken, setUserToken] = useState(false)
   const [userId, setUserId] = useState(false)
-  const [userRole, setUserRole] = useState(null)
-  const [firmId, setFirmId] = useState(null)
+
   const [refresh, setRefresh] = useState(false)
 
   const Stack = createNativeStackNavigator()
@@ -57,13 +59,13 @@ export default function App() {
     getUserData()
   }, [login])
 
-
   const login = useCallback(async (uid, token, admin, fid) => {
     try {
       setUserToken(token)
       setUserId(uid)
-      setUserRole(admin)
-      setFirmId(fid)
+
+      dispatch(setUserRole(admin))
+      dispatch(updateFirmId(fid))
       await AsyncStorage.setItem('userData', JSON.stringify({ userId: uid, token: token, admin: admin, firmId: fid }))
 
 
@@ -79,7 +81,7 @@ export default function App() {
       // window.alert('Are you sure you want to logout?')
       setUserToken(null)
       setUserId(null)
-      setUserRole(null)
+      // setUserRole(null)
 
 
     } catch (err) {
@@ -88,10 +90,7 @@ export default function App() {
   }, [])
 
 
-  const updateId = id => setFirmId(id)
-
   let routes;
-
 
   if (userToken) {
     routes = (
@@ -103,6 +102,7 @@ export default function App() {
           {/* authentification */}
           <Stack.Screen name='login' component={Login} options={{ headerShown: false }} />
           <Stack.Screen name='register' component={Register} options={{ headerShown: false }} />
+          <Stack.Screen name='resetPassword' component={ResetPassword} options={{ title: 'Passwort zurücksetzen' }} />
 
           {/* main */}
           <Stack.Screen name='overviewNavigator' component={OverviewNavigator} options={{ headerShown: false, title: 'Übersicht' }} />
@@ -127,7 +127,6 @@ export default function App() {
           <Stack.Screen name='workerList' component={WorkerList} options={{ title: 'Workers' }} />
           <Stack.Screen name='createWorker' component={WorkerCreate} options={{ title: 'Worker create' }} />
           <Stack.Screen name='workerDetails' component={WorkerDetails} options={{ title: 'Worker details' }} />
-
         </Stack.Navigator>
       </NavigationContainer>
     )
@@ -136,7 +135,7 @@ export default function App() {
       <NavigationContainer>
         <Stack.Navigator>
 
-          {/* main */}
+          {/* onboarding */}
           <Stack.Screen name='onboarding' component={OnboardingNavigator} options={{ headerShown: false }} />
 
           {/* authentification */}
@@ -153,23 +152,31 @@ export default function App() {
 
 
   return (
-    <Provider store={store}>
-      <AuthContext.Provider
-        value={{
-          login: login,
-          logout: logout,
-          updateId: updateId,
-          isLoggedIn: !!userToken,
-          userToken: userToken,
-          userId: userId,
-          firmId: firmId,
-          admin: userRole,
-          refresh: refresh,
-          handleRefresh: handleRefresh,
-        }}>
-        <React.Fragment>{routes}</React.Fragment>
-      </AuthContext.Provider>
-    </Provider>
+    <AuthContext.Provider
+      value={{
+        login: login,
+        logout: logout,
+
+        isLoggedIn: !!userToken,
+        userToken: userToken,
+        userId: userId,
+
+        // admin: userRole, 
+        refresh: refresh,
+        handleRefresh: handleRefresh,
+      }}>
+      <React.Fragment>{routes}</React.Fragment>
+    </AuthContext.Provider>
   );
 }
 
+const App = () => {
+
+  return (
+    <Provider store={store}>
+      <MainApp />
+    </Provider>
+  )
+}
+
+export default App

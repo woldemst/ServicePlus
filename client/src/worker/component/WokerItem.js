@@ -1,7 +1,7 @@
 import { View, Text, StyleSheet, Image, TouchableOpacity, Alert } from "react-native"
 import { useContext, useEffect, useState } from "react"
 import { useNavigation } from "@react-navigation/native"
-import { useDispatch } from "react-redux"
+import { useDispatch, useSelector } from "react-redux"
 import { SwipeListView } from "react-native-swipe-list-view";
 import axios from "axios";
 
@@ -15,6 +15,8 @@ const WorkerItem = (props) => {
     const navigation = useNavigation()
     const dispatch = useDispatch()
 
+    const firmId = useSelector(state => state.context.firmId)
+    const userRole = useSelector(state => state.context.userRole)
     // console.log(props);
     const deleteHandler = async () => {
         Alert.alert(
@@ -29,7 +31,7 @@ const WorkerItem = (props) => {
                     text: 'Delete',
                     onPress: async () => {
                         try {
-                            await axios.delete(`http://localhost:8000/api/workers/${auth.firmId}/delete/${workerId}`);
+                            await axios.delete(`http://localhost:8000/api/workers/${firmId}/delete/${workerId}`);
                             dispatch(deleteWorker(workerId))
                             dispatch(refershData())
 
@@ -77,7 +79,7 @@ const WorkerItem = (props) => {
             rightOpenValue={-75}
             // leftOpenValue={75}
             disableRightSwipe={true}
-            disableLeftSwipe={!auth.admin}
+            disableLeftSwipe={!userRole}
             closeOnRowOpen={true}
             data={[props]}
             renderHiddenItem={(data, rowMap) => (

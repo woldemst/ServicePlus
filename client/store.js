@@ -10,6 +10,9 @@ import appointmentReducer from './src/reducer/appointmentReducer'
 import inputReducer from './src/reducer/inputReducer';
 import selectReducer from './src/reducer/selectReducer';
 import utilReducer from './src/reducer/utilReducer'
+import contextReducer from './src/reducer/contextReducer';
+
+
 const store = configureStore({
   reducer: {
     user: userReducer,
@@ -23,6 +26,8 @@ const store = configureStore({
     input: inputReducer,
     select: selectReducer,
     util: utilReducer,
+    //
+    context: contextReducer,
   },
 });
 

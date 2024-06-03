@@ -24,9 +24,10 @@ const Login = () => {
     const auth = useContext(AuthContext)
     const navigation = useNavigation()
 
-    const [isLoginMode, setIsLoginMode] = useState(true)
-    const [loading, setLoading] = useState(false);
 
+    const firmId = useSelector(state => state.context.firmId)
+
+    const [loading, setLoading] = useState(false);
     const [formData, setFormData] = useState({
         email: '',
         password: '',
@@ -45,8 +46,8 @@ const Login = () => {
 
             // console.log('response', response.data);
             auth.login(response.data.userId, response.data.token, response.data.admin, response.data.firmId)
-            // console.log(response.data);
-            if (!auth.firmId) {
+
+            if (!firmId) {
                 navigation.navigate('overviewNavigator', { screen: 'FirmView' });
             } else {
                 navigation.navigate('overviewNavigator')

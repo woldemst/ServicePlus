@@ -22,6 +22,9 @@ const OrderCreate = (props) => {
   const auth = useContext(AuthContext)
   const dispatch = useDispatch()
 
+  const firmId = useSelector(state => state.context.firmId)
+
+
   const [isLoaded, setIsLoaded] = useState(false)
   const [formData, setFormData] = useState({
     name: '',
@@ -45,9 +48,9 @@ const OrderCreate = (props) => {
           // workerResponse,
           // contactResponse
         ] = await Promise.all([
-          axios.get(`http://localhost:8000/api/orders/customer-options/${auth.firmId}`),
-          // axios.get(`http://localhost:8000/api/orders/worker-options/${auth.firmId}`),
-          // axios.get(`http://localhost:8000/api/orders/contact-options/${auth.firmId}`),
+          axios.get(`http://localhost:8000/api/orders/customer-options/${firmId}`),
+          // axios.get(`http://localhost:8000/api/orders/worker-options/${firmId}`),
+          // axios.get(`http://localhost:8000/api/orders/contact-options/${firmId}`),
         ])
 
         setFormData((prevFormData) => ({
@@ -74,12 +77,12 @@ const OrderCreate = (props) => {
 
 
   const handleSubmit = async () => {
-    const URL = `http://localhost:8000/api/orders/${auth.firmId}/new`;
+    const URL = `http://localhost:8000/api/orders/${firmId}/new`;
 
     // console.log('before api selected customer', formData.selectedCustomer);
     try {
       const response = await axios.post(URL, {
-        firmId: auth.firmId,
+        firmId: firmId,
         name: formData.name,
         // workers: formData.selectedWorkers,
         customerId: formData.selectedCustomer,

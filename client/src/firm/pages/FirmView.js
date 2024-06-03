@@ -10,21 +10,26 @@ import { useSelector } from "react-redux"
 
 const FirmView = () => {
     const auth = useContext(AuthContext)
+
+    const userRole = useSelector(state => state.context.userRole)
     const refresh = useSelector(state => state.util.refresh)
+    const firmId = useSelector(state => state.context.firmId)
+
     const [content, setContent] = useState(null);
 
     useEffect(() => {
+        console.log(firmId);
         const renderContent = () => {
-            if (!auth.firmId) {
-                return !auth.admin ? <JoinFirm /> : <CreateSuggest />
+            if (!firmId) {
+                return !userRole ? <JoinFirm /> : <CreateSuggest />
             }
             return <FirmItem />
         }
         setContent(renderContent());
 
-    }, [refresh, auth.firmId])
+    }, [refresh, firmId])
 
-    // console.log(refresh, auth.firmId)
+    // console.log(refresh, firmId)
 
     return (
         <>

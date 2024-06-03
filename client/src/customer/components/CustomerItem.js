@@ -1,7 +1,7 @@
 import { View, Text, StyleSheet, Image, TouchableOpacity, Alert } from "react-native"
 import { useContext, useState } from "react"
 import { useNavigation } from "@react-navigation/native"
-import { useDispatch } from "react-redux"
+import { useDispatch, useSelector } from "react-redux"
 import { SwipeListView } from "react-native-swipe-list-view";
 import axios from "axios"
 
@@ -13,6 +13,10 @@ const CustomerItem = (props) => {
     const auth = useContext(AuthContext)
     const navigation = useNavigation()
     const dispatch = useDispatch()
+
+    const firmId = useSelector(state => state.context.firmId)
+    const userRole = useSelector(state => state.context.userRole)
+
     const [isSelected, setIsSelected] = useState(false)
 
     // const longPressHandler = () => {
@@ -34,7 +38,7 @@ const CustomerItem = (props) => {
                     text: 'Delete',
                     onPress: async () => {
                         try {
-                            await axios.delete(`http://localhost:8000/api/customers/${auth.firmId}/delete/${customerId}`);
+                            await axios.delete(`http://localhost:8000/api/customers/${firmId}/delete/${customerId}`);
                             dispatch(deleteCustomer(customerId))
 
                         } catch (err) {
@@ -85,7 +89,7 @@ const CustomerItem = (props) => {
             rightOpenValue={-75}
             // leftOpenValue={75}
             disableRightSwipe={true}
-            disableLeftSwipe={!auth.admin}
+            disableLeftSwipe={!userRole}
             closeOnRowOpen={true}
             data={[props]}
             renderHiddenItem={(data, rowMap) => (

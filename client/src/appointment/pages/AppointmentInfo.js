@@ -12,11 +12,13 @@ import { AuthContext } from "../../context/auth-context";
 
 const AppointmentInfo = props => {
     const auth = useContext(AuthContext)
+    const dispatch = useDispatch()
+
+
     const appointments = useSelector(state => state.appointment.appointmentsArray.appointments)
     const showArchived = useSelector(state => state.appointment.showArchived)
     const appointmentItem = appointments.find(appointment => appointment._id == props.id)
-
-    const dispatch = useDispatch()
+    const userRole = useSelector(state => state.context.userRole)
 
     const [edit, setEdit] = useState(false);
     const [activeStatus, setActiveStatus] = useState(props.status);
@@ -61,7 +63,7 @@ const AppointmentInfo = props => {
     // console.log(auth);
 
     const disabledButton = () => {
-        if (auth.admin) {
+        if (userRole) {
             return showArchived
         } 
         return !props.workers.includes(auth.userId) || (props.status == '3' || props.status == '4')

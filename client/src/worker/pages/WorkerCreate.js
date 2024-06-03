@@ -19,6 +19,8 @@ const WorkerCreate = (props) => {
   const dispatch = useDispatch()
   const navigation = useNavigation()
 
+  const firmId = useSelector(state => state.context.firmId)
+
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -39,10 +41,10 @@ const WorkerCreate = (props) => {
   // console.log('worker create', fetchedData);
   const handleSubmit = async () => {
     try {
-      const URL = `http://localhost:8000/api/workers/${auth.firmId}/new`
+      const URL = `http://localhost:8000/api/workers/${firmId}/new`
 
       const response = await axios.post(URL, {
-        firmId: auth.firmId,
+        firmId: firmId,
         name: formData.name,
         email: formData.email,
         tempPassword: formData.tempPassword,

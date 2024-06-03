@@ -17,9 +17,12 @@ const CustomerDetails = (props) => {
     const route = useRoute();
     const customerId = route.params.id;
     const auth = useContext(AuthContext);
-
     const dispatch = useDispatch();
+
+    const firmId = useSelector(state => state.context.firmId)
     const customersArray = useSelector((state) => state.customer.customersArray.customers);
+    const userRole = useSelector(state => state.context.userRole)
+
     const customer = customersArray.find(customer => customer._id == customerId)
     // console.log(customer);
 
@@ -34,9 +37,9 @@ const CustomerDetails = (props) => {
     const handleSubmit = async () => {
         try {
             const response = await axios.patch(
-                `http://localhost:8000/api/customers/${auth.firmId}/update/${customerId}`, {
+                `http://localhost:8000/api/customers/${firmId}/update/${customerId}`, {
                 customerId: customerId,
-                firmId: auth.firmId,
+                firmId: firmId,
                 name: formData.name,
                 email: formData.email,
                 street: formData.street,
@@ -165,7 +168,7 @@ const CustomerDetails = (props) => {
                             textArea={true}
                         />
 
-                        {auth.admin && (
+                        {userRole && (
                             <View style={styles.btnContainer}>
                                 {!isEdit ? (
                                     <Button

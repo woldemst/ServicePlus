@@ -24,6 +24,10 @@ const AppointmentCreate = props => {
     const dispatch = useDispatch()
     const auth = useContext(AuthContext)
 
+
+    const firmId = useSelector(state => state.context.firmId)
+
+
     const [isLoaded, setIsLoaded] = useState(false)
     const [date, setDate] = useState(new Date());
     const [selectedDateOnly, setSelectedDateOnly] = useState('');
@@ -62,10 +66,10 @@ const AppointmentCreate = props => {
                     customerResponse,
                     // contactResponse,
                 ] = await Promise.all([
-                    axios.get(`http://localhost:8000/api/appointments/order-options/${auth.firmId}`),
-                    axios.get(`http://localhost:8000/api/appointments/worker-options/${auth.firmId}`),
-                    axios.get(`http://localhost:8000/api/appointments/customer-options/${auth.firmId}`),
-                    // axios.get(`http://localhost:8000/api/appointments/contact-options/${auth.firmId}`),
+                    axios.get(`http://localhost:8000/api/appointments/order-options/${firmId}`),
+                    axios.get(`http://localhost:8000/api/appointments/worker-options/${firmId}`),
+                    axios.get(`http://localhost:8000/api/appointments/customer-options/${firmId}`),
+                    // axios.get(`http://localhost:8000/api/appointments/contact-options/${firmId}`),
                 ])
 
                 const filteredOrders = orderResponse.data.orders.filter(order => order.status !== '3' && order.status !== '4')
@@ -104,7 +108,7 @@ const AppointmentCreate = props => {
         const URL = `http://localhost:8000/api/appointments/new`;
         try {
             const response = await axios.post(URL, {
-                firmId: auth.firmId,
+                firmId: firmId,
                 orderId: formData.selectedOrder,
                 workers: formData.selectedWorkers,
                 description: formData.description,

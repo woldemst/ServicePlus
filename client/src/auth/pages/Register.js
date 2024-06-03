@@ -124,11 +124,9 @@ const Register = () => {
                 style={styles.button}
                 buttonText={styles.buttonText}
                 onPress={handleSubmit}
-                title={'Registrie ren'}
-
+                title={'Registrieren'}
             />
-
-
+            
             <View style={styles.inviteContainer}>
                 <Text style={styles.inviteText}>Sie haben schon einen Account?</Text>
                 <TouchableOpacity onPress={() => { navigation.navigate('login') }}>

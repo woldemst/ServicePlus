@@ -6,6 +6,7 @@ import OrderView from "../../order/pages/OrderView"
 import AppointmentView from "../../appointment/pages/AppointmentView"
 import FirmView from "../../firm/pages/FirmView"
 import { AuthContext } from "../../context/auth-context"
+import { useSelector } from "react-redux"
 
 const Tab = createMaterialTopTabNavigator()
 
@@ -14,6 +15,7 @@ const OverviewNavigator = () => {
     const [activeTab, setActiveTab] = useState('OrderView');
 
     const auth = useContext(AuthContext)
+    const firmId = useSelector(state => state.context.firmId)
 
     return (
         <View style={{ flex: 1 }}>
@@ -39,7 +41,7 @@ const OverviewNavigator = () => {
                 }}
             >
 
-                {!!auth.firmId && (
+                {!!firmId && (
                     <>
                         <Tab.Screen
                             name="AppointmentView"
