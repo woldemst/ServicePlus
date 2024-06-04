@@ -89,7 +89,7 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         color: '#FFFFFF',
         fontSize: 11, 
-        fontWeight: 700,
+        fontWeight: "700",
 
 
     },
