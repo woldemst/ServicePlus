@@ -19,7 +19,6 @@ const CreateCustomer = (props) => {
 
   const firmId = useSelector(state => state.context.firmId)
 
-
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -147,6 +146,9 @@ const CreateCustomer = (props) => {
           validators={[VALIDATOR_REQUIRE()]}
           errorText='Geben Sie die Beschreibung des Kunden ein'
           onChangeText={(text) => setFormData({ ...formData, description: text })}
+          style={[styles.textArea, styles.placeholderText]}
+          multiline={true}
+          numberOfLines={4}
         />
 
         <View style={styles.btnContainer}>
@@ -197,7 +199,7 @@ const styles = StyleSheet.create({
     height: 130, // Adjust the height as needed
     borderColor: "#e0e0e0",
     borderWidth: 1,
-    marginBottom: 30,
+    marginTop: 12,
     paddingTop: 7,
     paddingBottom: 7,
     paddingLeft: 7,

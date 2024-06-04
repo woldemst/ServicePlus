@@ -110,7 +110,6 @@ const WorkerDetails = props => {
                                     value={formData.street}
                                     validators={[VALIDATOR_REQUIRE()]}
                                     onChangeText={(value) => setFormData({ ...formData, street: value })}
-
                                 />
                             </View>
 
@@ -172,7 +171,7 @@ const WorkerDetails = props => {
                         />
 
 
-                        {userRole || auth.userId === workerId ? (<>
+                        {(!userRole && auth.userId === workerId) && (
                             <View style={styles.passwortBtnContainer}>
                                 <Button
                                     style={isEdit ? [styles.passwordBtn, styles.button] : [styles.invalidePasswordButton, styles.button]}
@@ -182,6 +181,9 @@ const WorkerDetails = props => {
                                     disabled={!isEdit}
                                 />
                             </View>
+                        )}
+
+                        {userRole || auth.userId === workerId ? (
                             <View style={styles.btnContainer}>
                                 <Button
                                     style={isEdit ? [styles.createBtn, styles.button] : [styles.invalideButton, styles.button]}
@@ -190,8 +192,7 @@ const WorkerDetails = props => {
                                     title={isEdit ? "Speichern" : "Ändern"}
                                 />
                             </View>
-                        </>) : null}
-
+                        ) : null}
 
                     </View>
                 )}

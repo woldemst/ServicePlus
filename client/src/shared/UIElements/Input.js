@@ -22,6 +22,16 @@ const Input = forwardRef((props, ref) => {
         }
     }, [props.isEdit]);
 
+    const inputStyles = [
+        props.style ? [
+            props.disabled && styles.disabled,
+            !isValid ? [props.inputInvalid ? props.inputInvalid : [props.textArea ? styles.textAreaInvalid : styles.inputInvalid]] : 
+            props.style, (props.textArea && !isValid) && styles.textAreaInvalid
+        ] : [
+            props.disabled && styles.disabled, !isValid ? styles.inputInvalid : styles.input, props.textArea && styles.textArea
+        ]
+    ]
+
     return <>
         <View style={props.thin && styles.inputContainer}>
             <TextInput
@@ -29,24 +39,20 @@ const Input = forwardRef((props, ref) => {
                 id={props.id}
                 value={props.value}
                 placeholder={props.placeholder}
-                style={
-                    props.style ? [
-                        props.disabled && styles.disabled, !isValid ? [props.inputInvalid ? props.inputInvalid : styles.inputInvalid] : props.style, props.textArea && styles.textArea
-                    ] : [
-                        props.disabled && styles.disabled, !isValid ? styles.inputInvalid : styles.input, props.textArea && styles.textArea
-                    ]}
+                style={inputStyles}
                 onChangeText={handleChange}
                 autoCapitalize="none"
                 multiline={props.multiline}
                 numberOfLines={props.numberOfLines}
                 editable={!props.disabled}
-                textArea={props.textArea}
+                // textArea={props.textArea}
                 // onFocus={() => setTouched(true)}
                 onBlur={props.onBlur}
                 scrollEnabled={props.scrollEnabled}
             />
 
-            {!isValid && <Text style={props.thin ? styles.thin : [props.errorTextStyle ? props.errorTextStyle : styles.errorText]}>{props.errorText}</Text>}
+            {(!isValid && !props.textArea)&& <Text style={props.thin ? styles.thin : [props.errorTextStyle ? props.errorTextStyle : styles.errorText]}>{props.errorText}</Text>}
+            {(!isValid && props.textArea) && <Text style={[props.errorTextStyle && props.errorTextStyle, styles.errorTextArea]}>{props.errorText}</Text>}
         </View>
     </>
 })
@@ -73,11 +79,20 @@ const styles = StyleSheet.create({
         marginTop: 18,
         padding: 7,
     },
-    textArea: {
-        height: 130, // Adjust the height as needed
+    textAreaValid: {
+        height: 130,
         borderColor: "#e0e0e0",
         borderWidth: 1,
-        // marginBottom: 14,
+        marginTop: 16,
+        padding: 7,
+        fontSize: 18,
+        borderRadius: 6,
+    },
+    textAreaInvalid: {
+        height: 130,
+        borderColor: "red",
+        borderWidth: 1,
+        marginTop: 16,
         padding: 7,
         fontSize: 18,
         borderRadius: 6,
@@ -91,6 +106,13 @@ const styles = StyleSheet.create({
         color: 'red',
         position: 'absolute',
         top: 68,
+        left: 0,
+    },
+    errorTextArea: {
+        fontSize: 12,
+        color: 'red',
+        position: 'absolute',
+        top: 152,
         left: 0,
     },
     thin: {

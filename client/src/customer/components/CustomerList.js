@@ -136,7 +136,7 @@ const CustomerList = () => {
                 onBackdropPress={toggleModal}
                 onBackButtonPress={toggleModal}
                 header={<Text style={styles.modalHeadline}>Kunde hinzufügen</Text>}
-                modalHeight={'70%'}
+                // modalHeight={'70%'}
             >
                 <CreateCustomer toggle={toggleModal} />
             </ModalComponent>
