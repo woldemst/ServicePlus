@@ -83,7 +83,7 @@ const WorkerList = () => {
                         <View style={styles.textContainer} >
                             <Text style={styles.headerText}>Mitarbeiter</Text>
                         </View>
-                        {userRole.admin && (
+                        {userRole && (
                             <View style={styles.headerIconContainer} >
                                 <TouchableOpacity style={styles.headerButton} onPress={toggleModal}>
                                     <Image style={styles.headerIcon} source={require('../../../assets/customer/user_plus.png')} />

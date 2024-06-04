@@ -5,7 +5,7 @@ import { useSelector, useDispatch } from "react-redux";
 import axios from "axios";
 
 import { clearWorkerField, createWorker } from "../../actions/workerActions";
-import { VALIDATOR_EMAIL, VALIDATOR_REQUIRE, VALIDATOR_MINLENGTH} from "../../util/validators";
+import { VALIDATOR_EMAIL, VALIDATOR_REQUIRE, VALIDATOR_MINLENGTH } from "../../util/validators";
 import { AuthContext } from "../../context/auth-context";
 import Input from "../../shared/UIElements/Input";
 import Button from "../../shared/UIElements/Button";
@@ -151,6 +151,11 @@ const WorkerCreate = (props) => {
           validators={[VALIDATOR_REQUIRE()]}
           errorText='Geben Sie die Beschreibung ein'
           onChangeText={(text) => setFormData({ ...formData, description: text })}
+          style={[styles.textArea, styles.placeholderText]}
+          inputInvalid={styles.inputInvalid}
+          multiline={true}
+          numberOfLines={4}
+          textArea={true}
         />
 
         <View style={styles.btnContainer}>
@@ -194,6 +199,15 @@ const styles = StyleSheet.create({
     borderRadius: 6,
     fontSize: 16,
   },
+  inputInvalid: {
+    width: '100%',
+    height: 50,
+    borderColor: 'red',
+    borderWidth: 1,
+    borderRadius: 4,
+    marginTop: 18,
+    padding: 7,
+},
 
   select: {
     margin: 15,
@@ -205,7 +219,7 @@ const styles = StyleSheet.create({
     height: 130, // Adjust the height as needed
     borderColor: "#e0e0e0",
     borderWidth: 1,
-    marginBottom: 30,
+    marginTop: 12,
     paddingTop: 7,
     paddingBottom: 7,
     paddingLeft: 7,
