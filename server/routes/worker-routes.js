@@ -10,7 +10,7 @@ router.patch('/:firmId/update/:workerId', workerController.updateWorkerById)
 router.post('/:firmId/new', workerController.createWorker)
 router.delete('/:firmId/delete/:workerId', workerController.deleteWorkerById)
 router.post('/:firmId/join/:userId', workerController.joinFirm)
-
+router.post('/resetPassword/:workerId', workerController.resetWorkerPassword)
 
 module.exports = router;
 

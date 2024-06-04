@@ -8,7 +8,7 @@ import { AuthContext } from "../../context/auth-context";
 import Input from '../../shared/UIElements/Input'
 import Button from '../../shared/UIElements/Button'
 import { refershData } from "../../actions/utilActions";
-import { useRoute } from "@react-navigation/native";
+import { useNavigation, useRoute } from "@react-navigation/native";
 import Avatar from "../../../components/Avatar";
 
 
@@ -17,6 +17,7 @@ const WorkerDetails = props => {
     const workerId = route.params.id
     const dispatch = useDispatch()
     const auth = useContext(AuthContext)
+    const navigation = useNavigation()
 
     const firmId = useSelector(state => state.context.firmId)
     const workersArr = useSelector(state => state.worker.workersArray.workers)
@@ -41,6 +42,10 @@ const WorkerDetails = props => {
 
     useEffect(() => setIsLoaded(true), [])
     const handleEdit = () => setIsEdit(!isEdit)
+
+    const resetPasswordHandler = () => {
+        navigation.navigate('resetPassword')
+    }
 
     const handleSubmit = async () => {
         try {
@@ -95,14 +100,6 @@ const WorkerDetails = props => {
                             onChangeText={(value) => setFormData({ ...formData, email: value })}
                         />
 
-                        <View style={styles.passwortBtnContainer}>
-                            <Button
-                                style={isEdit ? [styles.passwordBtn, styles.button] : [styles.invalidePasswordButton, styles.button]}
-                                buttonText={styles.changePasswordBtn}
-                                onPress={isEdit ? handleSubmit : handleEdit}
-                                title={"Passwort ändern"}
-                            />
-                        </View>
 
                         <View style={styles.streetContainer}>
                             <View style={styles.streetWrapper}>
@@ -173,7 +170,18 @@ const WorkerDetails = props => {
                             multiline={true}
                             textArea={true}
                         />
-                        {userRole || auth.userId === workerId ? (
+
+
+                        {userRole || auth.userId === workerId ? (<>
+                            <View style={styles.passwortBtnContainer}>
+                                <Button
+                                    style={isEdit ? [styles.passwordBtn, styles.button] : [styles.invalidePasswordButton, styles.button]}
+                                    buttonText={styles.changePasswordBtn}
+                                    onPress={resetPasswordHandler}
+                                    title={"Passwort ändern"}
+                                    disabled={!isEdit}
+                                />
+                            </View>
                             <View style={styles.btnContainer}>
                                 <Button
                                     style={isEdit ? [styles.createBtn, styles.button] : [styles.invalideButton, styles.button]}
@@ -182,7 +190,9 @@ const WorkerDetails = props => {
                                     title={isEdit ? "Speichern" : "Ändern"}
                                 />
                             </View>
-                        ) : null}
+                        </>) : null}
+
+
                     </View>
                 )}
 
@@ -249,20 +259,20 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between'
     },
     streetWrapper: {
-        width: '75%'
+        width: '76%'
     },
     nrWrapper: {
-        width: '20%'
+        width: '21%'
     },
     zipContainer: {
         flexDirection: 'row',
         justifyContent: 'space-between'
     },
     zipWrapper: {
-        width: '35%'
+        width: '36%'
     },
     placeWrapper: {
-        width: '60%'
+        width: '61%'
     },
     label: {
         marginTop: 12,
@@ -327,7 +337,7 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         alignItems: 'center',
         borderColor: '#e0e0e0',
-        borderWidth: 1, 
+        borderWidth: 1,
     },
     loader: {
         flex: 1,
