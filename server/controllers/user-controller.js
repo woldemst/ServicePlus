@@ -9,7 +9,7 @@ const register = async (req, res, next) => {
   const { name, email, password, admin } = req.body;
 
   let existingUser;
-  let existingWorker
+  let existingWorker;
 
   try {
     existingUser = await User.findOne({ email });

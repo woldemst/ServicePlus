@@ -292,10 +292,10 @@ const joinFirm = async (req, res, next) => {
 }
 
 const resetWorkerPassword = async (req, res, next) => {
-    const {  workerId } = req.params
+    const { workerId } = req.params
     const { actualPassword, newPassword, confirmPassword } = req.body
-
-    try {
+        // console.log(req.body);
+    try {   
         const worker = await Worker.findById(workerId)
         if (!worker) {
             return next(new HttpError('Worker not found with the provided ID.', 404));
@@ -303,14 +303,16 @@ const resetWorkerPassword = async (req, res, next) => {
         if (newPassword !== confirmPassword) {
             return next(new HttpError('Passwords do not match', 404));
         }
-
         const isPasswordMatch = bcrypt.compare(actualPassword, worker.password);
+
         if (!isPasswordMatch) {
             return next(new HttpError('Incorrect current password.', 403));
         }
 
-        const hashedPassword = bcrypt.hash(newPassword, 12);
-        await Worker.findByIdAndUpdate(workerId, { password: hashedPassword });
+        const hashedPassword = await bcrypt.hash(newPassword, 12);
+
+        worker.password = hashedPassword;
+        await worker.save();
 
 
         res.status(200).json({ message: 'Worker password was reset successfully' })
