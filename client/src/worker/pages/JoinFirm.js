@@ -33,7 +33,7 @@ const JoinFirm = props => {
 
     const joinHandler = async () => {
         try {
-            const URL = `http://localhost:8000/api/workers/${formData.firmId}/join/${auth.userId}`
+            const URL = `http://192.168.178.96:8000/api/workers/${formData.firmId}/join/${auth.userId}`
             // console.log('URL', URL);
             const response = await axios.post(URL)
             alert("Erfolgreich beigetreten!");

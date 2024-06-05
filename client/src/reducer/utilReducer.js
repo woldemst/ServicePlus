@@ -1,8 +1,8 @@
-import { REFRESH, MODAL_SWITCH} from "../actions/utilActions";
+import { REFRESH, MODAL_SWITCH } from "../actions/utilActions";
 
 const initialData = {
     refresh: false,
-    modalSwitch: false
+    modalSwitch: false,
 }
 
 const utilReducer = (state = initialData, action) => {

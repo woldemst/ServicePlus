@@ -66,10 +66,10 @@ const AppointmentCreate = props => {
                     customerResponse,
                     // contactResponse,
                 ] = await Promise.all([
-                    axios.get(`http://localhost:8000/api/appointments/order-options/${firmId}`),
-                    axios.get(`http://localhost:8000/api/appointments/worker-options/${firmId}`),
-                    axios.get(`http://localhost:8000/api/appointments/customer-options/${firmId}`),
-                    // axios.get(`http://localhost:8000/api/appointments/contact-options/${firmId}`),
+                    axios.get(`http://192.168.178.96:8000/api/appointments/order-options/${firmId}`),
+                    axios.get(`http://192.168.178.96:8000/api/appointments/worker-options/${firmId}`),
+                    axios.get(`http://192.168.178.96:8000/api/appointments/customer-options/${firmId}`),
+                    // axios.get(`http://192.168.178.96:8000/api/appointments/contact-options/${firmId}`),
                 ])
 
                 const filteredOrders = orderResponse.data.orders.filter(order => order.status !== '3' && order.status !== '4')
@@ -105,7 +105,7 @@ const AppointmentCreate = props => {
 
 
     const handleSubmit = async () => {
-        const URL = `http://localhost:8000/api/appointments/new`;
+        const URL = `http://192.168.178.96:8000/api/appointments/new`;
         try {
             const response = await axios.post(URL, {
                 firmId: firmId,

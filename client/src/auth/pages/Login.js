@@ -36,7 +36,8 @@ const Login = () => {
     const handleSignIn = async () => {
         setLoading(true);
         // console.log(formData);
-        const apiUrl = "http://localhost:8000/api/users/login";
+        const apiUrl = "http://192.168.178.96:8000/api/users/login";
+        // const apiUrl = "http://192.168.178.96:8000/api/users/login";
 
         try {
             const response = await axios.post(apiUrl, {

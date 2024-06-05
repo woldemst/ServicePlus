@@ -32,7 +32,7 @@ const CreateFirm = props => {
 
   const handleSubmit = async () => {
     // console.log('fetched data before api', fetchedData);
-    const URL = "http://localhost:8000/api/firm/register";
+    const URL = "http://192.168.178.96:8000/api/firm/register";
 
     try {
       const firmData = {

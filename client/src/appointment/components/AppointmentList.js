@@ -31,7 +31,7 @@ const AppointmentList = props => {
     useEffect(() => {
         const fetchOrders = async () => {
             try {
-                const response = await axios.get(`http://localhost:8000/api/appointments/${firmId}/all`)
+                const response = await axios.get(`http://192.168.178.96:8000/api/appointments/${firmId}/all`)
                 dispatch(getAppointments(response.data))
                 setIsLoaded(true)
 
@@ -65,7 +65,7 @@ const AppointmentList = props => {
                 ...fetchedActiveAppointments.filter(appointment => appointment.orderId === props.id),
                 ...fetchedArchivedAppointments.filter(appointment => appointment.orderId === props.id)
             ]
-        }else {
+        } else {
             appointmentsToRender = showArchived ? fetchedArchivedAppointments : fetchedActiveAppointments
         }
 

@@ -78,7 +78,7 @@ const AppointmentItem = (props) => {
                     text: "Delete",
                     onPress: async () => {
                         try {
-                            await axios.delete(`http://localhost:8000/api/appointments/${appointmentId}/delete`)
+                            await axios.delete(`http://192.168.178.96:8000/api/appointments/${appointmentId}/delete`)
                             dispatch(deleteAppointment(appointmentId))
                             dispatch(refershData())
 
@@ -187,8 +187,8 @@ const styles = StyleSheet.create({
         paddingLeft: 16,
         textAlign: 'left',
 
-        borderLeftWidth: 0, 
-        borderWidth: 1, 
+        borderLeftWidth: 0,
+        borderWidth: 1,
         borderColor: '#757575',
         borderTopRightRadius: 10,
         borderBottomRightRadius: 10,

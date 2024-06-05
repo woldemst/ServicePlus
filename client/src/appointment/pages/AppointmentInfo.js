@@ -45,7 +45,7 @@ const AppointmentInfo = props => {
                     text: "Change",
                     onPress: async () => {
                         try {
-                            const response = await axios.post(`http://localhost:8000/api/appointments/${props.id}/statuschange`, { newStatus: newStatus })
+                            const response = await axios.post(`http://192.168.178.96:8000/api/appointments/${props.id}/statuschange`, { newStatus: newStatus })
                             dispatch(refershData())
                             setEdit(false)
 
@@ -65,7 +65,7 @@ const AppointmentInfo = props => {
     const disabledButton = () => {
         if (userRole) {
             return showArchived
-        } 
+        }
         return !props.workers.includes(auth.userId) || (props.status == '3' || props.status == '4')
 
     }

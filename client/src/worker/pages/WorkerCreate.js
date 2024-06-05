@@ -41,7 +41,7 @@ const WorkerCreate = (props) => {
   // console.log('worker create', fetchedData);
   const handleSubmit = async () => {
     try {
-      const URL = `http://localhost:8000/api/workers/${firmId}/new`
+      const URL = `http://192.168.178.96:8000/api/workers/${firmId}/new`
 
       const response = await axios.post(URL, {
         firmId: firmId,
@@ -207,7 +207,7 @@ const styles = StyleSheet.create({
     borderRadius: 4,
     marginTop: 18,
     padding: 7,
-},
+  },
 
   select: {
     margin: 15,

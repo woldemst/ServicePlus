@@ -24,7 +24,7 @@ const FirmItem = () => {
     useEffect(() => {
         const fetcheFirm = async () => {
             try {
-                const response = await axios.get(`http://localhost:8000/api/firm/profile/${auth.userId}`)
+                const response = await axios.get(`http://192.168.178.96:8000/api/firm/profile/${auth.userId}`)
                 dispatch(getFirmData(response.data));
                 // console.log('Goten:',response.data); 
                 setIsLoaded(true)

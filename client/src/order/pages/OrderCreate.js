@@ -48,9 +48,9 @@ const OrderCreate = (props) => {
           // workerResponse,
           // contactResponse
         ] = await Promise.all([
-          axios.get(`http://localhost:8000/api/orders/customer-options/${firmId}`),
-          // axios.get(`http://localhost:8000/api/orders/worker-options/${firmId}`),
-          // axios.get(`http://localhost:8000/api/orders/contact-options/${firmId}`),
+          axios.get(`http://192.168.178.96:8000/api/orders/customer-options/${firmId}`),
+          // axios.get(`http://192.168.178.96:8000/api/orders/worker-options/${firmId}`),
+          // axios.get(`http://192.168.178.96:8000/api/orders/contact-options/${firmId}`),
         ])
 
         setFormData((prevFormData) => ({
@@ -77,7 +77,7 @@ const OrderCreate = (props) => {
 
 
   const handleSubmit = async () => {
-    const URL = `http://localhost:8000/api/orders/${firmId}/new`;
+    const URL = `http://192.168.178.96:8000/api/orders/${firmId}/new`;
 
     // console.log('before api selected customer', formData.selectedCustomer);
     try {

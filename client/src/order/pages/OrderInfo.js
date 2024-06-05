@@ -80,9 +80,9 @@ const OrderInfo = (props) => {
           // workerResponse,
           // contactResponse
         ] = await Promise.all([
-          axios.get(`http://localhost:8000/api/orders/customer-options/${firmId}`),
-          // axios.get(`http://localhost:8000/api/orders/worker-options/${firmId}`),
-          // axios.get(`http://localhost:8000/api/orders/contact-options/${firmId}`),
+          axios.get(`http://192.168.178.96:8000/api/orders/customer-options/${firmId}`),
+          // axios.get(`http://192.168.178.96:8000/api/orders/worker-options/${firmId}`),
+          // axios.get(`http://192.168.178.96:8000/api/orders/contact-options/${firmId}`),
         ])
 
         setFormData((prevFormData) => ({
@@ -123,7 +123,7 @@ const OrderInfo = (props) => {
 
 
   const handleSubmit = async () => {
-    const URL = `http://localhost:8000/api/orders/update/${orderId}`;
+    const URL = `http://192.168.178.96:8000/api/orders/update/${orderId}`;
 
     try {
       const response = await axios.patch(URL, {

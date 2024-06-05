@@ -31,7 +31,7 @@ const Register = () => {
 
 
     async function handleSubmit() {
-        const URL = "http://localhost:8000/api/users/register";
+        const URL = "http://192.168.178.96:8000/api/users/register";
 
         try {
             const response = await axios.post(URL, {
@@ -126,7 +126,7 @@ const Register = () => {
                 onPress={handleSubmit}
                 title={'Registrieren'}
             />
-            
+
             <View style={styles.inviteContainer}>
                 <Text style={styles.inviteText}>Sie haben schon einen Account?</Text>
                 <TouchableOpacity onPress={() => { navigation.navigate('login') }}>

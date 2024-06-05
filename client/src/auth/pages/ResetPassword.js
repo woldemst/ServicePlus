@@ -41,7 +41,7 @@ const ResetPassword = () => {
         setLoading(true);
 
         try {
-            const URL = `http://localhost:8000/api/workers/resetPassword/${auth.userId}`
+            const URL = `http://192.168.178.96:8000/api/workers/resetPassword/${auth.userId}`
             const response = await axios.post(URL, {
                 actualPassword: formData.actualPassword,
                 newPassword: formData.newPassword,

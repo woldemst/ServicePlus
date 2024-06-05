@@ -38,7 +38,7 @@ const CustomerList = () => {
     useEffect(() => {
         const fetchCustomers = async () => {
             try {
-                const response = await axios.get(`http://localhost:8000/api/customers/${firmId}/all`)
+                const response = await axios.get(`http://192.168.178.96:8000/api/customers/${firmId}/all`)
                 dispatch(getCustomerData(response.data))
                 setisLoaded(true)
             } catch (err) {
@@ -136,7 +136,7 @@ const CustomerList = () => {
                 onBackdropPress={toggleModal}
                 onBackButtonPress={toggleModal}
                 header={<Text style={styles.modalHeadline}>Kunde hinzufügen</Text>}
-                // modalHeight={'70%'}
+            // modalHeight={'70%'}
             >
                 <CreateCustomer toggle={toggleModal} />
             </ModalComponent>

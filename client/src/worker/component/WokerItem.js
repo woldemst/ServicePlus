@@ -31,7 +31,7 @@ const WorkerItem = (props) => {
                     text: 'Delete',
                     onPress: async () => {
                         try {
-                            await axios.delete(`http://localhost:8000/api/workers/${firmId}/delete/${workerId}`);
+                            await axios.delete(`http://192.168.178.96:8000/api/workers/${firmId}/delete/${workerId}`);
                             dispatch(deleteWorker(workerId))
                             dispatch(refershData())
 
