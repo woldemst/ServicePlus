@@ -46,7 +46,7 @@ const OrderItem = (props) => {
           text: 'Delete',
           onPress: async () => {
             try {
-              await axios.delete(`http://localhost:8000/api/orders/${orderId}/delete`);
+              await axios.delete(`http://192.168.178.96:8000/api/orders/${orderId}/delete`);
               dispatch(deleteOrder(orderId));
               dispatch(deleteAppointmentsByOrder(orderId))
             } catch (err) {

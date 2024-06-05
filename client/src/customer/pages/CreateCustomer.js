@@ -35,7 +35,7 @@ const CreateCustomer = (props) => {
 
   const handleSubmit = async () => {
     try {
-      const URL = `http://localhost:8000/api/customers/${firmId}/new`
+      const URL = `http://192.168.178.96:8000/api/customers/${firmId}/new`
       const response = await axios.post(URL, {
         firmId: firmId,
         name: formData.name,

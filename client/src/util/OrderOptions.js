@@ -43,7 +43,7 @@ const OrderOptions = props => {
                     text: 'Delete',
                     onPress: async () => {
                         try {
-                            await axios.delete(`http://localhost:8000/api/orders/${orderId}/delete`);
+                            await axios.delete(`http://192.168.178.96:8000/api/orders/${orderId}/delete`);
                             dispatch(deleteOrder(orderId));
                             dispatch(deleteAppointmentsByOrder(orderId))
                             props.onClose()
@@ -59,9 +59,9 @@ const OrderOptions = props => {
 
     const renameHandler = async () => {
         props.onClose(),
-        props.onRenameHandler(orderId)
+            props.onRenameHandler(orderId)
     }
-    
+
     return <>
         <View style={[styles.optionsContainer, { top: adjustedTop, left: adjustedLeft }]}>
             <TouchableOpacity style={styles.option} onPress={renameHandler}>

@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
 
 const app = express();
-const port = 8000;
+const port = '8000';
 
 app.use(bodyParser.json())
 
@@ -45,7 +45,7 @@ const connectionOptions = {
 mongoose
     .connect(connectionURL, connectionOptions)
     .then(()=>{
-        app.listen(port, ()=>{
+        app.listen(port, '0.0.0.0', ()=>{
             console.log(`Server is running on port ${port}`)
         })
     })

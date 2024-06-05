@@ -49,7 +49,7 @@ const WorkerDetails = props => {
 
     const handleSubmit = async () => {
         try {
-            const response = await axios.patch(`http://localhost:8000/api/workers/${firmId}/update/${workerId}`, {
+            const response = await axios.patch(`http://192.168.178.96:8000/api/workers/${firmId}/update/${workerId}`, {
                 workerId: workerId,
                 firmId: firmId,
                 name: formData.name,

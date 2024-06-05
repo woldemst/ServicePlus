@@ -29,7 +29,7 @@ const OrderList = (props) => {
     const refresh = useSelector(state => state.util.refresh)
     const showArchivedOrders = useSelector(state => state.order.showArchivedOrders)
     const firmId = useSelector(state => state.context.firmId)
- 
+
     const [isLoaded, setIsLoaded] = useState(false)
     const [fetchedCustomers, setFetchedCustomers] = useState([])
     const [fetchedWorkers, setFetchedWorkers] = useState([])
@@ -45,7 +45,7 @@ const OrderList = (props) => {
         const fetchOrders = async () => {
             try {
                 const response = await axios.get(
-                    `http://localhost:8000/api/orders/${firmId}/all`
+                    `http://192.168.178.96:8000/api/orders/${firmId}/all`
                 );
                 dispatch(getOrders(response.data));
                 // console.log('response', response.data);
@@ -62,7 +62,7 @@ const OrderList = (props) => {
     useEffect(() => {
         const fetcheCustomers = async () => {
             try {
-                const response = await axios.get(`http://localhost:8000/api/customers/${firmId}/all`)
+                const response = await axios.get(`http://192.168.178.96:8000/api/customers/${firmId}/all`)
                 setFetchedCustomers(response.data.customers)
             } catch (err) {
                 console.log('Error while fetching', err);
@@ -75,7 +75,7 @@ const OrderList = (props) => {
     useEffect(() => {
         const fetchWorkers = async () => {
             try {
-                const response = await axios.get(`http://localhost:8000/api/workers/${firmId}/all`)
+                const response = await axios.get(`http://192.168.178.96:8000/api/workers/${firmId}/all`)
                 setFetchedWorkers(response.data.workers)
 
             } catch (err) {

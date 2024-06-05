@@ -37,7 +37,7 @@ const CustomerDetails = (props) => {
     const handleSubmit = async () => {
         try {
             const response = await axios.patch(
-                `http://localhost:8000/api/customers/${firmId}/update/${customerId}`, {
+                `http://192.168.178.96:8000/api/customers/${firmId}/update/${customerId}`, {
                 customerId: customerId,
                 firmId: firmId,
                 name: formData.name,
@@ -164,7 +164,7 @@ const CustomerDetails = (props) => {
                             value={formData.description}
                             validators={[VALIDATOR_REQUIRE()]}
                             onChangeText={(value) => setFormData({ ...formData, description: value })}
-                            multiline={true}    
+                            multiline={true}
                             textArea={true}
                         />
 
