@@ -73,7 +73,12 @@ const Login = () => {
 
 
     return (
-        <KeyboardAvoidingView style={styles.container} behavior={Platform.OS === 'ios' ? 'padding' : 'height'} >
+        <KeyboardAvoidingView
+            style={styles.container}
+            behavior='height'
+            // behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+
+        >
             <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
                 <View style={styles.inner}>
 
@@ -139,10 +144,8 @@ const styles = StyleSheet.create({
         // borderColor: 'red'
     },
     inner: {
-        paddingLeft: 21,
-        paddingRight: 21,
-        paddingTop: 21,
-        paddingBottom: 105,
+        // paddingBottom: 105,
+        padding: 21,
 
     },
     logoText: {
