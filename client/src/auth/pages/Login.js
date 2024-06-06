@@ -151,7 +151,7 @@ const styles = StyleSheet.create({
     logoText: {
         fontSize: 32,
         textAlign: 'center',
-        marginBottom: 60, // Adjust margin to create space between logo and title
+        marginBottom: 90, // Adjust margin to create space between logo and title
     },
     title: {
         fontSize: 27,

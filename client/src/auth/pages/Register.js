@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity, StyleSheet, Alert } from "react-native";
+import { View, Text, TouchableOpacity, StyleSheet, Alert, KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard } from "react-native";
 import { useContext, useEffect, useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 
@@ -68,72 +68,80 @@ const Register = () => {
     }
 
     return (
-        <View style={styles.container}>
+        <KeyboardAvoidingView
+            style={styles.container}
+            behavior='height'
+        >
+            <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
 
-            <Text style={styles.logoText}>ServicePlus</Text>
-            <Text style={styles.title}>Registrieren</Text>
 
-            {isLoaded && (
-                <>
-                    <Input
-                        placeholder="Name"
-                        value={formData.name}
-                        onChangeText={(text) => setFormData({ ...formData, name: text })}
-                        validators={[VALIDATOR_REQUIRE()]}
-                        errorText="Please enter your name"
-                        isEdit={true}
+                <View style={styles.inner}>
+
+                    <Text style={styles.logoText}>ServicePlus</Text>
+                    <Text style={styles.title}>Registrieren</Text>
+
+                    {isLoaded && (
+                        <>
+                            <Input
+                                placeholder="Name"
+                                value={formData.name}
+                                onChangeText={(text) => setFormData({ ...formData, name: text })}
+                                validators={[VALIDATOR_REQUIRE()]}
+                                errorText="Please enter your name"
+                                isEdit={true}
+                            />
+
+                            <Input
+                                placeholder="Email"
+                                value={formData.email}
+                                onChangeText={(text) => setFormData({ ...formData, email: text })}
+                                validators={[VALIDATOR_EMAIL()]}
+                                errorText="Please enter a valid email"
+                            />
+
+                            <Input
+                                placeholder="Password"
+                                value={formData.password}
+                                onChangeText={(text) => setFormData({ ...formData, password: text })}
+
+                                validators={[VALIDATOR_MINLENGTH(6)]}
+                                errorText="Password must be at least 6 characters long"
+                                secureTextEntry
+                            />
+
+                            <Select
+                                placeholder="Role"
+                                value={formData.admin}
+                                onValueChange={(option) => setFormData({ ...formData, admin: option })}
+                                data={[
+                                    { label: "Owner", value: true },
+                                    { label: "Worker", value: false },
+                                ]}
+                                validators={[VALIDATOR_SELECT()]}
+                                errorText="Please select a role"
+                                search={false}
+                            />
+                        </>
+                    )}
+
+                    <Text style={styles.notice}>Passwort vergessen?</Text>
+
+                    <Button
+                        style={styles.button}
+                        buttonText={styles.buttonText}
+                        onPress={handleSubmit}
+                        title={'Registrieren'}
                     />
 
-                    <Input
-                        placeholder="Email"
-                        value={formData.email}
-                        onChangeText={(text) => setFormData({ ...formData, email: text })}
-                        validators={[VALIDATOR_EMAIL()]}
-                        errorText="Please enter a valid email"
-                    />
-
-                    <Input
-                        placeholder="Password"
-                        value={formData.password}
-                        onChangeText={(text) => setFormData({ ...formData, password: text })}
-
-                        validators={[VALIDATOR_MINLENGTH(6)]}
-                        errorText="Password must be at least 6 characters long"
-                        secureTextEntry
-                    />
-
-                    <Select
-                        placeholder="Role"
-                        value={formData.admin}
-                        onValueChange={(option) => setFormData({ ...formData, admin: option })}
-                        data={[
-                            { label: "Owner", value: true },
-                            { label: "Worker", value: false },
-                        ]}
-                        validators={[VALIDATOR_SELECT()]}
-                        errorText="Please select a role"
-                        search={false}
-                    />
-                </>
-            )}
-
-
-            <Text style={styles.notice}>Passwort vergessen?</Text>
-
-            <Button
-                style={styles.button}
-                buttonText={styles.buttonText}
-                onPress={handleSubmit}
-                title={'Registrieren'}
-            />
-
-            <View style={styles.inviteContainer}>
-                <Text style={styles.inviteText}>Sie haben schon einen Account?</Text>
-                <TouchableOpacity onPress={() => { navigation.navigate('login') }}>
-                    <Text style={styles.registerBtn}>Zurück zum Login</Text>
-                </TouchableOpacity>
-            </View>
-        </View>
+                    <View style={styles.inviteContainer}>
+                        <Text style={styles.inviteText}>Sie haben schon einen Account?</Text>
+                        <TouchableOpacity onPress={() => { navigation.navigate('login') }}>
+                            <Text style={styles.registerBtn}>Zurück zum Login</Text>
+                        </TouchableOpacity>
+                    </View>
+                </View>
+            </TouchableWithoutFeedback>
+        </KeyboardAvoidingView>
     )
 }
 
@@ -142,16 +150,13 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'flex-end',
         padding: 21,
-        paddingBottom: 45,
+
 
     },
     logoText: {
         fontSize: 32,
-        position: 'absolute',
         textAlign: 'center',
-        top: 160,
-        right: 0,
-        left: 0,
+        marginBottom: 90, 
     },
     title: {
         fontSize: 27,
