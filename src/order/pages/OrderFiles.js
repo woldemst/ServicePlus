@@ -1,5 +1,4 @@
-import { View } from "react-native";
-import { Text } from "react-native-elements";
+import { View, Text} from "react-native";
 
 const OrderFiles = () => {
     return <>
