@@ -139,8 +139,8 @@ const MainApp = () => {
           <Stack.Screen name='onboarding' component={OnboardingNavigator} options={{ headerShown: false }} />
 
           {/* authentification */}
-          <Stack.Screen name='login' component={Login} options={{ title: 'Login' }} />
-          <Stack.Screen name='register' component={Register} options={{ title: 'Registration' }} />
+          <Stack.Screen name='login' component={Login} options={{ headerShown: false }} />
+          <Stack.Screen name='register' component={Register} options={{ headerShown: false }} />
 
           {/* main */}
           <Stack.Screen name='overviewNavigator' component={OverviewNavigator} options={{ headerShown: false }} />
