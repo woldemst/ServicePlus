@@ -65,122 +65,125 @@ const Profile = (props) => {
   return isLoaded && (
     <View style={styles.container}>
       <ScrollView showsVerticalScrollIndicator={false}>
-        <View style={styles.imgContainer}>
-          <Avatar source={require('../../../assets/firm/company_avatar.jpg')} />
-        </View>
-        <View style={styles.content}>
-          <Input
-            placeholder="Name des Betriebs"
-            errorText='Type a name of firm'
-            disabled={!isEdit}
-            value={formData.name}
-            validators={[VALIDATOR_REQUIRE()]}
-            onChangeText={(text) => setFormData({ ...formData, name: text })}
-          />
 
-          <Input
-            placeholder="Name des Inhabers"
-            disabled={!isEdit}
-            value={formData.ownerName}
-            validators={[VALIDATOR_MINLENGTH(6)]}
-            onChangeText={(text) => setFormData({ ...formData, ownerName: text })}
-          />
-
-          <Input
-            placeholder="Email"
-            errorText='Type an email'
-            disabled={!isEdit}
-            value={formData.email}
-            validators={[VALIDATOR_EMAIL()]}
-            onChangeText={(text) => setFormData({ ...formData, email: text })}
-          />
-
-          <View style={styles.streetContainer}>
-            <View style={styles.streetWrapper}>
-              <Input
-                placeholder="Straße"
-                errorText='Type a street'
-                disabled={!isEdit}
-                value={formData.street}
-                validators={[VALIDATOR_REQUIRE()]}
-                onChangeText={(text) => setFormData({ ...formData, street: text })}
-              />
-            </View>
-
-            <View style={styles.nrWrapper}>
-              <Input
-                placeholder="Nr."
-                errorText='Number'
-                disabled={!isEdit}
-                value={formData.houseNr}
-                validators={[VALIDATOR_REQUIRE()]}
-                onChangeText={(text) => setFormData({ ...formData, houseNr: text })}
-              />
-            </View>
+        <View style={styles.inner}>
+          <View style={styles.imgContainer}>
+            <Avatar source={require('../../../assets/firm/company_avatar.jpg')} />
           </View>
+          <View style={styles.content}>
+            <Input
+              placeholder="Name des Betriebs"
+              errorText='Type a name of firm'
+              disabled={!isEdit}
+              value={formData.name}
+              validators={[VALIDATOR_REQUIRE()]}
+              onChangeText={(text) => setFormData({ ...formData, name: text })}
+            />
 
-          <View style={styles.zipContainer}>
-            <View style={styles.zipWrapper}>
-              <Input
-                placeholder="PLZ"
-                disabled={!isEdit}
-                value={formData.zip}
-                validators={[VALIDATOR_REQUIRE()]}
-                onChangeText={(text) => setFormData({ ...formData, zip: text })}
-              />
+            <Input
+              placeholder="Name des Inhabers"
+              disabled={!isEdit}
+              value={formData.ownerName}
+              validators={[VALIDATOR_MINLENGTH(6)]}
+              onChangeText={(text) => setFormData({ ...formData, ownerName: text })}
+            />
+
+            <Input
+              placeholder="Email"
+              errorText='Type an email'
+              disabled={!isEdit}
+              value={formData.email}
+              validators={[VALIDATOR_EMAIL()]}
+              onChangeText={(text) => setFormData({ ...formData, email: text })}
+            />
+
+            <View style={styles.streetContainer}>
+              <View style={styles.streetWrapper}>
+                <Input
+                  placeholder="Straße"
+                  errorText='Type a street'
+                  disabled={!isEdit}
+                  value={formData.street}
+                  validators={[VALIDATOR_REQUIRE()]}
+                  onChangeText={(text) => setFormData({ ...formData, street: text })}
+                />
+              </View>
+
+              <View style={styles.nrWrapper}>
+                <Input
+                  placeholder="Nr."
+                  errorText='Number'
+                  disabled={!isEdit}
+                  value={formData.houseNr}
+                  validators={[VALIDATOR_REQUIRE()]}
+                  onChangeText={(text) => setFormData({ ...formData, houseNr: text })}
+                />
+              </View>
             </View>
 
-            <View style={styles.placeWrapper}>
-              <Input
-                placeholder="Ort"
-                errorText='Type a place'
-                disabled={!isEdit}
-                value={formData.place}
-                validators={[VALIDATOR_REQUIRE()]}
-                onChangeText={(text) => setFormData({ ...formData, place: text })}
-              />
+            <View style={styles.zipContainer}>
+              <View style={styles.zipWrapper}>
+                <Input
+                  placeholder="PLZ"
+                  disabled={!isEdit}
+                  value={formData.zip}
+                  validators={[VALIDATOR_REQUIRE()]}
+                  onChangeText={(text) => setFormData({ ...formData, zip: text })}
+                />
+              </View>
+
+              <View style={styles.placeWrapper}>
+                <Input
+                  placeholder="Ort"
+                  errorText='Type a place'
+                  disabled={!isEdit}
+                  value={formData.place}
+                  validators={[VALIDATOR_REQUIRE()]}
+                  onChangeText={(text) => setFormData({ ...formData, place: text })}
+                />
+              </View>
             </View>
+
+            <Input
+              placeholder="Telefon"
+              errorText='Type a phone'
+              disabled={!isEdit}
+              value={formData.phone}
+              validators={[VALIDATOR_REQUIRE()]}
+              onChangeText={(text) => setFormData({ ...formData, phone: text })}
+            />
+
+            <Input
+              placeholder="Webseite"
+              errorText='Type a website'
+              disabled={!isEdit}
+              value={formData.website}
+              validators={[VALIDATOR_REQUIRE()]}
+              onChangeText={(text) => setFormData({ ...formData, website: text })}
+            />
+
+            {userRole && (
+              <View style={styles.btnContainer}>
+                {!isEdit ? (
+                  <Button
+                    style={[styles.invalideButton, styles.button]}
+                    // disabled={fetchedData.isFormValid}
+                    buttonText={styles.createBtnText}
+                    onPress={handleEdit}
+                    title={'Ändern'}
+                  />
+                ) : (
+                  <Button
+                    style={[styles.createBtn, styles.button]}
+                    // disabled={fetchedData.isFormValid}
+                    buttonText={styles.createBtnText}
+                    onPress={handleSubmit}
+                    title={'Speichern'}
+                  />
+                )}
+              </View>
+            )}
           </View>
-
-          <Input
-            placeholder="Telefon"
-            errorText='Type a phone'
-            disabled={!isEdit}
-            value={formData.phone}
-            validators={[VALIDATOR_REQUIRE()]}
-            onChangeText={(text) => setFormData({ ...formData, phone: text })}
-          />
-
-          <Input
-            placeholder="Webseite"
-            errorText='Type a website'
-            disabled={!isEdit}
-            value={formData.website}
-            validators={[VALIDATOR_REQUIRE()]}
-            onChangeText={(text) => setFormData({ ...formData, website: text })}
-          />
-
-          {userRole && (
-            <View style={styles.btnContainer}>
-              {!isEdit ? (
-                <Button
-                  style={[styles.invalideButton, styles.button]}
-                  // disabled={fetchedData.isFormValid}
-                  buttonText={styles.createBtnText}
-                  onPress={handleEdit}
-                  title={'Ändern'}
-                />
-              ) : (
-                <Button
-                  style={[styles.createBtn, styles.button]}
-                  // disabled={fetchedData.isFormValid}
-                  buttonText={styles.createBtnText}
-                  onPress={handleSubmit}
-                  title={'Speichern'}
-                />
-              )}
-            </View>
-          )}
         </View>
       </ScrollView>
     </View>
@@ -190,12 +193,14 @@ const Profile = (props) => {
 const styles = StyleSheet.create({
   container: {
     backgroundColor: "#fff",
-    padding: 16,
-    paddingBottom: 30,
+    paddingHorizontal: 16,
     flex: 1,
     justifyContent: 'space-between',
     borderWifth: 1,
     borderColor: 'red',
+  },
+  inner: {
+    paddingVertical: 16,
   },
   content: {
     // flex: 1,
