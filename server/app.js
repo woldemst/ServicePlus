@@ -36,14 +36,9 @@ app.use('/api/workers', workerRoutes)
 // connection string 
 const connectionURL = 'mongodb+srv://waldemar:1234@clusterplus.5ckgjtl.mongodb.net/ServicePlus?retryWrites=true&w=majority'
 
-const connectionOptions = {
-    useNewUrlParser: true, 
-    useUnifiedTopology: true,
-}
-
 // connection 
 mongoose
-    .connect(connectionURL, connectionOptions)
+    .connect(connectionURL)
     .then(()=>{
         app.listen(port, '0.0.0.0', ()=>{
             console.log(`Server is running on port ${port}`)
