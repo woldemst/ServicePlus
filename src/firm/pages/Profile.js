@@ -3,6 +3,8 @@ import {
   Text,
   StyleSheet,
   ScrollView,
+  TouchableOpacity,
+  Image,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { useContext, useEffect, useState } from "react";
@@ -18,7 +20,7 @@ import { refershData } from "../../actions/utilActions";
 
 
 const Profile = (props) => {
-  const auth = useContext(AuthContext)
+
   const navigation = useNavigation();
   const dispatch = useDispatch()
 
@@ -32,9 +34,9 @@ const Profile = (props) => {
 
   useEffect(() => setIsLoaded(true), [])
 
-  const handleEdit = () => setIsEdit(!isEdit)
-  // console.log(fetchedData.name);
-
+  const handleImageChange = () => {
+    console.log("image changed");
+  };
 
   const handleSubmit = async () => {
     const URL = `http://192.168.178.96:8000/api/firm/update/${firmId}`;
@@ -69,6 +71,13 @@ const Profile = (props) => {
         <View style={styles.inner}>
           <View style={styles.imgContainer}>
             <Avatar source={require('../../../assets/firm/company_avatar.jpg')} />
+            {isEdit && (
+              <View style={styles.editBtnContainer}>
+                <TouchableOpacity onPress={() => handleImageChange}>
+                  <Image className={styles.editBtnImg} source={require('../../../assets/order/edit.png')} />
+                </TouchableOpacity>
+              </View>
+            )}
           </View>
           <View style={styles.content}>
             <Input
@@ -169,7 +178,7 @@ const Profile = (props) => {
                     style={[styles.invalideButton, styles.button]}
                     // disabled={fetchedData.isFormValid}
                     buttonText={styles.createBtnText}
-                    onPress={handleEdit}
+                    onPress={() => setIsEdit(!isEdit)}
                     title={'Ändern'}
                   />
                 ) : (
@@ -268,12 +277,10 @@ const styles = StyleSheet.create({
     marginBottom: 6,
     fontSize: 18,
   },
-
   btnContainer: {
     flexDirection: "row",
     marginTop: 28,
   },
-
   button: {
     // height: 53,
     paddingLeft: 16,
@@ -287,7 +294,6 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
-
   createBtn: {
     backgroundColor: "#7A9B76",
   },
@@ -314,7 +320,22 @@ const styles = StyleSheet.create({
     // borderWidth: 1,
     // borderColor: 'red',
   },
+  editBtnContainer: {
+    backgroundColor: '#fff',
+    borderRadius: 50,
+    borderWidth: 1,
+    borderColor: '#eee',
+    height: 40,
+    width: 40,
+    alignItems: 'center',
+    justifyContent: 'center',
+    position: 'absolute',
+    bottom: 4,
+    right: 4,
+  },
+  editBtnImg: {
 
+  }
 });
 
 export default Profile;
