@@ -116,7 +116,7 @@ const getFirmByUserId = async (req, res, next) => {
     const firmId = user.firmId;
 
 
-    console.log(firmId);
+    // console.log(firmId);
     // Use firmId to get firm data
     const firm = await Firm.findById(firmId);
     if (!firm) {

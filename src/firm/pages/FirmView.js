@@ -18,7 +18,6 @@ const FirmView = () => {
     const [content, setContent] = useState(null);
 
     useEffect(() => {
-        console.log(firmId);
         const renderContent = () => {
             if (!firmId) {
                 return !userRole ? <JoinFirm /> : <CreateSuggest />

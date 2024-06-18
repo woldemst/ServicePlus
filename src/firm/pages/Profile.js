@@ -17,6 +17,7 @@ import Input from "../../shared/UIElements/Input";
 import Button from "../../shared/UIElements/Button";
 import Avatar from "../../../components/Avatar";
 import { refershData } from "../../actions/utilActions";
+import { getFirmData } from "../../actions/firmActions";
 
 
 const Profile = (props) => {
@@ -30,15 +31,26 @@ const Profile = (props) => {
   const [isLoaded, setIsLoaded] = useState(false)
   const [isEdit, setIsEdit] = useState(false)
   const [formData, setFormData] = useState({ ...fetchedData });
-  const [selectedImage, setSelectedImage] = useState(null);
+  const [image, setImage] = useState(fetchedData.profileImg?.data);
 
+  useEffect(() => setIsLoaded(true), []);
 
-  useEffect(() => setIsLoaded(true), [])
+  const handleImageChange = (imageUri) => setImage(imageUri);
 
-  const handleImageChange = (imageUri) => {
-    console.log(imageUri);
-    setSelectedImage(imageUri);
-  };
+  useEffect(() => {
+    // Function to convert binary image data to base64 URI
+    const convertBinaryToBase64 = () => {
+      // Check if profileImg exists and has data
+      if (fetchedData.profileImg && fetchedData.profileImg.data) {
+        // Convert binary data to base64 string
+        const base64Image = `data:${fetchedData.profileImg.contentType};base64,${fetchedData.profileImg.data.toString('base64')}`;
+        setImage(base64Image); // Set base64 URI to state
+      }
+    };
+    convertBinaryToBase64();
+    setIsLoaded(true)
+
+  }, [fetchedData])
 
   const handleSubmit = async () => {
     const URL = `http://192.168.178.96:8000/api/firm/update/${firmId}`;
@@ -55,27 +67,16 @@ const Profile = (props) => {
       formDataToSubmit.append("phone", formData.phone);
       formDataToSubmit.append("website", formData.website);
 
-      if (selectedImage) {
-        const uriParts = selectedImage.split('.');
+      if (image) {
+        const uriParts = image.split('.');
         const fileType = uriParts[uriParts.length - 1];
         formDataToSubmit.append("image", {
-          uri: selectedImage,
+          uri: image,
           name: `profile.${fileType}`,
           type: `image/${fileType}`,
         });
       }
-
-      // if (selectedImage) {
-      //   // console.log(selectedImage);
-      //   const imageData = new FormData();
-      //   imageData.append("image", {
-      //     uri: selectedImage,
-      //     type: "image/jpeg", // Adjust the type if necessary
-      //     name: "profile.jpg",
-      //   });
-      // }
-
-      const response = await axios.patch(URL, formDataToSubmit, {
+      await axios.patch(URL, formDataToSubmit, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
@@ -85,7 +86,7 @@ const Profile = (props) => {
       dispatch(refershData())
       setIsEdit(false);
       window.alert("Firm updated!");
-      console.log("Firm updated!", response.data);
+      // console.log("Firm updated!", response.data);
     } catch (err) {
       console.error("Error updating firm:", err);
     }
@@ -98,7 +99,7 @@ const Profile = (props) => {
         <View style={styles.inner}>
           <View style={styles.imgContainer}>
             <Avatar
-              source={selectedImage ? { uri: selectedImage } : require('../../../assets/firm/company_avatar.jpg')}
+              source={image ? { uri: image } : require('../../../assets/firm/company_avatar.jpg')}
               onImagePicked={handleImageChange}
               isEdit={!isEdit}
             />
