@@ -11,6 +11,7 @@ const firmReducer = (state = initialState, action) => {
       };
 
     case GET_FIRM_DATA:
+
       return {
         ...state,
         ...action.payload,
