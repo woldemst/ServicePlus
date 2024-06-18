@@ -26,7 +26,9 @@ const Avatar = (props) => {
             props.onImagePicked(result.assets[0].uri);
         }
 
-    }
+    } 
+
+
 
     return (
         <TouchableOpacity onPress={pickImageHandler} disabled={props.isEdit} style={[styles.container, props.style]}>

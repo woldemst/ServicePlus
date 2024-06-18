@@ -17,7 +17,6 @@ import Input from "../../shared/UIElements/Input";
 import Button from "../../shared/UIElements/Button";
 import Avatar from "../../../components/Avatar";
 import { refershData } from "../../actions/utilActions";
-import ImageUpoad from "../../shared/UIElements/ImageUpload";
 
 
 const Profile = (props) => {
@@ -37,6 +36,7 @@ const Profile = (props) => {
   useEffect(() => setIsLoaded(true), [])
 
   const handleImageChange = (imageUri) => {
+    console.log(imageUri);
     setSelectedImage(imageUri);
   };
 
@@ -44,33 +44,42 @@ const Profile = (props) => {
     const URL = `http://192.168.178.96:8000/api/firm/update/${firmId}`;
 
     try {
-      const response = await axios.patch(URL, {
-        name: formData.name,
-        ownerName: formData.ownerName,
-        email: formData.email,
-        street: formData.street,
-        houseNr: formData.houseNr,
-        zip: formData.zip,
-        place: formData.place,
-        phone: formData.phone,
-        website: formData.website,
-      });
+      const formDataToSubmit = new FormData();
+      formDataToSubmit.append("name", formData.name);
+      formDataToSubmit.append("ownerName", formData.ownerName);
+      formDataToSubmit.append("email", formData.email);
+      formDataToSubmit.append("street", formData.street);
+      formDataToSubmit.append("houseNr", formData.houseNr);
+      formDataToSubmit.append("zip", formData.zip);
+      formDataToSubmit.append("place", formData.place);
+      formDataToSubmit.append("phone", formData.phone);
+      formDataToSubmit.append("website", formData.website);
 
       if (selectedImage) {
-        // console.log(selectedImage);
-        const imageData = new FormData();
-        imageData.append("image", {
+        const uriParts = selectedImage.split('.');
+        const fileType = uriParts[uriParts.length - 1];
+        formDataToSubmit.append("image", {
           uri: selectedImage,
-          type: "image/jpeg", // Adjust the type if necessary
-          name: "profile.jpg",
-        });
-
-        await axios.post(`http://192.168.178.96:8000/api/firm/upload-image/${firmId}`, imageData, {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
+          name: `profile.${fileType}`,
+          type: `image/${fileType}`,
         });
       }
+
+      // if (selectedImage) {
+      //   // console.log(selectedImage);
+      //   const imageData = new FormData();
+      //   imageData.append("image", {
+      //     uri: selectedImage,
+      //     type: "image/jpeg", // Adjust the type if necessary
+      //     name: "profile.jpg",
+      //   });
+      // }
+
+      const response = await axios.patch(URL, formDataToSubmit, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
 
       // navigation.goBack()
       dispatch(refershData())
@@ -88,24 +97,11 @@ const Profile = (props) => {
 
         <View style={styles.inner}>
           <View style={styles.imgContainer}>
-
- 
-          <Avatar
+            <Avatar
               source={selectedImage ? { uri: selectedImage } : require('../../../assets/firm/company_avatar.jpg')}
               onImagePicked={handleImageChange}
               isEdit={!isEdit}
             />
-
-            {/* {isEdit && (
-              <>
-
-                <View style={styles.editBtnContainer}>
-                  <TouchableOpacity onPress={() => handleImageChange}>
-                    <Image className={styles.editBtnImg} source={require('../../../assets/order/edit.png')} />
-                  </TouchableOpacity>
-                </View>
-              </>
-            )} */}
           </View>
           <View style={styles.content}>
             <Input
