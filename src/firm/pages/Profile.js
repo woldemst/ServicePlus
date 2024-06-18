@@ -17,10 +17,10 @@ import Input from "../../shared/UIElements/Input";
 import Button from "../../shared/UIElements/Button";
 import Avatar from "../../../components/Avatar";
 import { refershData } from "../../actions/utilActions";
+import ImageUpoad from "../../shared/UIElements/ImageUpload";
 
 
 const Profile = (props) => {
-
   const navigation = useNavigation();
   const dispatch = useDispatch()
 
@@ -31,11 +31,13 @@ const Profile = (props) => {
   const [isLoaded, setIsLoaded] = useState(false)
   const [isEdit, setIsEdit] = useState(false)
   const [formData, setFormData] = useState({ ...fetchedData });
+  const [selectedImage, setSelectedImage] = useState(null);
+
 
   useEffect(() => setIsLoaded(true), [])
 
-  const handleImageChange = () => {
-    console.log("image changed");
+  const handleImageChange = (imageUri) => {
+    setSelectedImage(imageUri);
   };
 
   const handleSubmit = async () => {
@@ -54,6 +56,22 @@ const Profile = (props) => {
         website: formData.website,
       });
 
+      if (selectedImage) {
+        // console.log(selectedImage);
+        const imageData = new FormData();
+        imageData.append("image", {
+          uri: selectedImage,
+          type: "image/jpeg", // Adjust the type if necessary
+          name: "profile.jpg",
+        });
+
+        await axios.post(`http://192.168.178.96:8000/api/firm/upload-image/${firmId}`, imageData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        });
+      }
+
       // navigation.goBack()
       dispatch(refershData())
       setIsEdit(false);
@@ -70,14 +88,24 @@ const Profile = (props) => {
 
         <View style={styles.inner}>
           <View style={styles.imgContainer}>
-            <Avatar source={require('../../../assets/firm/company_avatar.jpg')} />
-            {isEdit && (
-              <View style={styles.editBtnContainer}>
-                <TouchableOpacity onPress={() => handleImageChange}>
-                  <Image className={styles.editBtnImg} source={require('../../../assets/order/edit.png')} />
-                </TouchableOpacity>
-              </View>
-            )}
+
+ 
+          <Avatar
+              source={selectedImage ? { uri: selectedImage } : require('../../../assets/firm/company_avatar.jpg')}
+              onImagePicked={handleImageChange}
+              isEdit={!isEdit}
+            />
+
+            {/* {isEdit && (
+              <>
+
+                <View style={styles.editBtnContainer}>
+                  <TouchableOpacity onPress={() => handleImageChange}>
+                    <Image className={styles.editBtnImg} source={require('../../../assets/order/edit.png')} />
+                  </TouchableOpacity>
+                </View>
+              </>
+            )} */}
           </View>
           <View style={styles.content}>
             <Input
