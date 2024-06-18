@@ -1,14 +1,41 @@
-import { Image, View, StyleSheet } from 'react-native';
+import { Image, View, StyleSheet, TouchableOpacity } from 'react-native';
+import { useEffect, useState, useRef } from "react";
+import * as ImagePicker from 'expo-image-picker';
 
-const Avatar = ({ source, style }) => {
+
+const Avatar = (props) => {
+    const [selectedImage, setSelectedImage] = useState(null);
+
+    const pickImageHandler = async () => {
+        const permissionResult = ImagePicker.requestMediaLibraryPermissionsAsync();
+
+        if (permissionResult.granted === false) {
+            alert('Permission to access camera roll is required!');
+            return;
+        }
+
+        const result = await ImagePicker.launchImageLibraryAsync({
+            mediaTypes: ImagePicker.MediaTypeOptions.Images,
+            allowsEditing: true,
+            aspect: [4, 3],
+            quality: 1,
+        });
+
+        if (!result.canceled) {
+            setSelectedImage(result.assets[0].uri);
+            props.onImagePicked(result.assets[0].uri);
+        }
+
+    } 
+
+
+
     return (
-        <View style={[styles.container, style]}>
+        <TouchableOpacity onPress={pickImageHandler} disabled={props.isEdit} style={[styles.container, props.style]}>
             <View style={styles.frame}>
-                <Image style={styles.img} source={source} />
-                {/* <Image style={styles.img} source={require('../../../assets/customer/customer_avatar.jpg')} /> */}
-
+                <Image source={selectedImage ? { uri: selectedImage } : props.source} style={styles.img} />
             </View>
-        </View>
+        </TouchableOpacity>
     );
 };
 
@@ -40,7 +67,7 @@ const styles = StyleSheet.create({
         // borderColor: 'red',
     },
     img: {
-        
+
         // borderWidth: 1,
         // borderColor: 'red',
         width: '100%',

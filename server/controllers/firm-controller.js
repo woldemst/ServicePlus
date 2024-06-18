@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const Firm = require("../models/Firm");
 const HttpError = require("../models/http-error");
 const User = require('../models/User')
-const Worker = require('../models/Worker')  
+const Worker = require('../models/Worker')
 
 const register = async (req, res, next) => {
   // destructuring assignment from body
@@ -78,17 +78,23 @@ const updateFirm = async (req, res, next) => {
       return next(error);
     }
 
-    updatedFirm.name = name,
-      updatedFirm.ownerName = ownerName,
-      updatedFirm.email = email,
-      updatedFirm.street = street,
-      updatedFirm.houseNr = houseNr,
-      updatedFirm.zip = zip,
-      updatedFirm.place = place,
-      updatedFirm.phone = phone,
-      updatedFirm.website = website,
+    updatedFirm.name = name;
+    updatedFirm.ownerName = ownerName;
+    updatedFirm.email = email;
+    updatedFirm.street = street;
+    updatedFirm.houseNr = houseNr;
+    updatedFirm.zip = zip;
+    updatedFirm.place = place;
+    updatedFirm.phone = phone;
+    updatedFirm.website = website;
 
-      await updatedFirm.save();
+    if (req.file) {
+      updatedFirm.profileImg = {
+        data: req.file.buffer,
+        contentType: req.file.mimetype,
+      };
+    }
+    await updatedFirm.save();
 
     res.status(200).json({ firm: updatedFirm.toObject({ getters: true }) });
   } catch (err) {
@@ -103,14 +109,14 @@ const getFirmByUserId = async (req, res, next) => {
 
   try {
     // Fetch user data by ID to get the associated firmId
-    const user = await User.findById(userId) || await Worker.findById(userId) 
+    const user = await User.findById(userId) || await Worker.findById(userId)
     if (!user) {
       return res.status(404).json({ message: 'User not found' });
     }
     const firmId = user.firmId;
 
 
-    console.log(firmId);
+    // console.log(firmId);
     // Use firmId to get firm data
     const firm = await Firm.findById(firmId);
     if (!firm) {

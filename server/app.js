@@ -15,6 +15,7 @@ const firmRoutes = require('./routes/firm-routes')
 const customerRoutes = require('./routes/customer-routes')
 const workerRoutes = require('./routes/worker-routes')
 
+
 // CORS 
 app.use((req, res, next) => {
     res.setHeader("Access-Control-Allow-Origin", "*");
