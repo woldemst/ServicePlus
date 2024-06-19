@@ -138,8 +138,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         justifyContent: 'flex-end',
-
-
+        backgroundColor: '#fff',
         // borderWidth: 1,
         // borderColor: 'red'
     },
