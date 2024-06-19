@@ -150,7 +150,7 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'flex-end',
         padding: 21,
-
+        backgroundColor: '#fff',
 
     },
     logoText: {
