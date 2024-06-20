@@ -5,11 +5,13 @@ import {
   ScrollView,
   TouchableOpacity,
   Image,
+  ActivityIndicator
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { useContext, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
+
 
 import { VALIDATOR_REQUIRE, VALIDATOR_MINLENGTH, VALIDATOR_EMAIL } from "../../util/validators";
 import { AuthContext } from "../../context/auth-context";
@@ -31,11 +33,11 @@ const Profile = (props) => {
   const [isLoaded, setIsLoaded] = useState(false)
   const [isEdit, setIsEdit] = useState(false)
   const [formData, setFormData] = useState({ ...fetchedData });
-  const [image, setImage] = useState(fetchedData.profileImg?.data);
+  // const [image, setImage] = useState(fetchedData.profileImg?.data);
+  const [image, setImage] = useState('');
+  const [isUploading, setIsUploading] = useState(false);
 
   useEffect(() => setIsLoaded(true), []);
-
-  const handleImageChange = (imageUri) => setImage(imageUri);
 
   useEffect(() => {
     // Function to convert binary image data to base64 URI
@@ -44,6 +46,7 @@ const Profile = (props) => {
       if (fetchedData.profileImg && fetchedData.profileImg.data) {
         // Convert binary data to base64 string
         const base64Image = `data:${fetchedData.profileImg.contentType};base64,${fetchedData.profileImg.data.toString('base64')}`;
+
         setImage(base64Image); // Set base64 URI to state
       }
     };
@@ -52,8 +55,13 @@ const Profile = (props) => {
 
   }, [fetchedData])
 
+
+  const handleImageChange = (imageUri) => setImage(imageUri);
+
   const handleSubmit = async () => {
     const URL = `http://192.168.178.96:8000/api/firm/update/${firmId}`;
+
+    setIsUploading(true);
 
     try {
       const formDataToSubmit = new FormData();
@@ -67,15 +75,17 @@ const Profile = (props) => {
       formDataToSubmit.append("phone", formData.phone);
       formDataToSubmit.append("website", formData.website);
 
-      if (image) {
+      // Check if image URI is different from the existing one
+      if (image && image !== `data:${fetchedData.profileImg.contentType};base64,${fetchedData.profileImg.data.toString('base64')}`) {
         const uriParts = image.split('.');
         const fileType = uriParts[uriParts.length - 1];
-        formDataToSubmit.append("image", {
+        formDataToSubmit.append('avatar', {
           uri: image,
           name: `profile.${fileType}`,
           type: `image/${fileType}`,
         });
       }
+
       await axios.patch(URL, formDataToSubmit, {
         headers: {
           "Content-Type": "multipart/form-data",
@@ -89,6 +99,8 @@ const Profile = (props) => {
       // console.log("Firm updated!", response.data);
     } catch (err) {
       console.error("Error updating firm:", err);
+    } finally {
+      setIsUploading(false)
     }
   };
 
@@ -104,6 +116,7 @@ const Profile = (props) => {
               isEdit={!isEdit}
             />
           </View>
+          
           <View style={styles.content}>
             <Input
               placeholder="Name des Betriebs"
@@ -111,7 +124,7 @@ const Profile = (props) => {
               disabled={!isEdit}
               value={formData.name}
               validators={[VALIDATOR_REQUIRE()]}
-              onChangeText={(text) => setFormData({ ...formData, name: text })}
+              onChangeText={(text) => setFormData(prevState => ({ ...prevState, name: text }))}
             />
 
             <Input
@@ -119,7 +132,7 @@ const Profile = (props) => {
               disabled={!isEdit}
               value={formData.ownerName}
               validators={[VALIDATOR_MINLENGTH(6)]}
-              onChangeText={(text) => setFormData({ ...formData, ownerName: text })}
+              onChangeText={(text) => setFormData(prevState => ({ ...prevState, ownerName: text }))}
             />
 
             <Input
@@ -128,7 +141,7 @@ const Profile = (props) => {
               disabled={!isEdit}
               value={formData.email}
               validators={[VALIDATOR_EMAIL()]}
-              onChangeText={(text) => setFormData({ ...formData, email: text })}
+              onChangeText={(text) => setFormData(prevState => ({ ...prevState, email: text }))}
             />
 
             <View style={styles.streetContainer}>
@@ -139,7 +152,7 @@ const Profile = (props) => {
                   disabled={!isEdit}
                   value={formData.street}
                   validators={[VALIDATOR_REQUIRE()]}
-                  onChangeText={(text) => setFormData({ ...formData, street: text })}
+                  onChangeText={(text) => setFormData(prevState => ({ ...prevState, street: text }))}
                 />
               </View>
 
@@ -150,7 +163,7 @@ const Profile = (props) => {
                   disabled={!isEdit}
                   value={formData.houseNr}
                   validators={[VALIDATOR_REQUIRE()]}
-                  onChangeText={(text) => setFormData({ ...formData, houseNr: text })}
+                  onChangeText={(text) => setFormData(prevState => ({ ...prevState, houseNr: text }))}
                 />
               </View>
             </View>
@@ -162,7 +175,7 @@ const Profile = (props) => {
                   disabled={!isEdit}
                   value={formData.zip}
                   validators={[VALIDATOR_REQUIRE()]}
-                  onChangeText={(text) => setFormData({ ...formData, zip: text })}
+                  onChangeText={(text) => setFormData(prevState => ({ ...prevState, zip: text }))}
                 />
               </View>
 
@@ -173,7 +186,7 @@ const Profile = (props) => {
                   disabled={!isEdit}
                   value={formData.place}
                   validators={[VALIDATOR_REQUIRE()]}
-                  onChangeText={(text) => setFormData({ ...formData, place: text })}
+                  onChangeText={(text) => setFormData(prevState => ({ ...prevState, place: text }))}
                 />
               </View>
             </View>
@@ -184,7 +197,7 @@ const Profile = (props) => {
               disabled={!isEdit}
               value={formData.phone}
               validators={[VALIDATOR_REQUIRE()]}
-              onChangeText={(text) => setFormData({ ...formData, phone: text })}
+              onChangeText={(text) => setFormData(prevState => ({ ...prevState, phone: text }))}
             />
 
             <Input
@@ -193,7 +206,7 @@ const Profile = (props) => {
               disabled={!isEdit}
               value={formData.website}
               validators={[VALIDATOR_REQUIRE()]}
-              onChangeText={(text) => setFormData({ ...formData, website: text })}
+              onChangeText={(text) => setFormData(prevState => ({ ...prevState, website: text }))}
             />
 
             {userRole && (
@@ -220,6 +233,11 @@ const Profile = (props) => {
           </View>
         </View>
       </ScrollView>
+      {isUploading && (
+        <View style={styles.loading}>
+          <ActivityIndicator size="large" color="#7A9B76" />
+        </View>
+      )}
     </View>
   );
 };
@@ -360,7 +378,17 @@ const styles = StyleSheet.create({
   },
   editBtnImg: {
 
-  }
+  },
+  loading: {
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    top: 0,
+    bottom: 0,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+  },
 });
 
 export default Profile;
