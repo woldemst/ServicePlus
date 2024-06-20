@@ -1,5 +1,5 @@
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, ScrollView, ActivityIndicator } from "react-native";
-import { useContext, useEffect, useState } from "react"
+import { useContext, useEffect, useState, useCallback } from "react"
 import { useDispatch, useSelector } from 'react-redux'
 import axios from "axios";
 
@@ -26,6 +26,8 @@ const WorkerDetails = props => {
 
     const [isLoaded, setIsLoaded] = useState(false)
     const [isEdit, setIsEdit] = useState(false)
+    const [image, setImage] = useState('');
+    const [isUploading, setIsUploading] = useState(false);
 
     const [formData, setFormData] = useState({
         name: worker.name,
@@ -39,27 +41,60 @@ const WorkerDetails = props => {
         description: worker.description,
     })
 
-
     useEffect(() => setIsLoaded(true), [])
+
+    useEffect(() => {
+        const convertBinaryToBase64 = () => {
+            if (worker.profileImg && worker.profileImg.data && worker.profileImg.contentType) {
+                const base64Image = `data:${worker.profileImg.contentType};base64,${worker.profileImg.data.toString('base64')}`;
+                setImage(base64Image);
+            }
+        }
+
+        convertBinaryToBase64()
+        setIsLoaded(true)
+
+    }, [worker])
+
     const handleEdit = () => setIsEdit(!isEdit)
+    const handleImageChange = useCallback((imageUri) => setImage(imageUri), []);
+
 
     const resetPasswordHandler = () => {
         navigation.navigate('resetPassword')
     }
 
     const handleSubmit = async () => {
+        const URL = `http://192.168.178.96:8000/api/workers/${firmId}/update/${workerId}`
+
         try {
-            const response = await axios.patch(`http://192.168.178.96:8000/api/workers/${firmId}/update/${workerId}`, {
-                workerId: workerId,
-                firmId: firmId,
-                name: formData.name,
-                email: formData.email,
-                street: formData.street,
-                houseNr: formData.houseNr,
-                zip: formData.zip,
-                place: formData.place,
-                phone: formData.phone,
-                description: formData.description,
+
+            const formDataToSubmit = new FormData();
+            formDataToSubmit.append("workerId", workerId);
+            formDataToSubmit.append("firmId", firmId);
+            formDataToSubmit.append("name", formData.name);
+            formDataToSubmit.append("email", formData.email);
+            formDataToSubmit.append("street", formData.street);
+            formDataToSubmit.append("houseNr", formData.houseNr);
+            formDataToSubmit.append("zip", formData.zip);
+            formDataToSubmit.append("place", formData.place);
+            formDataToSubmit.append("phone", formData.phone);
+            formDataToSubmit.append("description", formData.description);
+
+            if (image && image !== `data:${worker.profileImg.contentType};base64,${worker.profileImg.data.toString('base64')}`) {
+                const uriParts = image.split('.');
+                const fileType = uriParts[uriParts.length - 1];
+                formDataToSubmit.append('avatar', {
+                    uri: image,
+                    name: `profile.${fileType}`,
+                    type: `image/${fileType}`,
+                });
+            }
+
+            await axios.patch(URL, formDataToSubmit, {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
             })
 
             setIsEdit(false)
@@ -67,6 +102,8 @@ const WorkerDetails = props => {
             window.alert('Profile aktualisiert!')
         } catch (err) {
             console.log("Error while updating worker's profile", err);
+        } finally {
+            setIsUploading(false)
         }
     }
 
@@ -79,7 +116,11 @@ const WorkerDetails = props => {
 
                 <View style={styles.inner}>
                     <View style={styles.imgContainer}>
-                        <Avatar source={require('../../../assets/customer/customer_avatar.jpg')} />
+                        <Avatar
+                            source={image ? { uri: image } : require('../../../assets/customer/customer_avatar.jpg')}
+                            onImagePicked={handleImageChange}
+                            isEdit={!isEdit}
+                        />
                     </View>
                     {isLoaded && (
                         <View style={styles.content}>
