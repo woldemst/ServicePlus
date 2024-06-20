@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, Image, TouchableOpacity, Alert } from "react-native"
+import { View, Text, StyleSheet, Image, TouchableOpacity, Alert} from "react-native"
 import { useEffect, useState, useContext } from "react"
 import { useNavigation } from '@react-navigation/native'
 import { useRoute } from "@react-navigation/native"
@@ -18,7 +18,7 @@ const FirmItem = () => {
     const userRole = useSelector(state => state.context.userRole)
 
     const [isLoaded, setIsLoaded] = useState(false)
-
+    const [image, setImage] = useState(fetchedData.profileImg?.data);
     // console.log('Stored as Profile:', fetchedData);
 
     useEffect(() => {
@@ -27,6 +27,7 @@ const FirmItem = () => {
                 const response = await axios.get(`http://192.168.178.96:8000/api/firm/profile/${auth.userId}`)
                 dispatch(getFirmData(response.data));
                 // console.log('Goten:',response.data); 
+  
                 setIsLoaded(true)
 
             } catch (err) {
@@ -35,6 +36,14 @@ const FirmItem = () => {
         }
         fetcheFirm()
     }, [dispatch, refresh])
+
+    useEffect(() => {
+        if (fetchedData.profileImg && fetchedData.profileImg.data) {
+            const base64Image = `data:${fetchedData.profileImg.contentType};base64,${fetchedData.profileImg.data}`;
+            setImage(base64Image);
+        }
+        
+    }, [fetchedData.profileImg])
 
 
     const logoutHandler = async () => {
@@ -59,11 +68,15 @@ const FirmItem = () => {
     };
 
 
+
     return <>
 
         <TouchableOpacity style={styles.firmContainer} onPress={() => navigation.navigate('profile')}>
             <View style={styles.imageContainer} >
-                <Image style={styles.img} source={require('../../../assets/firmImage.jpeg')} ></Image>
+                <Image
+                    style={styles.img}
+                    source={image ? { uri: image } : require('../../../assets/firmImage.jpeg')} >
+                </Image>
             </View>
 
             <View style={styles.nameContainer} >
@@ -109,11 +122,14 @@ const styles = StyleSheet.create({
         flexDirection: 'row'
     },
     imageContainer: {
-        justifyContent: 'center'
+        justifyContent: 'center', 
+
     },
     img: {
         width: 48,
-        height: 48
+        height: 48,
+        borderRadius: 50
+        
     },
     nameContainer: {
         paddingLeft: 16,
