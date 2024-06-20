@@ -1,20 +1,22 @@
 import { View, Text, TouchableOpacity, StyleSheet, ScrollView } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 
+
 import { VALIDATOR_EMAIL, VALIDATOR_MINLENGTH, VALIDATOR_REQUIRE } from "../../util/validators";
-import { useDispatch, useSelector } from "react-redux";
-import { AuthContext } from "../../context/auth-context";
-import Input from "../../shared/UIElements/Input";
-import Button from "../../shared/UIElements/Button";
 import { getFirmData } from "../../actions/firmActions";
 import { updateFirmId } from "../../actions/contextActions";
+import Input from "../../shared/UIElements/Input";
+import Button from "../../shared/UIElements/Button";
 
 const CreateFirm = props => {
-  const auth = useContext(AuthContext)
   const navigation = useNavigation();
   const dispatch = useDispatch()
+
+  const userId = useSelector(state => state.context.userId)
+
   const [isLoaded, setIsLoaded] = useState(false)
 
   const [formData, setFormData] = useState({
@@ -36,8 +38,7 @@ const CreateFirm = props => {
 
     try {
       const firmData = {
-        role: auth.role,
-        userId: auth.userId,
+        userId: userId,
         ownerName: formData.ownerName,
         name: formData.name,
         email: formData.email,

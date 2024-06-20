@@ -10,21 +10,19 @@ import {
     TouchableWithoutFeedback,
     Keyboard
 } from "react-native";
-import { useState, useContext, useEffect, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigation } from "@react-navigation/native";
 import axios from "axios";
 
 
 import { VALIDATOR_MINLENGTH } from "../../util/validators";
-import { AuthContext } from "../../context/auth-context";
 import Button from "../../shared/UIElements/Button";
 import Input from "../../shared/UIElements/Input";
 
 const ResetPassword = () => {
-    const auth = useContext(AuthContext)
     const navigation = useNavigation();
-
+    const userId = useSelector(state => state.context.userId)
     const [loading, setLoading] = useState(false);
     const [formData, setFormData] = useState({
         actualPassword: '',
@@ -41,7 +39,7 @@ const ResetPassword = () => {
         setLoading(true);
 
         try {
-            const URL = `http://192.168.178.96:8000/api/workers/resetPassword/${auth.userId}`
+            const URL = `http://192.168.178.96:8000/api/workers/resetPassword/${userId}`
             const response = await axios.post(URL, {
                 actualPassword: formData.actualPassword,
                 newPassword: formData.newPassword,

@@ -6,7 +6,7 @@ const Worker = require('../models/Worker')
 
 const register = async (req, res, next) => {
   // destructuring assignment from body
-  const { name, ownerName, email, role, street, houseNr, zip, place, phone, website, userId } = req.body;
+  const { name, ownerName, email, street, houseNr, zip, place, phone, website, userId } = req.body;
 
   let existingFirm;
 
@@ -28,7 +28,6 @@ const register = async (req, res, next) => {
 
     // creating new firm
     const createdFirm = new Firm({
-      role,
       userId,
       ownerName,
       name,

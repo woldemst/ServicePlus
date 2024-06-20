@@ -10,19 +10,17 @@ import {
     RefreshControl,
     Alert
 } from "react-native";
+import { useState, useEffect, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import OrderItem from "./OrderItem";
-import { useContext, useState, useEffect, useCallback } from "react";
-import { AuthContext } from "../../context/auth-context";
 import axios from "axios";
 
+import { getOrders } from "../../actions/orderActions";
 import ModalComponent from "../../shared/UIElements/Modal";
 import OrderCreate from "../pages/OrderCreate";
-import { getOrders } from "../../actions/orderActions";
+import OrderItem from "./OrderItem";
 
 const OrderList = (props) => {
     const dispatch = useDispatch()
-    const auth = useContext(AuthContext)
 
     const fetchedActiveOrders = useSelector((state) => state.order.activeOrders);
     const fetchedArchivedOrders = useSelector((state) => state.order.archivedOrders);

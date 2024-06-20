@@ -1,23 +1,31 @@
 import { View, Text, StyleSheet, Image, TouchableOpacity, Alert } from "react-native"
-import { useContext, useEffect, useState } from "react"
+import { useEffect, useState } from "react"
 import { useNavigation } from "@react-navigation/native"
 import { useDispatch, useSelector } from "react-redux"
 import { SwipeListView } from "react-native-swipe-list-view";
 import axios from "axios";
 
 import { deleteWorker } from "../../actions/workerActions"
-import { AuthContext } from "../../context/auth-context";
 import { refershData } from "../../actions/utilActions";
 
 const WorkerItem = (props) => {
-    const auth = useContext(AuthContext)
     const workerId = props.id
     const navigation = useNavigation()
     const dispatch = useDispatch()
 
     const firmId = useSelector(state => state.context.firmId)
     const userRole = useSelector(state => state.context.userRole)
-    // console.log(props);
+
+    const workersArray = useSelector(state => state.worker.workersArray.workers)
+    const worker = workersArray.find(worker => worker._id === workerId);
+    const [image, setImage] = useState('');
+
+    useEffect(() => {
+        if (worker.profileImg && worker.profileImg.data) {
+            const base64Image = `data:${worker.profileImg.contentType};base64,${worker.profileImg.data.toString('base64')}`;
+            setImage(base64Image);
+        }
+    }, [])
     const deleteHandler = async () => {
         Alert.alert(
             'Löschbestätigung',
@@ -56,7 +64,10 @@ const WorkerItem = (props) => {
                     </View> */}
                     <View style={styles.imgContainer} >
                         <View style={styles.imgSet}>
-                            <Image style={styles.img} source={require('../../../assets/customer/customer.png')} />
+                            <Image
+                                style={styles.img}
+                                source={image ? { uri: image } : require('../../../assets/customer/customer.png')}
+                            />
                         </View>
                     </View>
                     <View style={styles.nameContainer} >
@@ -99,7 +110,6 @@ const styles = StyleSheet.create({
     imgSet: {
         backgroundColor: '#7a9b76',
         borderRadius: 50,
-        padding: 10
     },
     textContainer: {
 
@@ -127,8 +137,10 @@ const styles = StyleSheet.create({
         justifyContent: 'center'
     },
     img: {
-        width: 24,
-        height: 24
+        width: 34,
+        height: 34,
+        // borderWidth: 1, 
+        borderRadius: 50,
     },
     nameContainer: {
         paddingLeft: 16,

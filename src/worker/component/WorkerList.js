@@ -1,11 +1,9 @@
 import { View, Text, StyleSheet, Image, TouchableOpacity, ScrollView, ActivityIndicator, FlatList, RefreshControl } from "react-native"
-import { useContext, useEffect, useState, useCallback } from "react"
+import { useEffect, useState, useCallback } from "react"
 import { useDispatch, useSelector } from "react-redux"
-import { useNavigation } from "@react-navigation/native"
 import axios from "axios"
 
 import { getWorkerData } from "../../actions/workerActions"
-import { AuthContext } from "../../context/auth-context"
 import WorkerItem from "./WokerItem"
 import WorkerCreate from "../pages/WorkerCreate"
 
@@ -14,8 +12,6 @@ import WorkerProfile from "../pages/WorkerProfile"
 
 const WorkerList = () => {
     const dispatch = useDispatch()
-    const navigation = useNavigation()
-    const auth = useContext(AuthContext)
 
     const firmId = useSelector(state => state.context.firmId)
     const refresh = useSelector(state => state.util.refresh)

@@ -3,7 +3,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import OnboardingNavigator from './src/onboarding/OnboardingNavigator';
 import { NavigationContainer } from '@react-navigation/native';
 import { useCallback, useEffect, useState, useContext } from 'react';
-import { Provider, useDispatch } from 'react-redux';
+import { Provider, useDispatch, useSelector } from 'react-redux';
 import { AuthContext } from './src/context/auth-context';
 import React from 'react';
 
@@ -28,27 +28,21 @@ import ResetPassword from './src/auth/pages/ResetPassword';
 import { setUserRole, updateFirmId } from './src/actions/contextActions';
 
 
-const MainApp = () => {
+const Main = () => {
   const dispatch = useDispatch()
 
-  const [userToken, setUserToken] = useState(false)
-  const [userId, setUserId] = useState(false)
-
-  const [refresh, setRefresh] = useState(false)
+  const userToken = useSelector(state => state.context.userToken)
 
   const Stack = createNativeStackNavigator()
-
-  const handleRefresh = () => setRefresh(prevData => !prevData);
 
 
   useEffect(() => {
     const getUserData = async () => {
       try {
-        const userData = JSON.parse(await AsyncStorage.getItem('userData'))
-        if (userData && userData.token) {
-          login(userData.userId, userData.token, userData.admin, userData.firmId)
-          setUserToken(userData.token)
-        }
+        // const userData = JSON.parse(await AsyncStorage.getItem('userData'))
+        // if (userData && userData.token) {
+        //   login(userData.userId, userData.token, userData.admin, userData.firmId)
+        // }
 
         // console.log('isLoggedIn:', auth.isLoggedIn);
       } catch (err) {
@@ -57,38 +51,14 @@ const MainApp = () => {
     }
 
     getUserData()
-  }, [login])
-
-  const login = useCallback(async (uid, token, admin, fid) => {
-    try {
-      setUserToken(token)
-      setUserId(uid)
-
-      dispatch(setUserRole(admin))
-      dispatch(updateFirmId(fid))
-      await AsyncStorage.setItem('userData', JSON.stringify({ userId: uid, token: token, admin: admin, firmId: fid }))
-
-
-    } catch (err) {
-      console.error('Error setting user data:', err);
-
-    }
   }, [])
 
-  const logout = useCallback(async () => {
-    try {
-      await AsyncStorage.removeItem('userData')
-      // window.alert('Are you sure you want to logout?')
-      setUserToken(null)
-      setUserId(null)
-      // setUserRole(null)
+  // for login function
+  //       await AsyncStorage.setItem('userData', JSON.stringify({ userId: uid, token: token, admin: admin, firmId: fid }))
 
 
-    } catch (err) {
-      console.error('Error removing user token:', err);
-    }
-  }, [])
-
+  // logout function
+  // await AsyncStorage.removeItem('userData')
 
   let routes;
 
@@ -150,33 +120,11 @@ const MainApp = () => {
     )
   }
 
-
-  return (
-    <AuthContext.Provider
-      value={{
-        login: login,
-        logout: logout,
-
-        isLoggedIn: !!userToken,
-        userToken: userToken,
-        userId: userId,
-
-        // admin: userRole, 
-        refresh: refresh,
-        handleRefresh: handleRefresh,
-      }}>
-      <React.Fragment>{routes}</React.Fragment>
-    </AuthContext.Provider>
-  );
-}
+  return <React.Fragment>{routes}</React.Fragment>
+};
 
 const App = () => {
-
-  return (
-    <Provider store={store}>
-      <MainApp />
-    </Provider>
-  )
+  return <Provider store={store}><Main /></Provider>
 }
 
 export default App

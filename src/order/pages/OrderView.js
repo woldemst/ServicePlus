@@ -5,26 +5,23 @@ import {
     Text,
     Image,
 } from "react-native";
-import { useContext, useState, useCallback, useEffect } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 
+import { getArchivedOrders } from "../../actions/orderActions";
 import OrderList from '../components/OrderList'
 import ModalComponent from "../../shared/UIElements/Modal";
 import OrderCreate from "./OrderCreate";
-import { AuthContext } from "../../context/auth-context";
-import { getArchivedOrders } from "../../actions/orderActions";
 
 
 const OrderView = () => {
-    const auth = useContext(AuthContext);
     const dispatch = useDispatch()
 
-
     const fetchedData = useSelector((state) => state.order.ordersArray);
-    const showArchivedOrders = useSelector(state => state.order.showArchivedOrders)    
+    const showArchivedOrders = useSelector(state => state.order.showArchivedOrders)
     const userRole = useSelector(state => state.context.userRole)
-    
+
     const [isModalVisible, setModalVisible] = useState(false);
 
     const toggleModal = () => setModalVisible(!isModalVisible)
@@ -42,7 +39,7 @@ const OrderView = () => {
                     <TouchableOpacity style={styles.headerButton} >
                         <Image style={styles.headerIcon} source={require('../../../assets/filter.png')} />
                     </TouchableOpacity>
-                    
+
                     {userRole && (
                         <TouchableOpacity disabled={showArchivedOrders} style={styles.headerButton} onPress={toggleModal} >
                             <Image style={styles.headerIcon} source={require('../../../assets/add_new.png')} />

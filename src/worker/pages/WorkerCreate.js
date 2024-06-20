@@ -1,12 +1,12 @@
 import { View, Text, StyleSheet, ScrollView } from "react-native";
-import { useContext, useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { useSelector, useDispatch } from "react-redux";
 import axios from "axios";
 
 import { clearWorkerField, createWorker } from "../../actions/workerActions";
 import { VALIDATOR_EMAIL, VALIDATOR_REQUIRE, VALIDATOR_MINLENGTH } from "../../util/validators";
-import { AuthContext } from "../../context/auth-context";
+
 import Input from "../../shared/UIElements/Input";
 import Button from "../../shared/UIElements/Button";
 import { setInitialInputData } from "../../actions/inputActions";
@@ -15,7 +15,6 @@ import { refershData } from "../../actions/utilActions";
 const WorkerCreate = (props) => {
   const [isLoaded, setIsLoaded] = useState(false)
 
-  const auth = useContext(AuthContext)
   const dispatch = useDispatch()
   const navigation = useNavigation()
 

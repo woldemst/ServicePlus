@@ -1,17 +1,15 @@
 import { View, StyleSheet, Image, Text, TouchableOpacity, Alert } from "react-native";
 import { SwipeListView } from 'react-native-swipe-list-view';
-import { useContext, useState } from "react";
+import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 
 import ModalComponent from "../../shared/UIElements/Modal";
 import AppointmentInfo from "../pages/AppointmentInfo";
 import { deleteAppointment } from '../../actions/appointmentActions'
-import { AuthContext } from "../../context/auth-context";
 import { refershData } from "../../actions/utilActions";
 
 const AppointmentItem = (props) => {
-    const auth = useContext(AuthContext)
     const dispatch = useDispatch()
     const appointmentId = props.id
     const [isModalVisible, setModalVisible] = useState(false);
