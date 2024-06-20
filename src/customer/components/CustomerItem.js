@@ -1,5 +1,5 @@
 import { View, Text, StyleSheet, Image, TouchableOpacity, Alert } from "react-native"
-import { useContext, useEffect, useState } from "react"
+import { useEffect, useState } from "react"
 import { useNavigation } from "@react-navigation/native"
 import { useDispatch, useSelector } from "react-redux"
 import { SwipeListView } from "react-native-swipe-list-view";

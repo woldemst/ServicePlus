@@ -1,10 +1,9 @@
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, ScrollView, ActivityIndicator } from "react-native";
-import { useContext, useEffect, useState, useCallback } from "react"
+import { useEffect, useState, useCallback } from "react"
 import { useDispatch, useSelector } from 'react-redux'
 import axios from "axios";
 
 import { VALIDATOR_EMAIL, VALIDATOR_REQUIRE } from "../../util/validators";
-import { AuthContext } from "../../context/auth-context";
 import Input from '../../shared/UIElements/Input'
 import Button from '../../shared/UIElements/Button'
 import { refershData } from "../../actions/utilActions";
@@ -16,13 +15,13 @@ const WorkerDetails = props => {
     const route = useRoute()
     const workerId = route.params.id
     const dispatch = useDispatch()
-    const auth = useContext(AuthContext)
     const navigation = useNavigation()
 
     const firmId = useSelector(state => state.context.firmId)
     const workersArr = useSelector(state => state.worker.workersArray.workers)
     const worker = workersArr.find(worker => worker._id == workerId)
     const userRole = useSelector(state => state.context.userRole)
+    const userId = useSelector(state => state.context.userId)
 
     const [isLoaded, setIsLoaded] = useState(false)
     const [isEdit, setIsEdit] = useState(false)
@@ -66,6 +65,8 @@ const WorkerDetails = props => {
 
     const handleSubmit = async () => {
         const URL = `http://192.168.178.96:8000/api/workers/${firmId}/update/${workerId}`
+
+        setIsUploading(true);
 
         try {
 
@@ -214,7 +215,7 @@ const WorkerDetails = props => {
                             />
 
 
-                            {(!userRole && auth.userId === workerId) && (
+                            {(!userRole && userId === workerId) && (
                                 <View style={styles.passwortBtnContainer}>
                                     <Button
                                         style={isEdit ? [styles.passwordBtn, styles.button] : [styles.invalidePasswordButton, styles.button]}
@@ -226,7 +227,7 @@ const WorkerDetails = props => {
                                 </View>
                             )}
 
-                            {userRole || auth.userId === workerId ? (
+                            {userRole || userId === workerId ? (
                                 <View style={styles.btnContainer}>
                                     <Button
                                         style={isEdit ? [styles.createBtn, styles.button] : [styles.invalideButton, styles.button]}
@@ -241,6 +242,11 @@ const WorkerDetails = props => {
                     )}
                 </View>
             </ScrollView>
+            {isUploading && (
+                <View style={styles.loading}>
+                    <ActivityIndicator size="large" color="#7A9B76" />
+                </View>
+            )}
         </View>
     )
 }
@@ -398,6 +404,16 @@ const styles = StyleSheet.create({
         height: 400,
         // borderWidth: 1,
         // borderColor: 'red',
+    },
+    loading: {
+        position: 'absolute',
+        left: 0,
+        right: 0,
+        top: 0,
+        bottom: 0,
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: 'rgba(0, 0, 0, 0.5)',
     },
 
 })

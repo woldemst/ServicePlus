@@ -1,12 +1,10 @@
 import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native"
-import { useContext, useState } from "react";
+import { useState } from "react";
 import AppointmentList from '../components/AppointmentList'
 import { useDispatch, useSelector } from "react-redux";
-import { AuthContext } from "../../context/auth-context";
 import { getArchivedAppointments } from "../../actions/appointmentActions";
 
 const AppointmentView = () => {
-    const auth = useContext(AuthContext)
     const dispatch = useDispatch()
 
     const showArchived = useSelector(state => state.appointment.showArchived)
@@ -29,7 +27,7 @@ const AppointmentView = () => {
                     <View style={styles.textContainer} >
                         <Text style={styles.headerText}>Terminübersicht {showArchived && '(archiviert)'}</Text>
                     </View>
- 
+
                     <View style={[styles.headerIconContainer, { justifyContent: userRole ? 'space-between' : 'flex-end' }]} >
                         <TouchableOpacity disabled={showArchived} style={styles.headerButton} >
                             <Image style={styles.headerIcon} source={require('../../../assets/filter.png')} />

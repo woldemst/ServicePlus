@@ -2,16 +2,13 @@ import {
   View,
   Text,
   TouchableOpacity,
-  ActivityIndicator,
   StyleSheet,
   ScrollView,
-  Image
+  Alert,
 } from "react-native";
 import { useNavigation, useRoute } from "@react-navigation/native";
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { AuthContext } from "../../context/auth-context";
-import { Alert } from "react-native";
 import axios from "axios";
 
 import { VALIDATOR_REQUIRE, VALIDATOR_SELECT } from "../../util/validators";
@@ -22,11 +19,7 @@ import Input from "../../shared/UIElements/Input";
 import Select from "../../shared/UIElements/Select";
 
 const OrderInfo = (props) => {
-  const [isLoaded, setIsLoaded] = useState(false)
-  const [activeStatus, setActiveStatus] = useState(1);
-
   const navigation = useNavigation()
-  const auth = useContext(AuthContext)
   const dispatch = useDispatch()
   const route = useRoute()
 
@@ -36,6 +29,8 @@ const OrderInfo = (props) => {
   const edit = useSelector(state => state.order.edit);
   const firmId = useSelector(state => state.context.firmId)
 
+  const [isLoaded, setIsLoaded] = useState(false)
+  const [activeStatus, setActiveStatus] = useState(1);
   const [formData, setFormData] = useState({
     street: order.street,
     houseNr: order.houseNr,

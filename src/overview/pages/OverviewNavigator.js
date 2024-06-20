@@ -1,21 +1,19 @@
-import { useState, useEffect, useContext } from "react"
 import { View, Image } from "react-native"
+import { useState, useEffect, useContext } from "react"
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs'
 
 import OrderView from "../../order/pages/OrderView"
 import AppointmentView from "../../appointment/pages/AppointmentView"
 import FirmView from "../../firm/pages/FirmView"
-import { AuthContext } from "../../context/auth-context"
 import { useSelector } from "react-redux"
 
 const Tab = createMaterialTopTabNavigator()
 
 
 const OverviewNavigator = () => {
-    const [activeTab, setActiveTab] = useState('OrderView');
-
-    const auth = useContext(AuthContext)
     const firmId = useSelector(state => state.context.firmId)
+
+    const [activeTab, setActiveTab] = useState('OrderView');
 
     return (
         <View style={{ flex: 1 }}>

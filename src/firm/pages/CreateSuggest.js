@@ -1,13 +1,12 @@
 import { View, Text, TouchableOpacity, StyleSheet, Image } from "react-native";
-import { useContext, useState } from "react";
+import { useState } from "react";
 
 import ModalComponent from "../../shared/UIElements/Modal";
 import CreateFirm from "./CreateFirm";
-import { AuthContext } from "../../context/auth-context";
 
 const CreateSuggest = props => {
     const [isModalVisible, setIsModalVisible] = useState(false)
-    
+
     const toggleModal = () => setIsModalVisible(!isModalVisible)
     const createFirmCall = () => toggleModal()
 

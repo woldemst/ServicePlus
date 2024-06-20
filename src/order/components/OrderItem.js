@@ -2,11 +2,9 @@ import {
   View,
   Text,
   TouchableOpacity,
-  TouchableWithoutFeedback,
   StyleSheet,
   Image,
   Alert,
-  TextInput
 } from "react-native";
 import { useState, useContext } from "react";
 import { useNavigation } from "@react-navigation/native"
@@ -16,10 +14,9 @@ import axios from "axios";
 
 import { deleteOrder } from "../../actions/orderActions";
 import { deleteAppointmentsByOrder } from "../../actions/appointmentActions";
-import { AuthContext } from "../../context/auth-context";
+
 
 const OrderItem = (props) => {
-  const auth = useContext(AuthContext)
   const navigation = useNavigation()
   const dispatch = useDispatch()
 

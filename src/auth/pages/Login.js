@@ -10,19 +10,19 @@ import {
     TouchableWithoutFeedback,
     Keyboard
 } from "react-native";
-import { useState, useContext, useEffect, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigation } from "@react-navigation/native";
 import axios from "axios";
 
 import { VALIDATOR_EMAIL, VALIDATOR_MINLENGTH } from "../../util/validators";
-import { AuthContext } from "../../context/auth-context";
 import Button from "../../shared/UIElements/Button";
 import Input from "../../shared/UIElements/Input";
+import { loginSucces } from "../../actions/contextActions";
 
 const Login = () => {
-    const auth = useContext(AuthContext)
     const navigation = useNavigation()
+    const dispatch = useDispatch()
 
 
     const firmId = useSelector(state => state.context.firmId)
@@ -45,8 +45,12 @@ const Login = () => {
                 password: formData.password,
             });
 
-            // console.log('response', response.data);
-            auth.login(response.data.userId, response.data.token, response.data.admin, response.data.firmId)
+            dispatch(loginSucces({
+                userId: response.data.userId,
+                token: response.data.token,
+                admin: response.data.admin,
+                firmId: response.data.firmId,
+            }))
 
             if (!firmId) {
                 navigation.navigate('overviewNavigator', { screen: 'FirmView' });
@@ -76,7 +80,7 @@ const Login = () => {
         <KeyboardAvoidingView
             style={styles.container}
             behavior='height'
-            // behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        // behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
 
         >
             <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
