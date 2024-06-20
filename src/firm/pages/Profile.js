@@ -1,29 +1,23 @@
 import {
   View,
-  Text,
   StyleSheet,
   ScrollView,
-  TouchableOpacity,
-  Image,
   ActivityIndicator
 } from "react-native";
-import { useNavigation } from "@react-navigation/native";
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState, useCallback} from "react";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 
 
 import { VALIDATOR_REQUIRE, VALIDATOR_MINLENGTH, VALIDATOR_EMAIL } from "../../util/validators";
-import { AuthContext } from "../../context/auth-context";
 import Input from "../../shared/UIElements/Input";
 import Button from "../../shared/UIElements/Button";
 import Avatar from "../../../components/Avatar";
 import { refershData } from "../../actions/utilActions";
-import { getFirmData } from "../../actions/firmActions";
+
 
 
 const Profile = (props) => {
-  const navigation = useNavigation();
   const dispatch = useDispatch()
 
   const fetchedData = useSelector(state => state.firm)
@@ -33,21 +27,20 @@ const Profile = (props) => {
   const [isLoaded, setIsLoaded] = useState(false)
   const [isEdit, setIsEdit] = useState(false)
   const [formData, setFormData] = useState({ ...fetchedData });
-  // const [image, setImage] = useState(fetchedData.profileImg?.data);
+
   const [image, setImage] = useState('');
   const [isUploading, setIsUploading] = useState(false);
 
   useEffect(() => setIsLoaded(true), []);
 
   useEffect(() => {
+    
     // Function to convert binary image data to base64 URI
     const convertBinaryToBase64 = () => {
-      // Check if profileImg exists and has data
       if (fetchedData.profileImg && fetchedData.profileImg.data) {
-        // Convert binary data to base64 string
         const base64Image = `data:${fetchedData.profileImg.contentType};base64,${fetchedData.profileImg.data.toString('base64')}`;
 
-        setImage(base64Image); // Set base64 URI to state
+        setImage(base64Image);
       }
     };
     convertBinaryToBase64();
@@ -56,9 +49,9 @@ const Profile = (props) => {
   }, [fetchedData])
 
 
-  const handleImageChange = (imageUri) => setImage(imageUri);
+  const handleImageChange = useCallback((imageUri) => setImage(imageUri), []);
 
-  const handleSubmit = async () => {
+  const handleSubmit = useCallback(async () => {
     const URL = `http://192.168.178.96:8000/api/firm/update/${firmId}`;
 
     setIsUploading(true);
@@ -92,17 +85,17 @@ const Profile = (props) => {
         },
       });
 
-      // navigation.goBack()
+
       dispatch(refershData())
       setIsEdit(false);
       window.alert("Firm updated!");
       // console.log("Firm updated!", response.data);
     } catch (err) {
-      console.error("Error updating firm:", err);
+      console.error("Error while updating a firm:", err);
     } finally {
       setIsUploading(false)
     }
-  };
+  }, [image, formData, firmId, dispatch]);
 
   return isLoaded && (
     <View style={styles.container}>
@@ -116,7 +109,7 @@ const Profile = (props) => {
               isEdit={!isEdit}
             />
           </View>
-          
+
           <View style={styles.content}>
             <Input
               placeholder="Name des Betriebs"

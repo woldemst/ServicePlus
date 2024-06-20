@@ -1,13 +1,10 @@
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image, ScrollView, ActivityIndicator } from "react-native";
-import { useContext, useEffect, useState } from "react";
+import { View, StyleSheet, ScrollView, ActivityIndicator } from "react-native";
+import { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 
 import { VALIDATOR_REQUIRE, VALIDATOR_EMAIL } from "../../util/validators";
-import { AuthContext } from "../../context/auth-context";
-import { clearCustomerField } from "../../actions/customerActions";
 import Input from "../../shared/UIElements/Input";
-import { setInitialInputData } from "../../actions/inputActions";
 import Button from "../../shared/UIElements/Button";
 import { refershData } from "../../actions/utilActions";
 import { useRoute } from "@react-navigation/native";
@@ -16,7 +13,6 @@ import Avatar from "../../../components/Avatar";
 const CustomerDetails = (props) => {
     const route = useRoute();
     const customerId = route.params.id;
-    const auth = useContext(AuthContext);
     const dispatch = useDispatch();
 
     const firmId = useSelector(state => state.context.firmId)
@@ -28,33 +24,73 @@ const CustomerDetails = (props) => {
 
     const [isLoaded, setIsLoaded] = useState(false)
     const [isEdit, setIsEdit] = useState(false)
-    const [formData, setFormData] = useState({ ...customer });
+    const [formData, setFormData] = useState({ ...customer })
+    const [image, setImage] = useState('');
+    const [isUploading, setIsUploading] = useState(false);
+
 
     useEffect(() => setIsLoaded(true), [])
+
+    useEffect(() => {
+        const convertBinaryToBase64 = () => {
+            if (customer.profileImg && customer.profileImg.data && customer.profileImg.contentType) {
+                const base64Image = `data:${customer.profileImg.contentType};base64,${customer.profileImg.data.toString('base64')}`;
+                setImage(base64Image);
+            }
+        }
+
+        convertBinaryToBase64()
+        setIsLoaded(true)
+
+    }, [customer])
+
+
+    const handleImageChange = useCallback((imageUri) => setImage(imageUri), []);
 
     const handleEdit = () => setIsEdit(!isEdit)
 
     const handleSubmit = async () => {
+        const URL = `http://192.168.178.96:8000/api/customers/${firmId}/update/${customerId}`
+
+        setIsUploading(true);
         try {
-            const response = await axios.patch(
-                `http://192.168.178.96:8000/api/customers/${firmId}/update/${customerId}`, {
-                customerId: customerId,
-                firmId: firmId,
-                name: formData.name,
-                email: formData.email,
-                street: formData.street,
-                houseNr: formData.houseNr,
-                zip: formData.zip,
-                place: formData.place,
-                phone: formData.phone,
-                website: formData.website,
-                description: formData.description,
+            const formDataToSubmit = new FormData();
+            formDataToSubmit.append("customerId", customerId);
+            formDataToSubmit.append("firmId", firmId);
+            formDataToSubmit.append("name", formData.name);
+            formDataToSubmit.append("email", formData.email);
+            formDataToSubmit.append("street", formData.street);
+            formDataToSubmit.append("houseNr", formData.houseNr);
+            formDataToSubmit.append("zip", formData.zip);
+            formDataToSubmit.append("place", formData.place);
+            formDataToSubmit.append("phone", formData.phone);
+            formDataToSubmit.append("website", formData.website);
+            formDataToSubmit.append("description", formData.description);
+
+
+            if (image && image !== `data:${customer.profileImg.contentType};base64,${customer.profileImg.data.toString('base64')}`) {
+                const uriParts = image.split('.');
+                const fileType = uriParts[uriParts.length - 1];
+                formDataToSubmit.append('avatar', {
+                    uri: image,
+                    name: `profile.${fileType}`,
+                    type: `image/${fileType}`,
+                });
+            }
+
+            await axios.patch(URL, formDataToSubmit, {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
             });
+
             setIsEdit(false)
             dispatch(refershData())
             window.alert("Customer updated!");
         } catch (err) {
-            console.log("Error fetching while updating customers' profile", err);
+            console.log("Error while updating a customer's profile", err);
+        } finally {
+            setIsUploading(false)
         }
     };
 
@@ -67,7 +103,11 @@ const CustomerDetails = (props) => {
             <ScrollView showsVerticalScrollIndicator={false}>
                 <View style={styles.inner}>
                     <View style={styles.imgContainer}>
-                        <Avatar source={require('../../../assets/customer/customer_avatar.jpg')} />
+                        <Avatar
+                            source={image ? { uri: image } : require('../../../assets/customer/customer_avatar.jpg')}
+                            onImagePicked={handleImageChange}
+                            isEdit={!isEdit}
+                        />
                     </View>
 
                     {isLoaded && (
@@ -195,6 +235,11 @@ const CustomerDetails = (props) => {
                     )}
                 </View>
             </ScrollView>
+            {isUploading && (
+                <View style={styles.loading}>
+                    <ActivityIndicator size="large" color="#7A9B76" />
+                </View>
+            )}
         </View>
     )
 };
@@ -209,7 +254,7 @@ const styles = StyleSheet.create({
         borderColor: 'red',
     },
     inner: {
-      paddingVertical: 16,  
+        paddingVertical: 16,
     },
     content: {
         // flex: 1,
@@ -328,6 +373,16 @@ const styles = StyleSheet.create({
         height: 400,
         // borderWidth: 1,
         // borderColor: 'red',
+    },
+    loading: {
+        position: 'absolute',
+        left: 0,
+        right: 0,
+        top: 0,
+        bottom: 0,
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: 'rgba(0, 0, 0, 0.5)',
     },
 });
 
