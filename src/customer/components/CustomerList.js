@@ -1,19 +1,16 @@
 import { View, Text, StyleSheet, Image, TouchableOpacity, ScrollView, ActivityIndicator, FlatList, RefreshControl } from "react-native"
 import { useContext, useEffect, useState, useCallback } from "react"
 import { useDispatch, useSelector } from "react-redux"
-import { useNavigation } from "@react-navigation/native"
+
 import axios from "axios"
 
 import { getCustomerData } from "../../actions/customerActions"
-import { AuthContext } from "../../context/auth-context"
 import CustomerItem from "./CustomerItem"
 import CreateCustomer from "../pages/CreateCustomer"
 import ModalComponent from "../../shared/UIElements/Modal"
 
 const CustomerList = () => {
     const dispatch = useDispatch()
-    const navigation = useNavigation()
-    const auth = useContext(AuthContext)
 
     const refresh = useSelector(state => state.util.refresh)
     const fetchedData = useSelector(state => state.customer.customersArray)
