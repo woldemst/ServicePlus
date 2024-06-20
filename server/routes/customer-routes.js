@@ -12,4 +12,3 @@ router.post('/:firmId/new', custommerController.createCustomer)
 router.delete('/:firmId/delete/:customerId', custommerController.deleteCustomerById)
 
 module.exports = router;
-

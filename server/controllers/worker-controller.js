@@ -5,6 +5,8 @@ const Firm = require('../models/Firm')
 const User = require('../models/User')
 const Appointment = require('../models/Appointment')
 const bcrypt = require("bcryptjs");
+const fs = require('fs');
+const path = require('path');
 
 const getAllWorkersByFirmId = async (req, res, next) => {
     const firmId = req.params.firmId
@@ -59,6 +61,7 @@ const updateWorkerById = async (req, res, next) => {
     const workerId = req.params.workerId;
     const firmId = req.params.firmId;
 
+    console.log(req.body);
     const {
         workerNr,
         name,
@@ -81,17 +84,24 @@ const updateWorkerById = async (req, res, next) => {
             return next(error);
         }
 
-        updatedWorker.workerNr = workerNr,
-            updatedWorker.name = name,
-            updatedWorker.email = email,
-            updatedWorker.phone = phone,
-            updatedWorker.street = street,
-            updatedWorker.houseNr = houseNr,
-            updatedWorker.place = place,
-            updatedWorker.zip = zip,
-            updatedWorker.description = description,
+        updatedWorker.workerNr = workerNr;
+        updatedWorker.name = name;
+        updatedWorker.email = email;
+        updatedWorker.phone = phone;
+        updatedWorker.street = street;
+        updatedWorker.houseNr = houseNr;
+        updatedWorker.place = place;
+        updatedWorker.zip = zip;
+        updatedWorker.description = description;
 
-            await updatedWorker.save()
+        if (req.file) {
+            updatedWorker.profileImg = {
+                data: req.file.buffer,
+                contentType: req.file.mimetype,
+            };
+        }
+
+        await updatedWorker.save()
 
         res
             .status(200)
@@ -136,7 +146,12 @@ const createWorker = async (req, res, next) => {
         place: place,
         phone: phone,
         description: description,
-        // mobilePhone: mobilePhone, 
+        profileImg: {
+            data: fs.readFileSync(path.join(__dirname, '../../assets/worker/worker_avatar.jpg')), // adjust path as needed
+            contentType: 'image/jpg', // or the type of your default image
+        }
+
+
     })
 
     try {
@@ -294,8 +309,8 @@ const joinFirm = async (req, res, next) => {
 const resetWorkerPassword = async (req, res, next) => {
     const { workerId } = req.params
     const { actualPassword, newPassword, confirmPassword } = req.body
-        // console.log(req.body);
-    try {   
+    // console.log(req.body);
+    try {
         const worker = await Worker.findById(workerId)
         if (!worker) {
             return next(new HttpError('Worker not found with the provided ID.', 404));
@@ -316,7 +331,7 @@ const resetWorkerPassword = async (req, res, next) => {
 
 
         res.status(200).json({ message: 'Worker password was reset successfully' })
-    }catch {
+    } catch {
         const error = new HttpError(
             "Something went wrong, could not reset worker password.",
             500

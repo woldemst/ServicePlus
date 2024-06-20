@@ -106,13 +106,15 @@ const updateCustomerById = async (req, res, next) => {
         data: req.file.buffer,
         contentType: req.file.mimetype,
       };
-    }else if (!updatedCustomer.profileImg) {
-      // If no file provided and profileImg is missing, set a default image
-      updatedCustomer.profileImg = {
-        data: fs.readFileSync(path.join(__dirname, 'path_to_default_image')), // adjust path as needed
-        contentType: 'image/jpeg' // or the type of your default image
-      };
     }
+    
+    // else if (!updatedCustomer.profileImg) {
+    //   // If no file provided and profileImg is missing, set a default image
+    //   updatedCustomer.profileImg = {
+    //     data: fs.readFileSync(path.join(__dirname, 'path_to_default_image')), // adjust path as needed
+    //     contentType: 'image/jpeg' // or the type of your default image
+    //   };
+    // }
 
     await updatedCustomer.save();
 
