@@ -1,6 +1,8 @@
 const HttpError = require("../models/http-error")
 const Customer = require('../models/Customer')
 const Firm = require('../models/Firm')
+const fs = require('fs');
+const path = require('path');
 
 const getAllCustomersByFirmId = async (req, res, next) => {
   const firmId = req.params.firmId;
@@ -82,23 +84,37 @@ const updateCustomerById = async (req, res, next) => {
       return next(error);
     }
 
-    updatedCustomer.name = name,
-      updatedCustomer.email = email,
-      updatedCustomer.customerNr = customerNr,
-      updatedCustomer.organisation = organisation,
-      updatedCustomer.nextAppointment = nextAppointment,
-      updatedCustomer.mobilePhone = mobilePhone,
-      updatedCustomer.contact = contact,
-      updatedCustomer.worker = worker,
-      updatedCustomer.description = description,
-      updatedCustomer.street = street,
-      updatedCustomer.houseNr = houseNr,
-      updatedCustomer.zip = zip,
-      updatedCustomer.place = place,
-      updatedCustomer.phone = phone,
-      updatedCustomer.website = website,
+    updatedCustomer.name = name;
+    updatedCustomer.email = email;
+    updatedCustomer.customerNr = customerNr;
+    updatedCustomer.organisation = organisation;
+    updatedCustomer.nextAppointment = nextAppointment;
+    updatedCustomer.mobilePhone = mobilePhone;
+    updatedCustomer.contact = contact;
+    updatedCustomer.worker = worker;
+    updatedCustomer.description = description;
+    updatedCustomer.street = street;
+    updatedCustomer.houseNr = houseNr;
+    updatedCustomer.zip = zip;
+    updatedCustomer.place = place;
+    updatedCustomer.phone = phone;
+    updatedCustomer.website = website;
 
-      await updatedCustomer.save();
+    // Handle image upload if a file was provided
+    if (req.file) {
+      updatedCustomer.profileImg = {
+        data: req.file.buffer,
+        contentType: req.file.mimetype,
+      };
+    }else if (!updatedCustomer.profileImg) {
+      // If no file provided and profileImg is missing, set a default image
+      updatedCustomer.profileImg = {
+        data: fs.readFileSync(path.join(__dirname, 'path_to_default_image')), // adjust path as needed
+        contentType: 'image/jpeg' // or the type of your default image
+      };
+    }
+
+    await updatedCustomer.save();
 
     res
       .status(200)
@@ -134,7 +150,6 @@ const createCustomer = async (req, res, next) => {
     description
   } = req.body
 
-
   const createCustomer = new Customer({
     firmId: firmId,
     // customerNr: customerNr, 
@@ -150,7 +165,11 @@ const createCustomer = async (req, res, next) => {
     contact: contact,
     nextAppointment: nextAppointment,
     website: website,
-    description: description
+    description: description,
+    profileImg: {
+      data: fs.readFileSync(path.join(__dirname, '../../assets/customer/customer_avatar.jpg')), // adjust path as needed
+      contentType: 'image/jpg', // or the type of your default image
+    }
   })
 
   try {

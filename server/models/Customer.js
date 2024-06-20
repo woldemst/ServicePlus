@@ -17,6 +17,7 @@ const customerSchema = new mongoose.Schema({
   nextAppointment: { type: String, required: false },
   website: { type: String, required: false },
   description: { type: String, required: false },
+  profileImg: { data: Buffer, contentType: String },
 
 
   // creator: { type: mongoose.Types.ObjectId, required: true, ref: 'Customer'}, //ref: establish connection between two schemas
