@@ -1,29 +1,23 @@
 import {
   View,
   Text,
-  TouchableOpacity,
   ActivityIndicator,
   StyleSheet,
 } from "react-native";
-import { useNavigation } from "@react-navigation/native";
-import { useContext, useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 
-
 import { VALIDATOR_REQUIRE, VALIDATOR_SELECT } from "../../util/validators";
-import { AuthContext } from "../../context/auth-context";
 import { refershData } from "../../actions/utilActions";
 import Input from "../../shared/UIElements/Input";
 import Button from "../../shared/UIElements/Button";
 import Select from "../../shared/UIElements/Select";
 
 const OrderCreate = (props) => {
-  const auth = useContext(AuthContext)
   const dispatch = useDispatch()
 
   const firmId = useSelector(state => state.context.firmId)
-
 
   const [isLoaded, setIsLoaded] = useState(false)
   const [formData, setFormData] = useState({

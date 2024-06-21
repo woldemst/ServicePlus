@@ -1,8 +1,7 @@
 import { View, Text, TouchableOpacity, StyleSheet, Image } from "react-native";
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 
-import { AuthContext } from "../../context/auth-context";
 import Input from "../../shared/UIElements/Input";
 import { VALIDATOR_REQUIRE } from "../../util/validators";
 import Button from "../../shared/UIElements/Button";
@@ -12,12 +11,13 @@ import { refershData } from "../../actions/utilActions";
 import { updateFirmId } from "../../actions/contextActions";
 
 const JoinFirm = props => {
-    const auth = useContext(AuthContext)
     const dispatch = useDispatch();
+
     const navigation = useNavigation();
     const [formData, setFormData] = useState({ firmId: '' })
     const [isLoaded, setIsLoaded] = useState(false)
     const firmId = useSelector(state => state.context.firmId)
+    const userId = useSelector(state => state.context.userId)
 
     useEffect(() => {
         if (isLoaded) {
@@ -33,7 +33,7 @@ const JoinFirm = props => {
 
     const joinHandler = async () => {
         try {
-            const URL = `http://192.168.178.96:8000/api/workers/${formData.firmId}/join/${auth.userId}`
+            const URL = `http://192.168.178.96:8000/api/workers/${formData.firmId}/join/${userId}`
             // console.log('URL', URL);
             const response = await axios.post(URL)
             alert("Erfolgreich beigetreten!");

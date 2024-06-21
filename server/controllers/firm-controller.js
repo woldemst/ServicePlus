@@ -6,7 +6,7 @@ const Worker = require('../models/Worker')
 
 const register = async (req, res, next) => {
   // destructuring assignment from body
-  const { name, ownerName, email, role, street, houseNr, zip, place, phone, website, userId } = req.body;
+  const { name, ownerName, email, street, houseNr, zip, place, phone, website, userId } = req.body;
 
   let existingFirm;
 
@@ -28,7 +28,6 @@ const register = async (req, res, next) => {
 
     // creating new firm
     const createdFirm = new Firm({
-      role,
       userId,
       ownerName,
       name,
@@ -67,7 +66,6 @@ const updateFirm = async (req, res, next) => {
   const firmId = req.params.firmId;
   const { name, ownerName, email, street, houseNr, zip, place, phone, website } = req.body;
 
-
   let updatedFirm
 
   try {
@@ -87,7 +85,7 @@ const updateFirm = async (req, res, next) => {
     updatedFirm.place = place;
     updatedFirm.phone = phone;
     updatedFirm.website = website;
-
+    // Handle image upload if a file was provided
     if (req.file) {
       updatedFirm.profileImg = {
         data: req.file.buffer,
@@ -116,7 +114,7 @@ const getFirmByUserId = async (req, res, next) => {
     const firmId = user.firmId;
 
 
-    // console.log(firmId);
+    console.log(firmId);
     // Use firmId to get firm data
     const firm = await Firm.findById(firmId);
     if (!firm) {
@@ -136,4 +134,5 @@ const getFirmByUserId = async (req, res, next) => {
 
 exports.register = register;
 exports.updateFirm = updateFirm;
+// exports.updateFirmImage = updateFirmImage;
 exports.getFirmByUserId = getFirmByUserId;

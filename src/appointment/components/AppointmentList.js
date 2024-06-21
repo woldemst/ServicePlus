@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState, useCallback } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { View, Text, StyleSheet, Image, ScrollView, ActivityIndicator, FlatList, RefreshControl } from 'react-native';
 import axios from 'axios';
 
@@ -7,11 +7,9 @@ import AppointmentItem from './AppointmentItem';
 import AppointmentCreate from '../pages/AppointmentCreate';
 import { useDispatch, useSelector } from 'react-redux';
 import { getAppointments } from '../../actions/appointmentActions';
-import { AuthContext } from '../../context/auth-context';
 
 const AppointmentList = props => {
     const dispatch = useDispatch()
-    const auth = useContext(AuthContext)
 
     const fetchedActiveAppointments = useSelector(state => state.appointment.activeAppointments)
     const fetchedArchivedAppointments = useSelector(state => state.appointment.archivedAppointments)

@@ -1,20 +1,21 @@
 import { View, Text, TouchableOpacity, StyleSheet, Alert, KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard } from "react-native";
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 
 import axios from "axios";
 
 import { VALIDATOR_EMAIL, VALIDATOR_MINLENGTH, VALIDATOR_REQUIRE, VALIDATOR_SELECT } from "../../util/validators";
-import { AuthContext } from "../../context/auth-context";
 import Button from "../../shared/UIElements/Button";
 import Select from "../../shared/UIElements/Select";
 import Input from "../../shared/UIElements/Input";
+import { useDispatch } from "react-redux";
+import { loginSucces } from "../../actions/contextActions";
 
 
 
 const Register = () => {
-    const auth = useContext(AuthContext)
     const navigation = useNavigation()
+    const dipatch = useDispatch()
 
     const [isLoaded, setIsLoaded] = useState(false)
 
@@ -41,13 +42,16 @@ const Register = () => {
                 admin: formData.admin
             });
 
-            // console.log(formData); 
-            // console.log(response.status);
-
             if (response.status === 201) {
-                auth.login(response.data.userId, response.data.token, response.data.admin, response.data.firmId)
+                dipatch(loginSucces({
+                    userId: response.data.userId,
+                    token: response.data.token,
+                    admin: response.data.admin,
+                    firmId: response.data.firmId
+                }))
+
                 navigation.navigate('overviewNavigator', { screen: 'FirmView' });
-                // console.log(response.data);
+
                 // alert('User created');
             } else {
                 console.log(response.data);
@@ -150,13 +154,13 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'flex-end',
         padding: 21,
-
+        backgroundColor: '#fff',
 
     },
     logoText: {
         fontSize: 32,
         textAlign: 'center',
-        marginBottom: 90, 
+        marginBottom: 90,
     },
     title: {
         fontSize: 27,

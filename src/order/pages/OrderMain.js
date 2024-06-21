@@ -1,15 +1,11 @@
 import {
     View,
-    Text,
-    TextInput,
     TouchableOpacity,
-    ActivityIndicator,
     StyleSheet,
-    ScrollView,
     Image
 } from "react-native";
 import { useFocusEffect, useNavigation, useRoute } from "@react-navigation/native";
-import { useCallback, useContext, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import { Ionicons } from '@expo/vector-icons';
 import { useDispatch, useSelector } from "react-redux";
@@ -20,16 +16,12 @@ import OrderAppointments from "./OrderAppointments";
 import OrderInfo from "./OrderInfo"
 import OrderFiles from "./OrderFiles";
 import Input from "../../shared/UIElements/Input";
-import { AuthContext } from "../../context/auth-context";
-
 
 const OrderMain = (props) => {
     const dispatch = useDispatch()
     const route = useRoute()
     const navigation = useNavigation()
     const Tab = createMaterialTopTabNavigator()
-    const auth = useContext(AuthContext)
-
 
     const orderId = route.params.id
     const fetchedArray = useSelector((state) => state.order.ordersArray.orders);
@@ -37,7 +29,7 @@ const OrderMain = (props) => {
     const edit = useSelector(state => state.order.edit);
     const showArchivedOrders = useSelector(state => state.order.showArchivedOrders);
     const userRole = useSelector(state => state.context.userRole)
-    
+
     const [isLoaded, setIsLoaded] = useState(false)
     const [activeTab, setActiveTab] = useState(0);
 

@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, Image, TouchableOpacity, Alert } from "react-native"
+import { View, Text, StyleSheet, Image, TouchableOpacity, Alert} from "react-native"
 import { useEffect, useState, useContext } from "react"
 import { useNavigation } from '@react-navigation/native'
 import { useRoute } from "@react-navigation/native"
@@ -6,35 +6,44 @@ import axios from "axios"
 
 import { useDispatch, useSelector } from "react-redux"
 import { getFirmData } from '../../actions/firmActions'
-import { AuthContext } from "../../context/auth-context"
+import { logout } from "../../actions/contextActions"
 
 const FirmItem = () => {
-    const auth = useContext(AuthContext)
     const navigation = useNavigation()
     const dispatch = useDispatch()
 
     const refresh = useSelector(state => state.util.refresh)
     const fetchedData = useSelector(state => state.firm)
     const userRole = useSelector(state => state.context.userRole)
+    const userId = useSelector(state => state.context.userId)
 
     const [isLoaded, setIsLoaded] = useState(false)
-
+    const [image, setImage] = useState(fetchedData.profileImg?.data);
     // console.log('Stored as Profile:', fetchedData);
 
     useEffect(() => {
-        const fetcheFirm = async () => {
+        const fetchFirm = async () => {
             try {
-                const response = await axios.get(`http://192.168.178.96:8000/api/firm/profile/${auth.userId}`)
+                const response = await axios.get(`http://192.168.178.96:8000/api/firm/profile/${userId}`)
                 dispatch(getFirmData(response.data));
                 // console.log('Goten:',response.data); 
+  
                 setIsLoaded(true)
 
             } catch (err) {
                 console.log("Error if fetching firm profile", err);
             }
         }
-        fetcheFirm()
+        fetchFirm()
     }, [dispatch, refresh])
+
+    useEffect(() => {
+        if (fetchedData.profileImg && fetchedData.profileImg.data) {
+            const base64Image = `data:${fetchedData.profileImg.contentType};base64,${fetchedData.profileImg.data}`;
+            setImage(base64Image);
+        }
+        
+    }, [fetchedData.profileImg])
 
 
     const logoutHandler = async () => {
@@ -49,7 +58,7 @@ const FirmItem = () => {
                 {
                     text: 'Ausloggen',
                     onPress: () => {
-                        auth.logout()
+                        dispatch(logout())
                         navigation.navigate('onboarding')
                     },
                 },
@@ -59,11 +68,15 @@ const FirmItem = () => {
     };
 
 
+
     return <>
 
         <TouchableOpacity style={styles.firmContainer} onPress={() => navigation.navigate('profile')}>
             <View style={styles.imageContainer} >
-                <Image style={styles.img} source={require('../../../assets/firmImage.jpeg')} ></Image>
+                <Image
+                    style={styles.img}
+                    source={image ? { uri: image } : require('../../../assets/firmImage.jpeg')} >
+                </Image>
             </View>
 
             <View style={styles.nameContainer} >
@@ -109,11 +122,14 @@ const styles = StyleSheet.create({
         flexDirection: 'row'
     },
     imageContainer: {
-        justifyContent: 'center'
+        justifyContent: 'center', 
+
     },
     img: {
         width: 48,
-        height: 48
+        height: 48,
+        borderRadius: 50
+        
     },
     nameContainer: {
         paddingLeft: 16,

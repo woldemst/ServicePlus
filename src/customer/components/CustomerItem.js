@@ -1,30 +1,32 @@
 import { View, Text, StyleSheet, Image, TouchableOpacity, Alert } from "react-native"
-import { useContext, useState } from "react"
+import { useEffect, useState } from "react"
 import { useNavigation } from "@react-navigation/native"
 import { useDispatch, useSelector } from "react-redux"
 import { SwipeListView } from "react-native-swipe-list-view";
 import axios from "axios"
 
-import { AuthContext } from "../../context/auth-context"
+
 import { deleteCustomer } from "../../actions/customerActions"
 
 const CustomerItem = (props) => {
     const customerId = props.id
-    const auth = useContext(AuthContext)
     const navigation = useNavigation()
     const dispatch = useDispatch()
 
     const firmId = useSelector(state => state.context.firmId)
     const userRole = useSelector(state => state.context.userRole)
+    const customersArray = useSelector(state => state.customer.customersArray.customers)
+    const customer = customersArray.find(customer => customer._id === customerId);
 
-    const [isSelected, setIsSelected] = useState(false)
+    const [image, setImage] = useState('');
 
-    // const longPressHandler = () => {
-    //     setIsSelected(!isSelected)
-    // }
+    useEffect(() => {
+        if (customer.profileImg && customer.profileImg.data) {
+            const base64Image = `data:${customer.profileImg.contentType};base64,${customer.profileImg.data.toString('base64')}`;
+            setImage(base64Image);
+        }
+    }, [customer.profileImg])
 
-
-    // console.log(auth);
     const deleteHandler = async () => {
         Alert.alert(
             'Delete Confirmation',
@@ -65,7 +67,10 @@ const CustomerItem = (props) => {
 
                     <View style={styles.imgContainer} >
                         <View style={styles.imgSet}>
-                            <Image style={styles.img} source={require('../../../assets/customer/customer.png')} />
+                            <Image
+                                style={styles.img}
+                                source={image ? { uri: image } : require('../../../assets/customer/customer.png')}
+                            />
                         </View>
                     </View>
                     <View style={styles.nameContainer} >
@@ -113,7 +118,7 @@ const styles = StyleSheet.create({
     imgSet: {
         backgroundColor: '#7a9b76',
         borderRadius: 50,
-        padding: 10
+        // padding: 10
     },
     textContainer: {
 
@@ -142,8 +147,10 @@ const styles = StyleSheet.create({
         justifyContent: 'center'
     },
     img: {
-        width: 24,
-        height: 24
+        width: 34,
+        height: 34,
+        // borderWidth: 1,
+        borderRadius: 50
     },
     nameContainer: {
         paddingLeft: 16,

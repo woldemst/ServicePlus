@@ -1,21 +1,23 @@
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image } from "react-native";
-import { useContext, useEffect, useState } from "react"
+import { useEffect, useState } from "react"
 import { useNavigation } from "@react-navigation/native";
-import { AuthContext } from "../../context/auth-context";
+import { useSelector } from "react-redux";
 
 const WorkerProfile = (props) => {
-    const auth = useContext(AuthContext)
+    const userId = useSelector(state => state.context.userId)
 
+    const workersArray = useSelector(state => state.worker.workersArray.workers)
+    const worker = workersArray.find(worker => worker._id == userId)
     const navigation = useNavigation()
     return (
-        <TouchableOpacity style={styles.container} onPress={() => { navigation.navigate('workerDetails', { id: auth.userId })}}>
+        <TouchableOpacity style={styles.container} onPress={() => { navigation.navigate('workerDetails', { id: userId }) }}>
             <View style={styles.content}>
                 <View style={styles.imgContainer} >
                     <View style={styles.imgSet}>
                         <Image style={styles.img} source={require('../../../assets/customer/customer.png')} />
                     </View>
                 </View>
-                <View style={styles.nameContainer} >    
+                <View style={styles.nameContainer} >
                     <Text style={styles.customerName}>Profile</Text>
                 </View>
             </View>

@@ -1,23 +1,21 @@
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, ScrollView } from "react-native";
-import { useContext, useEffect, useState } from "react";
-import { clearCustomerField, createCustomer, getCustomerData } from "../../actions/customerActions";
+import { useEffect, useState } from "react";
 import { useNavigation } from "@react-navigation/native";
-import { AuthContext } from "../../context/auth-context";
-import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
-import Input from "../../shared/UIElements/Input";
+import axios from "axios";
+
 import { VALIDATOR_EMAIL, VALIDATOR_REQUIRE } from "../../util/validators";
 import { refershData } from "../../actions/utilActions";
+import Input from "../../shared/UIElements/Input";
 
 
 const CreateCustomer = (props) => {
-  const [isLoaded, setIsLoaded] = useState(false)
-
-  const auth = useContext(AuthContext)
   const dispatch = useDispatch()
   const navigation = useNavigation()
 
   const firmId = useSelector(state => state.context.firmId)
+
+  const [isLoaded, setIsLoaded] = useState(false)
 
   const [formData, setFormData] = useState({
     name: '',

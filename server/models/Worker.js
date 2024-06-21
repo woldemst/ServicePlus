@@ -13,6 +13,7 @@ const workerSchema = new mongoose.Schema({
   phone: { type: String },
   description: { type: String },
   // orders: { type: Array, required: false },
+  profileImg: { data: Buffer, contentType: String },
 
 
 });

@@ -6,7 +6,7 @@ const firmController = require("../controllers/firm-controller")
 const fileUpload = require("../middlewares/file-upload");
 
 router.post('/register', firmController.register)
-router.patch('/update/:firmId', fileUpload.single('image'), firmController.updateFirm)
+router.patch('/update/:firmId', fileUpload.single('avatar'), firmController.updateFirm)
 router.get('/profile/:userId', firmController.getFirmByUserId)
 
 module.exports = router; 

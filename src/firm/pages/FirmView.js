@@ -1,20 +1,15 @@
 import { View, Text, StyleSheet } from "react-native"
-
-import FirmItem from "../components/FirmItem"
-
-import { useContext, useState, useEffect } from "react"
-import { AuthContext } from "../../context/auth-context"
+import { useState, useEffect } from "react"
 import CreateSuggest from "./CreateSuggest"
 import JoinFirm from "../../worker/pages/JoinFirm"
 import { useSelector } from "react-redux"
 
-const FirmView = () => {
-    const auth = useContext(AuthContext)
+import FirmItem from "../components/FirmItem"
 
+const FirmView = () => {
     const userRole = useSelector(state => state.context.userRole)
     const refresh = useSelector(state => state.util.refresh)
     const firmId = useSelector(state => state.context.firmId)
-
     const [content, setContent] = useState(null);
 
     useEffect(() => {

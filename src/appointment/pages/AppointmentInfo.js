@@ -6,14 +6,12 @@ import { refershData } from "../../actions/utilActions";
 import { Alert } from "react-native";
 
 import Button from "../../shared/UIElements/Button";
-import { AuthContext } from "../../context/auth-context";
 
 
 
 const AppointmentInfo = props => {
-    const auth = useContext(AuthContext)
     const dispatch = useDispatch()
-
+    const userId = useSelector(state => state.context.userId)
 
     const appointments = useSelector(state => state.appointment.appointmentsArray.appointments)
     const showArchived = useSelector(state => state.appointment.showArchived)
@@ -60,13 +58,13 @@ const AppointmentInfo = props => {
 
     };
 
-    // console.log(auth);
+
 
     const disabledButton = () => {
         if (userRole) {
             return showArchived
         }
-        return !props.workers.includes(auth.userId) || (props.status == '3' || props.status == '4')
+        return !props.workers.includes(userId) || (props.status == '3' || props.status == '4')
 
     }
 

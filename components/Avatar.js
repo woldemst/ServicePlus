@@ -3,6 +3,7 @@ import { useEffect, useState, useRef } from "react";
 import * as ImagePicker from 'expo-image-picker';
 
 
+
 const Avatar = (props) => {
     const [selectedImage, setSelectedImage] = useState(null);
 
@@ -33,7 +34,7 @@ const Avatar = (props) => {
     return (
         <TouchableOpacity onPress={pickImageHandler} disabled={props.isEdit} style={[styles.container, props.style]}>
             <View style={styles.frame}>
-                <Image source={selectedImage ? { uri: selectedImage } : props.source} style={styles.img} />
+                <Image source={selectedImage  ? { uri: selectedImage } : props.source} style={styles.img} />
             </View>
         </TouchableOpacity>
     );
