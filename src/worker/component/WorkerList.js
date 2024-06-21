@@ -49,47 +49,58 @@ const WorkerList = () => {
     // Filetering worker's data based on userRole.userId and workerId
     const filteredData = fetchedData.workers.filter(worker => worker._id !== userRole.userId)
 
-    return fetchedData.workers.length === 0 ? (
-        <>
-            <View style={styles.suggestContainer}>
-                <Text style={styles.addText}>Noch kein Mitarbeiter</Text>
-                <View style={styles.centeredImageContainer}>
-                    <TouchableOpacity onPress={toggleModal}>
-                        <Image style={styles.addImg} source={require('../../../assets/firm/add.png')} />
-                    </TouchableOpacity>
-                </View>
-            </View>
-
-            <ModalComponent
-                isVisible={isModalVisible}
-                animationIn="slideInUp" // Specify the slide-up animation
-                animationOut="slideOutDown" // Specify the slide-down animation
-                onBackdropPress={toggleModal}
-                onBackButtonPress={toggleModal}
-                header={<Text style={styles.modalHeadline}>Miterbeiter hinzufügen</Text>}
-            >
-                <WorkerCreate toggle={toggleModal} />
-            </ModalComponent>
-        </>
-    ) : (
-        <>
-            <View style={styles.container}>
-                <View style={styles.header} >
-                    <View style={styles.headerContent}>
-                        <View style={styles.textContainer} >
-                            <Text style={styles.headerText}>Mitarbeiter</Text>
-                        </View>
-                        {userRole && (
-                            <View style={styles.headerIconContainer} >
-                                <TouchableOpacity style={styles.headerButton} onPress={toggleModal}>
-                                    <Image style={styles.headerIcon} source={require('../../../assets/customer/user_plus.png')} />
-                                </TouchableOpacity>
-                            </View>
-                        )}
-
+    const EmptyWorkerList = ({ isModalVisible, toggleModal }) => {
+        return (
+            <>
+                <View style={styles.suggestContainer}>
+                    <Text style={styles.addText}>Noch kein Mitarbeiter</Text>
+                    <View style={styles.centeredImageContainer}>
+                        <TouchableOpacity onPress={toggleModal}>
+                            <Image style={styles.addImg} source={require('../../../assets/firm/add.png')} />
+                        </TouchableOpacity>
                     </View>
                 </View>
 
+                <ModalComponent
+                    isVisible={isModalVisible}
+                    animationIn="slideInUp" // Specify the slide-up animation
+                    animationOut="slideOutDown" // Specify the slide-down animation
+                    onBackdropPress={toggleModal}
+                    onBackButtonPress={toggleModal}
+                    header={<Text style={styles.modalHeadline}>Miterbeiter hinzufügen</Text>}
+                >
+                    <WorkerCreate toggle={toggleModal} />
+                </ModalComponent>
+            </>
+        )
+    }
+
+    if (!isLoaded) {
+        return <ActivityIndicator style={styles.loader} size="large" color="#7A9B76" />
+    } else if (fetchedData.workers.length === 0) {
+        return <EmptyWorkerList isModalVisible={isModalVisible} toggleModal={toggleModal} />
+    }
+
+    return (
+        <>
+            <View style={styles.container}>
+                <View style={styles.header}>
+                    <View style={styles.headerContent}>
+                        <View style={styles.textContainer}>
+                            <Text style={styles.headerText}>Mitarbeiter</Text>
+                        </View>
+                        {userRole && (
+                            <View style={styles.headerIconContainer}>
+                                <TouchableOpacity style={styles.headerButton} onPress={toggleModal}>
+                                    <Image
+                                        style={styles.headerIcon}
+                                        source={require("../../../assets/customer/user_plus.png")}
+                                    />
+                                </TouchableOpacity>
+                            </View>
+                        )}
+                    </View>
+                </View>
                 {!userRole && (
                     <View style={styles.workerProfileConainer}>
                         <WorkerProfile />
@@ -97,36 +108,31 @@ const WorkerList = () => {
                 )}
 
                 <View style={styles.workerList}>
-                    {!isLoaded ? (
-                        <ActivityIndicator style={styles.loader} size="large" color="#7A9B76" />
-
-                    ) : (
-                        <FlatList
-                            refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
-                            showsVerticalScrollIndicator={false}
-                            style={styles.scroll}
-                            data={!userRole ? filteredData : fetchedData.workers}
-                            keyExtractor={item => item._id}
-                            renderItem={({ item }) => (
-                                <WorkerItem
-                                    id={item._id}
-                                    // key={item._id}
-                                    workerNr={item._id}
-                                    name={item.name}
-                                    email={item.email}
-                                    phone={item.phone}
-                                    description={item.description}
-                                    // nextAppointment
-                                    street={item.street}
-                                    houseNr={item.houseNr}
-                                    zip={item.zip}
-                                    place={item.place}
-                                />
-                            )}
-                        />
-                    )}
+                    <FlatList
+                        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
+                        showsVerticalScrollIndicator={false}
+                        style={styles.scroll}
+                        data={!userRole ? filteredData : fetchedData.workers}
+                        keyExtractor={item => item._id}
+                        renderItem={({ item }) => (
+                            <WorkerItem
+                                id={item._id}
+                                // key={item._id}
+                                workerNr={item._id}
+                                name={item.name}
+                                email={item.email}
+                                phone={item.phone}
+                                description={item.description}
+                                // nextAppointment
+                                street={item.street}
+                                houseNr={item.houseNr}
+                                zip={item.zip}
+                                place={item.place}
+                            />
+                        )}
+                    />
                 </View>
-            </View>
+            </View >
 
             <ModalComponent
                 isVisible={isModalVisible}

@@ -26,7 +26,7 @@ const Avatar = (props) => {
             const compressedImage = await ImageManipulator.manipulateAsync(
                 result.assets[0].uri,
                 [],
-                { compress: 0.7 } // Adjust the compression ratio as needed
+                { compress: 0.5 } // Adjust the compression ratio as needed
             );
             setSelectedImage(compressedImage.uri);
             props.onImagePicked(compressedImage.uri);
@@ -82,3 +82,4 @@ const styles = StyleSheet.create({
 });
 
 export default Avatar;
+
