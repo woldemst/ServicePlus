@@ -1,7 +1,7 @@
 import { Image, View, StyleSheet, TouchableOpacity } from 'react-native';
 import { useEffect, useState, useRef } from "react";
 import * as ImagePicker from 'expo-image-picker';
-
+import * as ImageManipulator from 'expo-image-manipulator';
 
 
 const Avatar = (props) => {
@@ -23,12 +23,16 @@ const Avatar = (props) => {
         });
 
         if (!result.canceled) {
-            setSelectedImage(result.assets[0].uri);
-            props.onImagePicked(result.assets[0].uri);
+            const compressedImage = await ImageManipulator.manipulateAsync(
+                result.assets[0].uri,
+                [],
+                { compress: 0.7 } // Adjust the compression ratio as needed
+            );
+            setSelectedImage(compressedImage.uri);
+            props.onImagePicked(compressedImage.uri);
         }
-
+        
     } 
-
 
 
     return (
