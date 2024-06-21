@@ -23,7 +23,7 @@ const Register = () => {
         name: '',
         email: '',
         password: '',
-        admin: null,
+        admin: false,
     })
 
     useEffect(() => {
@@ -41,6 +41,7 @@ const Register = () => {
                 password: formData.password,
                 admin: formData.admin
             });
+
 
             if (response.status === 201) {
                 dipatch(loginSucces({

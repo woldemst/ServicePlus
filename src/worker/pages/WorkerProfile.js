@@ -8,6 +8,8 @@ const WorkerProfile = (props) => {
 
     const workersArray = useSelector(state => state.worker.workersArray.workers)
     const worker = workersArray.find(worker => worker._id == userId)
+
+
     const navigation = useNavigation()
     return (
         <TouchableOpacity style={styles.container} onPress={() => { navigation.navigate('workerDetails', { id: userId }) }}>

@@ -61,7 +61,6 @@ const updateWorkerById = async (req, res, next) => {
     const workerId = req.params.workerId;
     const firmId = req.params.firmId;
 
-    console.log(req.body);
     const {
         workerNr,
         name,
@@ -117,6 +116,7 @@ const updateWorkerById = async (req, res, next) => {
 
 const createWorker = async (req, res, next) => {
     const {
+        admin, 
         firmId,
         name,
         email,
@@ -136,7 +136,7 @@ const createWorker = async (req, res, next) => {
 
     const createWorker = new Worker({
         firmId: firmId,
-        // workerNr: workerNr,
+        admin: firmId ? false : admin,
         name: name,
         email: email,
         password: hashedTempPassword,
@@ -150,7 +150,6 @@ const createWorker = async (req, res, next) => {
             data: fs.readFileSync(path.join(__dirname, '../../assets/worker/worker_avatar.jpg')), // adjust path as needed
             contentType: 'image/jpg', // or the type of your default image
         }
-
 
     })
 

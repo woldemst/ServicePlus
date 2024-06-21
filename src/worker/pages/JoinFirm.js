@@ -38,7 +38,7 @@ const JoinFirm = props => {
             const response = await axios.post(URL)
             alert("Erfolgreich beigetreten!");
             // console.log('response', response.data)
-            console.log(firmId, 'before dispatch');
+            // console.log(firmId, 'before dispatch');
             dispatch(updateFirmId(response.data.firmId))
             dispatch(refershData())
             setIsLoaded(true)
