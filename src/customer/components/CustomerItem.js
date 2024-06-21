@@ -14,7 +14,7 @@ const CustomerItem = (props) => {
     const dispatch = useDispatch()
 
     const firmId = useSelector(state => state.context.firmId)
-    const userRole = useSelector(state => state.context.userRole)
+    const admin = useSelector(state => state.context.admin)
     const customersArray = useSelector(state => state.customer.customersArray.customers)
     const customer = customersArray.find(customer => customer._id === customerId);
 
@@ -94,7 +94,7 @@ const CustomerItem = (props) => {
             rightOpenValue={-75}
             // leftOpenValue={75}
             disableRightSwipe={true}
-            disableLeftSwipe={!userRole}
+            disableLeftSwipe={!admin}
             closeOnRowOpen={true}
             data={[props]}
             renderHiddenItem={(data, rowMap) => (

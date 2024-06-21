@@ -16,7 +16,7 @@ const AppointmentInfo = props => {
     const appointments = useSelector(state => state.appointment.appointmentsArray.appointments)
     const showArchived = useSelector(state => state.appointment.showArchived)
     const appointmentItem = appointments.find(appointment => appointment._id == props.id)
-    const userRole = useSelector(state => state.context.userRole)
+    const admin = useSelector(state => state.context.admin)
 
     const [edit, setEdit] = useState(false);
     const [activeStatus, setActiveStatus] = useState(props.status);
@@ -61,7 +61,7 @@ const AppointmentInfo = props => {
 
 
     const disabledButton = () => {
-        if (userRole) {
+        if (admin) {
             return showArchived
         }
         return !props.workers.includes(userId) || (props.status == '3' || props.status == '4')

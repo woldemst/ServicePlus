@@ -15,7 +15,7 @@ const CustomerList = () => {
     const refresh = useSelector(state => state.util.refresh)
     const fetchedData = useSelector(state => state.customer.customersArray)
     const firmId = useSelector(state => state.context.firmId)
-    const userRole = useSelector(state => state.context.userRole)
+    const admin = useSelector(state => state.context.admin)
 
     const [isLoaded, setisLoaded] = useState(false)
     const [isModalVisible, setModalVisible] = useState(false);
@@ -90,7 +90,7 @@ const CustomerList = () => {
                             <Text style={styles.headerText}>Kunden</Text>
                         </View>
 
-                        {userRole && (
+                        {admin && (
                             <View style={styles.headerIconContainer} >
                                 <TouchableOpacity style={styles.headerButton} onPress={toggleModal}>
                                     <Image style={styles.headerIcon} source={require('../../../assets/customer/user_plus.png')} />

@@ -14,7 +14,7 @@ const WorkerItem = (props) => {
     const dispatch = useDispatch()
 
     const firmId = useSelector(state => state.context.firmId)
-    const userRole = useSelector(state => state.context.userRole)
+    const admin = useSelector(state => state.context.admin)
 
     const workersArray = useSelector(state => state.worker.workersArray.workers)
     const worker = workersArray.find(worker => worker._id === workerId);
@@ -90,7 +90,7 @@ const WorkerItem = (props) => {
             rightOpenValue={-75}
             // leftOpenValue={75}
             disableRightSwipe={true}
-            disableLeftSwipe={!userRole}
+            disableLeftSwipe={!admin}
             closeOnRowOpen={true}
             data={[props]}
             renderHiddenItem={(data, rowMap) => (

@@ -17,7 +17,7 @@ const CustomerDetails = (props) => {
 
     const firmId = useSelector(state => state.context.firmId)
     const customersArray = useSelector((state) => state.customer.customersArray.customers);
-    const userRole = useSelector(state => state.context.userRole)
+    const admin = useSelector(state => state.context.admin)
 
     const customer = customersArray.find(customer => customer._id == customerId)
     // console.log(customer);
@@ -208,7 +208,7 @@ const CustomerDetails = (props) => {
                                 textArea={true}
                             />
 
-                            {userRole && (
+                            {admin && (
                                 <View style={styles.btnContainer}>
                                     {!isEdit ? (
                                         <Button

@@ -20,7 +20,7 @@ const OrderView = () => {
 
     const fetchedData = useSelector((state) => state.order.ordersArray);
     const showArchivedOrders = useSelector(state => state.order.showArchivedOrders)
-    const userRole = useSelector(state => state.context.userRole)
+    const admin = useSelector(state => state.context.admin)
 
     const [isModalVisible, setModalVisible] = useState(false);
 
@@ -35,12 +35,12 @@ const OrderView = () => {
                     <Text style={styles.headerText}>{fetchedData.orders.length === 0 ? 'Noch keinen Auftrag?' : ['Aufträge ', showArchivedOrders && '(archiviert)']}</Text>
                 </View>
 
-                <View style={[styles.headerIconContainer, { justifyContent: userRole ? 'space-between' : 'flex-end' }]} >
+                <View style={[styles.headerIconContainer, { justifyContent: admin ? 'space-between' : 'flex-end' }]} >
                     <TouchableOpacity style={styles.headerButton} >
                         <Image style={styles.headerIcon} source={require('../../../assets/filter.png')} />
                     </TouchableOpacity>
 
-                    {userRole && (
+                    {admin && (
                         <TouchableOpacity disabled={showArchivedOrders} style={styles.headerButton} onPress={toggleModal} >
                             <Image style={styles.headerIcon} source={require('../../../assets/add_new.png')} />
                         </TouchableOpacity>

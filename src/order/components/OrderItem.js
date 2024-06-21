@@ -24,7 +24,7 @@ const OrderItem = (props) => {
   const orders = useSelector(state => state.order.ordersArray.orders)
   const showArchivedOrders = useSelector(state => state.order.showArchivedOrders)
   const orderItem = orders.find(order => order._id == orderId)
-  const userRole = useSelector(state => state.context.userRole)
+  const admin = useSelector(state => state.context.admin)
 
   const [isModalVisible, setModalVisible] = useState(false);
   // const [modalPosition, setModalPosition] = useState({ x: 0, y: 0 });
@@ -114,7 +114,7 @@ const OrderItem = (props) => {
       renderItem={renderItem}
       rightOpenValue={-75}
       // leftOpenValue={75}
-      disableLeftSwipe={!userRole}
+      disableLeftSwipe={!admin}
       disableRightSwipe={true}
       closeOnRowOpen={true}
       data={[props]}

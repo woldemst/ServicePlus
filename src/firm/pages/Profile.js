@@ -4,7 +4,7 @@ import {
   ScrollView,
   ActivityIndicator
 } from "react-native";
-import { useEffect, useState, useCallback} from "react";
+import { useEffect, useState, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 
@@ -22,7 +22,7 @@ const Profile = (props) => {
 
   const fetchedData = useSelector(state => state.firm)
   const firmId = useSelector(state => state.context.firmId)
-  const userRole = useSelector(state => state.context.userRole)
+  const admin = useSelector(state => state.context.admin)
 
   const [isLoaded, setIsLoaded] = useState(false)
   const [isEdit, setIsEdit] = useState(false)
@@ -34,7 +34,7 @@ const Profile = (props) => {
   useEffect(() => setIsLoaded(true), []);
 
   useEffect(() => {
-    
+
     // Function to convert binary image data to base64 URI
     const convertBinaryToBase64 = () => {
       if (fetchedData.profileImg && fetchedData.profileImg.data) {
@@ -202,7 +202,7 @@ const Profile = (props) => {
               onChangeText={(text) => setFormData(prevState => ({ ...prevState, website: text }))}
             />
 
-            {userRole && (
+            {admin && (
               <View style={styles.btnContainer}>
                 {!isEdit ? (
                   <Button

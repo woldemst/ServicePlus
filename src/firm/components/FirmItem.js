@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, Image, TouchableOpacity, Alert} from "react-native"
+import { View, Text, StyleSheet, Image, TouchableOpacity, Alert } from "react-native"
 import { useEffect, useState, useContext } from "react"
 import { useNavigation } from '@react-navigation/native'
 import { useRoute } from "@react-navigation/native"
@@ -14,7 +14,7 @@ const FirmItem = () => {
 
     const refresh = useSelector(state => state.util.refresh)
     const fetchedData = useSelector(state => state.firm)
-    const userRole = useSelector(state => state.context.userRole)
+    const admin = useSelector(state => state.context.admin)
     const userId = useSelector(state => state.context.userId)
 
     const [isLoaded, setIsLoaded] = useState(false)
@@ -27,7 +27,7 @@ const FirmItem = () => {
                 const response = await axios.get(`http://192.168.178.96:8000/api/firm/profile/${userId}`)
                 dispatch(getFirmData(response.data));
                 // console.log('Goten:',response.data); 
-  
+
                 setIsLoaded(true)
 
             } catch (err) {
@@ -42,7 +42,7 @@ const FirmItem = () => {
             const base64Image = `data:${fetchedData.profileImg.contentType};base64,${fetchedData.profileImg.data}`;
             setImage(base64Image);
         }
-        
+
     }, [fetchedData.profileImg])
 
 
@@ -93,12 +93,12 @@ const FirmItem = () => {
         <View style={styles.listContainer} >
             <TouchableOpacity style={styles.listItem} onPress={() => navigation.navigate('workerList')}>
                 <Image style={styles.icon} source={require('../../../assets/firm/customer.png')} />
-                <Text style={styles.itemText}>{userRole ? 'Mitarbeiter verwalten' : 'Mitarbeiter'}</Text>
+                <Text style={styles.itemText}>{admin ? 'Mitarbeiter verwalten' : 'Mitarbeiter'}</Text>
             </TouchableOpacity>
 
             <TouchableOpacity style={styles.listItem} onPress={() => navigation.navigate('customerList')}>
                 <Image style={styles.icon} source={require('../../../assets/firm/worker.png')} />
-                <Text style={styles.itemText}>{userRole ? 'Kunden verwalten' : 'Kunden'}</Text>
+                <Text style={styles.itemText}>{admin ? 'Kunden verwalten' : 'Kunden'}</Text>
             </TouchableOpacity>
 
             <TouchableOpacity style={styles.listItem}>
@@ -122,14 +122,14 @@ const styles = StyleSheet.create({
         flexDirection: 'row'
     },
     imageContainer: {
-        justifyContent: 'center', 
+        justifyContent: 'center',
 
     },
     img: {
         width: 48,
         height: 48,
         borderRadius: 50
-        
+
     },
     nameContainer: {
         paddingLeft: 16,

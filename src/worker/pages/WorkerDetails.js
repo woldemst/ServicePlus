@@ -20,7 +20,7 @@ const WorkerDetails = props => {
     const firmId = useSelector(state => state.context.firmId)
     const workersArr = useSelector(state => state.worker.workersArray.workers)
     const worker = workersArr.find(worker => worker._id == workerId)
-    const userRole = useSelector(state => state.context.userRole)
+    const admin = useSelector(state => state.context.admin)
     const userId = useSelector(state => state.context.userId)
 
     const [isLoaded, setIsLoaded] = useState(false)
@@ -99,11 +99,11 @@ const WorkerDetails = props => {
             })
 
             setIsEdit(false)
-            dispatch(refershData())
             window.alert('Profile aktualisiert!')
         } catch (err) {
             console.log("Error while updating worker's profile", err);
         } finally {
+            dispatch(refershData())
             setIsUploading(false)
         }
     }
@@ -215,7 +215,7 @@ const WorkerDetails = props => {
                             />
 
 
-                            {(!userRole && userId === workerId) && (
+                            {(!admin && userId === workerId) && (
                                 <View style={styles.passwortBtnContainer}>
                                     <Button
                                         style={isEdit ? [styles.passwordBtn, styles.button] : [styles.invalidePasswordButton, styles.button]}
@@ -227,7 +227,7 @@ const WorkerDetails = props => {
                                 </View>
                             )}
 
-                            {userRole || userId === workerId ? (
+                            {admin || userId === workerId ? (
                                 <View style={styles.btnContainer}>
                                     <Button
                                         style={isEdit ? [styles.createBtn, styles.button] : [styles.invalideButton, styles.button]}

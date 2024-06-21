@@ -24,7 +24,7 @@ import OrderAppointments from './src/order/pages/OrderAppointments';
 import AppointmentMain from './src/appointment/pages/AppointmentMain';
 import WorkerDetails from './src/worker/pages/WorkerDetails';
 import ResetPassword from './src/auth/pages/ResetPassword';
-import { setUserRole, updateFirmId } from './src/actions/contextActions';
+
 
 
 const Main = () => {

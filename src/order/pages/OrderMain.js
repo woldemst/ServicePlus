@@ -28,7 +28,7 @@ const OrderMain = (props) => {
     const order = fetchedArray.find(order => order._id == orderId)
     const edit = useSelector(state => state.order.edit);
     const showArchivedOrders = useSelector(state => state.order.showArchivedOrders);
-    const userRole = useSelector(state => state.context.userRole)
+    const admin = useSelector(state => state.context.admin)
 
     const [isLoaded, setIsLoaded] = useState(false)
     const [activeTab, setActiveTab] = useState(0);
@@ -63,7 +63,7 @@ const OrderMain = (props) => {
                         />
                     </View>
                     <View style={styles.editBtnContainer}>
-                        {(userRole && !showArchivedOrders && activeTab == 0) && (
+                        {(admin && !showArchivedOrders && activeTab == 0) && (
                             <TouchableOpacity onPress={() => dispatch(toggleEdit(!edit))}>
                                 <Image source={require('../../../assets/order/edit.png')} />
                             </TouchableOpacity>

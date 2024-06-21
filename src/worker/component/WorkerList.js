@@ -16,7 +16,8 @@ const WorkerList = () => {
     const firmId = useSelector(state => state.context.firmId)
     const refresh = useSelector(state => state.util.refresh)
     const fetchedData = useSelector(state => state.worker.workersArray)
-    const userRole = useSelector(state => state.context.userRole)
+    const admin = useSelector(state => state.context.admin)
+    const userId = useSelector(state => state.context.userId)
 
     const [isLoaded, setisLoaded] = useState(false)
     const [isModalVisible, setModalVisible] = useState(false);
@@ -46,8 +47,8 @@ const WorkerList = () => {
         fetchWorkers()
     }, [refresh, refreshing])
 
-    // Filetering worker's data based on userRole.userId and workerId
-    const filteredData = fetchedData.workers.filter(worker => worker._id !== userRole.userId)
+    // Filetering worker's data based on userId and workerId
+    const filteredData = fetchedData.workers.filter(worker => worker._id !== userId)
 
     const EmptyWorkerList = ({ isModalVisible, toggleModal }) => {
         return (
@@ -89,7 +90,7 @@ const WorkerList = () => {
                         <View style={styles.textContainer}>
                             <Text style={styles.headerText}>Mitarbeiter</Text>
                         </View>
-                        {userRole && (
+                        {admin && (
                             <View style={styles.headerIconContainer}>
                                 <TouchableOpacity style={styles.headerButton} onPress={toggleModal}>
                                     <Image
@@ -102,7 +103,7 @@ const WorkerList = () => {
                     </View>
                 </View>
 
-                {!userRole && (
+                {!admin && (
                     <View style={styles.workerProfileConainer}>
                         <WorkerProfile />
                     </View>
@@ -113,7 +114,7 @@ const WorkerList = () => {
                         refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
                         showsVerticalScrollIndicator={false}
                         style={styles.scroll}
-                        data={!userRole ? filteredData : fetchedData.workers}
+                        data={!admin ? filteredData : fetchedData.workers}
                         keyExtractor={item => item._id}
                         renderItem={({ item }) => (
                             <WorkerItem

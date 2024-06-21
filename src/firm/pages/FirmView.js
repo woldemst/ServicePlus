@@ -7,7 +7,7 @@ import { useSelector } from "react-redux"
 import FirmItem from "../components/FirmItem"
 
 const FirmView = () => {
-    const userRole = useSelector(state => state.context.userRole)
+    const admin = useSelector(state => state.context.admin)
     const refresh = useSelector(state => state.util.refresh)
     const firmId = useSelector(state => state.context.firmId)
     const [content, setContent] = useState(null);
@@ -15,7 +15,7 @@ const FirmView = () => {
     useEffect(() => {
         const renderContent = () => {
             if (!firmId) {
-                return !userRole ? <JoinFirm /> : <CreateSuggest />
+                return !admin ? <JoinFirm /> : <CreateSuggest />
             }
             return <FirmItem />
         }
