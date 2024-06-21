@@ -31,14 +31,13 @@ const Avatar = (props) => {
             setSelectedImage(compressedImage.uri);
             props.onImagePicked(compressedImage.uri);
         }
-        
-    } 
+    }
 
 
     return (
         <TouchableOpacity onPress={pickImageHandler} disabled={props.isEdit} style={[styles.container, props.style]}>
             <View style={styles.frame}>
-                <Image source={selectedImage  ? { uri: selectedImage } : props.source} style={styles.img} />
+                <Image source={selectedImage ? { uri: selectedImage } : props.source} style={styles.img} />
             </View>
         </TouchableOpacity>
     );

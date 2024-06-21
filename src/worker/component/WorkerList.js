@@ -101,6 +101,7 @@ const WorkerList = () => {
                         )}
                     </View>
                 </View>
+
                 {!userRole && (
                     <View style={styles.workerProfileConainer}>
                         <WorkerProfile />
@@ -117,7 +118,6 @@ const WorkerList = () => {
                         renderItem={({ item }) => (
                             <WorkerItem
                                 id={item._id}
-                                // key={item._id}
                                 workerNr={item._id}
                                 name={item.name}
                                 email={item.email}

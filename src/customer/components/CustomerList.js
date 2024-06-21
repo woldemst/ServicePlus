@@ -47,33 +47,41 @@ const CustomerList = () => {
     }, [refresh, refreshing])
 
 
+    const EmptyCustomerList = ({ isModalVisible, toggleModal }) => {
+        return (
+            <>
+                <View style={styles.suggestContainer}>
+                    <Text style={styles.addText}>Noch kein Kunde</Text>
 
-
-    return fetchedData.customers.length === 0 ? (
-        <>
-            <View style={styles.suggestContainer}>
-                <Text style={styles.addText}>Noch kein Kunde</Text>
-
-                <View style={styles.centeredImageContainer}>
-                    <TouchableOpacity onPress={toggleModal}>
-                        <Image style={styles.addImg} source={require('../../../assets/firm/add.png')} />
-                    </TouchableOpacity>
+                    <View style={styles.centeredImageContainer}>
+                        <TouchableOpacity onPress={toggleModal}>
+                            <Image style={styles.addImg} source={require('../../../assets/firm/add.png')} />
+                        </TouchableOpacity>
+                    </View>
                 </View>
-            </View>
 
-            <ModalComponent
-                isVisible={isModalVisible}
-                animationIn="slideInUp" // Specify the slide-up animation
-                animationOut="slideOutDown" // Specify the slide-down animation
-                onBackdropPress={toggleModal}
-                onBackButtonPress={toggleModal}
-                header={<Text style={styles.modalHeadline}>Kunde hinzufügen</Text>}
-                modalHeight={'70%'}
-            >
-                <CreateCustomer toggle={toggleModal} />
-            </ModalComponent>
-        </>
-    ) : (
+                <ModalComponent
+                    isVisible={isModalVisible}
+                    animationIn="slideInUp" // Specify the slide-up animation
+                    animationOut="slideOutDown" // Specify the slide-down animation
+                    onBackdropPress={toggleModal}
+                    onBackButtonPress={toggleModal}
+                    header={<Text style={styles.modalHeadline}>Kunde hinzufügen</Text>}
+                    modalHeight={'70%'}
+                >
+                    <CreateCustomer toggle={toggleModal} />
+                </ModalComponent>
+            </>
+        )
+    }
+
+    if (!isLoaded) {
+        return <ActivityIndicator style={styles.loader} size="large" color="#7A9B76" />
+    } else if (fetchedData.customers.length === 0) {
+        return <EmptyCustomerList isModalVisible={isModalVisible} toggleModal={toggleModal} />
+    }
+
+    return (
         <>
             <View style={styles.container}>
                 <View style={styles.header} >
@@ -94,35 +102,31 @@ const CustomerList = () => {
                 </View>
 
                 <View style={styles.customerList}>
-                    {!isLoaded ? (
-                        <ActivityIndicator style={styles.loader} size="large" color="#7A9B76" />
-                    ) : (
-                        <FlatList
-                            refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
-                            showsVerticalScrollIndicator={false}
-                            style={styles.scroll}
-                            data={fetchedData.customers}
-                            keyExtractor={item => item._id}
-                            renderItem={({ item }) => (
-                                <CustomerItem
-                                    id={item._id}
-                                    // key={item._id}
-                                    name={item.name}
-                                    customerNr={item._id}
-                                    email={item.email}
-                                    worker={item.worker}
-                                    phone={item.phone}
-                                    // nextAppointment
-                                    description={item.description}
-                                    website={item.website}
-                                    street={item.street}
-                                    houseNr={item.houseNr}
-                                    zip={item.zip}
-                                    place={item.place}
-                                />
-                            )}
-                        />
-                    )}
+                    <FlatList
+                        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
+                        showsVerticalScrollIndicator={false}
+                        style={styles.scroll}
+                        data={fetchedData.customers}
+                        keyExtractor={item => item._id}
+                        renderItem={({ item }) => (
+                            <CustomerItem
+                                id={item._id}
+                                name={item.name}
+                                customerNr={item._id}
+                                email={item.email}
+                                worker={item.worker}
+                                phone={item.phone}
+                                // nextAppointment
+                                description={item.description}
+                                website={item.website}
+                                street={item.street}
+                                houseNr={item.houseNr}
+                                zip={item.zip}
+                                place={item.place}
+                            />
+                        )}
+                    />
+
                 </View>
             </View>
 
@@ -133,7 +137,6 @@ const CustomerList = () => {
                 onBackdropPress={toggleModal}
                 onBackButtonPress={toggleModal}
                 header={<Text style={styles.modalHeadline}>Kunde hinzufügen</Text>}
-            // modalHeight={'70%'}
             >
                 <CreateCustomer toggle={toggleModal} />
             </ModalComponent>
