@@ -4,7 +4,6 @@ import OnboardingNavigator from './src/onboarding/OnboardingNavigator';
 import { NavigationContainer } from '@react-navigation/native';
 import { useCallback, useEffect, useState, useContext } from 'react';
 import { Provider, useDispatch, useSelector } from 'react-redux';
-import { AuthContext } from './src/context/auth-context';
 import React from 'react';
 
 import CustomerList from './src/customer/components/CustomerList';
