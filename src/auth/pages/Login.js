@@ -1,12 +1,11 @@
 import {
     View,
-    KeyboardAvoidingView,
     Text,
-    TextInput,
     TouchableOpacity,
     StyleSheet,
     Alert,
     Platform,
+    KeyboardAvoidingView,
     TouchableWithoutFeedback,
     Keyboard
 } from "react-native";

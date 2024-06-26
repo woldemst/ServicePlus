@@ -1,9 +1,8 @@
 import React, { useState, useRef } from 'react';
 import { View, ScrollView, Text, TouchableOpacity, StyleSheet, PanResponder } from 'react-native';
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+
 import Modal from 'react-native-modal'
-
-
-
 
 const ModalComponent = (props) => {
   return (
@@ -21,14 +20,16 @@ const ModalComponent = (props) => {
         <View style={[styles.modalContainer, props.modalHeight && { height: props.modalHeight }]}>
           <View style={styles.modalHeader}>{props.header}</View>
 
-          <ScrollView
+          <KeyboardAwareScrollView
+            style={{ flex: 1 }}
+            // extraScrollHeight={100}
+            enableOnAndroid={false}
             showsVerticalScrollIndicator={false}
-            contentContainerStyle={styles.scrollViewContent}
           >
             <View style={styles.modalContent}>{props.children}</View>
 
             {props.footer && <View style={styles.modalFooter}>{props.footer}</View>}
-          </ScrollView>
+          </KeyboardAwareScrollView>
         </View>
 
       </Modal>
@@ -47,7 +48,8 @@ const styles = StyleSheet.create({
   modalContainer: {
     backgroundColor: '#fff',
     padding: 32,
-    borderRadius: 10,
+    borderTopLeftRadius: 10,
+    borderTopRightRadius: 10,
     width: '100%',
     position: 'absolute',
     bottom: 0,

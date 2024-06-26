@@ -3,10 +3,17 @@ import {
   Text,
   ActivityIndicator,
   StyleSheet,
+  KeyboardAvoidingView,
+  TouchableWithoutFeedback,
+  Keyboard,
+  ScrollView,
+  Platform
 } from "react-native";
 import { useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+
 
 import { VALIDATOR_REQUIRE, VALIDATOR_SELECT } from "../../util/validators";
 import { refershData } from "../../actions/utilActions";
@@ -99,7 +106,10 @@ const OrderCreate = (props) => {
   return !isLoaded ? (
     <ActivityIndicator style={styles.loader} size="large" color="#7A9B76" />
   ) : (
-    <View>
+
+
+    <View style={styles.inner}>
+
       <Text style={styles.label}>Auftragsname</Text>
 
       <Input
@@ -120,30 +130,6 @@ const OrderCreate = (props) => {
         validators={[VALIDATOR_SELECT()]}
         onValueChange={(option) => setFormData({ ...formData, selectedCustomer: option })}
       />
-
-      {/* <Text style={styles.label}>Mitarbeiter</Text>
-
-      <Select
-        multi={true}
-        search={false}
-        data={formData.workerOptions}
-        errorText="Please select a worker"
-        validators={[VALIDATOR_SELECT()]}
-        onValueChange={(option) => setFormData({ ...formData, selectedWorkers: option })}
-      /> */}
-
-      {/* <Text style={styles.label}>Ansprechspartner</Text>
-
-      <Select
-        search={false}
-        placeholder='Auswählen'
-        data={formData.contactOptions}
-        value={formData.selectedContact}
-        errorText="Please select a contact"
-        validators={[VALIDATOR_SELECT()]}
-        onValueChange={(text) => setFormData({ ...formData, selectedContact: text })}
-      /> */}
-
 
       <Text style={styles.label}>Auftragsadresse</Text>
 
@@ -221,11 +207,20 @@ const OrderCreate = (props) => {
           title={'Anlegen'}
         />
       </View>
+
     </View>
+
+
   )
 };
 
 const styles = StyleSheet.create({
+  keyboardAvoidingView: {
+    flex: 1,
+  },
+  inner: {
+
+  },
   input: {
     width: "100%",
     height: 50,
@@ -275,8 +270,8 @@ const styles = StyleSheet.create({
 
   button: {
     // height: 53,
-    paddingLeft: 16,
-    paddingRight: 16,
+    paddingLeft: 14,
+    paddingRight: 14,
     paddingTop: 8,
     paddingBottom: 8,
     width: '40%',

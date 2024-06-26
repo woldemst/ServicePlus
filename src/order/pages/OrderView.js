@@ -64,7 +64,7 @@ const OrderView = () => {
             animationOut="slideOutDown" // Specify the slide-down animation
             onBackdropPress={toggleModal}
             onBackButtonPress={toggleModal}
-
+            modalHeight={'85%'}
             header={<Text style={styles.modalHeadline}>Auftrag hinzufügen</Text>}
         >
             <OrderCreate toggle={toggleModal} />
