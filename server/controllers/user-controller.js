@@ -5,28 +5,28 @@ const jwt = require('jsonwebtoken')
 const Firm = require('../models/Firm')
 const Worker = require('../models/Worker')
 
+const normalizeEmail = (value = '') => value.trim().toLowerCase();
+const escapeRegExp = (value = '') => value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+const emailQuery = (email) => ({ email: { $regex: `^${escapeRegExp(email)}$`, $options: 'i' } });
+
 const register = async (req, res, next) => {
   const { name, email, password, admin } = req.body;
-
-  let existingUser;
-  let existingWorker;
+  const normalizedEmail = normalizeEmail(email);
+  const trimmedPassword = password?.trim() ?? '';
 
   try {
-    existingUser = await User.findOne({ email });
+    if (!name || !normalizedEmail || !trimmedPassword) {
+      return res.status(400).json({ message: 'Name, email, and password are required.' });
+    }
 
+    console.log('register request', { email: normalizedEmail });
+    const existingUser = await User.findOne(emailQuery(normalizedEmail));
     if (existingUser) {
       return res.status(422).json({ message: 'User exists already, please login instead.' });
     }
 
-    existingWorker = await Worker.findOne({ email })
-    // console.log(existingWorker);
-
-    if (existingWorker) {
-      return res.status(403).json({ message: 'User already registered as non-admin. Please log in instead.' });
-    }
-
-    const hashedPassword = await bcrypt.hash(password, 12);
-    const createdUser = new User({ name, email, password: hashedPassword, admin });
+    const hashedPassword = await bcrypt.hash(trimmedPassword, 12);
+    const createdUser = new User({ name, email: normalizedEmail, password: hashedPassword, admin });
     await createdUser.save();
 
     let firmId
@@ -47,19 +47,18 @@ const register = async (req, res, next) => {
         admin
       });
   } catch (err) {
-    const error = new HttpError(
-      'Signing up failed, please try again later.',
-      500
-    );
-    return next(error);
+    console.error('register error', err);
+    const status = err?.code === 11000 ? 422 : 400;
+    return res.status(status).json({ message: err.message || 'Signing up failed, please try again later.' });
   }
 };
 
 const login = async (req, res, next) => {
-  const { email, password } = req.body;
+  const normalizedEmail = normalizeEmail(req.body.email);
+  const passwordInput = req.body.password?.trim() ?? '';
   try {
     // Attempt to find a User or Worker by email
-    let identifiedPerson = await User.findOne({ email }) || await Worker.findOne({ email });
+    let identifiedPerson = await User.findOne(emailQuery(normalizedEmail)) || await Worker.findOne(emailQuery(normalizedEmail));
 
     // console.log(identifiedPerson) 
     if (!identifiedPerson) {
@@ -70,7 +69,7 @@ const login = async (req, res, next) => {
     
     
     // Compare the provided password with the stored hash
-    const isValidPassword = await bcrypt.compare(password.trim(), identifiedPerson.password)
+    const isValidPassword = await bcrypt.compare(passwordInput, identifiedPerson.password)
     // const isValidPassword = password.trim() === identifiedPerson.password.trim() ? true : false
 
     console.log(identifiedPerson.password);

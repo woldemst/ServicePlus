@@ -35,7 +35,7 @@ app.use('/api/customers', customerRoutes)
 app.use('/api/workers', workerRoutes)
 
 // connection string 
-const connectionURL = 'mongodb+srv://waldemar:1234@clusterplus.5ckgjtl.mongodb.net/ServicePlus?retryWrites=true&w=majority'
+const connectionURL = 'mongodb+srv://walweiitnt_db_user:70OMsmswPDmfOXRQ@sp.y9w4auk.mongodb.net/?appName=SP&retryWrites=true&w=majority'
 
 // connection 
 mongoose
