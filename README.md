@@ -2,7 +2,7 @@
 
 Mobile service-management application prototype built with React Native and Expo.
 
-The project focuses on mobile UI workflows, state management, navigation, image handling and communication with external services. It was created to practice and demonstrate practical mobile application development with JavaScript technologies.
+The project focuses on mobile UI workflows, state management, navigation and image handling.
 
 ## Features
 
@@ -10,7 +10,6 @@ The project focuses on mobile UI workflows, state management, navigation, image 
 - React Native screens and navigation
 - State management with Redux Toolkit
 - External service communication with Axios
-- Firebase integration
 - Image selection / image handling
 - Form-based user interaction
 - Reusable UI components
@@ -22,7 +21,6 @@ The project focuses on mobile UI workflows, state management, navigation, image 
 - JavaScript
 - Redux Toolkit
 - React Navigation
-- Firebase
 - Axios
 - Expo Image Picker
 - React Native UI libraries
@@ -54,4 +52,4 @@ npm run web
 
 ## Context
 
-This is a mobile application project from my practical learning and project work. It demonstrates experience with React Native, Expo, app state management and mobile UI workflows.
+This mobile application project demonstrates experience with React Native, Expo, app state management and mobile UI workflows.
